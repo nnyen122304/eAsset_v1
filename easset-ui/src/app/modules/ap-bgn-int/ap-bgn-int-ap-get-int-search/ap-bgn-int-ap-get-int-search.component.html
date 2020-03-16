@@ -1,0 +1,13 @@
+<div class="page-container search-container">
+  <div class="search-header">
+    <label class="lb-search">取得申請(無形)を検索してください。</label>
+  </div>
+  <div class="search-main">
+    <app-ap-get-int-search-condition [currentState]="'AP_BGN_INT'"></app-ap-get-int-search-condition>
+  </div>
+</div>
+<hr class="footer-line">
+<div fxLayout="row" fxLayoutGap="6px" fxLayoutAlign="center center" class="search-footer">
+  <button type="button" class="wm-btn wm-tab-element ml-3" (click)="search()">検索</button>
+  <button type="button" class="wm-btn wm-tab-element ml-3" (click)="clear()">クリア</button>
+</div>

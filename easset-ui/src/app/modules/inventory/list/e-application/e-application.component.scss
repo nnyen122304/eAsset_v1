@@ -1,0 +1,28 @@
+.section-eview-buttons {
+  position: relative;
+  z-index: 10;
+  .text-desc {
+    display: inline-block;
+    margin: 0 0 0 10px;
+    vertical-align: middle;
+    color: #ff0000;
+    font-weight: bold;
+  }
+}
+.section-eview-list {
+  .grid-common-wrap {
+    display: block;
+  }
+  .grid-common-count {
+    margin-top: -15px;
+  }
+  .wp-grid-application-list {
+    width: 802px;
+    height: calc(100vh - 110px);
+  }
+  .grid-application-list {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+}

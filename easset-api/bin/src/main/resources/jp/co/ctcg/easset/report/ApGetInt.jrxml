@@ -1,0 +1,1960 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ApGetInt" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<property name="ireport.zoom" value="1.1"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="195"/>
+	<style name="BaseFont" isDefault="true" isBlankWhenNull="true" pdfFontName="HeiseiMin-W3" pdfEncoding="UniJIS-UCS2-HW-H" isPdfEmbedded="false"/>
+	<style name="Cell" isDefault="false" style="BaseFont" mode="Transparent" isBlankWhenNull="true">
+		<box leftPadding="1" rightPadding="1">
+			<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineStyle="Solid"/>
+			<bottomPen lineWidth="0.5" lineStyle="Solid"/>
+			<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="CellTitle" isDefault="false" style="Cell" mode="Opaque" backcolor="#C0C0C0" isBlankWhenNull="true"/>
+	<subDataset name="ApGetIntDummyDataset">
+		<parameter name="parameter1" class="java.lang.String"/>
+		<queryString>
+			<![CDATA[SELECT DUMMY FROM DUAL]]>
+		</queryString>
+		<field name="DUMMY" class="java.lang.String"/>
+	</subDataset>
+	<subDataset name="ApGetIntLineCostSecDataset">
+		<parameter name="applicationId" class="java.lang.String" isForPrompting="false"/>
+		<parameter name="tablePrefix" class="java.lang.String" isForPrompting="false"/>
+		<parameter name="versionWhere" class="java.lang.String" isForPrompting="false"/>
+		<parameter name="applicationVersion" class="java.lang.String"/>
+		<queryString>
+			<![CDATA[SELECT
+  COST_SECTION_CODE costSectionCode
+  , NEA_UTIL_PKG.GET_COST_SECTION_NAME_F(COST_SECTION_CODE, COST_SECTION_YEAR) costSectionName
+  , COST_DIST costDist
+FROM
+  NEA_AP_GET_INT_LINE_COST_SEC
+WHERE
+    APPLICATION_ID = $P{applicationId}
+AND APPLICATION_VERSION = $P{applicationVersion}
+ORDER BY
+  APPLICATION_ID
+  , LINE_SEQ]]>
+		</queryString>
+		<field name="COSTSECTIONCODE" class="java.lang.String"/>
+		<field name="COSTSECTIONNAME" class="java.lang.String"/>
+		<field name="COSTDIST" class="java.math.BigDecimal"/>
+	</subDataset>
+	<parameter name="applicationIdWhere" class="java.lang.String">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="lineOutputFlag" class="java.lang.String">
+		<defaultValueExpression><![CDATA["0"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="version" class="java.lang.Integer"/>
+	<parameter name="tablePrefix" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[$P{version} == null ? "" : "H_"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="versionWhere" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[$P{version} == null ? "" : " AND VERSION = " + $P{version}]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT
+  (SELECT COUNT('X') FROM NEA_AP_GET_INT_LINE_PROF_EST LPE WHERE LPE.APPLICATION_ID = nagi.APPLICATION_ID) apGetIntLineProfEst
+ ,(SELECT COUNT('X') FROM NEA_AP_GET_INT_LINE_DEV_SCH LDS WHERE LDS.APPLICATION_ID = nagi.APPLICATION_ID) apGetIntLineDevSch
+ ,(SELECT COUNT('X') FROM NEA_AP_GET_INT_LINE_FLD LF WHERE LF.APPLICATION_ID = nagi.APPLICATION_ID) apGetIntLineFld
+ ,(SELECT COUNT('X') FROM NEA_AP_GET_INT_LINE_COST_SEC LCS WHERE LCS.APPLICATION_ID = nagi.APPLICATION_ID) apGetIntLineCostSec
+ ,(SELECT COUNT('X') FROM NEA_AP_GET_INT_LINE_OTR_COST LOC WHERE LOC.APPLICATION_ID = nagi.APPLICATION_ID) apGetIntLineOtrCost
+ ,nagil.LINE_TYPE lineType
+ ,cn.value6 apGetAmountRangeLabel
+ ,cn.value4 title1
+ ,cn.value5 title2
+ ,nagi.APPLICATION_ID applicationId
+ ,nagi.APPLICATION_VERSION applicationVersion
+ ,nagi.CREATE_DATE createDate
+ ,nagi.CREATE_STAFF_CODE createStaffCode
+ ,nagi.UPDATE_DATE updateDate
+ ,nagi.UPDATE_STAFF_CODE updateStaffCode
+ ,nagi.VERSION version
+ ,nagi.DISPLAY_VERSION displayVersion
+ ,nagi.UPDATE_COMMENT updateComment
+ ,nagi.EAPP_ID eappId
+ ,nagi.AP_STATUS apStatus
+ ,NEA_UTIL_PKG.get_cn_value1_f('AP_STATUS_GET_INT', nagi.AP_STATUS) apStatusName
+ ,nagi.AP_DATE apDate
+ ,nagi.AP_GET_TYPE apGetType
+ ,NEA_UTIL_PKG.get_cn_value1_f('AP_GET_TYPE', nagi.AP_GET_TYPE) apGetTypeName
+ ,nagi.AP_GET_AMOUNT_RANGE apGetAmountRange
+ ,NEA_UTIL_PKG.get_cn_value1_f('AP_GET_INT_AMOUNT_RANGE', nagi.AP_GET_AMOUNT_RANGE, nagi.AP_COMPANY_CODE) apGetAmountRangeName
+ ,NEA_UTIL_PKG.get_cn_value_f('AP_GET_INT_AMOUNT_RANGE', nagi.AP_GET_AMOUNT_RANGE, 4, nagi.AP_COMPANY_CODE) apGetAmountRangeUseCostSecType
+ ,nagi.SPECIAL_APPROVE_FLAG specialApproveFlag
+ ,nagi.SPECIAL_APPROVE_DATE specialApproveDate
+ ,nagi.AP_CREATE_STAFF_CODE apCreateStaffCode
+ ,NEA_UTIL_PKG.get_staff_name_f(nagi.AP_CREATE_STAFF_CODE) apCreateStaffName
+ ,nagi.AP_CREATE_COMPANY_CODE apCreateCompanyCode
+ ,NEA_UTIL_PKG.get_company_name_f(nagi.AP_CREATE_COMPANY_CODE) apCreateCompanyName
+ ,nagi.AP_CREATE_SECTION_CODE apCreateSectionCode
+ ,NEA_UTIL_PKG.get_section_name_f(nagi.AP_CREATE_COMPANY_CODE, nagi.AP_CREATE_SECTION_CODE, nagi.AP_CREATE_SECTION_YEAR) apCreateSectionName
+ ,nagi.AP_CREATE_SECTION_YEAR apCreateSectionYear
+ ,nagi.AP_STAFF_CODE apStaffCode
+ ,NEA_UTIL_PKG.get_staff_name_f(nagi.AP_STAFF_CODE) apStaffName
+ ,nagi.AP_COMPANY_CODE apCompanyCode
+ ,NEA_UTIL_PKG.get_company_name_f(nagi.AP_COMPANY_CODE) apCompanyName
+ ,nagi.AP_SECTION_CODE apSectionCode
+ ,NEA_UTIL_PKG.get_section_name_f(nagi.AP_COMPANY_CODE, nagi.AP_SECTION_CODE, nagi.AP_SECTION_YEAR) apSectionName
+ ,nagi.AP_SECTION_YEAR apSectionYear
+ ,nagi.AP_TEL apTel
+ ,nagi.AP_SKIP_APPROVE_FLAG apSkipApproveFlag
+ ,nagi.AP_NEED_CIO_JUDGE_FLAG apNeedCioJudgeFlag
+ ,nagi.AST_GET_TIME_FLAG astGetTimeFlag
+ ,nagi.AST_NAME astName
+ ,nagi.AST_CLOUD_TYPE astCloudType
+ ,NEA_UTIL_PKG.get_cn_value1_f('ITEM_CLOUD_TYPE', nagi.AST_CLOUD_TYPE) astCloudTypeName
+ ,nagi.AST_GROUP_CODE astGroupCode
+ ,NEA_UTIL_PKG.get_item_group_name_f(nagi.AP_COMPANY_CODE, nagi.AST_GROUP_CODE) astGroupName
+ ,nagi.AST_GET_REASON astGetReason
+ ,nagi.AST_COMPLETE_PLAN_DATE astCompletePlanDate
+ ,nagi.AST_EFFECT_TYPE astEffectType
+ ,NEA_UTIL_PKG.get_cn_value1_f('AP_GET_INT_AST_EFFECT_TYPE', nagi.AST_EFFECT_TYPE) astEffectTypeName
+ ,nagi.AST_EFFECT_AMOUNT astEffectAmount
+ ,nagi.AST_EFFECT_DESCRIPTION astEffectDescription
+ ,nagi.AST_RENT_FLAG astRentFlag
+ ,nagi.AST_RENT_APPLICATION_ID astRentApplicationId
+ ,nagi.AST_RENT_MONTH astRentMonth
+ ,nagi.AST_RENT_DATE_FROM astRentDateFrom
+ ,nagi.AST_RENT_DATE_TO astRentDateTo
+ ,nagi.AST_RENT_DESCRIPTION astRentDescription
+ ,nagi.AST_TOTAL_AMOUNT astTotalAmount
+ ,nagi.GET_TOTAL_AMOUNT getTotalAmount
+ ,nagi.MKT_CAT_CATEGORY_CODE mktCatCategoryCode
+ ,NEA_UTIL_PKG.get_cn_value1_f('AP_GET_INT_MKT_CATEGORY', nagi.MKT_CAT_CATEGORY_CODE) mktCatCategoryName
+ ,nagi.MKT_CAT_TASK_CODE mktCatTaskCode
+ ,NEA_UTIL_PKG.get_cn_value1_f('AP_GET_INT_MKT_TASK', nagi.MKT_CAT_TASK_CODE) mktCatTaskName
+ ,nagi.MKT_AST_PROJECT_CODE mktAstProjectCode
+ ,NEA_UTIL_PKG.get_project_name_f(nagi.AP_COMPANY_CODE, nagi.MKT_AST_PROJECT_CODE) mktAstProjectName
+ ,nagi.MKT_AST_PRODUCT_OUTLINE mktAstProductOutline
+ ,nagi.MKT_AST_MARKET mktAstMarket
+ ,nagi.MKT_AST_POLICY mktAstPolicy
+ ,nagi.MKT_DEV_NEXT_PLAN_DATE mktDevNextPlanDate
+ ,nagi.ATT_DESCRIPTION attDescription
+ ,nagi.HOL_COMPANY_CODE holCompanyCode
+ ,NEA_UTIL_PKG.get_company_name_f(nagi.HOL_COMPANY_CODE) holCompanyName
+ ,nagi.HOL_SECTION_CODE holSectionCode
+ ,nagi.HOL_SECTION_YEAR holSectionYear
+ ,NEA_UTIL_PKG.get_section_name_f(nagi.HOL_COMPANY_CODE, nagi.HOL_SECTION_CODE, nagi.HOL_SECTION_YEAR) holSectionName
+ ,nagi.HOL_STAFF_CODE holStaffCode
+ ,NEA_UTIL_PKG.get_staff_name_f(nagi.HOL_STAFF_CODE) holStaffName
+ ,nagi.HOL_STAFF_COMPANY_CODE holStaffCompanyCode
+ ,NEA_UTIL_PKG.get_company_name_f(nagi.HOL_STAFF_COMPANY_CODE) holStaffCompanyName
+ ,nagi.HOL_STAFF_SECTION_CODE holStaffSectionCode
+ ,NEA_UTIL_PKG.get_section_name_f(nagi.HOL_STAFF_COMPANY_CODE, nagi.HOL_STAFF_SECTION_CODE, nagi.HOL_STAFF_SECTION_YEAR) holStaffSectionName
+ ,nagi.HOL_STAFF_SECTION_YEAR holStaffSectionYear
+ ,nagi.HOL_REP_OFFICE_CODE holRepOfficeCode
+ ,NEA_UTIL_PKG.get_rep_office_name_f(nagi.HOL_COMPANY_CODE, nagi.HOL_REP_OFFICE_CODE) holRepOfficeName
+ ,nagi.COST_TYPE costType
+ ,NEA_UTIL_PKG.get_cn_value1_f('COST_TYPE', nagi.COST_TYPE) costTypeName
+ ,nagi.COST_DEP_PRJ_CODE costDepPrjCode
+ ,NEA_UTIL_PKG.get_project_name_f(nagi.AP_COMPANY_CODE, nagi.COST_DEP_PRJ_CODE) as costDepPrjName
+ ,nagi.COST_COMPANY_CODE costCompanyCode
+ ,NEA_UTIL_PKG.get_company_name_f(nagi.COST_COMPANY_CODE) as costCompanyName
+ ,nagi.COST_SECTION_CODE costSectionCode
+ ,NEA_UTIL_PKG.get_cost_section_name_f(nagi.COST_SECTION_CODE, nagi.COST_SECTION_YEAR) as costSectionName
+ ,nagi.DESCRIPTION_AP descriptionAp
+ ,nagi.DESCRIPTION_ADMIN descriptionAdmin
+ ,nagi.REPORT_COMPLETE_FLAG reportCompleteFlag
+ ,nagi.REMINDER_DATE reminderDate
+ ,nagi.APPROVE_DATE approveDate
+ ,nagi.ACTIVE_FLAG activeFlag
+ ,nagi.VER_UP_COLUMN_NAME verUpColumnName
+ ,nagil.*
+FROM
+  NEA_$P!{tablePrefix}AP_GET_INT nagi
+  , (
+    SELECT
+      APPLICATION_ID
+      , APPLICATION_VERSION
+      , '1' LINE_TYPE
+      , LINE_SEQ lineSeq
+      , AST_CATEGORY_CODE astCategoryCode
+      , NEA_UTIL_PKG.get_cn_value1_f('AP_GET_INT_AST_CATEGORY', AST_CATEGORY_CODE) astCategoryName
+      , AST_NAME astNameD
+      , AST_PRJ_CODE astPrjCode
+      , NEA_UTIL_PKG.get_project_name_f((SELECT b.AP_COMPANY_CODE FROM NEA_$P!{tablePrefix}AP_GET_INT b WHERE b.APPLICATION_ID = a.APPLICATION_ID AND ROWNUM <= 1), AST_PRJ_CODE) astPrjName
+      , AST_PUR_COMPANY_NAME astPurCompanyName
+      , AST_ESTIMATE_NUMBER astEstimateNumber
+      , AST_UNIT_AMOUNT astUnitAmount
+      , AST_QUANTITY astQuantity
+      , AST_GET_AMOUNT astGetAmount
+      , AST_ADD_UP_TYPE astAddUpType
+      , AST_ACCOUNT_CODE astAccountCode
+      , (select value1 from nea_code_name where category_code = 'AP_GET_INT_AST_ACCOUNT' and internal_code = a.AST_ACCOUNT_CODE)  astAccountName
+      , TO_DATE(NULL) devPeriodFrom
+      , TO_DATE(NULL) devPeriodTo
+      , TO_NUMBER(NULL) devProperCount
+      , TO_NUMBER(NULL) devEntrustCount
+      , TO_NUMBER(NULL) devAmount
+      , TO_CHAR(NULL) devSchCode
+      , TO_CHAR(NULL) devSchName
+      , TO_CHAR(NULL) otrComment
+      , TO_NUMBER(NULL) otrAmount
+      , TO_NUMBER(NULL) profSalesQuantity
+      , TO_NUMBER(NULL) profSalesAmount
+      , TO_NUMBER(NULL) profCostAmount
+    FROM
+      NEA_$P!{tablePrefix}AP_GET_INT_LINE_FLD a
+    WHERE
+      '1' = $P{lineOutputFlag}
+      $P!{versionWhere}
+    UNION ALL
+    SELECT
+      APPLICATION_ID
+      , APPLICATION_VERSION
+      , '3' LINE_TYPE
+      , LINE_SEQ lineSeq
+      , TO_CHAR(NULL) astCategoryCode
+      , TO_CHAR(NULL) astCategoryName
+      , TO_CHAR(NULL) astNameD
+      , TO_CHAR(NULL) astPrjCode
+      , TO_CHAR(NULL) astPrjName
+      , TO_CHAR(NULL) astPurCompanyName
+      , TO_CHAR(NULL) astEstimateNumber
+      , TO_NUMBER(NULL) astUnitAmount
+      , TO_NUMBER(NULL) astQuantity
+      , TO_NUMBER(NULL) astGetAmount
+      , TO_CHAR(NULL) astAddUpType
+      , TO_CHAR(NULL) astAccountCode
+      , TO_CHAR(NULL) astAccountName
+      , DEV_PERIOD_FROM devPeriodFrom
+      , DEV_PERIOD_TO devPeriodTo
+      , DEV_PROPER_COUNT devProperCount
+      , DEV_ENTRUST_COUNT devEntrustCount
+      , DEV_AMOUNT devAmount
+      , DEV_SCH_CODE devSchCode
+      , NEA_UTIL_PKG.get_cn_value1_f('AP_GET_INT_MKT_DEV_SCH', DEV_SCH_CODE) devSchName
+      , TO_CHAR(NULL) otrComment
+      , TO_NUMBER(NULL) otrAmount
+      , TO_NUMBER(NULL) profSalesQuantity
+      , TO_NUMBER(NULL) profSalesAmount
+      , TO_NUMBER(NULL) profCostAmount
+    FROM
+      NEA_$P!{tablePrefix}AP_GET_INT_LINE_DEV_SCH
+    WHERE
+      '1' = $P{lineOutputFlag}
+      $P!{versionWhere}
+    UNION ALL
+    SELECT
+      APPLICATION_ID
+      , APPLICATION_VERSION
+      , '4' LINE_TYPE
+      , LINE_SEQ lineSeq
+      , TO_CHAR(NULL) astCategoryCode
+      , TO_CHAR(NULL) astCategoryName
+      , TO_CHAR(NULL) astNameD
+      , TO_CHAR(NULL) astPrjCode
+      , TO_CHAR(NULL) astPrjName
+      , TO_CHAR(NULL) astPurCompanyName
+      , TO_CHAR(NULL) astEstimateNumber
+      , TO_NUMBER(NULL) astUnitAmount
+      , TO_NUMBER(NULL) astQuantity
+      , TO_NUMBER(NULL) astGetAmount
+      , TO_CHAR(NULL) astAddUpType
+      , TO_CHAR(NULL) astAccountCode
+      , TO_CHAR(NULL) astAccountName
+      , TO_DATE(NULL) devPeriodFrom
+      , TO_DATE(NULL) devPeriodTo
+      , TO_NUMBER(NULL) devProperCount
+      , TO_NUMBER(NULL) devEntrustCount
+      , TO_NUMBER(NULL) devAmount
+      , TO_CHAR(NULL) devSchCode
+      , TO_CHAR(NULL) devSchName
+      , OTR_COMMENT otrComment
+      , OTR_AMOUNT otrAmount
+      , TO_NUMBER(NULL) profSalesQuantity
+      , TO_NUMBER(NULL) profSalesAmount
+      , TO_NUMBER(NULL) profCostAmount
+    FROM
+      NEA_$P!{tablePrefix}AP_GET_INT_LINE_OTR_COST
+    WHERE
+      '1' = $P{lineOutputFlag}
+      $P!{versionWhere}
+    UNION ALL
+    SELECT
+      APPLICATION_ID
+      , APPLICATION_VERSION
+      , '5' LINE_TYPE
+      , LINE_SEQ lineSeq
+      , TO_CHAR(NULL) astCategoryCode
+      , TO_CHAR(NULL) astCategoryName
+      , TO_CHAR(NULL) astNameD
+      , TO_CHAR(NULL) astPrjCode
+      , TO_CHAR(NULL) astPrjName
+      , TO_CHAR(NULL) astPurCompanyName
+      , TO_CHAR(NULL) astEstimateNumber
+      , TO_NUMBER(NULL) astUnitAmount
+      , TO_NUMBER(NULL) astQuantity
+      , TO_NUMBER(NULL) astGetAmount
+      , TO_CHAR(NULL) astAddUpType
+      , TO_CHAR(NULL) astAccountCode
+      , TO_CHAR(NULL) astAccountName
+      , TO_DATE(NULL) devPeriodFrom
+      , TO_DATE(NULL) devPeriodTo
+      , TO_NUMBER(NULL) devProperCount
+      , TO_NUMBER(NULL) devEntrustCount
+      , TO_NUMBER(NULL) devAmount
+      , TO_CHAR(NULL) devSchCode
+      , TO_CHAR(NULL) devSchName
+      , TO_CHAR(NULL) otrComment
+      , TO_NUMBER(NULL) otrAmount
+      , PROF_SALES_QUANTITY profSalesQuantity
+      , PROF_SALES_AMOUNT profSalesAmount
+      , PROF_COST_AMOUNT profCostAmount
+    FROM
+      NEA_$P!{tablePrefix}AP_GET_INT_LINE_PROF_EST
+    WHERE
+      '1' = $P{lineOutputFlag}
+      $P!{versionWhere}
+  ) nagil
+  , NEA_CODE_NAME cn
+WHERE
+  $P!{applicationIdWhere}
+  $P!{versionWhere}
+  AND nagi.APPLICATION_ID = nagil.APPLICATION_ID (+)
+  AND nagi.APPLICATION_VERSION = nagil.APPLICATION_VERSION (+)
+  AND nagi.AP_GET_AMOUNT_RANGE = cn.INTERNAL_CODE (+)
+  AND cn.CATEGORY_CODE (+) = 'AP_GET_INT_AMOUNT_RANGE'
+ORDER BY
+  applicationId
+  , lineType
+  , lineSeq]]>
+	</queryString>
+	<field name="APGETINTLINEPROFEST" class="java.math.BigDecimal"/>
+	<field name="APGETINTLINEDEVSCH" class="java.math.BigDecimal"/>
+	<field name="APGETINTLINEFLD" class="java.math.BigDecimal"/>
+	<field name="APGETINTLINECOSTSEC" class="java.math.BigDecimal"/>
+	<field name="APGETINTLINEOTRCOST" class="java.math.BigDecimal"/>
+	<field name="COSTTYPENAME" class="java.lang.String"/>
+	<field name="LINETYPE" class="java.lang.String"/>
+	<field name="APGETAMOUNTRANGELABEL" class="java.lang.String"/>
+	<field name="TITLE1" class="java.lang.String"/>
+	<field name="TITLE2" class="java.lang.String"/>
+	<field name="APPLICATIONID" class="java.lang.String"/>
+	<field name="APPLICATIONVERSION" class="java.lang.String"/>
+	<field name="CREATEDATE" class="java.sql.Timestamp"/>
+	<field name="CREATESTAFFCODE" class="java.lang.String"/>
+	<field name="UPDATEDATE" class="java.sql.Timestamp"/>
+	<field name="UPDATESTAFFCODE" class="java.lang.String"/>
+	<field name="VERSION" class="java.math.BigDecimal"/>
+	<field name="DISPLAYVERSION" class="java.math.BigDecimal"/>
+	<field name="UPDATECOMMENT" class="java.lang.String"/>
+	<field name="EAPPID" class="java.math.BigDecimal"/>
+	<field name="APSTATUS" class="java.lang.String"/>
+	<field name="APSTATUSNAME" class="java.lang.String"/>
+	<field name="APDATE" class="java.sql.Timestamp"/>
+	<field name="APGETTYPE" class="java.lang.String"/>
+	<field name="APGETTYPENAME" class="java.lang.String"/>
+	<field name="APGETAMOUNTRANGE" class="java.lang.String"/>
+	<field name="APGETAMOUNTRANGENAME" class="java.lang.String"/>
+	<field name="APGETAMOUNTRANGEUSECOSTSECTYPE" class="java.lang.String"/>
+	<field name="SPECIALAPPROVEFLAG" class="java.lang.String"/>
+	<field name="SPECIALAPPROVEDATE" class="java.sql.Timestamp"/>
+	<field name="APCREATESTAFFCODE" class="java.lang.String"/>
+	<field name="APCREATESTAFFNAME" class="java.lang.String"/>
+	<field name="APCREATECOMPANYCODE" class="java.lang.String"/>
+	<field name="APCREATECOMPANYNAME" class="java.lang.String"/>
+	<field name="APCREATESECTIONCODE" class="java.lang.String"/>
+	<field name="APCREATESECTIONNAME" class="java.lang.String"/>
+	<field name="APCREATESECTIONYEAR" class="java.math.BigDecimal"/>
+	<field name="APSTAFFCODE" class="java.lang.String"/>
+	<field name="APSTAFFNAME" class="java.lang.String"/>
+	<field name="APCOMPANYCODE" class="java.lang.String"/>
+	<field name="APCOMPANYNAME" class="java.lang.String"/>
+	<field name="APSECTIONCODE" class="java.lang.String"/>
+	<field name="APSECTIONNAME" class="java.lang.String"/>
+	<field name="APSECTIONYEAR" class="java.math.BigDecimal"/>
+	<field name="APTEL" class="java.lang.String"/>
+	<field name="APSKIPAPPROVEFLAG" class="java.lang.String"/>
+	<field name="APNEEDCIOJUDGEFLAG" class="java.lang.String"/>
+	<field name="ASTGETTIMEFLAG" class="java.lang.String"/>
+	<field name="ASTNAME" class="java.lang.String"/>
+	<field name="ASTCLOUDTYPE" class="java.lang.String"/>
+	<field name="ASTCLOUDTYPENAME" class="java.lang.String"/>
+	<field name="ASTGROUPCODE" class="java.lang.String"/>
+	<field name="ASTGROUPNAME" class="java.lang.String"/>
+	<field name="ASTGETREASON" class="java.lang.String"/>
+	<field name="ASTCOMPLETEPLANDATE" class="java.sql.Timestamp"/>
+	<field name="ASTEFFECTTYPE" class="java.lang.String"/>
+	<field name="ASTEFFECTAMOUNT" class="java.math.BigDecimal"/>
+	<field name="ASTEFFECTDESCRIPTION" class="java.lang.String"/>
+	<field name="ASTRENTFLAG" class="java.lang.String"/>
+	<field name="ASTRENTAPPLICATIONID" class="java.lang.String"/>
+	<field name="ASTRENTMONTH" class="java.math.BigDecimal"/>
+	<field name="ASTRENTDATEFROM" class="java.sql.Timestamp"/>
+	<field name="ASTRENTDATETO" class="java.sql.Timestamp"/>
+	<field name="ASTRENTDESCRIPTION" class="java.lang.String"/>
+	<field name="ASTTOTALAMOUNT" class="java.math.BigDecimal"/>
+	<field name="GETTOTALAMOUNT" class="java.math.BigDecimal"/>
+	<field name="MKTCATCATEGORYCODE" class="java.lang.String"/>
+	<field name="MKTCATCATEGORYNAME" class="java.lang.String"/>
+	<field name="MKTCATTASKCODE" class="java.lang.String"/>
+	<field name="MKTCATTASKNAME" class="java.lang.String"/>
+	<field name="MKTASTPROJECTCODE" class="java.lang.String"/>
+	<field name="MKTASTPROJECTNAME" class="java.lang.String"/>
+	<field name="MKTASTPRODUCTOUTLINE" class="java.lang.String"/>
+	<field name="MKTASTMARKET" class="java.lang.String"/>
+	<field name="MKTASTPOLICY" class="java.lang.String"/>
+	<field name="MKTDEVNEXTPLANDATE" class="java.sql.Timestamp"/>
+	<field name="ATTDESCRIPTION" class="java.lang.String"/>
+	<field name="HOLCOMPANYCODE" class="java.lang.String"/>
+	<field name="HOLCOMPANYNAME" class="java.lang.String"/>
+	<field name="HOLSECTIONCODE" class="java.lang.String"/>
+	<field name="HOLSECTIONYEAR" class="java.math.BigDecimal"/>
+	<field name="HOLSECTIONNAME" class="java.lang.String"/>
+	<field name="HOLSTAFFCODE" class="java.lang.String"/>
+	<field name="HOLSTAFFNAME" class="java.lang.String"/>
+	<field name="HOLSTAFFCOMPANYCODE" class="java.lang.String"/>
+	<field name="HOLSTAFFCOMPANYNAME" class="java.lang.String"/>
+	<field name="HOLSTAFFSECTIONCODE" class="java.lang.String"/>
+	<field name="HOLSTAFFSECTIONNAME" class="java.lang.String"/>
+	<field name="HOLSTAFFSECTIONYEAR" class="java.math.BigDecimal"/>
+	<field name="HOLREPOFFICECODE" class="java.lang.String"/>
+	<field name="HOLREPOFFICENAME" class="java.lang.String"/>
+	<field name="COSTTYPE" class="java.lang.String"/>
+	<field name="COSTDEPPRJCODE" class="java.lang.String"/>
+	<field name="COSTDEPPRJNAME" class="java.lang.String"/>
+	<field name="COSTCOMPANYCODE" class="java.lang.String"/>
+	<field name="COSTCOMPANYNAME" class="java.lang.String"/>
+	<field name="COSTSECTIONCODE" class="java.lang.String"/>
+	<field name="COSTSECTIONNAME" class="java.lang.String"/>
+	<field name="DESCRIPTIONAP" class="java.lang.String"/>
+	<field name="DESCRIPTIONADMIN" class="java.lang.String"/>
+	<field name="REPORTCOMPLETEFLAG" class="java.lang.String"/>
+	<field name="REMINDERDATE" class="java.sql.Timestamp"/>
+	<field name="APPROVEDATE" class="java.sql.Timestamp"/>
+	<field name="ACTIVEFLAG" class="java.lang.String"/>
+	<field name="VERUPCOLUMNNAME" class="java.lang.String"/>
+	<field name="APPLICATION_ID" class="java.lang.String"/>
+	<field name="LINE_TYPE" class="java.lang.String"/>
+	<field name="LINESEQ" class="java.math.BigDecimal"/>
+	<field name="ASTCATEGORYCODE" class="java.lang.String"/>
+	<field name="ASTCATEGORYNAME" class="java.lang.String"/>
+	<field name="ASTNAMED" class="java.lang.String"/>
+	<field name="ASTPRJCODE" class="java.lang.String"/>
+	<field name="ASTPRJNAME" class="java.lang.String"/>
+	<field name="ASTPURCOMPANYNAME" class="java.lang.String"/>
+	<field name="ASTESTIMATENUMBER" class="java.lang.String"/>
+	<field name="ASTUNITAMOUNT" class="java.math.BigDecimal"/>
+	<field name="ASTQUANTITY" class="java.math.BigDecimal"/>
+	<field name="ASTGETAMOUNT" class="java.math.BigDecimal"/>
+	<field name="ASTADDUPTYPE" class="java.lang.String"/>
+	<field name="ASTACCOUNTCODE" class="java.lang.String"/>
+	<field name="DEVPERIODFROM" class="java.sql.Timestamp"/>
+	<field name="ASTACCOUNTNAME" class="java.lang.String"/>
+	<field name="DEVPERIODTO" class="java.sql.Timestamp"/>
+	<field name="DEVPROPERCOUNT" class="java.math.BigDecimal"/>
+	<field name="DEVENTRUSTCOUNT" class="java.math.BigDecimal"/>
+	<field name="DEVAMOUNT" class="java.math.BigDecimal"/>
+	<field name="DEVSCHCODE" class="java.lang.String"/>
+	<field name="DEVSCHNAME" class="java.lang.String"/>
+	<field name="OTRCOMMENT" class="java.lang.String"/>
+	<field name="OTRAMOUNT" class="java.math.BigDecimal"/>
+	<field name="PROFSALESQUANTITY" class="java.math.BigDecimal"/>
+	<field name="PROFSALESAMOUNT" class="java.math.BigDecimal"/>
+	<field name="PROFCOSTAMOUNT" class="java.math.BigDecimal"/>
+	<variable name="ASTGETAMOUNT_SISAN" class="java.math.BigDecimal" resetType="Group" resetGroup="APPLICATIONID1" calculation="Sum">
+		<variableExpression><![CDATA[($F{ASTADDUPTYPE}.equals("1") ? $F{ASTGETAMOUNT} : 0)]]></variableExpression>
+	</variable>
+	<variable name="ASTGETAMOUNT_HIYOU" class="java.math.BigDecimal" resetType="Group" resetGroup="APPLICATIONID1" calculation="Sum">
+		<variableExpression><![CDATA[($F{ASTADDUPTYPE}.equals("2") ? $F{ASTGETAMOUNT} : 0)]]></variableExpression>
+	</variable>
+	<variable name="ASTGETAMOUNT_1" class="java.math.BigDecimal" resetType="Group" resetGroup="APPLICATIONID1" calculation="Sum">
+		<variableExpression><![CDATA[$F{ASTGETAMOUNT}]]></variableExpression>
+	</variable>
+	<variable name="PROFSALESQUANTITY_1" class="java.math.BigDecimal" resetType="Group" resetGroup="APPLICATIONID1" calculation="Sum">
+		<variableExpression><![CDATA[$F{PROFSALESQUANTITY}]]></variableExpression>
+	</variable>
+	<variable name="PROFSALESAMOUNT_1" class="java.math.BigDecimal" resetType="Group" resetGroup="APPLICATIONID1" calculation="Sum">
+		<variableExpression><![CDATA[$F{PROFSALESAMOUNT}]]></variableExpression>
+	</variable>
+	<variable name="PROFCOSTAMOUNT_1" class="java.math.BigDecimal" resetType="Group" resetGroup="APPLICATIONID1" calculation="Sum">
+		<variableExpression><![CDATA[$F{PROFCOSTAMOUNT}]]></variableExpression>
+	</variable>
+	<variable name="DEVAMOUNT_1" class="java.math.BigDecimal" resetType="Group" resetGroup="APPLICATIONID1" calculation="Sum">
+		<variableExpression><![CDATA[$F{DEVAMOUNT}]]></variableExpression>
+	</variable>
+	<variable name="OTRAMOUNT_1" class="java.math.BigDecimal" resetType="Group" resetGroup="LINETYPE" calculation="Sum">
+		<variableExpression><![CDATA[$F{OTRAMOUNT}]]></variableExpression>
+	</variable>
+	<variable name="DEVPROPERCOUNT_1" class="java.math.BigDecimal" resetType="Group" resetGroup="APPLICATIONID1" calculation="Sum">
+		<variableExpression><![CDATA[$F{DEVPROPERCOUNT}]]></variableExpression>
+	</variable>
+	<variable name="DEVENTRUSTCOUNT_1" class="java.math.BigDecimal" resetType="Group" resetGroup="APPLICATIONID1" calculation="Sum">
+		<variableExpression><![CDATA[$F{DEVENTRUSTCOUNT}]]></variableExpression>
+	</variable>
+	<group name="APPLICATIONID1" isStartNewPage="true" isResetPageNumber="true" isReprintHeaderOnEachPage="true">
+		<groupExpression><![CDATA[$F{APPLICATIONID}]]></groupExpression>
+		<groupHeader>
+			<band height="67">
+				<staticText>
+					<reportElement x="0" y="0" width="66" height="15"/>
+					<textElement verticalAlignment="Top"/>
+					<text><![CDATA[申請書番号：]]></text>
+				</staticText>
+				<textField>
+					<reportElement x="66" y="0" width="75" height="15"/>
+					<textElement verticalAlignment="Top"/>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{APPLICATIONID}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="116" y="15" width="300" height="32"/>
+					<textElement textAlignment="Center" verticalAlignment="Bottom">
+						<font size="12" isBold="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{TITLE1}
++ ($F{TITLE2} == null ? "" : "\n" + $F{TITLE2})]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="116" y="48" width="300" height="15"/>
+					<textElement textAlignment="Center" verticalAlignment="Top">
+						<font size="10" isBold="false"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[($F{APGETAMOUNTRANGENAME} == null ? ""
+:
+"("
++ ($F{APGETAMOUNTRANGELABEL} == null ? "" : $F{APGETAMOUNTRANGELABEL} + " ")
++ $F{APGETAMOUNTRANGENAME}
++ ")"
+)]]></textFieldExpression>
+				</textField>
+				<textField pattern="yyyy/MM/dd">
+					<reportElement x="492" y="0" width="63" height="15"/>
+					<textElement textAlignment="Right" verticalAlignment="Top"/>
+					<textFieldExpression class="java.sql.Timestamp"><![CDATA[$F{APDATE}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="520" y="15" width="15" height="15"/>
+					<textElement textAlignment="Center" verticalAlignment="Top"/>
+					<text><![CDATA[/]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="426" y="15" width="66" height="15"/>
+					<textElement textAlignment="Right" verticalAlignment="Top"/>
+					<text><![CDATA[ページ　：]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="426" y="0" width="66" height="15"/>
+					<textElement textAlignment="Right" verticalAlignment="Top"/>
+					<text><![CDATA[申請日付：]]></text>
+				</staticText>
+				<textField evaluationTime="Group" evaluationGroup="APPLICATIONID1">
+					<reportElement x="533" y="15" width="20" height="15"/>
+					<textElement textAlignment="Right" verticalAlignment="Top"/>
+					<textFieldExpression class="java.lang.String"><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="500" y="15" width="20" height="15"/>
+					<textElement textAlignment="Right" verticalAlignment="Top"/>
+					<textFieldExpression class="java.lang.String"><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="162" y="0" width="25" height="15"/>
+					<textElement verticalAlignment="Top"/>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{APPLICATIONVERSION}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="141" y="0" width="22" height="15"/>
+					<textElement verticalAlignment="Top"/>
+					<text><![CDATA[Ver.]]></text>
+				</staticText>
+			</band>
+		</groupHeader>
+	</group>
+	<group name="APPLICATIONID2">
+		<groupExpression><![CDATA[$F{APPLICATIONID}]]></groupExpression>
+		<groupHeader>
+			<band height="35" splitType="Stretch">
+				<staticText>
+					<reportElement x="0" y="0" width="90" height="15"/>
+					<textElement verticalAlignment="Top"/>
+					<text><![CDATA[申請ステータス：]]></text>
+				</staticText>
+				<textField>
+					<reportElement x="90" y="0" width="76" height="15"/>
+					<textElement verticalAlignment="Top"/>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{APSTATUSNAME}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="0" y="15" width="90" height="15">
+						<printWhenExpression><![CDATA[$F{APSTATUS}.equals("3") && $F{APPROVEDATE} != null]]></printWhenExpression>
+					</reportElement>
+					<textElement verticalAlignment="Top"/>
+					<text><![CDATA[申請承認日　　：]]></text>
+				</staticText>
+				<textField pattern="yyyy/MM/dd">
+					<reportElement x="90" y="15" width="63" height="15">
+						<printWhenExpression><![CDATA[$F{APSTATUS}.equals("3")]]></printWhenExpression>
+					</reportElement>
+					<textElement verticalAlignment="Top"/>
+					<textFieldExpression class="java.sql.Timestamp"><![CDATA[$F{APPROVEDATE}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="166" y="0" width="58" height="15"/>
+					<textElement verticalAlignment="Top"/>
+					<text><![CDATA[申請部署：]]></text>
+				</staticText>
+				<textField>
+					<reportElement x="224" y="0" width="331" height="15"/>
+					<textElement verticalAlignment="Top">
+						<font size="10"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[($F{APCOMPANYNAME} == null ? "" : $F{APCOMPANYNAME})
++ " "
++ ($F{APSECTIONNAME} == null ? "" : $F{APSECTIONNAME})]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="166" y="15" width="58" height="15"/>
+					<textElement verticalAlignment="Top"/>
+					<text><![CDATA[申請者　：]]></text>
+				</staticText>
+				<textField>
+					<reportElement x="224" y="15" width="155" height="15"/>
+					<textElement verticalAlignment="Top"/>
+					<textFieldExpression class="java.lang.String"><![CDATA[($F{APSTAFFCODE} == null ? "" : $F{APSTAFFCODE})
++ " "
++ ($F{APSTAFFNAME} == null ? "" : $F{APSTAFFNAME})]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="435" y="15" width="120" height="15"/>
+					<textElement verticalAlignment="Top"/>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{APTEL}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="389" y="15" width="47" height="15"/>
+					<textElement/>
+					<text><![CDATA[ＴＥＬ：]]></text>
+				</staticText>
+			</band>
+			<band height="15">
+				<printWhenExpression><![CDATA[$F{ASTGETTIMEFLAG}.equals("1")]]></printWhenExpression>
+				<staticText>
+					<reportElement style="CellTitle" positionType="Float" x="0" y="0" width="115" height="15"/>
+					<textElement verticalAlignment="Top"/>
+					<text><![CDATA[取得時期]]></text>
+				</staticText>
+				<textField pattern="yyyy/MM/dd">
+					<reportElement style="Cell" positionType="Float" x="115" y="0" width="440" height="15"/>
+					<textElement verticalAlignment="Top"/>
+					<textFieldExpression class="java.lang.String"><![CDATA[($F{ASTGETTIMEFLAG} != null && $F{ASTGETTIMEFLAG}.equals("1") ? "先行申請" : "")]]></textFieldExpression>
+				</textField>
+			</band>
+			<band height="65">
+				<printWhenExpression><![CDATA[$F{APGETTYPE}.equals("1") || $F{APGETTYPE}.equals("3")]]></printWhenExpression>
+				<frame>
+					<reportElement x="0" y="0" width="555" height="60"/>
+					<staticText>
+						<reportElement style="CellTitle" positionType="Float" x="0" y="15" width="115" height="15"/>
+						<textElement verticalAlignment="Top"/>
+						<text><![CDATA[案件グループ]]></text>
+					</staticText>
+					<textField isBlankWhenNull="true">
+						<reportElement style="Cell" positionType="Float" x="115" y="15" width="440" height="15"/>
+						<box leftPadding="1" rightPadding="1">
+							<topPen lineWidth="0.5"/>
+							<leftPen lineWidth="0.5"/>
+							<bottomPen lineWidth="0.5"/>
+							<rightPen lineWidth="0.5"/>
+						</box>
+						<textElement verticalAlignment="Top"/>
+						<textFieldExpression class="java.lang.String"><![CDATA[($F{ASTGROUPCODE} == null ? "" : $F{ASTGROUPCODE})
++ " "
++ ($F{ASTGROUPNAME} == null ? "" : $F{ASTGROUPNAME})]]></textFieldExpression>
+					</textField>
+					<componentElement>
+						<reportElement key="table 2" positionType="Float" x="0" y="30" width="555" height="15" isRemoveLineWhenBlank="true"/>
+						<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+							<datasetRun subDataset="ApGetIntDummyDataset">
+								<datasetParameter name="parameter1">
+									<datasetParameterExpression><![CDATA[$F{ASTGETREASON}]]></datasetParameterExpression>
+								</datasetParameter>
+							</datasetRun>
+							<jr:column width="115">
+								<jr:detailCell height="15" rowSpan="1">
+									<staticText>
+										<reportElement style="CellTitle" stretchType="RelativeToBandHeight" x="0" y="0" width="115" height="15"/>
+										<textElement verticalAlignment="Top"/>
+										<text><![CDATA[取得（再申請）理由]]></text>
+									</staticText>
+								</jr:detailCell>
+							</jr:column>
+							<jr:column width="440">
+								<jr:detailCell height="15" rowSpan="1">
+									<textField isStretchWithOverflow="true">
+										<reportElement style="Cell" x="0" y="0" width="440" height="15"/>
+										<textElement verticalAlignment="Top"/>
+										<textFieldExpression class="java.lang.String"><![CDATA[$P{parameter1}]]></textFieldExpression>
+									</textField>
+								</jr:detailCell>
+							</jr:column>
+						</jr:table>
+					</componentElement>
+					<staticText>
+						<reportElement style="CellTitle" positionType="Float" x="0" y="45" width="115" height="15">
+							<printWhenExpression><![CDATA[$F{APGETTYPE}.equals("1")]]></printWhenExpression>
+						</reportElement>
+						<textElement verticalAlignment="Top"/>
+						<text><![CDATA[リリース予定日]]></text>
+					</staticText>
+					<staticText>
+						<reportElement style="CellTitle" positionType="Float" x="0" y="45" width="115" height="15">
+							<printWhenExpression><![CDATA[$F{APGETTYPE}.equals("3")]]></printWhenExpression>
+						</reportElement>
+						<textElement verticalAlignment="Top"/>
+						<text><![CDATA[検収（納品）予定日]]></text>
+					</staticText>
+					<textField pattern="yyyy/MM/dd">
+						<reportElement style="Cell" positionType="Float" x="115" y="45" width="75" height="15"/>
+						<textElement verticalAlignment="Top"/>
+						<textFieldExpression class="java.sql.Timestamp"><![CDATA[$F{ASTCOMPLETEPLANDATE}]]></textFieldExpression>
+					</textField>
+					<textField pattern="yyyy/MM/dd">
+						<reportElement style="Cell" positionType="Float" x="190" y="45" width="365" height="15"/>
+						<textElement verticalAlignment="Top"/>
+						<textFieldExpression class="java.lang.String"><![CDATA[($F{APNEEDCIOJUDGEFLAG} != null && $F{APNEEDCIOJUDGEFLAG}.equals("1") ? "　要CIO審査" : "")]]></textFieldExpression>
+					</textField>
+					<componentElement>
+						<reportElement key="table 2" positionType="Float" x="0" y="0" width="555" height="15" isRemoveLineWhenBlank="true"/>
+						<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+							<datasetRun subDataset="ApGetIntDummyDataset">
+								<datasetParameter name="parameter1">
+									<datasetParameterExpression><![CDATA[($F{ASTNAME} == null ? "" : $F{ASTNAME}
+ + ($F{ASTCLOUDTYPENAME} == null ? "" : ("[" + $F{ASTCLOUDTYPENAME} + "]"))
+)]]></datasetParameterExpression>
+								</datasetParameter>
+							</datasetRun>
+							<jr:column width="115">
+								<jr:detailCell height="15" rowSpan="1">
+									<staticText>
+										<reportElement style="CellTitle" stretchType="RelativeToBandHeight" x="0" y="0" width="115" height="15"/>
+										<textElement verticalAlignment="Top"/>
+										<text><![CDATA[資産名]]></text>
+									</staticText>
+								</jr:detailCell>
+							</jr:column>
+							<jr:column width="440">
+								<jr:detailCell height="15" rowSpan="1">
+									<textField isStretchWithOverflow="true">
+										<reportElement style="Cell" x="0" y="0" width="440" height="15"/>
+										<textElement verticalAlignment="Top"/>
+										<textFieldExpression class="java.lang.String"><![CDATA[$P{parameter1}]]></textFieldExpression>
+									</textField>
+								</jr:detailCell>
+							</jr:column>
+						</jr:table>
+					</componentElement>
+				</frame>
+			</band>
+			<band height="35">
+				<printWhenExpression><![CDATA[$F{APGETTYPE}.equals("2")]]></printWhenExpression>
+				<staticText>
+					<reportElement style="CellTitle" positionType="Float" x="0" y="0" width="115" height="15"/>
+					<textElement verticalAlignment="Top"/>
+					<text><![CDATA[分類]]></text>
+				</staticText>
+				<textField>
+					<reportElement style="Cell" positionType="Float" x="115" y="0" width="440" height="15"/>
+					<textElement verticalAlignment="Top"/>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{MKTCATCATEGORYNAME}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement style="CellTitle" positionType="Float" x="0" y="15" width="115" height="15"/>
+					<textElement verticalAlignment="Top"/>
+					<text><![CDATA[タスク(会計計上区分)]]></text>
+				</staticText>
+				<textField>
+					<reportElement style="Cell" positionType="Float" x="115" y="15" width="75" height="15"/>
+					<textElement verticalAlignment="Top"/>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{MKTCATTASKNAME}]]></textFieldExpression>
+				</textField>
+				<textField pattern="yyyy/MM/dd">
+					<reportElement style="Cell" positionType="Float" x="190" y="15" width="365" height="15"/>
+					<textElement verticalAlignment="Top"/>
+					<textFieldExpression class="java.lang.String"><![CDATA[($F{APNEEDCIOJUDGEFLAG} != null && $F{APNEEDCIOJUDGEFLAG}.equals("1") ? "　要CIO審査" : "")]]></textFieldExpression>
+				</textField>
+			</band>
+			<band height="35">
+				<printWhenExpression><![CDATA[$F{APGETTYPE}.equals("1")]]></printWhenExpression>
+				<frame>
+					<reportElement x="0" y="0" width="555" height="30"/>
+					<staticText>
+						<reportElement style="CellTitle" positionType="Float" x="0" y="0" width="115" height="15"/>
+						<textElement verticalAlignment="Top"/>
+						<text><![CDATA[費用削減/収益獲得効果]]></text>
+					</staticText>
+					<textField>
+						<reportElement style="Cell" positionType="Float" x="115" y="0" width="245" height="15"/>
+						<textElement verticalAlignment="Top"/>
+						<textFieldExpression class="java.lang.String"><![CDATA[($F{ASTEFFECTTYPE} != null && $F{ASTEFFECTTYPE}.equals("1") ? "有" : "")
+ +
+($F{ASTEFFECTTYPE} != null && $F{ASTEFFECTTYPE}.equals("2") ? "無" : "")
+ +
+($F{ASTEFFECTTYPE} != null && $F{ASTEFFECTTYPE}.equals("3") ? "不明" : "")]]></textFieldExpression>
+					</textField>
+					<staticText>
+						<reportElement style="CellTitle" positionType="Float" x="360" y="0" width="75" height="15"/>
+						<textElement textAlignment="Right" verticalAlignment="Top"/>
+						<text><![CDATA[効果金額]]></text>
+					</staticText>
+					<textField pattern="#,##0">
+						<reportElement positionType="Float" x="435" y="0" width="85" height="15"/>
+						<textElement textAlignment="Right" verticalAlignment="Top"/>
+						<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{ASTEFFECTAMOUNT}]]></textFieldExpression>
+					</textField>
+					<staticText>
+						<reportElement x="520" y="0" width="34" height="15">
+							<printWhenExpression><![CDATA[$F{ASTEFFECTAMOUNT} == null ? "" : "百万円"]]></printWhenExpression>
+						</reportElement>
+						<textElement textAlignment="Center" verticalAlignment="Top"/>
+						<text><![CDATA[百万円]]></text>
+					</staticText>
+					<rectangle>
+						<reportElement style="Cell" mode="Transparent" x="435" y="0" width="120" height="15"/>
+						<graphicElement>
+							<pen lineWidth="0.5"/>
+						</graphicElement>
+					</rectangle>
+					<componentElement>
+						<reportElement key="table 2" positionType="Float" x="0" y="15" width="555" height="15" isRemoveLineWhenBlank="true"/>
+						<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+							<datasetRun subDataset="ApGetIntDummyDataset">
+								<datasetParameter name="parameter1">
+									<datasetParameterExpression><![CDATA[$F{ASTEFFECTDESCRIPTION}]]></datasetParameterExpression>
+								</datasetParameter>
+							</datasetRun>
+							<jr:column width="115">
+								<jr:detailCell height="15" rowSpan="1">
+									<staticText>
+										<reportElement style="CellTitle" stretchType="RelativeToBandHeight" x="0" y="0" width="115" height="15"/>
+										<textElement verticalAlignment="Top"/>
+										<text><![CDATA[効果に対する備考]]></text>
+									</staticText>
+								</jr:detailCell>
+							</jr:column>
+							<jr:column width="440">
+								<jr:detailCell height="15" rowSpan="1">
+									<textField isStretchWithOverflow="true">
+										<reportElement style="Cell" x="0" y="0" width="440" height="15"/>
+										<textElement verticalAlignment="Top"/>
+										<textFieldExpression class="java.lang.String"><![CDATA[$P{parameter1}]]></textFieldExpression>
+									</textField>
+								</jr:detailCell>
+							</jr:column>
+						</jr:table>
+					</componentElement>
+				</frame>
+			</band>
+			<band height="50">
+				<printWhenExpression><![CDATA[$F{APGETTYPE}.equals("3") && $F{ASTRENTFLAG}.equals("1")]]></printWhenExpression>
+				<frame>
+					<reportElement x="0" y="0" width="555" height="45"/>
+					<staticText>
+						<reportElement positionType="Float" x="0" y="0" width="153" height="15" isRemoveLineWhenBlank="true"/>
+						<textElement verticalAlignment="Top"/>
+						<text><![CDATA[【賃借物件据付費用】]]></text>
+					</staticText>
+					<staticText>
+						<reportElement style="CellTitle" positionType="Float" x="0" y="15" width="115" height="15"/>
+						<textElement verticalAlignment="Top"/>
+						<text><![CDATA[ﾘｰｽ・ﾚﾝﾀﾙ取得申請番号]]></text>
+					</staticText>
+					<textField>
+						<reportElement style="Cell" positionType="Float" x="115" y="15" width="109" height="15"/>
+						<textElement verticalAlignment="Top"/>
+						<textFieldExpression class="java.lang.String"><![CDATA[$F{ASTRENTAPPLICATIONID}]]></textFieldExpression>
+					</textField>
+					<staticText>
+						<reportElement style="CellTitle" positionType="Float" x="224" y="15" width="56" height="15"/>
+						<textElement textAlignment="Center" verticalAlignment="Top"/>
+						<text><![CDATA[契約月数]]></text>
+					</staticText>
+					<textField pattern="###0.00">
+						<reportElement style="Cell" positionType="Float" x="280" y="15" width="50" height="15"/>
+						<textElement textAlignment="Right" verticalAlignment="Top"/>
+						<textFieldExpression class="java.lang.String"><![CDATA[($F{ASTRENTMONTH} == null ? "" : $F{ASTRENTMONTH} + "ヶ月")]]></textFieldExpression>
+					</textField>
+					<staticText>
+						<reportElement style="CellTitle" positionType="Float" x="330" y="15" width="70" height="15"/>
+						<textElement textAlignment="Center" verticalAlignment="Top"/>
+						<text><![CDATA[賃借予定期間]]></text>
+					</staticText>
+					<textField pattern="yyyy/MM/dd">
+						<reportElement positionType="Float" x="400" y="15" width="70" height="15"/>
+						<textElement textAlignment="Center" verticalAlignment="Top"/>
+						<textFieldExpression class="java.sql.Timestamp"><![CDATA[$F{ASTRENTDATEFROM}]]></textFieldExpression>
+					</textField>
+					<staticText>
+						<reportElement x="470" y="15" width="14" height="15">
+							<printWhenExpression><![CDATA[$F{ASTRENTDATEFROM} == null ? "" : "～"]]></printWhenExpression>
+						</reportElement>
+						<textElement textAlignment="Center" verticalAlignment="Top"/>
+						<text><![CDATA[～]]></text>
+					</staticText>
+					<textField pattern="yyyy/MM/dd">
+						<reportElement positionType="Float" x="484" y="15" width="70" height="15"/>
+						<textElement textAlignment="Center" verticalAlignment="Top"/>
+						<textFieldExpression class="java.sql.Timestamp"><![CDATA[$F{ASTRENTDATETO}]]></textFieldExpression>
+					</textField>
+					<componentElement>
+						<reportElement key="table 2" positionType="Float" x="0" y="30" width="555" height="15" isRemoveLineWhenBlank="true"/>
+						<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+							<datasetRun subDataset="ApGetIntDummyDataset">
+								<datasetParameter name="parameter1">
+									<datasetParameterExpression><![CDATA[$F{ASTRENTDESCRIPTION}]]></datasetParameterExpression>
+								</datasetParameter>
+							</datasetRun>
+							<jr:column width="115">
+								<jr:detailCell height="15" rowSpan="1">
+									<staticText>
+										<reportElement style="CellTitle" stretchType="RelativeToBandHeight" x="0" y="0" width="115" height="15"/>
+										<textElement verticalAlignment="Top"/>
+										<text><![CDATA[据付費用に対する備考]]></text>
+									</staticText>
+								</jr:detailCell>
+							</jr:column>
+							<jr:column width="440">
+								<jr:detailCell height="15" rowSpan="1">
+									<textField isStretchWithOverflow="true">
+										<reportElement style="Cell" x="0" y="0" width="440" height="15"/>
+										<textElement verticalAlignment="Top"/>
+										<textFieldExpression class="java.lang.String"><![CDATA[$P{parameter1}]]></textFieldExpression>
+									</textField>
+								</jr:detailCell>
+							</jr:column>
+						</jr:table>
+					</componentElement>
+				</frame>
+				<rectangle>
+					<reportElement style="Cell" x="400" y="15" width="155" height="15"/>
+					<graphicElement>
+						<pen lineWidth="0.5"/>
+					</graphicElement>
+				</rectangle>
+			</band>
+			<band height="100">
+				<printWhenExpression><![CDATA[$F{APGETTYPE}.equals("2")]]></printWhenExpression>
+				<frame>
+					<reportElement x="0" y="0" width="555" height="90"/>
+					<staticText>
+						<reportElement style="CellTitle" positionType="Float" x="0" y="0" width="115" height="15"/>
+						<textElement verticalAlignment="Top"/>
+						<text><![CDATA[資産名]]></text>
+					</staticText>
+					<textField>
+						<reportElement style="Cell" positionType="Float" x="115" y="0" width="440" height="15"/>
+						<textElement verticalAlignment="Top"/>
+						<textFieldExpression class="java.lang.String"><![CDATA[$F{ASTNAME}]]></textFieldExpression>
+					</textField>
+					<staticText>
+						<reportElement style="CellTitle" positionType="Float" x="0" y="15" width="115" height="15"/>
+						<textElement verticalAlignment="Top"/>
+						<text><![CDATA[資産プロジェクト]]></text>
+					</staticText>
+					<textField>
+						<reportElement style="Cell" positionType="Float" x="115" y="15" width="440" height="15"/>
+						<textElement verticalAlignment="Top"/>
+						<textFieldExpression class="java.lang.String"><![CDATA[($F{MKTASTPROJECTCODE} == null ? "" : $F{MKTASTPROJECTCODE})
++ " "
++ ($F{MKTASTPROJECTNAME} == null ? "" : $F{MKTASTPROJECTNAME})]]></textFieldExpression>
+					</textField>
+					<staticText>
+						<reportElement style="CellTitle" positionType="Float" x="0" y="30" width="115" height="15"/>
+						<textElement verticalAlignment="Top"/>
+						<text><![CDATA[開発完了予定日]]></text>
+					</staticText>
+					<textField pattern="yyyy/MM/dd">
+						<reportElement style="Cell" positionType="Float" x="115" y="30" width="440" height="15"/>
+						<textElement verticalAlignment="Top"/>
+						<textFieldExpression class="java.sql.Timestamp"><![CDATA[$F{ASTCOMPLETEPLANDATE}]]></textFieldExpression>
+					</textField>
+					<componentElement>
+						<reportElement key="table 2" positionType="Float" x="0" y="45" width="555" height="15" isRemoveLineWhenBlank="true"/>
+						<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+							<datasetRun subDataset="ApGetIntDummyDataset">
+								<datasetParameter name="parameter1">
+									<datasetParameterExpression><![CDATA[$F{MKTASTPRODUCTOUTLINE}]]></datasetParameterExpression>
+								</datasetParameter>
+							</datasetRun>
+							<jr:column width="115">
+								<jr:detailCell height="15" rowSpan="1">
+									<staticText>
+										<reportElement style="CellTitle" stretchType="RelativeToBandHeight" x="0" y="0" width="115" height="15"/>
+										<textElement verticalAlignment="Top"/>
+										<text><![CDATA[製品の概要]]></text>
+									</staticText>
+								</jr:detailCell>
+							</jr:column>
+							<jr:column width="440">
+								<jr:detailCell height="15" rowSpan="1">
+									<textField isStretchWithOverflow="true">
+										<reportElement style="Cell" x="0" y="0" width="440" height="15"/>
+										<textElement verticalAlignment="Top"/>
+										<textFieldExpression class="java.lang.String"><![CDATA[$P{parameter1}]]></textFieldExpression>
+									</textField>
+								</jr:detailCell>
+							</jr:column>
+						</jr:table>
+					</componentElement>
+					<componentElement>
+						<reportElement key="table 2" positionType="Float" x="0" y="60" width="555" height="15" isRemoveLineWhenBlank="true"/>
+						<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+							<datasetRun subDataset="ApGetIntDummyDataset">
+								<datasetParameter name="parameter1">
+									<datasetParameterExpression><![CDATA[$F{MKTASTMARKET}]]></datasetParameterExpression>
+								</datasetParameter>
+							</datasetRun>
+							<jr:column width="115">
+								<jr:detailCell height="15" rowSpan="1">
+									<staticText>
+										<reportElement style="CellTitle" stretchType="RelativeToBandHeight" x="0" y="0" width="115" height="15"/>
+										<textElement verticalAlignment="Top"/>
+										<text><![CDATA[市場性]]></text>
+									</staticText>
+								</jr:detailCell>
+							</jr:column>
+							<jr:column width="440">
+								<jr:detailCell height="15" rowSpan="1">
+									<textField isStretchWithOverflow="true">
+										<reportElement style="Cell" x="0" y="0" width="440" height="15"/>
+										<textElement verticalAlignment="Top"/>
+										<textFieldExpression class="java.lang.String"><![CDATA[$P{parameter1}]]></textFieldExpression>
+									</textField>
+								</jr:detailCell>
+							</jr:column>
+						</jr:table>
+					</componentElement>
+					<componentElement>
+						<reportElement key="table 2" positionType="Float" x="0" y="75" width="555" height="15" isRemoveLineWhenBlank="true"/>
+						<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+							<datasetRun subDataset="ApGetIntDummyDataset">
+								<datasetParameter name="parameter1">
+									<datasetParameterExpression><![CDATA[$F{MKTASTPOLICY}]]></datasetParameterExpression>
+								</datasetParameter>
+							</datasetRun>
+							<jr:column width="115">
+								<jr:detailCell height="15" rowSpan="1">
+									<staticText>
+										<reportElement style="CellTitle" stretchType="RelativeToBandHeight" x="0" y="0" width="115" height="15"/>
+										<textElement verticalAlignment="Top"/>
+										<text><![CDATA[マーケティング方針]]></text>
+									</staticText>
+								</jr:detailCell>
+							</jr:column>
+							<jr:column width="440">
+								<jr:detailCell height="15" rowSpan="1">
+									<textField isStretchWithOverflow="true">
+										<reportElement style="Cell" x="0" y="0" width="440" height="15"/>
+										<textElement verticalAlignment="Top"/>
+										<textFieldExpression class="java.lang.String"><![CDATA[$P{parameter1}]]></textFieldExpression>
+									</textField>
+								</jr:detailCell>
+							</jr:column>
+						</jr:table>
+					</componentElement>
+				</frame>
+			</band>
+			<band height="15">
+				<staticText>
+					<reportElement style="CellTitle" positionType="Float" x="0" y="0" width="115" height="15"/>
+					<textElement verticalAlignment="Top"/>
+					<text><![CDATA[保有部署]]></text>
+				</staticText>
+				<textField>
+					<reportElement style="Cell" positionType="Float" x="115" y="0" width="245" height="15"/>
+					<textElement verticalAlignment="Top"/>
+					<textFieldExpression class="java.lang.String"><![CDATA[($F{HOLCOMPANYNAME} == null ? "" : $F{HOLCOMPANYNAME})
++ " "
++ ($F{HOLSECTIONNAME} == null ? "" : $F{HOLSECTIONNAME})]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement style="CellTitle" positionType="Float" x="360" y="0" width="75" height="15"/>
+					<textElement verticalAlignment="Top"/>
+					<text><![CDATA[無形管理担当者]]></text>
+				</staticText>
+				<textField>
+					<reportElement style="Cell" positionType="Float" x="435" y="0" width="120" height="15"/>
+					<textElement verticalAlignment="Top"/>
+					<textFieldExpression class="java.lang.String"><![CDATA[($F{HOLSTAFFCODE} == null ? "" : $F{HOLSTAFFCODE})
++ " "
++ ($F{HOLSTAFFNAME} == null ? "" : $F{HOLSTAFFNAME})]]></textFieldExpression>
+				</textField>
+			</band>
+			<band height="15">
+				<printWhenExpression><![CDATA[$F{APGETTYPE}.equals("1") || $F{APGETTYPE}.equals("3")]]></printWhenExpression>
+				<staticText>
+					<reportElement style="CellTitle" positionType="Float" x="0" y="0" width="115" height="15"/>
+					<textElement verticalAlignment="Top"/>
+					<text><![CDATA[代表設置場所]]></text>
+				</staticText>
+				<textField>
+					<reportElement style="Cell" positionType="Float" x="115" y="0" width="440" height="15"/>
+					<textElement verticalAlignment="Top"/>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{HOLREPOFFICENAME}]]></textFieldExpression>
+				</textField>
+			</band>
+			<band height="50" splitType="Stretch">
+				<textField>
+					<reportElement style="Cell" positionType="Float" x="115" y="0" width="440" height="15"/>
+					<textElement verticalAlignment="Top"/>
+					<textFieldExpression class="java.lang.String"><![CDATA[($F{COSTTYPENAME} == null ? "" : $F{COSTTYPENAME} + " ")
+    + ($F{COSTDEPPRJCODE} != null ? ("　減価償却(費用化)ﾌﾟﾛｼﾞｪｸﾄｺｰﾄﾞ：" + $F{COSTDEPPRJCODE} + " " + $F{COSTDEPPRJNAME}) : "")]]></textFieldExpression>
+				</textField>
+				<componentElement>
+					<reportElement key="table 3" positionType="Float" x="0" y="15" width="555" height="15"/>
+					<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+						<datasetRun subDataset="ApGetIntLineCostSecDataset">
+							<datasetParameter name="applicationId">
+								<datasetParameterExpression><![CDATA[$F{APPLICATIONID}]]></datasetParameterExpression>
+							</datasetParameter>
+							<datasetParameter name="applicationVersion">
+								<datasetParameterExpression><![CDATA[$F{APPLICATIONVERSION}]]></datasetParameterExpression>
+							</datasetParameter>
+							<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+						</datasetRun>
+						<jr:column width="115">
+							<jr:detailCell height="15" rowSpan="1">
+								<textField>
+									<reportElement style="CellTitle" x="0" y="0" width="115" height="15"/>
+									<box leftPadding="1" rightPadding="1">
+										<topPen lineWidth="0.0"/>
+										<bottomPen lineWidth="0.0"/>
+									</box>
+									<textElement verticalAlignment="Top"/>
+									<textFieldExpression class="java.lang.String"><![CDATA[($V{COLUMN_COUNT} == 1 ? "経費負担部課" : "")]]></textFieldExpression>
+								</textField>
+							</jr:detailCell>
+						</jr:column>
+						<jr:column width="340">
+							<jr:detailCell height="15" rowSpan="1">
+								<textField>
+									<reportElement x="1" y="0" width="339" height="15"/>
+									<textElement verticalAlignment="Top"/>
+									<textFieldExpression class="java.lang.String"><![CDATA[($F{COSTSECTIONCODE} != null
+  ?  $F{COSTSECTIONCODE} + " "+ $F{COSTSECTIONNAME}
+  : ""
+)]]></textFieldExpression>
+								</textField>
+							</jr:detailCell>
+						</jr:column>
+						<jr:column width="100">
+							<jr:detailCell height="15" rowSpan="1">
+								<textField pattern="#,##0.0%　　　　　　" isBlankWhenNull="true">
+									<reportElement x="0" y="0" width="100" height="15">
+										<printWhenExpression><![CDATA[($F{COSTDIST} != null && Math.ceil($F{COSTDIST}.doubleValue()) != $F{COSTDIST}.doubleValue())]]></printWhenExpression>
+									</reportElement>
+									<box>
+										<rightPen lineWidth="0.5"/>
+									</box>
+									<textElement textAlignment="Right">
+										<font size="10"/>
+									</textElement>
+									<textFieldExpression class="java.lang.Double"><![CDATA[$F{COSTDIST} / 100]]></textFieldExpression>
+								</textField>
+								<textField pattern="#,##0  %　　　　　　" isBlankWhenNull="true">
+									<reportElement x="0" y="0" width="100" height="15">
+										<printWhenExpression><![CDATA[($F{COSTDIST} == null || Math.ceil($F{COSTDIST}.doubleValue()) == $F{COSTDIST}.doubleValue())]]></printWhenExpression>
+									</reportElement>
+									<box>
+										<rightPen lineWidth="0.5"/>
+									</box>
+									<textElement textAlignment="Right">
+										<font size="10"/>
+									</textElement>
+									<textFieldExpression class="java.lang.Double"><![CDATA[$F{COSTDIST} / 100]]></textFieldExpression>
+								</textField>
+							</jr:detailCell>
+						</jr:column>
+					</jr:table>
+				</componentElement>
+				<staticText>
+					<reportElement style="CellTitle" positionType="Float" x="0" y="30" width="115" height="15"/>
+					<textElement verticalAlignment="Top"/>
+					<text><![CDATA[資産計上部課]]></text>
+				</staticText>
+				<textField>
+					<reportElement style="Cell" positionType="Float" x="115" y="30" width="440" height="15"/>
+					<textElement verticalAlignment="Top"/>
+					<textFieldExpression class="java.lang.String"><![CDATA[($F{COSTSECTIONCODE} != null
+  ?  $F{COSTSECTIONCODE} + " "+ $F{COSTSECTIONNAME}
+  : ""
+)]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement style="CellTitle" positionType="Float" x="0" y="0" width="115" height="15"/>
+					<textElement verticalAlignment="Top"/>
+					<text><![CDATA[販管/原価区分]]></text>
+				</staticText>
+			</band>
+			<band height="20">
+				<printWhenExpression><![CDATA[$F{APGETTYPE}.equals("2") && $F{MKTDEVNEXTPLANDATE} != null]]></printWhenExpression>
+				<frame>
+					<reportElement x="0" y="0" width="555" height="15"/>
+					<staticText>
+						<reportElement style="CellTitle" positionType="Float" x="0" y="0" width="115" height="15"/>
+						<textElement verticalAlignment="Top"/>
+						<text><![CDATA[次期開発完了予定日]]></text>
+					</staticText>
+					<textField pattern="yyyy/MM/dd">
+						<reportElement style="Cell" positionType="Float" x="115" y="0" width="438" height="15"/>
+						<textElement textAlignment="Left" verticalAlignment="Top"/>
+						<textFieldExpression class="java.sql.Timestamp"><![CDATA[$F{MKTDEVNEXTPLANDATE}]]></textFieldExpression>
+					</textField>
+				</frame>
+			</band>
+			<band height="35">
+				<componentElement>
+					<reportElement key="table 2" positionType="Float" x="0" y="0" width="555" height="15" isRemoveLineWhenBlank="true"/>
+					<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+						<datasetRun subDataset="ApGetIntDummyDataset">
+							<datasetParameter name="parameter1">
+								<datasetParameterExpression><![CDATA[$F{DESCRIPTIONAP}]]></datasetParameterExpression>
+							</datasetParameter>
+						</datasetRun>
+						<jr:column width="115">
+							<jr:detailCell height="15" rowSpan="1">
+								<staticText>
+									<reportElement style="CellTitle" stretchType="RelativeToBandHeight" x="0" y="0" width="115" height="15"/>
+									<textElement verticalAlignment="Top"/>
+									<text><![CDATA[備考（申請者）]]></text>
+								</staticText>
+							</jr:detailCell>
+						</jr:column>
+						<jr:column width="440">
+							<jr:detailCell height="15" rowSpan="1">
+								<textField isStretchWithOverflow="true">
+									<reportElement style="Cell" x="0" y="0" width="440" height="15"/>
+									<textElement verticalAlignment="Top"/>
+									<textFieldExpression class="java.lang.String"><![CDATA[$P{parameter1}]]></textFieldExpression>
+								</textField>
+							</jr:detailCell>
+						</jr:column>
+					</jr:table>
+				</componentElement>
+				<componentElement>
+					<reportElement key="table 2" positionType="Float" x="0" y="15" width="555" height="15" isRemoveLineWhenBlank="true"/>
+					<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+						<datasetRun subDataset="ApGetIntDummyDataset">
+							<datasetParameter name="parameter1">
+								<datasetParameterExpression><![CDATA[$F{DESCRIPTIONADMIN}]]></datasetParameterExpression>
+							</datasetParameter>
+						</datasetRun>
+						<jr:column width="115">
+							<jr:detailCell height="15" rowSpan="1">
+								<staticText>
+									<reportElement style="CellTitle" stretchType="RelativeToBandHeight" x="0" y="0" width="115" height="15"/>
+									<textElement verticalAlignment="Top"/>
+									<text><![CDATA[備考（管理者）]]></text>
+								</staticText>
+							</jr:detailCell>
+						</jr:column>
+						<jr:column width="440">
+							<jr:detailCell height="15" rowSpan="1">
+								<textField isStretchWithOverflow="true">
+									<reportElement style="Cell" x="0" y="0" width="440" height="15"/>
+									<textElement verticalAlignment="Top"/>
+									<textFieldExpression class="java.lang.String"><![CDATA[$P{parameter1}]]></textFieldExpression>
+								</textField>
+							</jr:detailCell>
+						</jr:column>
+					</jr:table>
+				</componentElement>
+			</band>
+		</groupHeader>
+	</group>
+	<group name="LINETYPE" isReprintHeaderOnEachPage="true">
+		<groupExpression><![CDATA[$F{LINETYPE}]]></groupExpression>
+		<groupHeader>
+			<band height="60">
+				<printWhenExpression><![CDATA[$F{LINETYPE}.equals("1") && $F{APGETTYPE}.equals("1")]]></printWhenExpression>
+				<staticText>
+					<reportElement positionType="Float" x="0" y="0" width="153" height="15" isRemoveLineWhenBlank="true"/>
+					<textElement verticalAlignment="Top"/>
+					<text><![CDATA[【資産明細】]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="CellTitle" positionType="Float" stretchType="RelativeToBandHeight" x="0" y="15" width="30" height="45"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle"/>
+					<text><![CDATA[No]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="CellTitle" positionType="Float" x="30" y="15" width="210" height="30"/>
+					<textElement verticalAlignment="Middle"/>
+					<text><![CDATA[名称/資産プロジェクト]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="CellTitle" positionType="Float" x="240" y="15" width="170" height="30"/>
+					<textElement verticalAlignment="Middle"/>
+					<text><![CDATA[仕入先]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="CellTitle" positionType="Float" x="30" y="45" width="85" height="15"/>
+					<textElement verticalAlignment="Top"/>
+					<text><![CDATA[分類]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="CellTitle" positionType="Float" x="115" y="45" width="165" height="15"/>
+					<textElement verticalAlignment="Top"/>
+					<text><![CDATA[処理科目]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="CellTitle" positionType="Float" x="280" y="45" width="130" height="15"/>
+					<textElement verticalAlignment="Top"/>
+					<text><![CDATA[見積番号]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="CellTitle" positionType="Float" x="410" y="15" width="45" height="45"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle"/>
+					<text><![CDATA[計上区分]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="CellTitle" positionType="Float" stretchType="RelativeToBandHeight" x="455" y="15" width="100" height="45"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle"/>
+					<text><![CDATA[単価
+数量(人月)
+取得金額]]></text>
+				</staticText>
+			</band>
+			<band height="60">
+				<printWhenExpression><![CDATA[$F{LINETYPE}.equals("1") && $F{APGETTYPE}.equals("3")]]></printWhenExpression>
+				<staticText>
+					<reportElement positionType="Float" x="0" y="0" width="153" height="15" isRemoveLineWhenBlank="true"/>
+					<textElement verticalAlignment="Top"/>
+					<text><![CDATA[【資産明細】]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="CellTitle" positionType="Float" stretchType="RelativeToBandHeight" x="0" y="15" width="30" height="45"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle"/>
+					<text><![CDATA[No]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="CellTitle" positionType="Float" x="30" y="15" width="220" height="30"/>
+					<textElement verticalAlignment="Middle"/>
+					<text><![CDATA[名称/資産プロジェクト]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="CellTitle" positionType="Float" x="250" y="15" width="205" height="30"/>
+					<textElement verticalAlignment="Middle"/>
+					<text><![CDATA[仕入先]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="CellTitle" positionType="Float" x="30" y="45" width="85" height="15"/>
+					<textElement verticalAlignment="Top"/>
+					<text><![CDATA[分類]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="CellTitle" positionType="Float" x="115" y="45" width="210" height="15"/>
+					<textElement verticalAlignment="Top"/>
+					<text><![CDATA[処理科目]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="CellTitle" positionType="Float" x="325" y="45" width="130" height="15"/>
+					<textElement verticalAlignment="Top"/>
+					<text><![CDATA[見積番号]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="CellTitle" positionType="Float" stretchType="RelativeToBandHeight" x="455" y="15" width="100" height="45"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle"/>
+					<text><![CDATA[単価
+数量(人月)
+取得金額]]></text>
+				</staticText>
+			</band>
+			<band height="45">
+				<printWhenExpression><![CDATA[$F{LINETYPE}.equals("3")]]></printWhenExpression>
+				<staticText>
+					<reportElement positionType="Float" x="0" y="0" width="185" height="15" isRemoveLineWhenBlank="true"/>
+					<textElement verticalAlignment="Top"/>
+					<text><![CDATA[【開発スケジュール / 開発要員計画】]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="CellTitle" positionType="Float" x="0" y="15" width="135" height="30"/>
+					<textElement verticalAlignment="Middle"/>
+					<text><![CDATA[フェーズ]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="CellTitle" positionType="Float" x="135" y="15" width="130" height="30"/>
+					<textElement verticalAlignment="Middle"/>
+					<text><![CDATA[実施期間]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="CellTitle" positionType="Float" x="385" y="30" width="60" height="15"/>
+					<textElement textAlignment="Right" verticalAlignment="Top"/>
+					<text><![CDATA[合計]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="CellTitle" positionType="Float" x="265" y="30" width="60" height="15"/>
+					<textElement textAlignment="Right" verticalAlignment="Top"/>
+					<text><![CDATA[社員]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="CellTitle" positionType="Float" x="325" y="30" width="60" height="15"/>
+					<textElement textAlignment="Right" verticalAlignment="Top"/>
+					<text><![CDATA[業務委託]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="CellTitle" positionType="Float" x="445" y="15" width="110" height="30"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle"/>
+					<text><![CDATA[開発経費]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="CellTitle" positionType="Float" x="265" y="15" width="180" height="15"/>
+					<textElement textAlignment="Center" verticalAlignment="Top"/>
+					<text><![CDATA[要員数(人月)]]></text>
+				</staticText>
+			</band>
+			<band height="40">
+				<printWhenExpression><![CDATA[$F{LINETYPE}.equals("4")]]></printWhenExpression>
+				<staticText>
+					<reportElement positionType="Float" x="0" y="10" width="153" height="15" isRemoveLineWhenBlank="true"/>
+					<textElement verticalAlignment="Top"/>
+					<text><![CDATA[【その他費用】]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="CellTitle" positionType="Float" x="0" y="25" width="445" height="15"/>
+					<textElement verticalAlignment="Top"/>
+					<text><![CDATA[コメント]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="CellTitle" positionType="Float" x="445" y="25" width="110" height="15"/>
+					<textElement textAlignment="Right" verticalAlignment="Top"/>
+					<text><![CDATA[金額]]></text>
+				</staticText>
+			</band>
+			<band height="40">
+				<printWhenExpression><![CDATA[$F{LINETYPE}.equals("5")]]></printWhenExpression>
+				<staticText>
+					<reportElement positionType="Float" x="0" y="10" width="153" height="15" isRemoveLineWhenBlank="true"/>
+					<textElement verticalAlignment="Top"/>
+					<text><![CDATA[【販売・利益予想】]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="CellTitle" positionType="Float" x="0" y="25" width="95" height="15"/>
+					<textElement verticalAlignment="Top"/>
+					<text><![CDATA[]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="CellTitle" positionType="Float" x="95" y="25" width="115" height="15"/>
+					<textElement textAlignment="Right" verticalAlignment="Top"/>
+					<text><![CDATA[販売本数]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="CellTitle" positionType="Float" x="210" y="25" width="115" height="15"/>
+					<textElement textAlignment="Right" verticalAlignment="Top"/>
+					<text><![CDATA[売上]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="CellTitle" positionType="Float" x="325" y="25" width="120" height="15"/>
+					<textElement textAlignment="Right" verticalAlignment="Top"/>
+					<text><![CDATA[売上原価]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="CellTitle" positionType="Float" x="445" y="25" width="110" height="15"/>
+					<textElement textAlignment="Right" verticalAlignment="Top"/>
+					<text><![CDATA[粗利益]]></text>
+				</staticText>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="36">
+				<printWhenExpression><![CDATA[$F{LINETYPE}.equals("1") && ($F{APGETTYPE}.equals("1") || $F{APGETTYPE}.equals("3"))]]></printWhenExpression>
+				<line>
+					<reportElement positionType="Float" x="0" y="5" width="555" height="1">
+						<printWhenExpression><![CDATA[$F{LINETYPE}.equals("1")]]></printWhenExpression>
+					</reportElement>
+					<graphicElement>
+						<pen lineWidth="0.5" lineStyle="Solid"/>
+					</graphicElement>
+				</line>
+				<line>
+					<reportElement x="455" y="6" width="1" height="30">
+						<printWhenExpression><![CDATA[$F{LINETYPE}.equals("1")]]></printWhenExpression>
+					</reportElement>
+					<graphicElement>
+						<pen lineWidth="0.5"/>
+					</graphicElement>
+				</line>
+				<line>
+					<reportElement x="554" y="6" width="1" height="30">
+						<printWhenExpression><![CDATA[$F{LINETYPE}.equals("1")]]></printWhenExpression>
+					</reportElement>
+					<graphicElement>
+						<pen lineWidth="0.5"/>
+					</graphicElement>
+				</line>
+				<line>
+					<reportElement positionType="Float" x="0" y="20" width="555" height="1">
+						<printWhenExpression><![CDATA[$F{LINETYPE}.equals("1")]]></printWhenExpression>
+					</reportElement>
+					<graphicElement>
+						<pen lineWidth="0.5" lineStyle="Solid"/>
+					</graphicElement>
+				</line>
+				<line>
+					<reportElement positionType="Float" x="456" y="35" width="99" height="1">
+						<printWhenExpression><![CDATA[$F{LINETYPE}.equals("1")]]></printWhenExpression>
+					</reportElement>
+					<graphicElement>
+						<pen lineWidth="0.5" lineStyle="Solid"/>
+					</graphicElement>
+				</line>
+				<staticText>
+					<reportElement positionType="Float" x="299" y="5" width="153" height="15">
+						<printWhenExpression><![CDATA[$F{LINETYPE}.equals("1")]]></printWhenExpression>
+					</reportElement>
+					<textElement textAlignment="Right"/>
+					<text><![CDATA[資産合計]]></text>
+				</staticText>
+				<textField pattern="¤ #,##0">
+					<reportElement x="454" y="6" width="100" height="15"/>
+					<textElement textAlignment="Right" verticalAlignment="Top"/>
+					<textFieldExpression class="java.math.BigDecimal"><![CDATA[$V{ASTGETAMOUNT_SISAN}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement positionType="Float" x="299" y="20" width="153" height="15">
+						<printWhenExpression><![CDATA[$F{LINETYPE}.equals("1")]]></printWhenExpression>
+					</reportElement>
+					<textElement textAlignment="Right"/>
+					<text><![CDATA[費用合計]]></text>
+				</staticText>
+				<textField pattern="¤ #,##0" isBlankWhenNull="false">
+					<reportElement x="454" y="21" width="100" height="15"/>
+					<textElement textAlignment="Right" verticalAlignment="Top"/>
+					<textFieldExpression class="java.math.BigDecimal"><![CDATA[$V{ASTGETAMOUNT_HIYOU}]]></textFieldExpression>
+				</textField>
+			</band>
+			<band height="23">
+				<printWhenExpression><![CDATA[$F{LINETYPE}.equals("1")]]></printWhenExpression>
+				<staticText>
+					<reportElement positionType="Float" x="299" y="8" width="153" height="15">
+						<printWhenExpression><![CDATA[$F{LINETYPE}.equals("1")]]></printWhenExpression>
+					</reportElement>
+					<textElement textAlignment="Right"/>
+					<text><![CDATA[取得金額合計]]></text>
+				</staticText>
+				<textField pattern="¤ #,##0">
+					<reportElement x="454" y="8" width="100" height="15"/>
+					<textElement textAlignment="Right"/>
+					<textFieldExpression class="java.math.BigDecimal"><![CDATA[$V{ASTGETAMOUNT_1}]]></textFieldExpression>
+				</textField>
+				<line>
+					<reportElement positionType="Float" x="0" y="5" width="555" height="1">
+						<printWhenExpression><![CDATA[$F{LINETYPE}.equals("1")]]></printWhenExpression>
+					</reportElement>
+					<graphicElement>
+						<pen lineWidth="0.5" lineStyle="Solid"/>
+					</graphicElement>
+				</line>
+				<line>
+					<reportElement positionType="Float" x="0" y="7" width="555" height="1">
+						<printWhenExpression><![CDATA[$F{LINETYPE}.equals("1")]]></printWhenExpression>
+					</reportElement>
+					<graphicElement>
+						<pen lineWidth="0.5" lineStyle="Solid"/>
+					</graphicElement>
+				</line>
+				<line>
+					<reportElement x="455" y="8" width="1" height="14">
+						<printWhenExpression><![CDATA[$F{LINETYPE}.equals("1")]]></printWhenExpression>
+					</reportElement>
+					<graphicElement>
+						<pen lineWidth="0.5"/>
+					</graphicElement>
+				</line>
+				<line>
+					<reportElement x="554" y="7" width="1" height="15">
+						<printWhenExpression><![CDATA[$F{LINETYPE}.equals("1")]]></printWhenExpression>
+					</reportElement>
+					<graphicElement>
+						<pen lineWidth="0.5"/>
+					</graphicElement>
+				</line>
+				<line>
+					<reportElement positionType="Float" x="456" y="22" width="99" height="1">
+						<printWhenExpression><![CDATA[$F{LINETYPE}.equals("1")]]></printWhenExpression>
+					</reportElement>
+					<graphicElement>
+						<pen lineWidth="0.5" lineStyle="Solid"/>
+					</graphicElement>
+				</line>
+			</band>
+			<band height="46">
+				<printWhenExpression><![CDATA[$F{LINETYPE}.equals("3") && $F{APGETINTLINEDEVSCH} > 0]]></printWhenExpression>
+				<frame>
+					<reportElement x="0" y="20" width="555" height="22" isRemoveLineWhenBlank="true">
+						<printWhenExpression><![CDATA[$F{APGETINTLINEOTRCOST} == 0]]></printWhenExpression>
+					</reportElement>
+					<line>
+						<reportElement positionType="Float" x="0" y="0" width="555" height="1"/>
+						<graphicElement>
+							<pen lineWidth="0.5" lineStyle="Solid"/>
+						</graphicElement>
+					</line>
+					<line>
+						<reportElement x="554" y="3" width="1" height="14"/>
+						<graphicElement>
+							<pen lineWidth="0.5"/>
+						</graphicElement>
+					</line>
+					<textField pattern="¤ #,##0">
+						<reportElement x="445" y="3" width="109" height="13"/>
+						<textElement textAlignment="Right"/>
+						<textFieldExpression class="java.math.BigDecimal"><![CDATA[$V{DEVAMOUNT_1}]]></textFieldExpression>
+					</textField>
+					<line>
+						<reportElement positionType="Float" x="0" y="2" width="555" height="1"/>
+						<graphicElement>
+							<pen lineWidth="0.5" lineStyle="Solid"/>
+						</graphicElement>
+					</line>
+					<line>
+						<reportElement x="445" y="4" width="1" height="14"/>
+						<graphicElement>
+							<pen lineWidth="0.5"/>
+						</graphicElement>
+					</line>
+					<line>
+						<reportElement positionType="Float" x="446" y="17" width="109" height="1"/>
+						<graphicElement>
+							<pen lineWidth="0.5" lineStyle="Solid"/>
+						</graphicElement>
+					</line>
+					<staticText>
+						<reportElement positionType="Float" x="291" y="3" width="153" height="15"/>
+						<textElement textAlignment="Right"/>
+						<text><![CDATA[取得金額合計]]></text>
+					</staticText>
+				</frame>
+				<textField pattern="¤ #,##0">
+					<reportElement style="Cell" positionType="Float" x="445" y="0" width="110" height="15"/>
+					<textElement textAlignment="Right" verticalAlignment="Top"/>
+					<textFieldExpression class="java.math.BigDecimal"><![CDATA[$V{DEVAMOUNT_1}]]></textFieldExpression>
+				</textField>
+				<textField pattern="###0.0" isBlankWhenNull="true">
+					<reportElement style="Cell" positionType="Float" x="385" y="0" width="60" height="15"/>
+					<textElement textAlignment="Right" verticalAlignment="Top"/>
+					<textFieldExpression class="java.math.BigDecimal"><![CDATA[$V{DEVPROPERCOUNT_1} + $V{DEVENTRUSTCOUNT_1}]]></textFieldExpression>
+				</textField>
+				<textField pattern="###0.0">
+					<reportElement style="Cell" positionType="Float" x="325" y="0" width="60" height="15"/>
+					<textElement textAlignment="Right" verticalAlignment="Top"/>
+					<textFieldExpression class="java.math.BigDecimal"><![CDATA[$V{DEVENTRUSTCOUNT_1}]]></textFieldExpression>
+				</textField>
+				<textField pattern="###0.0" isBlankWhenNull="true">
+					<reportElement style="Cell" positionType="Float" x="265" y="0" width="60" height="15"/>
+					<textElement textAlignment="Right" verticalAlignment="Top"/>
+					<textFieldExpression class="java.math.BigDecimal"><![CDATA[$V{DEVPROPERCOUNT_1}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement style="Cell" positionType="Float" x="0" y="0" width="265" height="15"/>
+					<textElement textAlignment="Right" verticalAlignment="Top"/>
+					<text><![CDATA[合計]]></text>
+				</staticText>
+			</band>
+			<band height="26">
+				<printWhenExpression><![CDATA[$F{LINETYPE}.equals("4")]]></printWhenExpression>
+				<line>
+					<reportElement positionType="Float" x="0" y="9" width="555" height="1"/>
+					<graphicElement>
+						<pen lineWidth="0.5" lineStyle="Solid"/>
+					</graphicElement>
+				</line>
+				<line>
+					<reportElement x="554" y="11" width="1" height="14"/>
+					<graphicElement>
+						<pen lineWidth="0.5"/>
+					</graphicElement>
+				</line>
+				<textField pattern="¤ #,##0">
+					<reportElement x="445" y="12" width="109" height="13"/>
+					<textElement textAlignment="Right"/>
+					<textFieldExpression class="java.math.BigDecimal"><![CDATA[$V{DEVAMOUNT_1} + ($V{OTRAMOUNT_1} == null ? 0 : $V{OTRAMOUNT_1})]]></textFieldExpression>
+				</textField>
+				<line>
+					<reportElement positionType="Float" x="0" y="11" width="555" height="1"/>
+					<graphicElement>
+						<pen lineWidth="0.5" lineStyle="Solid"/>
+					</graphicElement>
+				</line>
+				<line>
+					<reportElement x="445" y="12" width="1" height="14"/>
+					<graphicElement>
+						<pen lineWidth="0.5"/>
+					</graphicElement>
+				</line>
+				<line>
+					<reportElement positionType="Float" x="446" y="25" width="109" height="1"/>
+					<graphicElement>
+						<pen lineWidth="0.5" lineStyle="Solid"/>
+					</graphicElement>
+				</line>
+				<staticText>
+					<reportElement positionType="Float" x="291" y="11" width="153" height="15"/>
+					<textElement textAlignment="Right"/>
+					<text><![CDATA[取得金額合計]]></text>
+				</staticText>
+			</band>
+			<band height="15">
+				<printWhenExpression><![CDATA[$F{LINETYPE}.equals("5")]]></printWhenExpression>
+				<textField pattern="#,##0">
+					<reportElement style="Cell" x="95" y="0" width="115" height="15"/>
+					<textElement textAlignment="Right"/>
+					<textFieldExpression class="java.math.BigDecimal"><![CDATA[$V{PROFSALESQUANTITY_1}]]></textFieldExpression>
+				</textField>
+				<textField pattern="¤ #,##0">
+					<reportElement style="Cell" x="210" y="0" width="115" height="15"/>
+					<textElement textAlignment="Right"/>
+					<textFieldExpression class="java.math.BigDecimal"><![CDATA[$V{PROFSALESAMOUNT_1}]]></textFieldExpression>
+				</textField>
+				<textField pattern="¤ #,##0">
+					<reportElement style="Cell" x="325" y="0" width="120" height="15"/>
+					<textElement textAlignment="Right"/>
+					<textFieldExpression class="java.math.BigDecimal"><![CDATA[$V{PROFCOSTAMOUNT_1}]]></textFieldExpression>
+				</textField>
+				<textField pattern="¤ #,##0">
+					<reportElement style="Cell" x="445" y="0" width="110" height="15"/>
+					<textElement textAlignment="Right" verticalAlignment="Top"/>
+					<textFieldExpression class="java.math.BigDecimal"><![CDATA[$V{PROFSALESAMOUNT_1} - $V{PROFCOSTAMOUNT_1}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement style="Cell" x="0" y="0" width="95" height="15"/>
+					<box topPadding="0" leftPadding="1" rightPadding="1">
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Top"/>
+					<text><![CDATA[合計]]></text>
+				</staticText>
+			</band>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<detail>
+		<band height="45">
+			<printWhenExpression><![CDATA[$F{LINETYPE}.equals("1") && $F{APGETTYPE}.equals("1")]]></printWhenExpression>
+			<textField>
+				<reportElement style="Cell" stretchType="RelativeToBandHeight" x="0" y="0" width="30" height="45"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression class="java.lang.Long"><![CDATA[$F{LINESEQ}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Cell" x="30" y="0" width="210" height="30"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{ASTNAMED} + ($F{ASTPRJNAME} == null ? "" : "/" + $F{ASTPRJNAME})]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Cell" stretchType="RelativeToBandHeight" x="240" y="0" width="170" height="30"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{ASTPURCOMPANYNAME}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Cell" positionType="Float" x="30" y="30" width="85" height="15"/>
+				<textElement verticalAlignment="Top"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{ASTCATEGORYNAME}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Cell" positionType="Float" x="115" y="30" width="165" height="15"/>
+				<textElement verticalAlignment="Top"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{ASTACCOUNTNAME}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Cell" positionType="Float" x="280" y="30" width="130" height="15"/>
+				<textElement verticalAlignment="Top"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{ASTESTIMATENUMBER}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Cell" positionType="Float" x="410" y="0" width="45" height="45"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[($F{ASTADDUPTYPE} != null && $F{ASTADDUPTYPE}.equals("1") ? "資産" : "費用")]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0">
+				<reportElement stretchType="RelativeToBandHeight" x="454" y="0" width="100" height="15"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{ASTUNITAMOUNT}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement stretchType="RelativeToBandHeight" x="454" y="15" width="100" height="15"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{ASTQUANTITY}]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0">
+				<reportElement stretchType="RelativeToBandHeight" x="454" y="29" width="100" height="15"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{ASTGETAMOUNT}]]></textFieldExpression>
+			</textField>
+			<rectangle>
+				<reportElement style="Cell" x="455" y="0" width="100" height="45"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</rectangle>
+		</band>
+		<band height="45">
+			<printWhenExpression><![CDATA[$F{LINETYPE}.equals("1") && $F{APGETTYPE}.equals("3")]]></printWhenExpression>
+			<textField>
+				<reportElement style="Cell" stretchType="RelativeToBandHeight" x="0" y="0" width="30" height="45"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression class="java.lang.Long"><![CDATA[$F{LINESEQ}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Cell" stretchType="RelativeToBandHeight" x="250" y="0" width="205" height="30"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{ASTPURCOMPANYNAME}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Cell" positionType="Float" x="30" y="30" width="85" height="15"/>
+				<textElement verticalAlignment="Top"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{ASTCATEGORYNAME}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Cell" positionType="Float" x="115" y="30" width="210" height="15"/>
+				<textElement verticalAlignment="Top"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{ASTACCOUNTNAME}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Cell" positionType="Float" x="325" y="30" width="130" height="15"/>
+				<textElement verticalAlignment="Top"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{ASTESTIMATENUMBER}]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0">
+				<reportElement stretchType="RelativeToBandHeight" x="454" y="0" width="100" height="15"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{ASTUNITAMOUNT}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement stretchType="RelativeToBandHeight" x="454" y="15" width="100" height="15"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{ASTQUANTITY}]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0">
+				<reportElement stretchType="RelativeToBandHeight" x="454" y="29" width="100" height="15"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{ASTGETAMOUNT}]]></textFieldExpression>
+			</textField>
+			<rectangle>
+				<reportElement style="Cell" x="455" y="0" width="100" height="45"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</rectangle>
+			<textField>
+				<reportElement style="Cell" x="30" y="0" width="220" height="30"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{ASTNAMED} + ($F{ASTPRJNAME} == null ? "" : "/" + $F{ASTPRJNAME})]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="15">
+			<printWhenExpression><![CDATA[$F{LINETYPE}.equals("3")]]></printWhenExpression>
+			<textField pattern="">
+				<reportElement style="Cell" positionType="Float" x="0" y="0" width="135" height="15"/>
+				<textElement verticalAlignment="Top"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{DEVSCHNAME}]]></textFieldExpression>
+			</textField>
+			<textField pattern="yyyy/MM/dd">
+				<reportElement x="136" y="0" width="60" height="15"/>
+				<textElement textAlignment="Center" verticalAlignment="Top"/>
+				<textFieldExpression class="java.sql.Timestamp"><![CDATA[$F{DEVPERIODFROM}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="196" y="0" width="10" height="15">
+					<printWhenExpression><![CDATA[$F{DEVPERIODFROM} != null]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Top"/>
+				<text><![CDATA[～]]></text>
+			</staticText>
+			<textField pattern="yyyy/MM/dd">
+				<reportElement x="205" y="0" width="60" height="15"/>
+				<textElement textAlignment="Center" verticalAlignment="Top"/>
+				<textFieldExpression class="java.sql.Timestamp"><![CDATA[$F{DEVPERIODTO}]]></textFieldExpression>
+			</textField>
+			<rectangle>
+				<reportElement style="Cell" x="135" y="0" width="130" height="15"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</rectangle>
+			<textField pattern="###0.0" isBlankWhenNull="true">
+				<reportElement style="Cell" positionType="Float" x="265" y="0" width="60" height="15"/>
+				<textElement textAlignment="Right" verticalAlignment="Top"/>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{DEVPROPERCOUNT}]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0.0">
+				<reportElement style="Cell" positionType="Float" x="325" y="0" width="60" height="15"/>
+				<textElement textAlignment="Right" verticalAlignment="Top"/>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{DEVENTRUSTCOUNT}]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0.0" isBlankWhenNull="true">
+				<reportElement style="Cell" positionType="Float" x="385" y="0" width="60" height="15"/>
+				<textElement textAlignment="Right" verticalAlignment="Top"/>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{DEVPROPERCOUNT} + $F{DEVENTRUSTCOUNT}]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0">
+				<reportElement style="Cell" positionType="Float" x="445" y="0" width="110" height="15"/>
+				<textElement textAlignment="Right" verticalAlignment="Top"/>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{DEVAMOUNT}]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="15">
+			<printWhenExpression><![CDATA[$F{LINETYPE}.equals("4")]]></printWhenExpression>
+			<textField>
+				<reportElement style="Cell" positionType="Float" x="0" y="0" width="445" height="15"/>
+				<textElement verticalAlignment="Top"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{OTRCOMMENT}]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0">
+				<reportElement style="Cell" x="445" y="0" width="110" height="15"/>
+				<textElement textAlignment="Right" verticalAlignment="Top"/>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{OTRAMOUNT}]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="15">
+			<printWhenExpression><![CDATA[$F{LINETYPE}.equals("5")]]></printWhenExpression>
+			<textField>
+				<reportElement style="Cell" positionType="Float" x="0" y="0" width="95" height="15"/>
+				<textElement textAlignment="Right" verticalAlignment="Top"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{LINESEQ}.toString() + "年目"]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement style="Cell" positionType="Float" x="95" y="0" width="115" height="15"/>
+				<textElement textAlignment="Right" verticalAlignment="Top"/>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{PROFSALESQUANTITY}]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0">
+				<reportElement style="Cell" positionType="Float" x="210" y="0" width="115" height="15"/>
+				<textElement textAlignment="Right" verticalAlignment="Top"/>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{PROFSALESAMOUNT}]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0">
+				<reportElement style="Cell" positionType="Float" x="325" y="0" width="120" height="15"/>
+				<textElement textAlignment="Right" verticalAlignment="Top"/>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{PROFCOSTAMOUNT}]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0">
+				<reportElement style="Cell" positionType="Float" x="445" y="0" width="110" height="15"/>
+				<textElement textAlignment="Right" verticalAlignment="Top"/>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{PROFSALESAMOUNT} - $F{PROFCOSTAMOUNT}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

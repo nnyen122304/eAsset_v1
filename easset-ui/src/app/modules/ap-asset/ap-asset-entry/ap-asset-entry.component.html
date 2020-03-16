@@ -1,0 +1,97 @@
+<div class="entry-header">
+  <form [formGroup]="assetForm">
+    <div fxLayout="row" class="et-header">
+      <div class="block-frame-border header w-100">
+        <div class="row col">
+          <div class="col">
+            <div class="row ml-unset">
+              <div class="form-group wm-200 ml-4">
+                <label>登録申請番号:</label>
+                <ea-input-mask class="wm-combo wm-100 bg-gray" id="assetId" formControlName="assetId" readonly>
+                </ea-input-mask>
+              </div>
+              <div class="form-group wm-200">
+                <label>取得申請書番号:</label>
+                <div class="e-link">
+               <span class="e-link">
+                  <a class="link">{{12345}}</a>
+                </span>
+                </div>
+              </div>
+              <div class="form-group wm-220">
+                <label>ステータス:</label>
+                <app-ast-selection [formExportSearch]="assetForm" [statusCodeControlName]="'apStatus'"
+                                   [statusNameControlName]="'apStatusName'" [modalTitle]="'ステータス選択'"
+                                   [sqlName]="'selectCodeName_LOV'"
+                                   [paramMap]="{categoryCode: 'AP_STATUS_ASSET'}" [headerGrid]="'ステータス'"
+                                   [isShowButtonClear]="false"
+                                   [extClass]="'required wm-100'" [popupClass]="'wm-250'">
+                </app-ast-selection>
+              </div>
+              <div class="form-group">
+                <label>e申請書類ID</label>
+                <div class="e-link">
+               <span class="e-link">
+                  <a class="link">{{12345}}</a>
+                </span>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="form-group wm-200">
+                <label class="asset-complete" [hidden]="!(assetForm.get('apStatus').value === '3')">情報機器等登録済</label>
+              </div>
+              <div class="form-group">
+                <div class="f-right">
+                  <label>契約番号:</label>
+                  <ea-input-mask class="wm-combo wm-150" id="contractNum" formControlName="contractNum">
+                  </ea-input-mask>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col">
+            <div class="row">
+              <div class="form-group wm-400">
+                <label class="wm-150 text-right">申請日:</label>
+                <wj-input-date class="wm-combo wm-100 required date" id="apDate" maxlength="10" name="apDate"
+                               formControlName="apDate" [isRequired]="false">
+                </wj-input-date>
+              </div>
+            </div>
+            <div class="row">
+              <div class="form-group wm-400">
+                <label class="wm-150 text-right">親情報機器管理番号:</label>
+                <ea-input-mask #inputDisplay class="input-display wm-combo is-rounded wm-100"></ea-input-mask>
+                <button type="button" class="wm-btn wm-sm btn-icon btn-tooltip">
+                  <span class="ico"><img src="assets/images/button/clear.gif"/></span><span
+                  class="tooltip-text">クリア</span>
+                </button>
+                <button type="button" class="wm-btn wm-sm">
+                  <span class="ico"><img src="assets/images/button/popup.png"/></span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+
+<div class="et-body">
+  <app-asset-entry-body [assetForm]="assetForm"></app-asset-entry-body>
+</div>
+
+
+<!-- entry footer -->
+<div class="entry-footer">
+  <button type="button" class="wm-btn wm-sm">
+    <span class="ico"><img src="assets/images/button/save.png"></span>
+    <span>保存</span>
+  </button>
+  <button type="button" class="wm-btn wm-sm">
+    <span class="ico"><img src="assets/images/button/save.png"></span>
+    <span>保存</span>
+  </button>
+</div>

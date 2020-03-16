@@ -1,0 +1,58 @@
+<form class="form-staff row-selection" [formGroup]="sectionForm">
+  <div fxLayout="row">
+    <label [ngClass]="title ? 'wm-combo wm-100' : ''">{{title}}</label>
+    <ea-input-mask #costSectionCode [formControl]="sectionForm.controls[costSectionCodeControlName]" [maxLength]="10"
+                   [pattern]="'a-zA-Z0-9'" [capitalize]="true" formControlName="{{costSectionCodeControlName}}"
+                   (keyup)="onInput($event)" (change)="getCodeNameData()" (focusout)="getCostDataOnFocus()"
+                   [ngClass]="extClass" [attr.disabled]="disabled == true ? true : null" id="costSectionCode"
+                   class="ip-code wm-combo"></ea-input-mask>
+    <button type="button" [hidden]="!visibleStatus" en class="wm-btn wm-sm" (click)="open($event.currentTarget)"><span class="ico">
+      <img src="assets/images/button/popup.png"></span>
+    </button>
+    <ea-input-mask [hidden]="isShow" #costSectionName formControlName="{{costSectionNameControlName}}"
+                   class="wm-combo bg-gray " readonly></ea-input-mask>
+  </div>
+</form>
+<ea-popup #costSectionPopup class="popup-staff-selection popup-cost-selection" [hideTrigger]="'None'"
+  (hidden)="close()">
+  <div class="form-select-staff">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">{{modalTitle}}</h5>
+        <button type="button" tabindex="-1" class="close bt-close wj-hide">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="section-search">
+          <form clas="row" [formGroup]="searchForm">
+            <div class="col">
+              <div class="row row-search">
+                <div class="col-3 m-0 col-left">
+                  <span class="text-nowrap">部署名(あいまい)：</span>
+                </div>
+                <div class="col-6 ml-4 col-center">
+                  <ea-input-mask formControlName="sectionName" class="w-100"></ea-input-mask>
+                </div>
+                <div class="col-2 m-0 p-0 col-right">
+                  <button type="button" class="wm-btn" (click)="search()">検索</button>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="section-data m-3">
+          <ea-flex-grid #gridCostSectionList class="grid-common-list grid-staff-selection-list"
+            [(itemsSource)]="sectionList" [allowResizing]="'None'" (dblclick)="submit()" [headersVisibility]="'Column'">
+            <ea-flex-grid-column header="部署コード" binding="sectionCode" [allowResizing]="false" [width]="100">
+            </ea-flex-grid-column>
+            <ea-flex-grid-column header="部署名" binding="sectionName" [allowResizing]="false" [width]="280">
+            </ea-flex-grid-column>
+          </ea-flex-grid>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="wm-btn" (click)="submit()">選択</button>
+        <button type="button" class="wm-btn wj-hide">閉じる</button>
+      </div>
+    </div>
+  </div>
+</ea-popup>

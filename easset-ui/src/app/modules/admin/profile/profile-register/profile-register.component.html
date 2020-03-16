@@ -1,0 +1,54 @@
+<span id="focusChildInit" tabindex="0"></span>
+<form class="form-profile-register block-frame-border" [formGroup]="registerForm" [hidden]="!isFormShown">
+  <h2 class="frame-title">登録</h2>
+  <div class="frame-body">
+    <div class="row">
+      <div class="col col-label">
+        権限部署：
+      </div>
+      <div class="col col-form">
+        <ea-input-mask class="ip-section-name wm-combo bg-gray" formControlName="sectionName" [isReadOnly]="true"></ea-input-mask>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col col-label">
+        権限者：
+      </div>
+      <div class="col col-form">
+        <div class="group-input-staff">
+          <span class="label">社員番号</span>
+          <ea-input-mask class="ip-staff-code wm-combo bg-gray" formControlName="staffCode" [isReadOnly]="true"></ea-input-mask>
+          <span class="label">氏名</span>
+          <ea-input-mask class="ip-staff-name wm-combo bg-gray" formControlName="staffName" [isReadOnly]="true"></ea-input-mask>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col col-label">
+        公開：
+      </div>
+      <div class="col col-form">
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" id="fe01" formControlName="publicFlag" [value]="'1'">
+          <label class="form-check-label" for="fe01">する</label>
+        </div>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" id="fe02" formControlName="publicFlag" [value]="'0'">
+          <label class="form-check-label" for="fe02">しない</label>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col col-label">
+        公開コメント：
+      </div>
+      <div class="col col-form">
+        <ea-input-mask class="ip-comment wm-combo" formControlName="publicComment" [maxLength]="256"></ea-input-mask>
+      </div>
+    </div>
+  </div>
+  <div class="buttons wm-buttons">
+    <button type="button" class="wm-btn" (click)="submit()"><span class="ico"><img src="assets/images/button/save.png" alt="更新"></span><span class="txt">更新</span></button>
+    <button type="button" class="wm-btn" (click)="close()">キャンセル</button>
+  </div>
+</form>

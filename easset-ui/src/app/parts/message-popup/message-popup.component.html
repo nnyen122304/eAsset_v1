@@ -1,0 +1,38 @@
+<ea-popup class="popup-message" #messagePopup [hideTrigger]="'None'" (hidden)="close()">
+    <div class="popup-message-wrapper">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"></h5>
+                <button type="button" tabindex="-1" class="close bt-close wj-hide">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="section-data">
+                    <ea-flex-grid
+                        #gridMessageList
+                        class="grid-common-list grid-message-list"
+                        [itemsSource]="tableRows"
+                        [allowDragging]="'None'"
+                        [allowSorting]="false"
+                        [allowResizing]="'None'"
+                        [headersVisibility]="'None'">
+                        <ea-flex-grid-column binding="type" [allowResizing]="false" [wordWrap]="true" [width]="25">
+                            <ng-template wjFlexGridCellTemplate [cellType]="'Cell'" let-cell="cell">
+                                <div *ngIf="cell.item.type !== 'empty'">
+                                    <img src="assets/images/message/{{cell.item.type}}.png">
+                                </div>
+                            </ng-template>
+                        </ea-flex-grid-column>
+                        <ea-flex-grid-column binding="message" [allowResizing]="false" [wordWrap]="true" [width]="455">
+                            <ng-template wjFlexGridCellTemplate [cellType]="'Cell'" let-cell="cell">
+                                <div [innerHTML]="cell.item.message"></div>
+                            </ng-template>
+                        </ea-flex-grid-column>
+                    </ea-flex-grid>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="wm-btn wj-hide">閉じる</button>
+            </div>
+        </div>
+    </div>
+</ea-popup>

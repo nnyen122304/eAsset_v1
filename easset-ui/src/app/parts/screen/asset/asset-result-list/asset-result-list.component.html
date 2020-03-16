@@ -1,0 +1,141 @@
+<div class="grid-common-wrap grid-common-wrap-asset-result-list">
+  <div class="grid-common-count">
+    【件数{{ gridAssetResultList && gridAssetResultList.rows ? (gridAssetResultList.rows.length | number) : 0 }}件】
+  </div>
+  <div class="grid-inventory-list wp-grid-asset-result-list" id="wp-grid-asset-result-list">
+    <ea-flex-grid #gridAssetResultList class="grid-common-list grid-asset-list grid-inventory-list"
+      [itemsSource]="dataList" (initialized)="onGridInitialized(gridAssetResultList)" [allowSorting]="false"
+      [isReadOnly]="false">
+      <ng-container *ngIf="checkBoxVisible">
+      <ea-flex-grid-column header="Sel" binding="sel" [allowDragging]="'None'" [allowMerging]="false" [width]="30"
+        [isReadOnly]="false"></ea-flex-grid-column>
+      </ng-container>
+      <ea-flex-grid-column header="情報機器管理番号" binding="assetId" [width]="120"></ea-flex-grid-column>
+      <ng-container *ngIf="deleteColumnVisible">
+        <ea-flex-grid-column header="抹消日" binding="deleteDate" [width]="100"></ea-flex-grid-column>
+        <ea-flex-grid-column header="抹消理由" binding="deleteReason" [width]="200"></ea-flex-grid-column>
+      </ng-container>
+      <ea-flex-grid-column header="資産(機器)名" binding="astName" [width]="250"></ea-flex-grid-column>
+      <ea-flex-grid-column header="資産(機器)分類" binding="astCategory2Name" [width]="150"></ea-flex-grid-column>
+      <ea-flex-grid-column header="メーカー" binding="astMakerName" [width]="100"></ea-flex-grid-column>
+      <ea-flex-grid-column header="メーカー型番" binding="astMakerModel" [width]="120"></ea-flex-grid-column>
+      <ea-flex-grid-column header="シリアル番号" binding="astSerialCode" [width]="120"></ea-flex-grid-column>
+      <ea-flex-grid-column header="保有部署" binding="holSectionName" [width]="270">
+        <ng-template wjFlexGridCellTemplate [cellType]="'Cell'" let-cell="cell">
+          {{ cell.item.holCompanyName }}
+          {{ cell.item.holSectionName }}
+        </ng-template>
+      </ea-flex-grid-column>
+      <ea-flex-grid-column header="資産管理担当者" binding="holStaffName" [width]="170">
+        <ng-template wjFlexGridCellTemplate [cellType]="'Cell'" let-cell="cell">
+          {{ cell.item.holStaffCode }}
+          {{ cell.item.holStaffName }}
+        </ng-template>
+      </ea-flex-grid-column>
+      <ea-flex-grid-column header="設置（使用）場所" binding="holOfficeName" [width]="200">
+        <ng-template wjFlexGridCellTemplate [cellType]="'Cell'" let-cell="cell">
+          {{ cell.item.holOfficeName }}
+          {{ cell.item.holOfficeFloor }}
+        </ng-template>
+      </ea-flex-grid-column>
+      <ea-flex-grid-column header="数量" binding="holQuantity" [width]="50"></ea-flex-grid-column>
+      <ea-flex-grid-column header="使用者" binding="useStaffName" [width]="170">
+        <ng-template wjFlexGridCellTemplate [cellType]="'Cell'" let-cell="cell">
+          {{ cell.item.useStaffCode }}
+          {{ cell.item.useStaffName }}
+        </ng-template>
+      </ea-flex-grid-column>
+      <ea-flex-grid-column header="資産区分" binding="astAssetTypeName" [width]="100"></ea-flex-grid-column>
+      <ea-flex-grid-column header="管理区分" binding="astManageTypeName" [width]="150"></ea-flex-grid-column>
+      <ea-flex-grid-column header="OIR" binding="astOir" [width]="70"></ea-flex-grid-column>
+      <ea-flex-grid-column binding="osNameOne" [width]="120">
+        <ng-template wjFlexGridCellTemplate cellType="ColumnHeader" let-cel="cell">
+          OS名<br>[代表]
+        </ng-template>
+      </ea-flex-grid-column>
+      <ea-flex-grid-column binding="netMacAddressOne" [width]="120">
+        <ng-template wjFlexGridCellTemplate cellType="ColumnHeader" let-cel="cell">
+          MACアドレス<br>[代表]
+        </ng-template>
+      </ea-flex-grid-column>
+      <ea-flex-grid-column binding="netIpAddressOne" [width]="100">
+        <ng-template wjFlexGridCellTemplate cellType="ColumnHeader" let-cel="cell">
+          IPアドレス<br>[代表]
+        </ng-template>
+      </ea-flex-grid-column>
+      <ea-flex-grid-column header="ホスト名" binding="netHostName" [width]="100"></ea-flex-grid-column>
+      <ea-flex-grid-column header="備考" binding="dscDescription" [width]="300"></ea-flex-grid-column>
+      <ea-flex-grid-column binding="parentAssetId" [width]="100">
+        <ng-template wjFlexGridCellTemplate cellType="ColumnHeader" let-cel="cell">
+          親情報機器<br>管理番号
+        </ng-template>
+      </ea-flex-grid-column>
+      <ea-flex-grid-column header="取得申請書番号" binding="getApplicationId" [width]="100"></ea-flex-grid-column>
+      <ea-flex-grid-column header="登録申請番号" binding="registApplicationId" [width]="100"></ea-flex-grid-column>
+      <ea-flex-grid-column header="契約番号" binding="contractNum" [width]="100"></ea-flex-grid-column>
+      <ea-flex-grid-column header="契約枝番" binding="contractEda" [width]="100"></ea-flex-grid-column>
+      <ea-flex-grid-column header="資産番号" binding="shisanNum" [width]="100"></ea-flex-grid-column>
+      <ea-flex-grid-column header="保守契約先(1)" binding="mntContractCompanyName" [width]="250"></ea-flex-grid-column>
+      <ea-flex-grid-column header="保守契約番号(1)" binding="mntContractCode" [width]="120"></ea-flex-grid-column>
+      <ea-flex-grid-column header="サービスレベル(1)" binding="mntContractServiceLevel" [width]="150"></ea-flex-grid-column>
+      <ea-flex-grid-column binding="mntContractStartDate" [width]="100">
+        <ng-template wjFlexGridCellTemplate cellType="ColumnHeader" let-cel="cell">
+          <div class="label-column">
+            保守契約<br>開始日(1)
+          </div>
+        </ng-template>
+      </ea-flex-grid-column>
+      <ea-flex-grid-column binding="mntContractEndDate" [width]="100">
+        <ng-template wjFlexGridCellTemplate cellType="ColumnHeader" let-cel="cell">
+          <div class="label-column">
+            保守契約<br>終了日(1)
+          </div>
+        </ng-template>
+      </ea-flex-grid-column>
+      <ea-flex-grid-column header="保守契約先(2)" binding="mntContractCompanyName2" [width]="250"></ea-flex-grid-column>
+      <ea-flex-grid-column header="保守契約番号(2)" binding="mntContractCode2" [width]="120"></ea-flex-grid-column>
+      <ea-flex-grid-column header="サービスレベル(2)" binding="mntContractServiceLevel2" [width]="150"></ea-flex-grid-column>
+      <ea-flex-grid-column binding="mntContractStartDate2" [width]="100">
+        <ng-template wjFlexGridCellTemplate cellType="ColumnHeader" let-cel="cell">
+          <div class="label-column">
+            保守契約<br>開始日(2)
+          </div>
+        </ng-template>
+      </ea-flex-grid-column>
+      <ea-flex-grid-column binding="mntContractEndDate2" [width]="100">
+        <ng-template wjFlexGridCellTemplate cellType="ColumnHeader" let-cel="cell">
+          <div class="label-column">
+            保守契約<br>終了日(2)
+          </div>
+        </ng-template>
+      </ea-flex-grid-column>
+      <ea-flex-grid-column header="保守契約先(3)" binding="mntContractCompanyName3" [width]="250"></ea-flex-grid-column>
+      <ea-flex-grid-column header="保守契約番号(3)" binding="mntContractCode3" [width]="120"></ea-flex-grid-column>
+      <ea-flex-grid-column header="サービスレベル(3)" binding="mntContractServiceLevel3" [width]="150"></ea-flex-grid-column>
+      <ea-flex-grid-column binding="mntContractStartDate3" [width]="100">
+        <ng-template wjFlexGridCellTemplate cellType="ColumnHeader" let-cel="cell">
+          <div class="label-column">
+            保守契約<br>開始日(3)
+          </div>
+        </ng-template>
+      </ea-flex-grid-column>
+      <ea-flex-grid-column binding="mntContractEndDate3" [width]="100">
+        <ng-template wjFlexGridCellTemplate cellType="ColumnHeader" let-cel="cell">
+          <div class="label-column">
+            保守契約<br>終了日(3)
+          </div>
+        </ng-template>
+      </ea-flex-grid-column>
+      <ea-flex-grid-column header="リース開始日" binding="leaseStartDate" [width]="100"></ea-flex-grid-column>
+      <ea-flex-grid-column header="リース満了日" binding="leaseEndDate" [width]="100"></ea-flex-grid-column>
+      <ea-flex-grid-column header="レンタル開始日" binding="rentalStartDate" [width]="100"></ea-flex-grid-column>
+      <ea-flex-grid-column header="レンタル満了日" binding="rentalEndDate" [width]="100"></ea-flex-grid-column>
+      <ea-flex-grid-column header="経費負担部課コード" binding="costSectionCode" [width]="130"></ea-flex-grid-column>
+      <ea-flex-grid-column header="経費負担部課名" binding="costSectionName" [width]="200"></ea-flex-grid-column>
+      <ea-flex-grid-column header="プロジェクトコード" binding="costDepPrjCode" [width]="130"></ea-flex-grid-column>
+      <ea-flex-grid-column header="プロジェクト名" binding="costDepPrjName" [width]="250"></ea-flex-grid-column>
+      <ea-flex-grid-column header="管理項目9" binding="dscAttribute9" [width]="200"></ea-flex-grid-column>
+      <ea-flex-grid-column header="管理項目10" binding="dscAttribute10" [width]="200"></ea-flex-grid-column>
+    </ea-flex-grid>
+  </div>
+</div>

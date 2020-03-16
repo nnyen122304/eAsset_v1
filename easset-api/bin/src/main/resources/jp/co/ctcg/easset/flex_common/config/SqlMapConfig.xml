@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMapConfig PUBLIC "-//iBATIS.com//DTD SQL Map Config 2.0//EN"
+ "http://www.ibatis.com/dtd/sql-map-config-2.dtd">
+
+<!--
+ *===================================================================
+ * ファイル名 : SqlMapConfig.xml
+ * 概要説明   : iBATISライブラリ用設定ファイル
+ 				テンプレートと開発者で共有利用
+ * バージョン : 1.0
+ *===================================================================
+ * 修正履歴
+ * 日付       Ver. 担当者       修正内容
+ * －－－－－ －－ －－－－－－ －－－－－－－－－－－－－－－－－－
+ * 2010-01-14 1.0  リヨン       新規
+ *===================================================================
+ -->
+
+<sqlMapConfig>
+
+<!--
+	テンプレート／開発者共有SqlMap設定
+ -->
+    <settings
+      cacheModelsEnabled="true"
+      enhancementEnabled="true"
+      lazyLoadingEnabled="true"
+      maxRequests="128"
+      maxSessions="10"
+      maxTransactions="5"
+      useStatementNamespaces="false"
+      defaultStatementTimeout="7200"
+      statementCachingEnabled="true"
+      classInfoCacheEnabled="true"
+    />
+
+<!--
+	テンプレート／開発者共有JDBC設定
+ -->
+    <transactionManager type="EXTERNAL">
+      <dataSource type="JNDI">
+        <property name="DataSource" value="jdbc/eAsset"/>
+      </dataSource>
+    </transactionManager>
+<!--
+	テンプレート用SQLMAP
+ -->
+    <sqlMap resource="jp/co/ctcg/easset/template/dao/AppDAO_SqlMap.xml" />
+<!--
+	Lov用SQLMAP
+ -->
+    <sqlMap resource="jp/co/ctcg/easset/dao/LovDAO_SqlMap.xml" />
+<!--
+	マスタ用SQLMAP
+ -->
+    <sqlMap resource="jp/co/ctcg/easset/dao/MasterDAO_SqlMap.xml" />
+<!--
+	情報機器等、情報機器等登録申請用SQLMAP
+ -->
+    <sqlMap resource="jp/co/ctcg/easset/dao/AssetDAO_SqlMap.xml" />
+<!--
+	ライセンス、ライセンス登録申請用SQLMAP
+ -->
+    <sqlMap resource="jp/co/ctcg/easset/dao/LicenseDAO_SqlMap.xml" />
+<!--
+	取得申請（有形）用SQLMAP
+ -->
+    <sqlMap resource="jp/co/ctcg/easset/dao/ApGetTanDAO_SqlMap.xml" />
+<!--
+	取得申請（無形）用SQLMAP
+ -->
+    <sqlMap resource="jp/co/ctcg/easset/dao/ApGetIntDAO_SqlMap.xml" />
+<!--
+	サービス提供開始報告用SQLMAP
+ -->
+    <sqlMap resource="jp/co/ctcg/easset/dao/ApBgnIntDAO_SqlMap.xml" />
+<!--
+	移動申請用SQLMAP
+ -->
+    <sqlMap resource="jp/co/ctcg/easset/dao/ApChangeDAO_SqlMap.xml" />
+<!--
+	リース満了・解約申請用SQLMAP
+ -->
+    <sqlMap resource="jp/co/ctcg/easset/dao/ApEndLeDAO_SqlMap.xml" />
+<!--
+	レンタル満了･解約申請用SQLMAP
+ -->
+    <sqlMap resource="jp/co/ctcg/easset/dao/ApEndReDAO_SqlMap.xml" />
+<!--
+	履歴用SQLMAP
+ -->
+    <sqlMap resource="jp/co/ctcg/easset/dao/HistDAO_SqlMap.xml" />
+<!--
+    固定資産(照会・管理項目修正)
+-->
+    <sqlMap resource="jp/co/ctcg/easset/dao/FldDAO_SqlMap.xml" />
+<!--
+    リース・レンタル契約情報(照会)
+-->
+    <sqlMap resource="jp/co/ctcg/easset/dao/LldDAO_SqlMap.xml" />
+<!--
+    固定資産除売却申請
+-->
+    <sqlMap resource="jp/co/ctcg/easset/dao/ApEndTanDAO_SqlMap.xml" />
+<!--
+    ProPlus取込
+-->
+    <sqlMap resource="jp/co/ctcg/easset/dao/PpfsImportDAO_SqlMap.xml" />
+<!--
+    棚卸
+-->
+    <sqlMap resource="jp/co/ctcg/easset/dao/InvDAO_SqlMap.xml" />
+<!--
+    経費負担部課精査
+-->
+    <sqlMap resource="jp/co/ctcg/easset/dao/CostScrDAO_SqlMap.xml" />
+
+</sqlMapConfig>

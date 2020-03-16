@@ -1,0 +1,17 @@
+<div class="page-container asset-search-page">
+  <div class="asset-search-container">
+    <div class="asset-search-header">
+        <label class="asset-search-label" *ngIf="sessionInfo.currentMenuId === menuId.menuIdAssetDelete">抹消する情報機器等を検索してください。</label>
+    </div>
+    <div class="asset-search-main">
+      <app-asset-search-condition [currentState]="sessionInfo.currentMenuId === menuId.menuIdAssetDelete ? 'ASSET_DELETE' : 'ASSET_SEARCH'"></app-asset-search-condition>
+    </div>
+  </div>
+  <hr class="asset-search-footer-line">
+  <div fxLayout="row" fxLayoutGap="6px" fxLayoutAlign="center center" class="asset-search-footer">
+    <button type="button" class="wm-btn" id="search" (click)="search()">検索</button>
+    <button type="button" class="wm-btn" id="download" (click)="downloadOptionPropComponent.open($event.currentTarget)" *ngIf="sessionInfo.currentMenuId !== menuId.menuIdAssetDelete">ダウンロード</button>
+    <button type="button" class="wm-btn" id="clear" (click)="clear()">クリア</button>
+  </div>
+</div>
+<app-download-option-prop #appDownloadOptionProp [paramObj]="{itemDefName: 'ITEM_DEF_ASSET'}" (select)="download($event)"></app-download-option-prop>

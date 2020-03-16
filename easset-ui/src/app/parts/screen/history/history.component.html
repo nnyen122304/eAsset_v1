@@ -1,0 +1,225 @@
+<div class="page-container page-create-data">
+  <div class="section-form">
+    <div class="block-frame">
+      <div class="frame-body">
+        <form [formGroup]="infoForm" [ngClass]="keyClass">
+          <div class="row">
+            <div class="col-8">
+              <div class="row">
+                <div class="form-group" [hidden]="objLabel.labelLicenseId === ''">
+                  <label>{{objLabel.labelLicenseId}}</label>
+                  <div class="form-group bt">
+                    <ea-input-mask class="wm-combo wm-100 bg-gray" id="licenseId" formControlName="licenseId" readonly>
+                    </ea-input-mask>
+                  </div>
+                </div>
+                <div class="form-group" [hidden]="objLabel.labelAssetId === ''">
+                  <label>{{objLabel.labelAssetId}}</label>
+                  <div class="form-group bt">
+                    <ea-input-mask class="wm-combo wm-100 bg-gray" id="assetId" formControlName="assetId" readonly>
+                    </ea-input-mask>
+                  </div>
+                </div>
+                <div class="form-group" [hidden]="objLabel.labelAppID === ''">
+                  <label class="label-appId">{{objLabel.labelAppID}}</label>
+                  <div class="form-group bt">
+                    <ea-input-mask
+                      [hidden]="(infoForm.get('applicationId').value !== ''  && entityName === 'AP_BGN_INT') || entityName === 'ASSET'"
+                      class="wm-combo wm-100 bg-gray" id="applicationId" formControlName="applicationId" readonly>
+                    </ea-input-mask>
+                    <div class="e-link"
+                      [hidden]="(infoForm.get('applicationId').value === ''  && entityName === 'AP_BGN_INT') || (entityName !== 'AP_BGN_INT' && entityName !=='ASSET')">
+                      <a class="link">{{infoForm.get('applicationId').value}}</a>
+                    </div>
+                  </div>
+                </div>
+                <div class=" form-group" [hidden]="objLabel.labelVer === ''">
+                  <label class="label-ver">{{objLabel.labelVer}}</label>
+                  <div class="form-group bt">
+                    <ea-input-mask class="wm-combo wm-50 bg-gray " id="applicationVersion"
+                      formControlName="applicationVersion" readonly>
+                    </ea-input-mask>
+                  </div>
+                </div>
+                <div class=" form-group" [hidden]="objLabel.labelApStatus === ''">
+                  <label>{{objLabel.labelApStatus}}</label>
+                  <div class="form-group bt">
+                    <ea-input-mask class="ap-status wm-combo bg-gray " id="apStatus" formControlName="apStatus"
+                      readonly>
+                    </ea-input-mask>
+                  </div>
+                </div>
+                <div class="form-group" [hidden]="objLabel.labelApDate === ''">
+                  <label>{{objLabel.labelApDate}}</label>
+                  <div class="form-group bt">
+                    <ea-input-mask class="wm-combo wm-100 bg-gray " id="apDate" formControlName="apDate" readonly>
+                    </ea-input-mask>
+                  </div>
+                </div>
+                <div class="form-group" [hidden]="objLabel.labelContractNum === ''">
+                  <label class="label-contract">{{objLabel.labelContractNum}}</label>
+                  <div class="form-group bt">
+                    <ea-input-mask class="wm-combo wm-200 bg-gray" id="contractNum" formControlName="contractNum"
+                      readonly>
+                    </ea-input-mask>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="form-group" [ngClass]="'width-delete-flag'" [hidden]="objLabel.labelDeleteDate === ''">
+                  <div class="row" [hidden]="deleteFlag === '0'">
+                  <label class="label-dltDate1">抹消済</label>
+                  <label class="label-dltDate2">{{objLabel.labelDeleteDate}}</label>
+                  <div class="form-group bt">
+                    <ea-input-mask class="wm-combo wm-100 bg-gray" id="deleteDate" formControlName="deleteDate"
+                      readonly>
+                    </ea-input-mask>
+                  </div>
+                </div>
+                </div>
+                <div class="form-group" [hidden]="objLabel.labelRegistAppId === ''">
+                  <label>{{objLabel.labelRegistAppId}}</label>
+                  <div class="form-group bt">
+                    <ea-input-mask class="wm-combo wm-100 bg-gray" id="registApplicationId"
+                      formControlName="registApplicationId" readonly>
+                    </ea-input-mask>
+                  </div>
+                </div>
+                <div class="form-group" [hidden]="objLabel.labelShisanNum === ''">
+                  <label>{{objLabel.labelShisanNum}}</label>
+                  <div class="form-group bt">
+                    <ea-input-mask class="wm-combo wm-200 bg-gray" id="shisanNum" formControlName="shisanNum" readonly>
+                    </ea-input-mask>
+                  </div>
+                </div>
+                <div class=" form-group" [hidden]="objLabel.labelApGetType === ''">
+                  <label>{{objLabel.labelApGetType}}</label>
+                  <div class="form-group bt">
+                    <ea-input-mask class="ap-get-type wm-combo bg-gray " id="apGetTypeName"
+                      formControlName="apGetTypeName" readonly>
+                    </ea-input-mask>
+                  </div>
+                </div>
+                <div class="form-group"
+                  [hidden]="objLabel.labelApGetAmount === '' || ( apGetType === '4' && entityName === 'AP_GET_TAN')">
+                  <label class="label-ap-get-amount">{{objLabel.labelApGetAmount}}</label>
+                  <div class="form-group bt">
+                    <ea-input-mask class="ap-get-amount wm-combo bg-gray is-rounded" id="apGetAmountRangeName"
+                      formControlName="apGetAmountRangeName" readonly>
+                    </ea-input-mask>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-4">
+              <div class="row">
+                <div class="col-6" [hidden]="objLabel.labelShisanNum">
+                  <div class="form-group float-right" [hidden]="objLabel.labelCheckbox === ''">
+                    <div class="form-check form-check-inline">
+                      <input class="form-check-input" type="checkbox" id="specialApproveFlag"
+                        formControlName="specialApproveFlag">
+                      <label class="label-check">{{objLabel.labelCheckbox}}</label>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-5" [hidden]="objLabel.labelShisanNum">
+                  <div class="form-group float-right" [hidden]="objLabel.labelApDate2 === ''">
+                    <label>{{objLabel.labelApDate2}}</label>
+                    <div class="form-group bt">
+                      <ea-input-mask class="wm-combo wm-tab-element wm-100 bg-gray" id="apDate" formControlName="apDate"
+                        readonly>
+                      </ea-input-mask>
+                    </div>
+                  </div>
+                  <div class="form-group float-right" [hidden]="objLabel.labelApproveDate === ''">
+                    <label>{{objLabel.labelApproveDate}}</label>
+                    <div class="form-group bt">
+                      <ea-input-mask class="wm-combo wm-tab-element wm-100 bg-gray" id="approveDate"
+                        formControlName="approveDate" readonly>
+                      </ea-input-mask>
+                    </div>
+                  </div>
+                  <div class="form-group float-right"
+                    [hidden]="objLabel.labelSpecDate === '' || this.infoForm.get('specialApproveFlag').value === false">
+                    <label>{{objLabel.labelSpecDate}}</label>
+                    <div class="form-group bt">
+                      <ea-input-mask class="wm-combo wm-tab-element wm-100 bg-gray" id="specialApproveDate"
+                        formControlName="specialApproveDate" readonly>
+                      </ea-input-mask>
+                    </div>
+                  </div>
+                  <div class="row"
+                    [hidden]="objLabel.labelCheckbox2 === '' || ( objLabel.labelCheckbox2 !== ''&& apGetType === '4' && entityName === 'AP_GET_TAN')">
+                    <div class="form-group float-right">
+                      <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" id="specialApproveFlag"
+                          formControlName="specialApproveFlag">
+                        <label>{{objLabel.labelCheckbox2}}</label>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row"
+                    [hidden]="objLabel.labelSpecDate2 === '' || this.infoForm.get('specialApproveFlag').value === false ||
+                     ( objLabel.labelSpecDate2 !== '' && apGetType === '4' && entityName === 'AP_GET_TAN')">
+                    <div class="form-group float-right">
+                      <label class="label-special-date2">{{objLabel.labelSpecDate2}}</label>
+                      <div class="form-group bt">
+                        <ea-input-mask class="wm-combo wm-tab-element wm-100 bg-gray" id="specialApproveDate"
+                          formControlName="specialApproveDate" readonly>
+                        </ea-input-mask>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group" [hidden]="objLabel.labelDreamsNum === ''">
+                  <label class="label">{{objLabel.labelDreamsNum}}</label>
+                  <div class="form-group bt">
+                    <ea-input-mask class=" wm-combo wm-200 bg-gray" id="dreamsNum" formControlName="dreamsNum" readonly>
+                    </ea-input-mask>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="form-group" [hidden]="objLabel.labelParentAssetId === ''">
+                  <label class="label">{{objLabel.labelParentAssetId}}</label>
+                  <div class="form-group bt">
+                    <ea-input-mask class=" wm-combo wm-200 bg-gray" id="parentAssetId" formControlName="parentAssetId"
+                      readonly>
+                    </ea-input-mask>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div class="section-create-list">
+    <div class="block-frame">
+      <h2 class="frame-title bg-blue">更新履歴</h2>
+      <div class="frame-body">
+        <div class="block-container">
+          <div class="grid-common-wrap">
+            <div class="grid-common-count">
+              【{{ gridDataHistList && gridDataHistList.rows ? (gridDataHistList.rows.length | number) : 0 }} 件】
+            </div>
+            <div class="wp-grid-data-realease-list" id="wp-grid-data-realease-list">
+              <ea-flex-grid #gridDataHistList class="grid-common-list grid-data-realease-list "
+                [itemsSource]="dataHistList">
+                <ea-flex-grid-column header="更新日" binding="updateDate" [width]="200" [format]="'yyyy/MM/dd HH:mm'">
+                </ea-flex-grid-column>
+                <ea-flex-grid-column header="更新者" binding="updateStaffCode" [width]="200"></ea-flex-grid-column>
+                <ea-flex-grid-column header="操作" binding="operation" [width]="150"></ea-flex-grid-column>
+                <ea-flex-grid-column header="ステータス" binding="apStatusName" [width]="150"></ea-flex-grid-column>
+                <ea-flex-grid-column header="更新項目" binding="updateColumnName" [width]="300"></ea-flex-grid-column>
+                <ea-flex-grid-column header="コメント" binding="updateComment" [width]="300"></ea-flex-grid-column>
+              </ea-flex-grid>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+</div>

@@ -1,0 +1,83 @@
+.section-create-form {
+  padding-bottom: 15px;
+  margin-bottom: 15px;
+  border-bottom: 1px solid #fff;
+  .block-frame {
+    width: 750px;
+    .frame-body {
+      padding: 5px 10px;
+    }
+  }
+  .col-inputs {
+    padding: 10px 15px 5px;
+    .col-label {
+      flex: 0 0 80px;
+      padding-right: 5px;
+      text-align: right;
+    }
+    .col-content {
+      padding-left: 0;
+      padding-right: 0;
+    }
+  }
+  .col-buttons {
+    width: 150px;
+    flex: 0 0 150px;
+    padding: 25px 20px;
+    border-left: 1px solid #fff;
+  }
+  .form-creator {
+    .form-group {
+      margin: 0;
+    }
+    .text-inline {
+      margin-left: 5px;
+    }
+  }
+}
+
+.section-create-list {
+  width: 100%;
+  padding-bottom: 3px;
+  border-bottom: 1px solid #fff;
+  .block-buttons {
+    margin-bottom: 8px;
+    position: relative;
+    z-index: 1;
+    .wm-btn {
+      margin-right: 10px;
+    }
+    .text-desc {
+      display: inline-block;
+      margin: 0 0 0 15px;
+      vertical-align: middle;
+    }
+  }
+  .grid-common-count {
+    margin-top: -25px;
+    position: relative;
+    z-index: 0;
+  }
+
+  .grid-common-wrap {
+    display: block;
+  }
+  .wp-grid-data-realease-list {
+    height: calc(100vh - 275px);
+  }
+  .grid-data-realease-list {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+  .frame-body {
+    width: 1061px;
+  }
+
+}
+
+@media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+  .frame-title {
+    font-size: 14px;
+  }
+}

@@ -1,0 +1,371 @@
+<div class="page-container page-container-cost-scr">
+  <div class="section-form">
+    <div class="block-frame-border w-bd-70 m-0 py-2">
+      <div class="frame-content">
+        <form [formGroup]="itemForm">
+          <div class="d-flex">
+            <span class="label">経費負担部課:</span>
+            <div class="col-period text-nowrap">
+              <span class="mx-2">当年度</span>
+              <ea-input-mask class="wm-combo wm-150 bg-gray" formControlName="costSectionCodeAndName"
+                [isReadOnly]="true">
+              </ea-input-mask>
+            </div>
+            <div class="col-period text-nowrap">
+              <span class="mx-2">前年度</span>
+              <ea-input-mask class="wm-combo wm-150 bg-gray" formControlName="costSectionCodeOldAndNameOld"
+                [isReadOnly]="true">
+              </ea-input-mask>
+            </div>
+            <div class="col-period-status text-nowrap">
+              <span class="mx-2">精査種別</span>
+              <ea-input-mask class="wm-combo bg-gray" formControlName="scrTypeName" [isReadOnly]="true"></ea-input-mask>
+            </div>
+          </div>
+        </form>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="section-description block-frame-border no-radius">
+    <p>
+      ◆ 必ず全データに対し確認作業を行い、「OK」或は「要対応」のチェックを入れてください。（チェック漏れの場合は「精査完了」の処理が行えません。）◆
+      全てのデータ確認作業が完了しましたら、上位画面に戻り「精査完了」の処理を行ってください。
+      ◇ 操作方法については
+      <span class="open-link">＜操作マニュアル：経費負担部課精査手順＞</span>
+      を参照してください。
+    </p>
+  </div>
+  <div class="block-frame-border pad-10 form-search-cost-scr-line">
+    <h2 class="frame-title">絞込</h2>
+    <div class="frame-content container-search-cost-scr-line">
+      <form [formGroup]="filterForm">
+        <div class="row">
+          <div class="col-5">
+            <div class="d-flex">
+              <div class="col-label text-right">精査状況:</div>
+              <div class="p-0">
+                <div class="form-check form-check-inline" formArrayName="scrStatus"
+                  *ngFor="let item of scrStatus; let i = index">
+                  <input type="checkbox" [formControlName]="i" class="form-check-input wm-checkbox"
+                    [id]="'item-scrStatus-' + i" (change)="toggleCostScrStatus($event)">
+                  <label class="form-check-label" [for]="'item-scrStatus-' + i">{{item}}</label>
+                </div>
+              </div>
+            </div>
+            <div class="d-flex">
+              <div class="col-label text-right">移動申請状況:</div>
+              <div class="p-0 form-sub-status">
+                <div class="form-check form-check-inline" formArrayName="apChangeStatus"
+                  *ngFor="let item of apChangeStatus; index as i">
+                  <ng-container *ngIf="i !== 3 && i !== 4">
+                    <input type="checkbox" [formControlName]="i" class="form-check-input wm-checkbox"
+                      (change)="toggleCostScrStatus($event)" [id]="'item-apChangeStatus-' + i">
+                    <label class="form-check-label" [for]="'item-apChangeStatus-' + i">{{item}}</label>
+                  </ng-container>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-5" style="margin-right: -55px">
+            <ng-container *ngIf="scrType === '3' || scrType === '4'">
+              <div class="d-flex">
+                <div class="col-label text-right">契約番号:</div>
+                <div class="col p-0">
+                  <div class="col-period text-nowrap">
+                    <ea-input-mask class="wm-combo wm-100" formControlName="contractNum"></ea-input-mask>
+                    <span class="label">(あいまい)</span>
+                  </div>
+                </div>
+              </div>
+            </ng-container>
+            <ng-container *ngIf="scrType === '1' || scrType === '2'">
+              <div class="d-flex">
+                <div class="col-label text-right">資産番号:</div>
+                <div class="col p-0">
+                  <div class="col-period text-nowrap">
+                    <ea-input-mask class="wm-combo wm-100" formControlName="astNum" [pattern]="'0-9A-Z-_'">
+                    </ea-input-mask>
+                    <span class="label">(あいまい)</span>
+                  </div>
+                </div>
+              </div>
+            </ng-container>
+            <ng-container *ngIf="scrType !== '2'">
+              <div class="d-flex">
+                <div class="col-label text-right">情報機器管理番号:</div>
+                <div class="col p-0">
+                  <div class="col-period text-nowrap">
+                    <ea-input-mask class="wm-combo wm-100" formControlName="assetId" [pattern]="'0-9A-Z'">
+                    </ea-input-mask>
+                    <span class="label">(あいまい)</span>
+                  </div>
+                </div>
+              </div>
+            </ng-container>
+            <ng-container *ngIf="scrType === '2'">
+              <div class="d-flex">
+                <div class="col-label text-right">取得申請書:</div>
+                <div class="col p-0">
+                  <div class="col-period text-nowrap">
+                    <ea-input-mask class="wm-combo wm-100" formControlName="applicationId" [pattern]="'0-9A-Z-'">
+                    </ea-input-mask>
+                    <span class="label">(あいまい)</span>
+                  </div>
+                </div>
+              </div>
+            </ng-container>
+          </div>
+          <div class="col-2 col-form-buttons d-flex align-items-center">
+            <button type="button" (click)="filterAssets()" class="wm-btn">絞込検索</button>
+          </div>
+        </div>
+
+
+
+      </form>
+    </div>
+  </div>
+  <div class="section-cost-scr-line">
+    <div class="list-status">
+      <div class="list-status-left">
+        <div class="status-desc d-inline">
+          ※ リンクをクリックすると現時点の詳細が表示されます。
+        </div>
+        <ng-container *ngIf="scrType === '1'">
+          <div class="status-desc d-inline">
+            ※ 「取得価額」、「帳簿価額(4月末)」は資産番号別の合計金額です。
+          </div>
+        </ng-container>
+        <ng-container *ngIf="scrType === '3' || scrType === '4'">
+          <div class="status-desc d-inline">
+            ※ 「契約金額」、「均等金額」は資産番号別の合計金額です。
+          </div>
+        </ng-container>
+      </div>
+      <div class="list-status-right">
+        【件数:{{gridCostScrLine && gridCostScrLine.rows ? (gridCostScrLine.rows.length | number) : 0}} 件】
+      </div>
+
+    </div>
+    <div class="list-table">
+      <div class="wp-grid-asset-list--table" id="wp-grid-asset-list">
+        <ea-flex-grid #gridCostScrLine class="grid-common-list grid-asset-list grid-inventory-list"
+          [itemsSource]="searchCostScrLineList" [allowSorting]="false" [isReadOnly]="false"
+          (initialized)="onGridInitialized(gridCostScrLine)">
+          <ea-flex-grid-column header="OK" binding="selScrStatus1" [allowSorting]="false" [allowDragging]="'None'"
+            [isReadOnly]="false" [width]="65" #selScrStatus1Ref>
+            <ng-template wjFlexGridCellTemplate cellType="ColumnHeader" [autoSizeRows]="false">
+              <div class="hd-asset">
+                <div class="block-text">OK</div>
+                <div class="block-checkbox">
+                  <input type="checkbox" value="" id="toggle-1" [(ngModel)]="checkboxSelectAll1"
+                    (change)="toggleSelect($event, selScrStatus1Ref)">
+                </div>
+              </div>
+            </ng-template>
+
+          </ea-flex-grid-column>
+          <ea-flex-grid-column header="要対応" binding="selScrStatus2" [allowDragging]="'None'" [allowMerging]="false"
+            [isReadOnly]="false" [width]="65">
+            <ng-template wjFlexGridCellTemplate cellType="ColumnHeader" [autoSizeRows]="false">
+              <div class="hd-asset">
+                <div class="block-text">要対応</div>
+                <div class="block-checkbox">
+                  <input type="checkbox" id="toggle-2" [(ngModel)]="checkboxSelectAll2" (change)="toggleSelect($event)">
+                </div>
+              </div>
+            </ng-template>
+          </ea-flex-grid-column>
+          <ea-flex-grid-column header="コメント" binding="scrComment" [allowDragging]="'None'" [allowMerging]="false"
+            [isReadOnly]="false" [width]="200">
+            <ng-template wjFlexGridCellTemplate [cellType]="'Cell'" let-cell="cell">
+              <ea-input-mask class="wj-grid-editor wj-grid-editor-input wj-form-control cell-input-text"
+                (change)="changeInput(cell.item)" (keypress)="sessionService.setDataChange(true)"
+                (paste)="sessionService.setDataChange(true)" [(ngModel)]="cell.item.scrComment" [isReadOnly]="false">
+              </ea-input-mask>
+            </ng-template>
+          </ea-flex-grid-column>
+          <!--編集項目 ここまで-->
+          <ea-flex-grid-column header="資産番号" binding="astNum" [width]="150">
+            <ng-template wjFlexGridCellTemplate [cellType]="'Cell'" let-cell="cell">
+              <a class="cell-link">{{cell.item.astNum}}</a>
+            </ng-template>
+          </ea-flex-grid-column>
+          <!-- リース・レンタル -->
+          <ng-container *ngIf="scrType !== '1' && scrType !== '2'">
+            <ea-flex-grid-column header="契約番号" binding="contractNum" [width]="150">
+            </ea-flex-grid-column>
+            <ea-flex-grid-column header="契約枝番" binding="contractSubNum" [width]="150"></ea-flex-grid-column>
+          </ng-container>
+
+          <ng-container *ngIf="scrType !== '2'">
+            <ea-flex-grid-column header="取得申請書番号" binding="applicationId" [width]="120"></ea-flex-grid-column>
+          </ng-container>
+
+          <ea-flex-grid-column header="精査担当部署" binding="scrSectionName" [width]="150">
+
+          </ea-flex-grid-column>
+
+          <!--	経費情報：当年度 ここから-->
+          <ea-flex-grid-column header="会社" binding="costCompanyName" [width]="50"></ea-flex-grid-column>
+          <ea-flex-grid-column header="経費負担部課" binding="costSectionName" [width]="150">
+            <ng-template wjFlexGridCellTemplate [cellType]="'Cell'" let-cell="cell">
+              {{cell.item.costSectionCode}} {{cell.item.costSectionName}}
+            </ng-template>
+          </ea-flex-grid-column>
+          <ea-flex-grid-column header="配賦コード" binding="costDistCode" [width]="100"></ea-flex-grid-column>
+          <ea-flex-grid-column header="配賦セット" binding="costDistSet" [width]="200"></ea-flex-grid-column>
+          <ea-flex-grid-column header="販管/原価区分" binding="costTypeName" [width]="100"></ea-flex-grid-column>
+          <ea-flex-grid-column header="減価償却プロジェクトコード" binding="costDepPrjCode" [width]="200"></ea-flex-grid-column>
+          <!--経費情報：当年度 ここまで-->
+
+          <!--経費情報：前年度 ここから-->
+          <ea-flex-grid-column header="会社" binding="costCompanyNameOld" [width]="50"></ea-flex-grid-column>
+          <ea-flex-grid-column header="経費負担部課" binding="costSectionNameOld" [width]="150">
+            <ng-template wjFlexGridCellTemplate [cellType]="'Cell'" let-cell="cell">
+              {{cell.item.costSectionCodeOld}} {{cell.item.costSectionNameOld}}
+            </ng-template>
+          </ea-flex-grid-column>
+          <ea-flex-grid-column header="配賦コード" binding="costDistCodeOld" [width]="100"></ea-flex-grid-column>
+          <ea-flex-grid-column header="配賦セット" binding="costDistSetOld" [width]="200"></ea-flex-grid-column>
+          <!--経費情報：前年度 ここまで-->
+
+          <!--契約情報 ここから-->
+          <ng-container *ngIf="scrType === '3' || scrType === '4'">
+            <ea-flex-grid-column header="契約状態区分" binding="lldContractStatusTypeName" [width]="100">
+            </ea-flex-grid-column>
+            <ea-flex-grid-column header="物件状態区分" binding="lldAstStatusTypeName" [width]="100"></ea-flex-grid-column>
+            <ea-flex-grid-column header="リース・レンタル会社" binding="lldLeReCompanyName" [width]="200"></ea-flex-grid-column>
+            <ea-flex-grid-column header="物件名" binding="lldAstName" [width]="200"></ea-flex-grid-column>
+            <ea-flex-grid-column header="契約区分" binding="lldContractTypeName" [width]="100"></ea-flex-grid-column>
+            <ea-flex-grid-column header="開始日" binding="lldContractStartDateF" [format]="'YYYY/MM/DD'">
+            </ea-flex-grid-column>
+            <ea-flex-grid-column header="満了日" binding="lldContractEndDateF" [width]="100" [format]="'YYYY/MM/DD'">
+            </ea-flex-grid-column>
+            <ea-flex-grid-column header="期間(ヵ月)" binding="lldPeriodMonth" [width]="100"></ea-flex-grid-column>
+            <ea-flex-grid-column header="契約金額" binding="lldContractAmount" [width]="120"></ea-flex-grid-column>
+            <ea-flex-grid-column header="均等金額" binding="lldMonthAmount" [width]="120"></ea-flex-grid-column>
+          </ng-container>
+          <!--契約情報 ここまで-->
+
+          <!--資産情報 ここから-->
+          <ng-container *ngIf="scrType === '1' || scrType === '2'">
+            <ea-flex-grid-column header="資産管理区分" binding="fldAstManageTypeName" [width]="100"></ea-flex-grid-column>
+            <ea-flex-grid-column header="資産状態区分" binding="fldAstStatusTypeName" [width]="100"></ea-flex-grid-column>
+            <ea-flex-grid-column header="仕入先名" binding="fldPurCompanyName" [width]="200"></ea-flex-grid-column>
+            <ea-flex-grid-column header="資産名" binding="fldAstName" [width]="200"></ea-flex-grid-column>
+            <ea-flex-grid-column header="中古区分" binding="fldOldTypeName" [width]="100"></ea-flex-grid-column>
+            <ea-flex-grid-column header="稼働日" binding="fldStartDateF" [width]="100" [width]="100"
+              [format]="'YYYY/MM/DD'"></ea-flex-grid-column>
+            <ea-flex-grid-column header="除売却日" binding="fldEndDateF" [width]="100" [width]="100"
+              [format]="'YYYY/MM/DD'"></ea-flex-grid-column>
+            <ea-flex-grid-column header="耐用年数" binding="fldUsefulYear" [width]="100"></ea-flex-grid-column>
+            <ea-flex-grid-column header="取得価額" binding="fldAstGetAmount" [width]="120" [width]="100" [format]="'n0'">
+            </ea-flex-grid-column>
+            <ea-flex-grid-column header="帳簿価額(4月末)" binding="fldAstBookAmount" [width]="120" [width]="100"
+              [format]="'n0'"></ea-flex-grid-column>
+          </ng-container>
+          <!--資産情報 ここまで-->
+
+          <!--情報機器等 ここから-->
+          <ng-container *ngIf="scrType !== '2'">
+            <ea-flex-grid-column header="情報機器管理番号" binding="assetId" [width]="120">
+              <ng-template wjFlexGridCellTemplate [cellType]="'Cell'" let-cell="cell">
+                <span class="cell-link">{{cell.item.assetId}}</span>
+              </ng-template>
+            </ea-flex-grid-column>
+            <ea-flex-grid-column header="資産(機器)名" binding="astName" [width]="150"></ea-flex-grid-column>
+            <ea-flex-grid-column header="メーカー型番" binding="astMakerModel" [width]="100"></ea-flex-grid-column>
+            <ea-flex-grid-column header="シリアル番号" binding="astSerialCode" [width]="100"></ea-flex-grid-column>
+            <ea-flex-grid-column header="OIR" binding="astOir" [width]="80"></ea-flex-grid-column>
+            <ea-flex-grid-column header="管理区分" binding="astManageTypeName" [width]="100"></ea-flex-grid-column>
+          </ng-container>
+          <!--情報機器等 ここまで-->
+
+          <!--情報機器等使用者：当年度 ここから-->
+          <ng-container *ngIf="scrType !== '2'">
+            <ea-flex-grid-column header="使用者" binding="useStaffCode" [width]="150">
+              <ng-template wjFlexGridCellTemplate [cellType]="'Cell'" let-cell="cell">
+                {{cell.item.useStaffCode}} {{cell.item.useStaffName}}
+              </ng-template>
+            </ea-flex-grid-column>
+            <ea-flex-grid-column header="所属会社" binding="useStaffCompanyName" [width]="80"></ea-flex-grid-column>
+            <ea-flex-grid-column header="所属部署" binding="useStaffSectionName" [width]="200"></ea-flex-grid-column>
+          </ng-container>
+          <!--情報機器等使用者：当年度 ここまで-->
+
+          <!--情報機器等使用者：前年度 ここから-->
+          <ng-container *ngIf="scrType !== '2'">
+            <ea-flex-grid-column header="使用者" binding="useStaffCodeOld" [width]="150">
+              <ng-template wjFlexGridCellTemplate [cellType]="'Cell'" let-cell="cell">
+                {{cell.item.useStaffCodeOld}} {{cell.item.useStaffNameOld}}
+              </ng-template>
+            </ea-flex-grid-column>
+            <ea-flex-grid-column header="所属会社" binding="useStaffCompanyNameOld" [width]="80"></ea-flex-grid-column>
+            <ea-flex-grid-column header="所属部署" binding="useStaffSectionNameOld" [width]="200"></ea-flex-grid-column>
+          </ng-container>
+          <!--情報機器等使用者：前年度 ここまで-->
+
+          <!--無形管理担当者：当年度 ここから-->
+          <ng-container *ngIf="scrType === '2'">
+            <ea-flex-grid-column header="無形管理担当者" binding="holStaffCode" [width]="200">
+              <ng-template wjFlexGridCellTemplate [cellType]="'Cell'" let-cell="cell">
+                {{cell.item.hosStaffCode}} {{cell.item.hosStaffName}}
+              </ng-template>
+            </ea-flex-grid-column>
+            <ea-flex-grid-column header="所属会社" binding="holStaffCompanyName" [width]="80"></ea-flex-grid-column>
+            <ea-flex-grid-column header="所属部署" binding="holStaffSectionName" [width]="200"></ea-flex-grid-column>
+          </ng-container>
+          <!--無形管理担当者：当年度 ここまで-->
+
+          <!--無形管理担当者：前年度 ここから-->
+          <ng-container *ngIf="scrType === '2'">
+            <ea-flex-grid-column header="無形管理担当者" binding="holStaffCodeOld" [width]="200">
+              <ng-template wjFlexGridCellTemplate [cellType]="'Cell'" let-cell="cell">
+                {{cell.item.holStaffCodeOld}} {{cell.item.holStaffNameOld}}
+              </ng-template>
+            </ea-flex-grid-column>
+            <ea-flex-grid-column header="所属会社" binding="holStaffCompanyNameOld" [width]="80"></ea-flex-grid-column>
+            <ea-flex-grid-column header="所属部署" binding="holStaffSectionNameOld" [width]="200"></ea-flex-grid-column>
+          </ng-container>
+          <!--無形管理担当者：前年度 ここまで-->
+
+          <!--移動申請：精査NG分 ここから-->
+          <ea-flex-grid-column header="移動申請書番号" binding="apChangeApplicationId" [width]="100"></ea-flex-grid-column>
+          <ea-flex-grid-column header="ステータス" binding="apChangeApStatusName" [width]="100"></ea-flex-grid-column>
+          <ea-flex-grid-column header="申請日" binding="apChangeApDate" [width]="100"></ea-flex-grid-column>
+          <ea-flex-grid-column header="申請者" binding="apChangeApStaffCode" [width]="200"></ea-flex-grid-column>
+          <ea-flex-grid-column header="販管/原価区分" binding="apChangeCostTypeName" [width]="100"></ea-flex-grid-column>
+          <ea-flex-grid-column header="減価償却プロジェクトコード" binding="apChangeCostDepPrjCode" [width]="200">
+          </ea-flex-grid-column>
+          <ea-flex-grid-column header="経費負担部課" binding="apChangeCostSectionNameDist" [width]="200">
+          </ea-flex-grid-column>
+          <ea-flex-grid-column header="資産計上部課" binding="apChangeCostSectionCode" [width]="200">
+            <ng-template wjFlexGridCellTemplate [cellType]="'Cell'" let-cell="cell">
+              {{cell.item.apChangeCostSectionCode}} {{cell.item.apChangeCostSectionName}}
+            </ng-template>
+          </ea-flex-grid-column>
+          <!--
+	移動申請：精査NG分 ここまで
+-->
+        </ea-flex-grid>
+      </div>
+    </div>
+    <div class="footer-btn d-flex justify-content-center wm-buttons">
+      <button type="button" (click)="saveCostScrLine()" class="wm-btn">
+        <span class="ico"><img src="assets/images/button/save.png" /></span><span class="txt">保存</span>
+      </button>
+      <button type="button" (click)="exportAssets()" class="wm-btn">
+        <span class="txt">ｴｸｽﾎﾟｰﾄ</span>
+      </button>
+      <app-file-upload-selection [btnText]="'ｲﾝﾎﾟｰﾄ'" (select)="importAssets($event)"></app-file-upload-selection>
+      <button type="button" class="wm-btn" (click)="close()">
+        <span class="txt">戻る</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<app-confirm-popup #confirmPopupExport (confirm)="exportAssets(true)"></app-confirm-popup>

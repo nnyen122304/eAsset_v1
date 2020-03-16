@@ -1,0 +1,10 @@
+<wj-tab-panel #viewStack class="view-stack" (selectedIndexChange)="this.selectedIndexChangeHandler($event)">
+  <ea-view-stack-tab [keepViewState]="false"> <!-- 画面切替後も状態を維持する画面：true、維持しない画面:false-->
+    <a>サイトマップ</a>
+    <div>
+      <app-site-map-result [parent]="this" #childViewResult *ngIf="this.isLoaded.get(this.viewIndexResult)">
+        {{this.changeChildSubject.set(this.viewIndexResult, childViewResult.changeChildSubject)}}
+      </app-site-map-result>
+    </div>
+  </ea-view-stack-tab>
+</wj-tab-panel>

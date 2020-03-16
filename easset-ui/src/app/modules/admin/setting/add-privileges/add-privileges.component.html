@@ -1,0 +1,60 @@
+<form class="form-add-privileges block-frame-border" [ngClass]="{'form-sm': role === 'admin'}" [formGroup]="addPrivilegesForm" *ngIf="isFormShown">
+  <h2 class="frame-title">更新</h2>
+  <div class="frame-body">
+    <ng-container *ngIf="role === 'admin'">
+      <div class="row">
+        <div class="col col-label">
+          権限者：
+        </div>
+        <div class="col col-form">
+          <app-staff-selection (select)="selectStaff($event)" [staffForm]="staffForm" [staffCodeControlName]="staffCodeControlName" [staffNameControlName]="staffNameControlName" [usableDataOnly]="true" [required]="true"></app-staff-selection>
+        </div>
+      </div>
+    </ng-container>
+    <ng-container *ngIf="role !== 'admin'">
+      <div class="row">
+        <div class="col col-label">
+          権限部署：
+        </div>
+        <div class="col col-form col-section-selection">
+          <app-section-selection (select)="selectSection($event)" [sectionForm]="sectionForm" [sectionCodeControlName]="'sectionCode'" [sectionNameControlName]="'sectionName'" [sectionYearControlName]="'sectionYear'" [selectOnly]="true" [required]="true"></app-section-selection>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col col-label">
+          権限者：
+        </div>
+        <div class="col col-form">
+          <app-staff-selection (select)="selectStaff($event)" [staffForm]="staffForm" [staffCodeControlName]="'staffCode'" [staffNameControlName]="'staffName'" [usableDataOnly]="true" [required]="true" [companyOnly]="true"></app-staff-selection>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col col-label">
+          公開：
+        </div>
+        <div class="col col-form">
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" id="fe01" formControlName="publicFlag" [value]="'1'" required="true">
+            <label class="form-check-label" for="fe01">する</label>
+          </div>
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" id="fe02" formControlName="publicFlag" [value]="'2'" required="true">
+            <label class="form-check-label" for="fe02">しない</label>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col col-label">
+          公開コメント：
+        </div>
+        <div class="col col-form">
+          <ea-input-mask class="ip-comment" formControlName="publicComment"></ea-input-mask>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+  <div class="buttons wm-buttons">
+    <button type="button" class="wm-btn" (click)="submit()"><span class="ico"><img src="assets/images/button/save.png" alt="権限追加"></span><span class="txt">権限追加</span></button>
+    <button type="button" class="wm-btn" (click)="close()">キャンセル</button>
+  </div>
+</form>

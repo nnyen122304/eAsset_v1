@@ -1,0 +1,171 @@
+<div class="page-container page-cost-scr-create-data">
+  <div class="section-setting-search section-create-form">
+    <div class="block-frame">
+      <h2 class="frame-title">データ作成</h2>
+      <div class="frame-body">
+        <form class="form-creator row" [formGroup]="creatorForm">
+          <div class="col col-inputs">
+            <div class="row">
+              <div class="col-label">
+                <label for="field-login-company-name">会社：</label>
+              </div>
+              <div class="col col-content pl-0 pr-0">
+                <div class="form-group m-0 bt">
+                  <ea-input-mask class="wm-combo wm-tab-element wm-100 bg-gray" id="field-login-company-name"
+                    [value]="sessionInfo.loginCompanyName" readonly></ea-input-mask>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-label">
+                <label>会計年月：</label>
+              </div>
+              <div class="col col-content pl-0 pr-0">
+                <div class="form-group m-0 bt">
+                  <ea-input-mask class="wm-combo wm-tab-element wm-100 bg-gray" formControlName="period" mask="0000-00"
+                    [isReadOnly]="true"></ea-input-mask>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-label"></div>
+              <div class="col col-content pl-0 pr-0">
+                <div class="form-group m-0 bt">
+                  <div class="form-checkbox">
+                    <div class="form-check form-check-inline">
+                      <input class="form-check-input wm-checkbox wm-tab-element" type="checkbox" id="field-overwrite"
+                        formControlName="overwriteFlag" (change)="toggleOverwritePopup()">
+                      <label class="form-check-label" for="field-overwrite">作成済の場合は再作成する。</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col col-buttons d-flex align-items-center">
+            <button type="button" class="wm-btn wm-tab-element" (click)="create()"><span class="ico"><img
+                  src="assets/images/button/save.png" alt="作成実行"></span><span class="txt">作成実行</span></button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div class="section-create-list">
+    <div class="block-frame">
+      <h2 class="frame-title bg-blue">データ作成状況</h2>
+      <div class="frame-body" id="grid-cont">
+        <div class="block-buttons">
+          <button type="button" class="wm-btn" (click)="updateData()">最新の情報に更新</button>
+        </div>
+        <div class="block-container">
+          <div class="grid-common-wrap">
+            <div class="grid-common-count">
+              【件数：{{gridDataReleaseList && gridDataReleaseList.rows ? (gridDataReleaseList.rows.length | number) : 0}}
+              件】</div>
+            <div class="wp-grid-data-realease-list" id="wp-grid-data-realease-list">
+              <ea-flex-grid #gridDataReleaseList class="grid-common-list grid-data-realease-list grid-cost-scr-list"
+                [itemsSource]="dataReleaseList" (initialized)="onGridInitialized(gridDataReleaseList)">
+                <ea-flex-grid-column header="会計年月" binding="period" [width]="80"></ea-flex-grid-column>
+                <ea-flex-grid-column header="ステータス" binding="createStatusName" [width]="80"></ea-flex-grid-column>
+                <ea-flex-grid-column header="処理開始日" binding="createStartDate" [width]="150"
+                  [format]="'yyyy/MM/dd HH:mm'"></ea-flex-grid-column>
+                <ea-flex-grid-column header="処理終了日" binding="createEndDate" [width]="150" [format]="'yyyy/MM/dd HH:mm'">
+                </ea-flex-grid-column>
+                <ea-flex-grid-column header="実行者" binding="createExecStaffCode" [width]="150">
+                  <ng-template wjFlexGridCellTemplate [cellType]="'Cell'" let-cell="cell">
+                    {{cell.item.createExecStaffCode}}　{{cell.item.createExecStaffName}}
+                  </ng-template>
+                  <ng-template wjFlexGridCellTemplate [cellType]="'CellEdit'" let-cell="cell">
+                    <input class="wj-grid-editor wj-form-control" type="text"
+                      [value]="cell.item.createExecStaffCode + '　' + cell.item.createExecStaffName" readonly>
+                  </ng-template>
+                </ea-flex-grid-column>
+                <ea-flex-grid-column header="実行日" binding="scrSectionUpdateDate" [width]="150"
+                  [format]="'yyyy/MM/dd HH:mm'"></ea-flex-grid-column>
+                <ea-flex-grid-column header="実行者" binding="scrSectionUpdateStaffCode" [width]="150">
+                  <ng-template wjFlexGridCellTemplate [cellType]="'Cell'" let-cell="cell">
+                    {{cell.item.scrSectionUpdateStaffCode}}　{{cell.item.scrSectionUpdateStaffName}}
+                  </ng-template>
+                  <ng-template wjFlexGridCellTemplate [cellType]="'CellEdit'" let-cell="cell">
+                    <input class="wj-grid-editor wj-form-control" type="text"
+                      [value]="cell.item.scrSectionUpdateStaffCode + '　' + cell.item.scrSectionUpdateStaffName"
+                      readonly>
+                  </ng-template>
+                </ea-flex-grid-column>
+                <ea-flex-grid-column header="実行日" binding="openDate" [width]="150" [format]="'yyyy/MM/dd HH:mm'">
+                </ea-flex-grid-column>
+                <ea-flex-grid-column header="実行者" binding="openStaffCode" [width]="150">
+                  <ng-template wjFlexGridCellTemplate [cellType]="'Cell'" let-cell="cell">
+                    {{cell.item.openStaffCode}}　{{cell.item.openStaffName}}
+                  </ng-template>
+                  <ng-template wjFlexGridCellTemplate [cellType]="'CellEdit'" let-cell="cell">
+                    <input class="wj-grid-editor wj-form-control" type="text"
+                      [value]="cell.item.openStaffCode + '　' + cell.item.openStaffName" readonly>
+                  </ng-template>
+                </ea-flex-grid-column>
+                <ea-flex-grid-column header="ステータス" binding="sendStatusName" [width]="150"></ea-flex-grid-column>
+                <ea-flex-grid-column header="実行日" binding="scrSectionUpdateDate" [width]="150"
+                  [format]="'yyyy/MM/dd HH:mm'"></ea-flex-grid-column>
+                <ea-flex-grid-column header="実行者" binding="sendStaffCode" [width]="150">
+                  <ng-template wjFlexGridCellTemplate [cellType]="'Cell'" let-cell="cell">
+                    {{cell.item.sendStaffCode}}　{{cell.item.sendStaffName}}
+                  </ng-template>
+                  <ng-template wjFlexGridCellTemplate [cellType]="'CellEdit'" let-cell="cell">
+                    <input class="wj-grid-editor wj-form-control" type="text"
+                      [value]="cell.item.sendStaffCode + '　' + cell.item.sendStaffName" readonly>
+                  </ng-template>
+                </ea-flex-grid-column>
+                <ea-flex-grid-column header="実行日" binding="closeDate" [width]="150" [format]="'yyyy/MM/dd HH:mm'">
+                </ea-flex-grid-column>
+                <ea-flex-grid-column header="実行者" binding="closeStaffCode" [width]="150">
+                  <ng-template wjFlexGridCellTemplate [cellType]="'Cell'" let-cell="cell">
+                    {{cell.item.closeStaffCode}}　{{cell.item.closeStaffName}}
+                  </ng-template>
+                  <ng-template wjFlexGridCellTemplate [cellType]="'CellEdit'" let-cell="cell">
+                    <input class="wj-grid-editor wj-form-control" type="text"
+                      [value]="cell.item.closeStaffCode + '　' + cell.item.closeStaffName" readonly>
+                  </ng-template>
+                </ea-flex-grid-column>
+              </ea-flex-grid>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="section-each-part">
+    <div class="block-frame">
+      <h2 class="frame-title bg-warning bg-orange">各部ＯＰＥＮ</h2>
+      <div class="frame-body">
+        <div class="row">
+          <div class="col-label">処理対象資産区分：</div>
+          <app-file-upload-selection [btnText]="'ファイル選択(精査部署設定更新)'" [isIcon]="true" (select)="fileSelected($event)">
+          </app-file-upload-selection>
+          <div class="col">(ファイルを選択すると更新処理が即座に実行されます。)</div>
+        </div>
+        <div class="row">
+          <div class="file-row has-indent text-important">
+            「期首移行＞経費負担部課精査」メニューからダウンロードしたCSVに、'精査担当部課コード'項目を入力したファイルを選択してください。
+          </div>
+          <div class="file-row has-indent file-important">
+            ※ CSVファイルの各項目入力可能値は　<a class="link" (click)="getFormatCSV()">こちら</a>
+          </div>
+        </div>
+        <div class="row row-menu" [formGroup]="creatorForm">
+          <div class="col-label col-label-menu">各部メニュー：</div>
+          <div class="col    pl-0">
+            <div class="form-group bt">
+              <ea-input-mask class="wm-combo wm-tab-element wm-100 bg-gray" id="field-login-company-name"
+                [value]="creatorForm.controls.value2.value === '0' ?'CLOSE':'OPEN'" readonly></ea-input-mask>
+              <button type="button" class="wm-btn wm-tab-element ml-3"
+                (click)="showCreateDataPopup($event.currentTarget)"><span class="ico"></span><span
+                  class="txt">OPEN/CLOSE切替</span></button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<app-open-close-switching (select)="isSendMailUpdate($event['data'])"></app-open-close-switching>

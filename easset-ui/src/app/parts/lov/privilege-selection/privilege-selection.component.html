@@ -1,0 +1,26 @@
+<ea-popup #statusSelectionPopup class="popup-status-selection popup-privilege-selection" [hideTrigger]="'None'" (hidden)="close()">
+  <div class="form-select-status">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">管理者権限選択</h5>
+        <button type="button" tabindex="-1" class="close bt-close wj-hide">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="section-status">
+          <ea-flex-grid
+            #gridPrivilegeSelectionList
+            class="grid-common-list grid-privilege-selection-list"
+            [itemsSource]="statusList"
+            (dblclick)="onRowSelecting($event)"
+          >
+            <ea-flex-grid-column header="権限" binding="name" [width]="'*'"></ea-flex-grid-column>
+          </ea-flex-grid>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="wm-btn" (click)="submit()">選択</button>
+        <button type="button" class="wm-btn wj-hide">閉じる</button>
+      </div>
+    </div>
+  </div>
+</ea-popup>

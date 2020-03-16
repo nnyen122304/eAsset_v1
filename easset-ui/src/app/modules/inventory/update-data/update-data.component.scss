@@ -1,0 +1,145 @@
+.page-message {
+  padding: 0 20px;
+  margin-bottom: 20px;
+  font-size: 12px;
+  color: #0000ff;
+}
+
+.section-update-form {
+  .period-text {
+    margin-bottom: 5px;
+  }
+  .period-desc {
+    margin-left: 5px;
+    display: inline-block;
+    vertical-align: middle;
+  }
+  .input-period {
+    width: 100px;
+  }
+  .update-form {
+    width: 800px;
+    .col-label {
+      flex: 0 0 150px;
+    }
+    > .row + .row {
+      margin-top: 10px;
+    }
+    .file-row a {
+      text-decoration: underline;
+    }
+    .file-row + .file-row {
+      margin-top: 10px;
+    }
+    .has-indent {
+      padding-left: 1.5em;
+      position: relative;
+    }
+    .has-indent-top {
+      &:before {
+        content: "\203B";
+        display: inline-block;
+        position: absolute;
+        top: 0;
+        left: 0;
+      }
+    }
+    .input-filename {
+      width: 400px;
+      margin-right: 10px;
+    }
+    .btn-upload {
+      margin-top: -2px;
+    }
+  }
+}
+
+.text-important {
+  color: #ff0000;
+}
+
+.section-update-history-buttons {
+  margin-top: 10px;
+  padding: 0 10px;
+  a {
+    font-size: 1em;
+    text-decoration: underline;
+  }
+}
+
+.section-update-message {
+  height: 20px;
+
+  margin-top: 5px;
+  padding: 0 10px;
+  color: #ff0000;
+  font-size: 1em;
+}
+
+.section-update-buttons {
+  margin-top: 10px;
+  padding-top: 5px;
+  border-top: 1px solid #fff;
+  text-align: center;
+  .btn {
+    min-width: 100px;
+    margin: 0 10px;
+  }
+}
+
+.section-update-history-list {
+  display: flex;
+  margin-top: 10px;
+  height: calc(100vh - 370px);
+  .has-file & {
+    height: calc(100vh - 390px);
+  }
+  .has-file-submitted & {
+    height: calc(100vh - 365px);
+  }
+  .row-history-list {
+    padding: 0 15px;
+  }
+  .list-desc {
+    padding-left: 0;
+    list-style: none;
+  }
+
+  .row-list-heading {
+    margin: 0;
+    padding: 0;
+    .col-label {
+      width: 140px;
+      padding-bottom: 1em;
+    }
+  }
+
+  .grid-common-wrap {
+    width: 901px;
+  }
+
+  .grid-common-count {
+    margin-top: -25px;
+  }
+
+  .wp-grid-history-list {
+    height: calc(100vh - 480px);
+    @media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+      height: calc(100vh - 500px);
+    }
+  }
+  .grid-history-list {
+    display: block;
+    height: 100%;
+  }
+  .button-delete {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    margin-right: 5px;
+    background: url(/assets/images/button/line_delete_save.png) 50% 50% no-repeat;
+    background-size: 12px auto;
+    vertical-align: middle;
+    cursor: pointer;
+  }
+}

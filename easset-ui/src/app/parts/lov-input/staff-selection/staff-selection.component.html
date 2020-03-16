@@ -1,0 +1,87 @@
+<form class="form-staff" [formGroup]="staffForm">
+    <div class="col p-0" fxLayout="row">
+        <div class="form-group">
+            <label class="label">{{title}}</label>
+            <ea-input-mask [ngClass]="extClass" #staffCode class="ip-code wm-combo"
+                           formControlName="{{staffCodeControlName}}"
+                           [formControl]="staffForm.controls[staffCodeControlName]" (keyup)="onInput($event)"
+                           (change)="getStaffData()" (focusout)="getStaffDataOnFocus()" [required]="required"
+                           [maxLength]="10" [isReadOnly]="readOnly"
+                           [pattern]="'a-zA-Z0-9'" [capitalize]="true"></ea-input-mask>
+            <button [hidden]="!visibleStatus" type="button" class="wm-btn wm-sm" (click)="open($event.currentTarget)">
+                <span class="ico"><img src="assets/images/button/popup.png"></span>
+            </button>
+            <ea-input-mask [ngClass]="extNameClass" [hidden]="onlyStaffCode" #staffName class="ip-name wm-combo bg-gray"
+                           formControlName="{{staffNameControlName}}"
+                           readonly></ea-input-mask>
+        </div>
+    </div>
+</form>
+
+<ea-popup #staffSelectionPopup class="popup-common-sel staff-selection" [hideTrigger]="'None'" (hidden)="close()">
+    <div class="form-select-staff">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">社員選択</h5>
+                <button type="button" tabindex="-1" class="close bt-close wj-hide">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="section-search">
+                    <form class="row" [formGroup]="searchForm">
+                        <div class="col-6">
+                            <div class="row row-search">
+                                <div class="col-6">社員名（あいまい）：</div>
+                                <div class="col-6">
+                                    <ea-input-mask formControlName="staffName"></ea-input-mask>
+                                </div>
+                            </div>
+                            <div class="row row-search">
+                                <div class="col-6">部署名（あいまい）：</div>
+                                <div class="col-6">
+                                    <ea-input-mask formControlName="sectionName"></ea-input-mask>
+                                </div>
+                            </div>
+                            <div class="row row-search" *ngIf="!usableDataOnly">
+                                <div class="col-6"></div>
+                                <div class="col-6">
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="checkbox" id="form-input-enablestaffonly"
+                                               [(ngModel)]="includeIntired" [ngModelOptions]="{standalone: true}">
+                                        <label class="form-check-label" for="form-input-enablestaffonly">退職者も含める</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6 col-buttons">
+                            <button type="button" class="wm-btn" (click)="search()">検索</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="section-data">
+                    <ea-flex-grid
+                        #gridStaffSelectionList
+                        class="grid-common-list grid-staff-selection-list"
+                        [itemsSource]="staffList"
+                        [allowResizing]="'None'"
+                        [allowSorting]="false"
+                        [headersVisibility]="'Column'"
+                        (dblclick)="submit()"
+                    >
+                        <ea-flex-grid-column header="社員番号" binding="staffCode" [allowResizing]="false"
+                                             [allowMerging]=true
+                                             [width]="130"></ea-flex-grid-column>
+                        <ea-flex-grid-column header="社員名" binding="name" [allowResizing]="false" [allowMerging]=true
+                                             [width]="200"></ea-flex-grid-column>
+                        <ea-flex-grid-column header="会社・部署" binding="lovDispName" [allowResizing]="false"
+                                             [allowMerging]=true
+                                             [width]="300"></ea-flex-grid-column>
+                    </ea-flex-grid>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="wm-btn" (click)="submit()">選択</button>
+                <button type="button" class="wm-btn wj-hide">閉じる</button>
+            </div>
+        </div>
+    </div>
+</ea-popup>

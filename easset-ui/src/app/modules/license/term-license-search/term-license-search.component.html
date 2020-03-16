@@ -1,0 +1,13 @@
+<div class="page-container page-search-license">
+  <div class="section-header text-blue mb-1">契約更新するタームライセンスを検索してください。</div>
+  <div class="section-body is-header">
+    <app-license-search-condition [currentState]="'TERM_LICENSE'"></app-license-search-condition>
+  </div>
+  <div class="section-footer mt-1 pt-2">
+    <div class="button-bottom ">
+      <button type="button" class="wm-btn wm-tab-element ml-3" (click)="search()">検索</button>
+      <button type="button" class="wm-btn wm-tab-element ml-3" (click)="resetSearch()">クリア</button>
+      <button type="button" class="wm-btn wm-tab-element ml-3" (click)="back()">戻る</button>
+    </div>
+  </div>
+</div>

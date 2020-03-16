@@ -1,0 +1,30 @@
+<div [fxLayout]="'column'">
+  <div [fxLayout]="'column'">
+    <form name="searchForm">
+      <fieldset>
+        <legend>検索条件</legend>
+        <div [fxLayout]="'row'">
+          <div  class="form-group">
+            <label for="applicationId">申請会社：</label>
+            <ea-input-mask  class="test" id="apCompanyName" name="apCompanyName" [(ngModel)]="apGetTanSC.apCompanyName" [isReadOnly]="true"></ea-input-mask>
+          </div>
+          <div  class="form-group">
+            <label for="applicationId">取得申請書番号：</label>
+            <!-- <wj-combo-box id="applicationId" name="applicationId" [(ngModel)]="apGetTanSC.applicationId" [wjModelProperty]="'text'"></wj-combo-box> -->
+            <ea-input-mask id="applicationId" name="applicationId" [(ngModel)]="apGetTanSC.applicationId"></ea-input-mask>
+          </div>
+          <div class="form-group">
+            <label for="apDateFrom">申請日FROM：</label>
+            <wj-input-date id="apDateFrom" name="apDateFrom" [(ngModel)]="apGetTanSC.apDateFrom" [isRequired]="false"></wj-input-date>
+          </div>
+        </div>
+      </fieldset>
+    </form>
+    <div class="button-bar-container">
+      <div class="button-bar">
+        <button type="button" (click)="search()">検索</button>
+        <button type="button" (click)="download()">CSVダウンロード</button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,80 @@
+<form class="form-project row row-selection" [formGroup]="projectForm">
+  <div class="col p-0" fxLayout="row">
+    <label *ngIf="title != ''" class="wr-10">{{title}}</label>
+    <div class="col">
+      <div class="row">
+        <ea-input-mask class="wm-combo" formControlName="{{projectCodeControlName}}"
+                       [formControl]="projectForm.controls[projectCodeControlName]"
+                       (focusout)="getProjectDataByCode()"
+                       [ngClass]="extClass"
+                       [required]="required" [maxLength]="10" [pattern]="'a-zA-Z0-9'"
+                       [capitalize]="true"></ea-input-mask>
+        <button type="button" [hidden]="!visibleStatus" class="wm-btn wm-sm" (click)="open($event.currentTarget)">
+          <span class="ico"><img src="assets/images/button/popup.png"></span>
+        </button>
+        <ea-input-mask class="wm-combo bg-gray" [ngClass]="extClassName"
+                       formControlName="{{projectNameControlName}}" readonly></ea-input-mask>
+      </div>
+      <div class="row pt-1" *ngIf="projectTypeControlName != ''"
+           [hidden]="projectForm.controls[projectTypeControlName].value == ''
+           || projectForm.controls[projectTypeControlName].value == null">
+        <ea-input-mask class="wm-combo bg-gray prj-type-name" [ngClass]="extClassType"
+                       formControlName="{{projectTypeControlName}}" readonly></ea-input-mask>
+      </div>
+    </div>
+  </div>
+</form>
+
+<ea-popup #projectSelectionPopup class="popup-common-sel popup-project-selection" [hideTrigger]="'None'"
+          (hidden)="close()">
+  <div class="form-tree-selection">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">資産プロジェクト選択</h5>
+        <button type="button" tabindex="-1" class="close bt-close wj-hide">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="section-search">
+          <form [formGroup]="searchForm">
+            <div class="col">
+              <div class="form-content row">
+                <div class="col-7">
+                  <div class="form-group">
+                    <label class="col-6">プロジェクト名(あいまい)：</label>
+                    <ea-input-mask class="wr-15" formControlName="projectName"></ea-input-mask>
+                  </div>
+                  <div class="form-group">
+                    <label class="col-6">タイプ名(あいまい)：</label>
+                    <ea-input-mask class="wr-15" formControlName="typeName"></ea-input-mask>
+                  </div>
+                </div>
+                <div class="col-2 m-0 p-0">
+                  <button type="button" class="wm-btn" (click)="search()">検索</button>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="section-list">
+          <ea-flex-grid
+            #gridProjectSelectionList
+            class="grid-common-list grid-list"
+            [itemsSource]="dataList"
+            [allowResizing]="'None'"
+            [allowSorting]="false"
+            [headersVisibility]="'Column'"
+            (dblclick)="submit()"
+          >
+            <ea-flex-grid-column header="プロジェクトコード" binding="code" [width]="130"></ea-flex-grid-column>
+            <ea-flex-grid-column header="プロジェクト名" binding="name" [width]="200"></ea-flex-grid-column>
+            <ea-flex-grid-column header="タイプ名" binding="value1" [width]="320"></ea-flex-grid-column>
+          </ea-flex-grid>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="wm-btn" (click)="submit()">選択</button>
+        <button type="button" class="wm-btn wj-hide">閉じる</button>
+      </div>
+    </div>
+  </div>
+</ea-popup>

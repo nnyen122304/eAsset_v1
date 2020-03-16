@@ -1,0 +1,43 @@
+<wj-tab-panel #viewStack class="view-stack" (selectedIndexChange)="this.selectedIndexChangeHandler($event)">
+  <ea-view-stack-tab [keepViewState]="false"> <!-- 画面切替後も状態を維持する画面：true、維持しない画面:false-->
+    <a>棚卸データ作成</a>
+    <div>
+      <app-create-data [parent]="this" #childViewCreate *ngIf="this.isLoaded.get(this.viewIndexCreate)">
+        {{this.changeChildSubject.set(this.viewIndexCreate, childViewCreate.changeChildSubject)}}
+      </app-create-data>
+    </div>
+  </ea-view-stack-tab>
+  <ea-view-stack-tab [keepViewState]="true"> <!-- 画面切替後も状態を維持する画面：true、維持しない画面:false-->
+    <a>棚卸一覧：保有部署別一覧</a>
+    <div>
+      <app-list [parent]="this" #childViewList *ngIf="this.isLoaded.get(this.viewIndexList)">
+        {{this.changeChildSubject.set(this.viewIndexList, childViewList.changeChildSubject)}}
+      </app-list>
+    </div>
+  </ea-view-stack-tab>
+  <ea-view-stack-tab [keepViewState]="false"> <!-- 画面切替後も状態を維持する画面：true、維持しない画面:false-->
+    <a>棚卸一覧：e申請</a>
+    <div>
+      <app-e-application [parent]="this" #childViewListEApplication *ngIf="this.isLoaded.get(this.viewIndexListEApplication)">
+        {{this.changeChildSubject.set(this.viewIndexListEApplication, childViewListEApplication.changeChildSubject)}}
+      </app-e-application>
+    </div>
+  </ea-view-stack-tab>
+  <ea-view-stack-tab [keepViewState]="false"> <!-- 画面切替後も状態を維持する画面：true、維持しない画面:false-->
+    <a>棚卸一覧：資産別一覧</a>
+    <div>
+      <app-asset-list [parent]="this" #childViewListAsset *ngIf="this.isLoaded.get(this.viewIndexListAsset)">
+        {{this.changeChildSubject.set(this.viewIndexListAsset, childViewListAsset.changeChildSubject)}}
+      </app-asset-list>
+    </div>
+  </ea-view-stack-tab>
+  <ea-view-stack-tab [keepViewState]="false"> <!-- 画面切替後も状態を維持する画面：true、維持しない画面:false-->
+    <a>棚卸データ一括更新</a>
+    <div>
+      <app-update-data [parent]="this" #childViewUpdate *ngIf="this.isLoaded.get(this.viewIndexUpdate)">
+        {{this.changeChildSubject.set(this.viewIndexUpdate, childViewUpdate.changeChildSubject)}}
+      </app-update-data>
+    </div>
+  </ea-view-stack-tab>
+</wj-tab-panel>
+<app-confirm-popup #confirmPopup (confirm)="onConfirm()"></app-confirm-popup>

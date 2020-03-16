@@ -1,0 +1,27 @@
+.block-frame-border {
+    padding: 10px 0px 10px 0px !important;
+    margin-top: 15px;
+    // width: ;
+  
+    .frame-title {
+      writing-mode: horizontal-tb;
+      -webkit-writing-mode: horizontal-tb;
+      -ms-writing-mode: lr-tb;
+      -webkit-writing-mode: horizontal-tb !important;
+      width: auto !important;
+    }
+  
+    .frame-content {
+      vertical-align: middle;
+      align-items: center;
+    }
+  
+    button {
+      min-width: 40px;
+      margin: 0px 5px;
+      padding: 3px 15px;
+    }
+  }
+  .wm-550{
+    width: 550px;
+  }

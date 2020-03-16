@@ -1,0 +1,71 @@
+<div class="form-os">
+  <div class="btn-form mt-2">
+    <button type="button" class="wm-btn wm-sm pt">
+      行追加
+    </button>
+  </div>
+  <div>
+    <div class="block-frame-border fld-line-otr-cost">
+      <h2 class="frame-title horizontal-tb">明細入力</h2>
+      <div class="col p-0">
+        <form>
+          <div class="col p-0">
+            <div class="form-group">
+              <label class="wm-combo wm-120 mr-1">No:</label>
+              <ea-input-number class="input-display wm-combo wm-30 col-1 bg-gray" id="lineSeq"
+                name="lineSeq"></ea-input-number>
+            </div>
+            <div class="form-group">
+              <label class="wm-combo wm-120 mr-1">コメント:</label>
+                <ea-input-mask class="input-display wm-combo wm-300" id="otrComment" name="otrComment">
+                </ea-input-mask>
+            </div>
+            <div class="form-group">
+              <label class="wm-combo wm-120 mr-1">金額(税抜)</label>
+              <ea-input-number class="input-display wm-combo wm-100 required" id="otrAmount"
+                name="otrAmount"></ea-input-number>
+            </div>
+          </div>
+        </form>
+        <hr class="e-line">
+        <div class="col p-0">
+          <div class="form-group e-group-btn">
+            <div class="form-group e-group-btn">
+              <button type="button" class="wm-btn wm-sm">
+                OK
+              </button>
+              <button type="button" class="wm-btn wm-sm">
+                次行入力
+              </button>
+              <button type="button" class="wm-btn wm-sm">
+                キャンセル
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="grid-common-wrap u-top">
+  <div class="grid-common-count">
+    <span>【件数：{{gridApGetIntLineFldLine && gridApGetIntLineFldLine.rows ? (gridApGetIntLineFldLine.rows.length | number) : 0}}
+      件】</span>
+  </div>
+  <div class="wm-grid-list" id="wp-grid-data-list">
+    <ea-flex-grid #gridApGetIntLineFldLine
+    class="grid-common-list grid-list" [allowAddNew]="true">
+      <ea-flex-grid-column [width]="25" header="">
+        <ng-template wjFlexGridCellTemplate [cellType]="'Cell'" let-cell="cell" let-row="row">
+          <a  name="btnDel" id="btnDel" class="btn-del"></a>
+        </ng-template>
+      </ea-flex-grid-column>
+      <ea-flex-grid-column [width]="30" binding="lineSeq" header="No">
+      </ea-flex-grid-column>
+      <ea-flex-grid-column binding="astComment" [width]="500" header="コメント">
+      </ea-flex-grid-column>
+      <ea-flex-grid-column binding="astComment" [width]="100" header="金額(税抜)">
+      </ea-flex-grid-column>
+    </ea-flex-grid>
+  </div>
+</div>

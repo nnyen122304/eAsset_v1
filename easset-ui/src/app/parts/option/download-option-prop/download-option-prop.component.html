@@ -1,0 +1,109 @@
+<ea-popup #downloadSelectionPopup class="restore popup-common-sel option-prop" [hideTrigger]="'None'"
+          (hidden)="close()">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h5 class="modal-title">ダウンロードオプション指定</h5>
+      <button type="button" tabindex="-1" class="close bt-close wj-hide">&times;</button>
+    </div>
+    <div class="modal-body">
+      <div class="col">
+        <div class="section-search">
+          <div class="row col">ダウンロードする項目を選択してください。</div>
+          <!-- 選択状態保存レイアウト -->
+          <div class="row" [hidden]="!isFormSave">
+            <div class="col text-right">
+              <div class="e-link">
+                <a class="link" [hidden]="isSave" (click)="clickEvent('openSaveBox')">選択状態の保存</a>
+              </div>
+              <form [formGroup]="saveForm">
+                <div class="block-frame-border col-6" [hidden]="!isSave">
+                  <h2 class="frame-title">選択状態の保存</h2>
+                  <div class="frame-body col">
+                    <div class="row">
+                      <label class="mb-3">保存名：</label>
+                      <ea-input-mask class="ip-code wm-combo wm-200 input-display required" id="saveName"
+                                     name="saveName" formControlName="saveName"></ea-input-mask>
+                    </div>
+                    <div class="row group-buttons wm-buttons">
+                      <button type="button" class="wm-btn" (click)="clickEvent('saveOk')" [disabled]="!saveForm.valid">
+                        OK
+                      </button>
+                      <button type="button" class="wm-btn" (click)="clickEvent('saveCancel')">キャンセル</button>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+          <!-- 選択状態復元レイアウト -->
+          <div class="row" [hidden]="!isFormRestore">
+            <div class="col text-right">
+              <div class="e-link">
+                <a class="link" [hidden]="isRestore" (click)="clickEvent('openRestoreBox')">選択状態の復元</a>
+              </div>
+              <form [formGroup]="saveForm">
+                <div class="block-frame-border col-7" [hidden]="!isRestore">
+                  <h2 class="frame-title">選択状態の復元</h2>
+                  <div class="frame-body col">
+                    <label>復元する状態を選択(ダブルクリック)してください。</label>
+                    <div class="section-data restore-list">
+                      <ea-flex-grid #gridRestoreList class="grid-common-list grid-list grid-staff-selection-list"
+                                    [itemsSource]="restoreList" [allowResizing]="'None'" [allowSorting]="false"
+                                    [headersVisibility]="'Column'" (dblclick)="clickEvent('restoreSelect')">
+                        <ea-flex-grid-column header="" [allowDragging]="'None'" [allowMerging]="false" [width]="30"
+                                             [isReadOnly]="false">
+                          <ng-template wjFlexGridCellTemplate [cellType]="'Cell'" let-cell="cell">
+                            <a class="btn-del" (click)="clickEvent('removeRestore')"></a>
+                          </ng-template>
+                        </ea-flex-grid-column>
+                        <ea-flex-grid-column header="選択状態保存名" binding="name" [allowResizing]="false" [allowMerging]=true
+                                             [width]="278">
+                        </ea-flex-grid-column>
+                      </ea-flex-grid>
+                    </div>
+                    <div class="row group-buttons wm-buttons">
+                      <button type="button" class="wm-btn" (click)="clickEvent('restoreSelect')">選択</button>
+                      <button type="button" class="wm-btn" (click)="clickEvent('restoreCancel')">キャンセル</button>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+        <div class="section-data" [ngClass]="isRestore ? 'restore-list-open' : (isSave ? 'save-list-open': '')">
+          <ea-flex-grid #gridDownloadSelectionList class="grid-common-list grid-staff-selection-list"
+                        [itemsSource]="downloadItemList" [allowSorting]="false" [isReadOnly]="false">
+            <ea-flex-grid-column header="Sel" binding="sel" [allowDragging]="'None'" [allowMerging]="false"
+                                 [isReadOnly]="false" [width]="50" [isReadOnly]="false"></ea-flex-grid-column>
+            <ea-flex-grid-column header="項目カテゴリ" binding="description" [allowResizing]="false" [allowMerging]=true
+                                 [width]="250">
+            </ea-flex-grid-column>
+            <ea-flex-grid-column header="項目" binding="value5" [allowResizing]="false" [allowMerging]=true [width]="350">
+            </ea-flex-grid-column>
+          </ea-flex-grid>
+        </div>
+
+        <form class="row" [formGroup]="lineItemFIForm">
+          <div class="col" [hidden]="!isLineItemFI">
+            <div class="row row-search">
+              <div class="col-2">明細出力：</div>
+              <div class="col-7">
+                <wj-combo-box class=" wm-combo wm-dropdown wm-tab-element wm-350" id="selectType"
+                              [itemsSource]="lineItemAC" [displayMemberPath]="'label'" [selectedValuePath]="'data'"
+                              formControlName="selectType" [isEditable]="false" [isRequired]="false">
+                </wj-combo-box>
+                <label>(１項目のみ指定できます。)</label>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="wm-btn" (click)="clickEvent('download')">選択</button>
+      <button type="button" class="wm-btn wj-hide" (click)="close()">閉じる</button>
+    </div>
+  </div>
+</ea-popup>

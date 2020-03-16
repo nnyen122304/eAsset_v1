@@ -1,0 +1,59 @@
+.width-body{
+    margin-left: 20px;
+    width: 520px;
+  }
+  .col-label-search{
+    width: 150px;
+  }
+  .col-label{
+    width: 110px;
+  }
+  .block-frame-border {         
+    padding: 5px;
+    margin: 10px 0 0 0;
+  }
+  .col-label-toggle {
+    a {
+      cursor: pointer;
+      color: blue;
+      font-weight: bold;
+      text-decoration: underline;
+      padding: 3px;
+      margin-bottom: 0px;
+    }
+    a:hover {
+      border-radius: 4px;
+      background:	#ADD8E6;
+      color: black !important;
+    }
+  }
+
+  .wmd-110{
+    width: 110px;
+  }
+  .wm-lic-term{
+    width: 178px;
+  }
+
+  label.form-check-label{
+    margin-left: 3px;
+  }
+
+.e-link {
+  white-space: nowrap;
+  font-weight: bold;
+  text-decoration: underline;
+}
+.text-inline {
+  padding: 0 10px;
+}
+.col-form {
+  display: block;
+  flex-wrap: wrap;
+  width: 250px;
+  padding: 0;
+}
+.label-attribute{
+  width: 40px;
+  text-align: center;
+}

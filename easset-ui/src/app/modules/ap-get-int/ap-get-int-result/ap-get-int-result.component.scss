@@ -1,0 +1,26 @@
+.int-list {
+  position: relative;
+  z-index: 0;
+  top: -36px;
+}
+
+.head-search {
+  span {
+    margin: 0px 5px;
+    white-space: nowrap;
+    font-weight: bold;
+    text-decoration: underline;
+  }
+}
+
+.block-frame-border {
+  padding: 9px 10px !important;
+  width: 320px;
+  float: right;
+  margin-right: 95px;
+  z-index: 10;
+
+  .input-display {
+    width: 100px;
+  }
+}

@@ -1,0 +1,1429 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<!--
+ *===================================================================
+ * ファイル名 : ApChangeDAO_SqlMap.xml
+ * 概要説明   : 移動申請用SQL文
+ * バージョン : 1.0
+ *===================================================================
+ * 修正履歴
+ * 日付       Ver. 担当者       修正内容
+ * －－－－－ －－ －－－－－－ －－－－－－－－－－－－－－－－－－
+ * 2010-10-06 1.0  リヨン       新規
+ *===================================================================
+ -->
+<sqlMap namespace="ApChangeDAO" >
+
+  <sql id="selectApChangeComColumn_APC">
+      nac.APPLICATION_ID applicationId
+     ,nac.CREATE_DATE createDate
+     ,nac.CREATE_STAFF_CODE createStaffCode
+     ,nac.UPDATE_DATE updateDate
+     ,nac.UPDATE_STAFF_CODE updateStaffCode
+     ,nac.VERSION version
+     ,nac.UPDATE_COMMENT updateComment
+     ,nac.EAPP_ID eappId
+     ,nac.AP_STATUS apStatus
+     ,nac.AP_DATE apDate
+     ,nac.AP_CHANGE_TYPE apChangeType
+     ,nac.AP_CHANGE_TYPE_TAN_FLAG apChangeTypeTanFlag
+     ,nac.AP_CHANGE_TYPE_EQUIP_FLAG apChangeTypeEquipFlag
+     ,nac.AP_CHANGE_TYPE_THIN_CL_FLAG apChangeTypeThinClFlag
+     ,nac.AP_CHANGE_TYPE_TAKE_PC_FLAG apChangeTypeTakePcFlag
+     ,nac.AP_CHANGE_TYPE_LEASE_FLAG apChangeTypeLeaseFlag
+     ,nac.AP_CHANGE_TYPE_RENTAL_FLAG apChangeTypeRentalFlag
+     ,nac.AP_CHANGE_TYPE_LICENSE_FLAG apChangeTypeLicenseFlag
+     ,nac.AP_CHANGE_TYPE_COST_TYPE_FLAG apChangeTypeCostTypeFlag
+     ,nac.AP_CREATE_STAFF_CODE apCreateStaffCode
+     ,nac.AP_CREATE_COMPANY_CODE apCreateCompanyCode
+     ,nac.AP_CREATE_SECTION_CODE apCreateSectionCode
+     ,nac.AP_CREATE_SECTION_YEAR apCreateSectionYear
+     ,nac.AP_STAFF_CODE apStaffCode
+     ,nac.AP_COMPANY_CODE apCompanyCode
+     ,nac.AP_SECTION_CODE apSectionCode
+     ,nac.AP_SECTION_YEAR apSectionYear
+     ,nac.AP_TEL apTel
+     ,nac.CHG_SCHEDULE_DATE chgScheduleDate
+     ,nac.CHG_SCHEDULE_PERIOD chgSchedulePeriod
+     ,nac.CHG_DESCRIPTION chgDescription
+     ,nac.HOL_COMPANY_CODE holCompanyCode
+     ,nac.HOL_SECTION_CODE holSectionCode
+     ,nac.HOL_SECTION_YEAR holSectionYear
+     ,nac.HOL_SECTION_WITH_FLAG holSectionWithFlag
+     ,nac.HOL_STAFF_CODE holStaffCode
+     ,nac.HOL_OFFICE_CODE holOfficeCode
+     ,nac.HOL_OFFICE_FLOOR holOfficeFloor
+     ,nac.HOL_OFFICE_ROOM_NUM holOfficeRoomNum
+     ,nac.HOL_OFFICE_RACK_NUM holOfficeRackNum
+     ,nac.USE_STAFF_CODE useStaffCode
+     ,nac.USE_STAFF_COMPANY_CODE useStaffCompanyCode
+     ,nac.USE_STAFF_SECTION_CODE useStaffSectionCode
+     ,nac.USE_STAFF_SECTION_YEAR useStaffSectionYear
+     ,nac.COST_TYPE costType
+     ,nac.COST_DEP_PRJ_CODE costDepPrjCode
+     ,nac.APPR_HOL_STAFF_CODE_OLD apprHolStaffCodeOld
+     ,nac.APPR_COST_STAFF_CODE_OLD apprCostStaffCodeOld
+     ,nac.APPR_SUPERIOR_STAFF_CODE_OLD apprSuperiorStaffCodeOld
+     ,nac.APPR_HOL_STAFF_CODE_NEW apprHolStaffCodeNew
+     ,nac.APPR_COST_STAFF_CODE_NEW apprCostStaffCodeNew
+     ,nac.APPR_SUPERIOR_STAFF_CODE_NEW apprSuperiorStaffCodeNew
+     ,nac.APPROVE_DATE approveDate
+
+     , nac.COST_COMPANY_CODE costCompanyCode
+     , nac.COST_SECTION_CODE costSectionCode
+     , nac.COST_SECTION_YEAR costSectionYear
+     , nac.AP_CHANGE_TYPE_INT1_FLAG apChangeTypeInt1Flag
+     , nac.AP_CHANGE_TYPE_INT2_FLAG apChangeTypeInt2Flag
+     , nac.HOL_REP_OFFICE_CODE holRepOfficeCode
+     , nac.INT_HOL_STAFF_CODE intHolStaffCode
+     , nac.INT_HOL_STAFF_COMPANY_CODE intHolStaffCompanyCode
+     , nac.INT_HOL_STAFF_SECTION_CODE intHolStaffSectionCode
+     , nac.INT_HOL_STAFF_SECTION_YEAR intHolStaffSectionYear
+     , nac.APPR_COST_STAFF_SKIP_FLAG_OLD apprCostStaffSkipFlagOld
+     , nac.APPR_COST_STAFF_SKIP_FLAG_NEW apprCostStaffSkipFlagNew
+
+
+     ,NEA_UTIL_PKG.get_cn_value1_f('OFFICE', nac.HOL_OFFICE_CODE) holOfficeName
+     ,NEA_UTIL_PKG.get_cn_value1_f('AP_STATUS_CHANGE', nac.AP_STATUS) apStatusName
+     ,NEA_UTIL_PKG.get_staff_name_f(nac.AP_CREATE_STAFF_CODE) apCreateStaffName
+     ,NEA_UTIL_PKG.get_staff_name_f(nac.AP_STAFF_CODE) apStaffName
+     ,NEA_UTIL_PKG.get_staff_name_f(nac.HOL_STAFF_CODE) holStaffName
+     ,NEA_UTIL_PKG.get_staff_name_f(nac.USE_STAFF_CODE) useStaffName
+     ,NEA_UTIL_PKG.get_staff_name_f(nac.APPR_HOL_STAFF_CODE_OLD) apprHolStaffNameOld
+     ,NEA_UTIL_PKG.get_staff_name_f(nac.APPR_COST_STAFF_CODE_OLD) apprCostStaffNameOld
+     ,NEA_UTIL_PKG.get_staff_name_f(nac.APPR_SUPERIOR_STAFF_CODE_OLD) apprSuperiorStaffNameOld
+     ,NEA_UTIL_PKG.get_staff_name_f(nac.APPR_HOL_STAFF_CODE_NEW) apprHolStaffNameNew
+     ,NEA_UTIL_PKG.get_staff_name_f(nac.APPR_COST_STAFF_CODE_NEW) apprCostStaffNameNew
+     ,NEA_UTIL_PKG.get_staff_name_f(nac.APPR_SUPERIOR_STAFF_CODE_NEW) apprSuperiorStaffNameNew
+     ,NEA_UTIL_PKG.get_company_name_f(nac.AP_CREATE_COMPANY_CODE) apCreateCompanyName
+     ,NEA_UTIL_PKG.get_company_name_f(nac.AP_COMPANY_CODE) apCompanyName
+     ,NEA_UTIL_PKG.get_company_name_f(nac.HOL_COMPANY_CODE) holCompanyName
+     ,NEA_UTIL_PKG.get_company_name_f(nac.USE_STAFF_COMPANY_CODE) useStaffCompanyName
+     ,NEA_UTIL_PKG.get_ap_chg_cost_sec_dist_f(nac.APPLICATION_ID, 'A') costSectionNameOld
+     ,NEA_UTIL_PKG.get_ap_chg_cost_sec_dist_f(nac.APPLICATION_ID, 'B') costSectionNameNew
+     ,NEA_UTIL_PKG.get_section_name_f(nac.AP_COMPANY_CODE, nac.AP_SECTION_CODE, nac.AP_SECTION_YEAR) apSectionName
+     ,NEA_UTIL_PKG.get_section_name_f(nac.AP_CREATE_COMPANY_CODE, nac.AP_CREATE_SECTION_CODE, nac.AP_CREATE_SECTION_YEAR) apCreateSectionName
+     ,NEA_UTIL_PKG.get_section_name_f(nac.HOL_COMPANY_CODE, nac.HOL_SECTION_CODE, nac.HOL_SECTION_YEAR) holSectionName
+     ,NEA_UTIL_PKG.get_section_name_f(nac.USE_STAFF_COMPANY_CODE, nac.USE_STAFF_SECTION_CODE, nac.USE_STAFF_SECTION_YEAR) useStaffSectionName
+     ,NEA_UTIL_PKG.get_ap_chg_type_name_f(nac.AP_CHANGE_TYPE_TAN_FLAG, nac.AP_CHANGE_TYPE_INT1_FLAG, nac.AP_CHANGE_TYPE_INT2_FLAG
+                                        , nac.AP_CHANGE_TYPE_EQUIP_FLAG
+                                        , nac.AP_CHANGE_TYPE_THIN_CL_FLAG ,nac.AP_CHANGE_TYPE_TAKE_PC_FLAG
+                                        , nac.AP_CHANGE_TYPE_LEASE_FLAG, nac.AP_CHANGE_TYPE_RENTAL_FLAG
+                                        , nac.AP_CHANGE_TYPE_LICENSE_FLAG
+                                        , nac.AP_CHANGE_TYPE_COST_TYPE_FLAG) apChangeTypeName
+     ,DECODE(nac.CHG_SCHEDULE_PERIOD, NULL, NULL, SUBSTR(nac.CHG_SCHEDULE_PERIOD, 1,4) || '-' || SUBSTR(nac.CHG_SCHEDULE_PERIOD, 5,6)) chgSchedulePeriodName
+     ,NEA_UTIL_PKG.get_cn_value1_f('COST_TYPE', nac.COST_TYPE) costTypeName
+     ,NEA_UTIL_PKG.get_project_name_f(nac.AP_COMPANY_CODE, nac.COST_DEP_PRJ_CODE) costDepPrjName
+     ,NEA_UTIL_PKG.get_project_type_f(nac.AP_COMPANY_CODE, nac.COST_DEP_PRJ_CODE) costDepPrjType
+     ,NEA_UTIL_PKG.get_section_name_f(nac.USE_STAFF_COMPANY_CODE, nac.USE_STAFF_SECTION_CODE, nac.USE_STAFF_SECTION_YEAR) useStaffSectionName
+
+
+     ,NEA_UTIL_PKG.get_cost_section_name_f(nac.COST_SECTION_CODE, nac.COST_SECTION_YEAR) costSectionName
+     ,NEA_UTIL_PKG.get_staff_name_f(nac.INT_HOL_STAFF_CODE) intHolStaffName
+     ,NEA_UTIL_PKG.get_company_name_f(nac.INT_HOL_STAFF_COMPANY_CODE) intHolStaffCompanyName
+     ,NEA_UTIL_PKG.get_section_name_f(nac.INT_HOL_STAFF_COMPANY_CODE, nac.INT_HOL_STAFF_SECTION_CODE, nac.INT_HOL_STAFF_SECTION_YEAR) intHolStaffSectionName
+     ,NEA_UTIL_PKG.get_rep_office_name_f(nac.AP_COMPANY_CODE, nac.HOL_REP_OFFICE_CODE) holRepOfficeName
+
+  </sql>
+
+  <!--
+    移動申請検索(ヘッダ)
+  -->
+  <select id="selectApChange_APC" parameterClass="java.util.Map" resultClass="jp.co.ctcg.easset.dto.ap_change.ApChange">
+    SELECT
+      <include refid="selectApChangeComColumn_APC" />
+     ,NEA_UTIL_PKG.get_tel_f(nac.AP_CREATE_COMPANY_CODE, nac.AP_CREATE_STAFF_CODE, nac.AP_CREATE_SECTION_YEAR) apCreateTel
+    FROM
+      NEA_AP_CHANGE nac
+    WHERE
+    <isNotEmpty property="applicationId">
+      nac.APPLICATION_ID = #applicationId#
+    </isNotEmpty>
+    <isNotEmpty property="eappId">
+      nac.EAPP_ID = #eappId#
+    </isNotEmpty>
+    <isNotEmpty property="lockFlag">
+      FOR UPDATE
+    </isNotEmpty>
+  </select>
+
+  <!--
+    移動申請検索(固定資産明細)
+  -->
+  <select id="selectApChangeLineFld_APC" parameterClass="java.util.Map" resultClass="jp.co.ctcg.easset.dto.ap_change.ApChangeLineFld">
+    SELECT
+      fld.APPLICATION_ID applicationId
+    , fld.AP_CHANGE_LINE_FLD_TYPE apChangeLineFldType
+    , fld.LINE_SEQ lineSeq
+    , fld.CREATE_DATE createDate
+    , fld.CREATE_STAFF_CODE createStaffCode
+    , fld.UPDATE_DATE updateDate
+    , fld.UPDATE_STAFF_CODE updateStaffCode
+    , fld.PP_ID ppId
+    , fld.GET_APPLICATION_ID getApplicationId
+    , fld.AST_DATE astDate
+    , fld.AST_NUM astNum
+    , fld.AST_NAME astName
+    , fld.AST_CLASS astClass
+    , fld.AST_GET_AMOUNT astGetAmount
+    , fld.AST_BOOK_AMOUNT astBookAmount
+    , fld.COST_TYPE costType
+    , fld.COST_DEP_PRJ_CODE costDepPrjCode
+    , fld.COST_SECTION_CODE costSectionCode
+    , fld.COST_SECTION_NAME costSectionName
+    , fld.ITEM_GROUP_CODE itemGroupCode
+    , fld.HOL_REP_OFFICE_CODE holRepOfficeCode
+    , fld.COST_DIST_CODE costDistCode
+    , fld.HOL_COMPANY_CODE holCompanyCode
+    , fld.HOL_SECTION_CODE holSectionCode
+    , fld.HOL_SECTION_YEAR holSectionYear
+    , fld.HOL_STAFF_CODE holStaffCode
+    , fld.PP_TRANS_FLAG ppTransFlag
+    , fld.TEMP_FLAG tempFlag
+    , NEA_UTIL_PKG.get_rep_office_name_f(naet.AP_COMPANY_CODE, fld.HOL_REP_OFFICE_CODE) holRepOfficeName
+    , NEA_UTIL_PKG.get_cn_value1_f('COST_TYPE', fld.COST_TYPE) costTypeName
+    , NEA_UTIL_PKG.get_item_group_name_f(naet.AP_COMPANY_CODE, fld.ITEM_GROUP_CODE) itemGroupName
+    , NEA_UTIL_PKG.get_project_name_f(naet.AP_COMPANY_CODE, fld.COST_DEP_PRJ_CODE) costDepPrjName
+    , NEA_UTIL_PKG.get_ast_class_name_f(naet.AP_COMPANY_CODE, fld.AST_CLASS) astClassName
+    , NEA_UTIL_PKG.get_section_name_f(fld.HOL_COMPANY_CODE, fld.HOL_SECTION_CODE, fld.HOL_SECTION_YEAR) holSectionName
+    , NEA_UTIL_PKG.get_staff_name_f(fld.HOL_STAFF_CODE) holStaffName
+    FROM
+      NEA_AP_CHANGE_LINE_FLD fld
+    , NEA_AP_CHANGE naet
+    WHERE
+      fld.APPLICATION_ID = #applicationId#
+    AND
+      fld.APPLICATION_ID = naet.APPLICATION_ID
+    AND
+      fld.AP_CHANGE_LINE_FLD_TYPE = #apChangeLineFldType#
+    ORDER BY
+      fld.LINE_SEQ
+  </select>
+
+  <!--
+    移動申請検索(契約明細)
+  -->
+  <select id="selectApChangeLineContract_APC" parameterClass="java.util.Map" resultClass="jp.co.ctcg.easset.dto.ap_change.ApChangeLineContract">
+    SELECT
+       naclc.APPLICATION_ID applicationId
+     , naclc.AP_CHANGE_LINE_CONTRACT_TYPE apChangeLineContractType
+     , naclc.LINE_SEQ lineSeq
+     , naclc.CREATE_DATE createDate
+     , naclc.CREATE_STAFF_CODE createStaffCode
+     , naclc.UPDATE_DATE updateDate
+     , naclc.UPDATE_STAFF_CODE updateStaffCode
+     , naclc.CONTRACT_COMPANY_CODE contractCompanyCode
+     , naclc.CONTRACT_NUM contractNum
+     , naclc.CONTRACT_START_DATE contractStartDate
+     , naclc.CONTRACT_END_DATE contractEndDate
+     , naclc.REMAIN_AMOUNT remainAmount
+     , naclc.MONTH_AMOUNT monthAmount
+     , naclc.COST_TYPE costType
+     , naclc.COST_DEP_PRJ_CODE costDepPrjCode
+
+      , naclc.CONTRACT_BRANCH_NUM contractSubNum
+      , naclc.AST_NUM astNum
+      , naclc.AST_NAME astName
+      , naclc.REMAIN_TERM remainTerm
+      , naclc.AST_CLASS astClass
+      , naclc.COST_SECTION_CODE costSectionCode
+      , naclc.ITEM_GROUP_CODE itemGroupCode
+      , naclc.HOL_REP_OFFICE_CODE holRepOfficeCode
+      , naclc.COST_DIST_CODE costDistCode
+      , naclc.PP_ID_CONTRACT ppIdContract
+      , naclc.PP_ID_AST ppIdAst
+      , naclc.PP_TRANS_FLAG ppTransFlag
+
+     , NEA_UTIL_PKG.get_cn_value1_f('COST_TYPE', naclc.COST_TYPE) costTypeName
+     , NEA_UTIL_PKG.get_project_name_f(naet.AP_COMPANY_CODE, naclc.COST_DEP_PRJ_CODE) costDepPrjName
+     , NEA_UTIL_PKG.get_ap_chg_cost_sec_dist_f(naclc.APPLICATION_ID, naclc.AP_CHANGE_LINE_CONTRACT_TYPE, naclc.AST_NUM) costSectionName
+     , NEA_UTIL_PKG.get_company_name_f(naclc.CONTRACT_COMPANY_CODE) contractCompanyName
+    FROM
+      NEA_AP_CHANGE_LINE_CONTRACT naclc
+    , NEA_AP_CHANGE naet
+    WHERE
+      naclc.APPLICATION_ID = #applicationId#
+    AND
+      naclc.APPLICATION_ID = naet.APPLICATION_ID
+    AND
+      naclc.AP_CHANGE_LINE_CONTRACT_TYPE = #apChangeLineContractType#
+    ORDER BY
+       naclc.CONTRACT_NUM
+  </select>
+
+  <!--
+    移動申請検索(資産(機器)明細)
+  -->
+  <select id="selectApChangeLineAst_APC" parameterClass="java.util.Map" resultClass="jp.co.ctcg.easset.dto.ap_change.ApChangeLineAst">
+    SELECT
+       APPLICATION_ID applicationId
+     , LINE_SEQ lineSeq
+     , CREATE_DATE createDate
+     , CREATE_STAFF_CODE createStaffCode
+     , UPDATE_DATE updateDate
+     , UPDATE_STAFF_CODE updateStaffCode
+     , ASSET_ID assetId
+     , HOL_COMPANY_CODE holCompanyCode
+     , HOL_SECTION_CODE holSectionCode
+     , HOL_SECTION_YEAR holSectionYear
+     , HOL_STAFF_CODE holStaffCode
+     , HOL_OFFICE_CODE holOfficeCode
+     , USE_STAFF_CODE useStaffCode
+     , USE_STAFF_COMPANY_CODE useStaffCompanyCode
+     , USE_STAFF_SECTION_CODE useStaffSectionCode
+     , USE_STAFF_SECTION_YEAR useStaffSectionYear
+     , AST_NAME astName
+     , AST_CATEGORY1_CODE astCategory1Code
+     , AST_CATEGORY2_CODE astCategory2Code
+     , AST_SYSTEM_SECTION_DEPLOY_FLAG astSystemSectionDeployFlag
+     , AST_ASSET_TYPE astAssetType
+     , AST_MANAGE_TYPE astManageType
+     , CONTRACT_NUM contractNum
+     , AUTO_ADD_FLAG autoAddFlag
+
+     , HOL_QUANTITY holQuantity
+     , PP_ID ppId
+     , AST_NUM astNum
+     , GET_APPLICATION_ID getApplicationId
+     , CONTRACT_BRANCH_NUM contractSubNum
+
+     ,NEA_UTIL_PKG.get_cn_value1_f('OFFICE', HOL_OFFICE_CODE) holOfficeName
+     ,NEA_UTIL_PKG.get_section_name_f(HOL_COMPANY_CODE, HOL_SECTION_CODE, HOL_SECTION_YEAR) holSectionName
+     ,NEA_UTIL_PKG.get_staff_name_f(HOL_STAFF_CODE) holStaffName
+     ,NEA_UTIL_PKG.get_staff_name_f(USE_STAFF_CODE) useStaffName
+     ,NEA_UTIL_PKG.get_cn_value1_f('ASSET_TYPE', AST_ASSET_TYPE) astAssetTypeName
+    FROM
+      NEA_AP_CHANGE_LINE_AST
+    WHERE
+      APPLICATION_ID = #applicationId#
+    ORDER BY
+      applicationId
+      , lineSeq
+  </select>
+
+  <!--
+    移動申請検索(ライセンス明細)
+  -->
+  <select id="selectApChangeLineLic_APC" parameterClass="java.util.Map" resultClass="jp.co.ctcg.easset.dto.ap_change.ApChangeLineLic">
+    SELECT
+       nacll.APPLICATION_ID applicationId
+     , nacll.LINE_SEQ lineSeq
+     , nacll.CREATE_DATE createDate
+     , nacll.CREATE_STAFF_CODE createStaffCode
+     , nacll.UPDATE_DATE updateDate
+     , nacll.UPDATE_STAFF_CODE updateStaffCode
+     , nacll.LICENSE_ID licenseId
+     , nacll.HOL_COMPANY_CODE holCompanyCode
+     , nacll.HOL_SECTION_CODE holSectionCode
+     , nacll.HOL_SECTION_YEAR holSectionYear
+     , nacll.HOL_STAFF_CODE holStaffCode
+     , nacll.SOFTWARE_MAKER_ID softwareMakerId
+     , nacll.SOFTWARE_ID softwareId
+     , nacll.LIC_ASSET_TYPE licAssetType
+     , nacll.CONTRACT_NUM contractNum
+     , AUTO_ADD_FLAG autoAddFlag
+
+     , LIC_QUANTITY_TYPE licQuantityType
+     , LIC_QUANTITY licQuantity
+     , PP_ID ppId
+     , AST_NUM astNum
+     , GET_APPLICATION_ID getApplicationId
+     , CONTRACT_BRANCH_NUM contractSubNum
+
+     ,NEA_UTIL_PKG.get_section_name_f(nacll.HOL_COMPANY_CODE, nacll.HOL_SECTION_CODE, nacll.HOL_SECTION_YEAR) holSectionName
+     ,NEA_UTIL_PKG.get_staff_name_f(nacll.HOL_STAFF_CODE) holStaffName
+     ,NEA_UTIL_PKG.get_cn_value1_f('LICENSE_ASSET_TYPE', nacll.LIC_ASSET_TYPE) licAssetTypeName
+     , NEA_UTIL_PKG.get_software_maker_name_f(nacll.SOFTWARE_MAKER_ID) softwareMakerName
+     , NEA_UTIL_PKG.get_software_name_f(nacll.SOFTWARE_ID) softwareName
+    FROM
+      NEA_AP_CHANGE_LINE_LIC nacll
+    WHERE
+      nacll.APPLICATION_ID = #applicationId#
+    ORDER BY
+      applicationId
+      , lineSeq
+  </select>
+
+  <!--
+    移動申請検索(経費負担部課明細)
+  -->
+  <select id="selectApChangeLineCostSec_APC" parameterClass="java.util.Map" resultClass="jp.co.ctcg.easset.dto.ap_change.ApChangeLineCostSec">
+    SELECT
+       APPLICATION_ID applicationId
+     , AP_CHANGE_LINE_COST_TYPE apChangeLineCostType
+     , AST_NUM astNum
+     , LINE_SEQ lineSeq
+     , CREATE_DATE createDate
+     , CREATE_STAFF_CODE createStaffCode
+     , UPDATE_DATE updateDate
+     , UPDATE_STAFF_CODE updateStaffCode
+     , COST_COMPANY_CODE costCompanyCode
+     , COST_SECTION_CODE costSectionCode
+     , COST_SECTION_YEAR costSectionYear
+     , COST_DIST costDist
+     ,NEA_UTIL_PKG.get_company_name_f(COST_COMPANY_CODE) costCompanyName
+     ,NEA_UTIL_PKG.get_cost_section_name_f(COST_SECTION_CODE, COST_SECTION_YEAR) costSectionName
+    FROM
+      NEA_AP_CHANGE_LINE_COST_SEC
+    WHERE
+      APPLICATION_ID = #applicationId#
+      AND AP_CHANGE_LINE_COST_TYPE = #apChangeLineCostType#
+      <isNotEmpty property="astNum">
+        AND AST_NUM = #astNum#
+      </isNotEmpty>
+  </select>
+
+  <!--
+    移動申請検索
+  -->
+  <select id="selectApChangeList_APC" parameterClass="java.util.Map" resultClass="jp.co.ctcg.easset.dto.ap_change.ApChangeSR">
+    SELECT
+      <include refid="selectApChangeComColumn_APC" />
+     ,nacla.ASSET_ID assetId
+     ,nacla.AST_NAME astName
+     ,nacll.LICENSE_ID licenseId
+     ,nacll.SOFTWARE_ID softwareId
+     ,DECODE(naclft.APPLICATION_ID, NULL, naclfi.AST_NUM, naclft.AST_NUM) astNum
+     ,DECODE(naclft.APPLICATION_ID, NULL, naclfi.AST_NAME, naclft.AST_NAME) astNameFld
+     ,DECODE(naclcl.APPLICATION_ID, NULL, naclcr.CONTRACT_NUM, naclcl.CONTRACT_NUM) contractNum
+     ,DECODE(naclcl.APPLICATION_ID, NULL, naclcr.CONTRACT_BRANCH_NUM, naclcl.CONTRACT_BRANCH_NUM) contractSubNum
+     ,DECODE(naclcl.APPLICATION_ID, NULL, naclcr.AST_NAME, naclcl.AST_NAME) astNameContract
+     ,NEA_UTIL_PKG.get_software_name_f(nacll.SOFTWARE_ID) softwareName
+     ,CASE
+        WHEN nac.AP_CHANGE_TYPE = '2' THEN /* ライセンス */
+          NEA_UTIL_PKG.get_company_name_f(nacll.HOL_COMPANY_CODE)
+        WHEN nac.AP_CHANGE_TYPE IN ('3', 'C') THEN /* 無形固定資産 */
+          NEA_UTIL_PKG.get_company_name_f(naclfi.HOL_COMPANY_CODE)
+        ELSE /* 有形・リース・レンタル・備品 */
+          NEA_UTIL_PKG.get_company_name_f(nacla.HOL_COMPANY_CODE)
+      END holCompanyNameOld
+     ,CASE
+        WHEN nac.AP_CHANGE_TYPE = '2' THEN /* ライセンス */
+          NEA_UTIL_PKG.get_section_name_f(nacll.HOL_COMPANY_CODE, nacll.HOL_SECTION_CODE, nacll.HOL_SECTION_YEAR)
+        WHEN nac.AP_CHANGE_TYPE IN ('3', 'C') THEN /* 無形固定資産 */
+          NEA_UTIL_PKG.get_section_name_f(naclfi.HOL_COMPANY_CODE, naclfi.HOL_SECTION_CODE, naclfi.HOL_SECTION_YEAR)
+        ELSE /* 有形・リース・レンタル・備品 */
+          NEA_UTIL_PKG.get_section_name_f(nacla.HOL_COMPANY_CODE, nacla.HOL_SECTION_CODE, nacla.HOL_SECTION_YEAR)
+      END holSectionNameOld
+
+    FROM
+      NEA_AP_CHANGE nac
+     ,NEA_AP_CHANGE_LINE_AST nacla
+     ,NEA_AP_CHANGE_LINE_LIC nacll
+     ,NEA_AP_CHANGE_LINE_CONTRACT naclcl
+     ,NEA_AP_CHANGE_LINE_CONTRACT naclcr
+     ,NEA_AP_CHANGE_LINE_FLD naclft
+     ,NEA_AP_CHANGE_LINE_FLD naclfi
+    WHERE
+      nac.APPLICATION_ID = nacla.APPLICATION_ID(+)
+      AND nac.APPLICATION_ID = nacll.APPLICATION_ID(+)
+      AND nac.APPLICATION_ID = naclcl.APPLICATION_ID(+)
+      AND nac.APPLICATION_ID = naclcr.APPLICATION_ID(+)
+      AND nac.APPLICATION_ID = naclft.APPLICATION_ID(+)
+      AND nac.APPLICATION_ID = naclfi.APPLICATION_ID(+)
+      AND 1 = nacla.LINE_SEQ(+)
+      AND 1 = nacll.LINE_SEQ(+)
+      AND 1 = naclcl.LINE_SEQ(+)
+      AND 1 = naclcr.LINE_SEQ(+)
+      AND 1 = naclft.LINE_SEQ(+)
+      AND 1 = naclfi.LINE_SEQ(+)
+      AND 1 = naclcl.AP_CHANGE_LINE_CONTRACT_TYPE(+)
+      AND 2 = naclcr.AP_CHANGE_LINE_CONTRACT_TYPE(+)
+      AND 3 = naclft.AP_CHANGE_LINE_FLD_TYPE(+)
+      AND 4 = naclfi.AP_CHANGE_LINE_FLD_TYPE(+)
+
+      AND nac.APPLICATION_ID
+        IN (
+          SELECT
+            nac1.APPLICATION_ID
+          FROM
+            (
+              <!-- 検索対象:機器明細 -->
+              SELECT
+                L.ASSET_ID
+                , TO_CHAR(NULL) AS LICENSE_ID
+                , L.HOL_COMPANY_CODE AS OLD_HOL_COMPANY_CODE
+                , L.HOL_SECTION_CODE AS OLD_HOL_SECTION_CODE
+                , L.HOL_SECTION_YEAR AS OLD_HOL_SECTION_YEAR
+                , L.HOL_STAFF_CODE AS OLD_HOL_STAFF_CODE
+                , L.HOL_OFFICE_CODE AS OLD_HOL_OFFICE_CODE
+                , L.USE_STAFF_CODE AS OLD_USE_STAFF_CODE
+                , L.AST_ASSET_TYPE AS AST_ASSET_TYPE
+                , L.AST_MANAGE_TYPE AS AST_MANAGE_TYPE
+                , L.CONTRACT_NUM AS CONTRACT_NUM
+                , TO_CHAR(NULL) AS OLD_COST_TYPE
+                , TO_CHAR(NULL) AS OLD_COST_DEP_PRJ_CODE
+                , TO_CHAR(NULL) AS OLD_COST_SECTION_CODE
+                , TO_CHAR(NULL) AS NEW_COST_SECTION_CODE
+                , L.CONTRACT_BRANCH_NUM AS CONTRACT_BRANCH_NUM
+                , L.AST_NUM AS AST_NUM
+                , TO_CHAR(NULL) AS OLD_INT_HOL_STAFF_CODE
+                , TO_CHAR(NULL) AS OLD_HOL_REP_OFFICE_CODE
+                , C.*
+              FROM
+                NEA_AP_CHANGE C
+                , NEA_AP_CHANGE_LINE_AST L
+              WHERE
+                C.APPLICATION_ID = L.APPLICATION_ID
+              <!-- 検索対象:ライセンス明細 -->
+              UNION ALL
+              SELECT
+                TO_CHAR(NULL)
+                , L.LICENSE_ID
+                , L.HOL_COMPANY_CODE
+                , L.HOL_SECTION_CODE
+                , L.HOL_SECTION_YEAR
+                , L.HOL_STAFF_CODE
+                , TO_CHAR(NULL)
+                , TO_CHAR(NULL)
+                , TO_CHAR(NULL)
+                , TO_CHAR(NULL)
+                , L.CONTRACT_NUM
+                , TO_CHAR(NULL)
+                , TO_CHAR(NULL)
+                , TO_CHAR(NULL)
+                , TO_CHAR(NULL)
+                , L.CONTRACT_BRANCH_NUM
+                , L.AST_NUM
+                , TO_CHAR(NULL)
+                , TO_CHAR(NULL)
+                , C.*
+              FROM
+                NEA_AP_CHANGE C
+                , NEA_AP_CHANGE_LINE_LIC L
+              WHERE
+                C.APPLICATION_ID = L.APPLICATION_ID
+              <!-- 検索対象:契約明細 -->
+              UNION ALL
+              SELECT
+                TO_CHAR(NULL)
+                , TO_CHAR(NULL)
+                , C.AP_COMPANY_CODE /* 申請会社 = 保有会社のため申請会社で代用 */
+                , TO_CHAR(NULL)
+                , TO_NUMBER(NULL)
+                , TO_CHAR(NULL)
+                , TO_CHAR(NULL)
+                , TO_CHAR(NULL)
+                , TO_CHAR(NULL)
+                , TO_CHAR(NULL)
+                , L.CONTRACT_NUM
+                , L.COST_TYPE
+                , L.COST_DEP_PRJ_CODE
+                , TO_CHAR(NULL)
+                , TO_CHAR(NULL)
+                , L.CONTRACT_BRANCH_NUM
+                , L.AST_NUM
+                , TO_CHAR(NULL)
+                , L.HOL_REP_OFFICE_CODE
+                , C.*
+              FROM
+                NEA_AP_CHANGE C
+                , NEA_AP_CHANGE_LINE_CONTRACT L
+              WHERE
+                C.APPLICATION_ID = L.APPLICATION_ID
+              <!-- 検索対象:経費負担明細 -->
+              UNION ALL
+              SELECT
+                TO_CHAR(NULL)
+                , TO_CHAR(NULL)
+                , C.AP_COMPANY_CODE /* 申請会社 = 保有会社のため申請会社で代用 */
+                , TO_CHAR(NULL)
+                , TO_NUMBER(NULL)
+                , TO_CHAR(NULL)
+                , TO_CHAR(NULL)
+                , TO_CHAR(NULL)
+                , TO_CHAR(NULL)
+                , TO_CHAR(NULL)
+                , TO_CHAR(NULL)
+                , TO_CHAR(NULL)
+                , TO_CHAR(NULL)
+                , DECODE(L.AP_CHANGE_LINE_COST_TYPE, 'B', NULL, L.COST_SECTION_CODE)
+                , DECODE(L.AP_CHANGE_LINE_COST_TYPE, 'B', L.COST_SECTION_CODE, NULL)
+                , TO_CHAR(NULL)
+                , TO_CHAR(NULL)
+                , TO_CHAR(NULL)
+                , TO_CHAR(NULL)
+                , C.*
+              FROM
+                NEA_AP_CHANGE C
+                , NEA_AP_CHANGE_LINE_COST_SEC L
+              WHERE
+                C.APPLICATION_ID = L.APPLICATION_ID
+              <!-- 検索対象:資産明細 -->
+              UNION ALL
+              SELECT
+                TO_CHAR(NULL)
+                , TO_CHAR(NULL)
+                , C.AP_COMPANY_CODE /* 申請会社 = 保有会社のため申請会社で代用 */
+                , L.HOL_SECTION_CODE
+                , L.HOL_SECTION_YEAR
+                , TO_CHAR(NULL)
+                , TO_CHAR(NULL)
+                , TO_CHAR(NULL)
+                , TO_CHAR(NULL)
+                , TO_CHAR(NULL)
+                , TO_CHAR(NULL)
+                , L.COST_TYPE
+                , L.COST_DEP_PRJ_CODE
+                , TO_CHAR(NULL)
+                , TO_CHAR(NULL)
+                , TO_CHAR(NULL)
+                , L.AST_NUM
+                , L.HOL_STAFF_CODE
+                , L.HOL_REP_OFFICE_CODE
+                , C.*
+              FROM
+                NEA_AP_CHANGE C
+                , NEA_AP_CHANGE_LINE_FLD L
+              WHERE
+                C.APPLICATION_ID = L.APPLICATION_ID
+            ) nac1
+          WHERE
+            1 = 1
+            <!-- 申請会社 -->
+            <isNotEmpty property="searchParam.apCompanyCode">
+              AND nac1.AP_COMPANY_CODE = #searchParam.apCompanyCode#
+            </isNotEmpty>
+
+            <!-- 基本 -->
+            <isNotEmpty property="searchParam.applicationId">
+              AND nac1.APPLICATION_ID LIKE '%' || #searchParam.applicationId# || '%'
+            </isNotEmpty>
+            <isNotEmpty property="apChangeTypePluralList">
+              AND $apChangeTypePluralList$
+            </isNotEmpty>
+            <isNotEmpty property="applicationIdPluralList">
+              AND $applicationIdPluralList$
+            </isNotEmpty>
+            <isNotEmpty property="apStatusPluralList">
+              AND $apStatusPluralList$
+            </isNotEmpty>
+            <isNotEmpty property="searchParam.apDateFrom">
+              AND nac1.AP_DATE <![CDATA[>]]>= #searchParam.apDateFrom#
+            </isNotEmpty>
+            <isNotEmpty property="searchParam.apDateTo">
+              AND nac1.AP_DATE <![CDATA[<]]>= #searchParam.apDateTo#
+            </isNotEmpty>
+            <isNotEmpty property="searchParam.apStaffCode">
+              AND (nac1.AP_STAFF_CODE = #searchParam.apStaffCode# OR nac1.AP_CREATE_STAFF_CODE = #searchParam.apStaffCode#)
+            </isNotEmpty>
+            <isNotEmpty property="apGetTypePluralList">
+              AND $apGetTypePluralList$
+            </isNotEmpty>
+            <isNotEmpty property="searchParam.apChangeTypeTanFlag">
+              AND nac1.AP_CHANGE_TYPE_TAN_FLAG = #searchParam.apChangeTypeTanFlag#
+            </isNotEmpty>
+            <isNotEmpty property="searchParam.apChangeTypeInt1Flag">
+              AND (nac1.AP_CHANGE_TYPE_INT1_FLAG = #searchParam.apChangeTypeInt1Flag# OR nac1.AP_CHANGE_TYPE_INT2_FLAG = #searchParam.apChangeTypeInt2Flag#)
+            </isNotEmpty>
+            <isNotEmpty property="searchParam.apChangeTypeEquipFlag">
+              AND nac1.AP_CHANGE_TYPE_EQUIP_FLAG = #searchParam.apChangeTypeEquipFlag#
+            </isNotEmpty>
+            <isNotEmpty property="searchParam.apChangeTypeThinClFlag">
+              AND nac1.AP_CHANGE_TYPE_THIN_CL_FLAG = #searchParam.apChangeTypeThinClFlag#
+            </isNotEmpty>
+            <isNotEmpty property="searchParam.apChangeTypeTakePcFlag">
+              AND nac1.AP_CHANGE_TYPE_TAKE_PC_FLAG = #searchParam.apChangeTypeTakePcFlag#
+            </isNotEmpty>
+            <isNotEmpty property="searchParam.apChangeTypeLeaseFlag">
+              AND nac1.AP_CHANGE_TYPE_LEASE_FLAG = #searchParam.apChangeTypeLeaseFlag#
+            </isNotEmpty>
+            <isNotEmpty property="searchParam.apChangeTypeRentalFlag">
+              AND nac1.AP_CHANGE_TYPE_RENTAL_FLAG = #searchParam.apChangeTypeRentalFlag#
+            </isNotEmpty>
+            <isNotEmpty property="searchParam.apChangeTypeLicenseFlag">
+              AND nac1.AP_CHANGE_TYPE_LICENSE_FLAG = #searchParam.apChangeTypeLicenseFlag#
+            </isNotEmpty>
+            <isNotEmpty property="searchParam.apChangeTypeCostTypeFlag">
+              AND nac1.AP_CHANGE_TYPE_COST_TYPE_FLAG = #searchParam.apChangeTypeCostTypeFlag#
+            </isNotEmpty>
+            <isNotEmpty property="searchParam.eappId">
+              AND nac1.EAPP_ID LIKE '%' || #searchParam.eappId# || '%'
+            </isNotEmpty>
+            <isNotEmpty property="eappIdPluralList">
+              AND $eappIdPluralList$
+            </isNotEmpty>
+
+            <!-- 移動対象 -->
+            <isNotEmpty property="searchParam.assetId">
+              AND nac1.ASSET_ID LIKE '%' || #searchParam.assetId# || '%'
+            </isNotEmpty>
+            <isNotEmpty property="assetIdPluralList">
+              AND $assetIdPluralList$
+            </isNotEmpty>
+            <isNotEmpty property="searchParam.licenseId">
+              AND nac1.LICENSE_ID LIKE '%' || #searchParam.licenseId# || '%'
+            </isNotEmpty>
+            <isNotEmpty property="licenseIdPluralList">
+              AND $licenseIdPluralList$
+            </isNotEmpty>
+            <isNotEmpty property="searchParam.contractNum">
+              AND nac1.CONTRACT_NUM LIKE '%' || #searchParam.contractNum# || '%'
+            </isNotEmpty>
+            <isNotEmpty property="contractNumPluralList">
+              AND $contractNumPluralList$
+            </isNotEmpty>
+            <isNotEmpty property="searchParam.contractSubNum">
+              AND nac1.CONTRACT_BRANCH_NUM LIKE '%' || #searchParam.contractSubNum# || '%'
+            </isNotEmpty>
+            <isNotEmpty property="contractSubNumPluralList">
+              AND $contractSubNumPluralList$
+            </isNotEmpty>
+            <isNotEmpty property="searchParam.astNum">
+              AND nac1.AST_NUM LIKE '%' || #searchParam.astNum# || '%'
+            </isNotEmpty>
+            <isNotEmpty property="astNumPluralList">
+              AND $astNumPluralList$
+            </isNotEmpty>
+            <isNotEmpty property="searchParam.astAssetType">
+              AND nac1.AST_ASSET_TYPE = #searchParam.astAssetType#
+            </isNotEmpty>
+            <isNotEmpty property="searchParam.astManageType">
+              AND nac1.AST_MANAGE_TYPE = #searchParam.astManageType#
+            </isNotEmpty>
+
+            <!-- アクセスレベル/部署 -->
+            <isNotEmpty property="accessLevelSection">
+              AND $accessLevelSection$
+            </isNotEmpty>
+            <isNotEmpty property="section">
+              AND $section$
+            </isNotEmpty>
+
+            <!-- 変更項目 -->
+            <!-- 検索対象:両方 -->
+            <isEqual property="searchParam.searchTarget" compareValue="0">
+              <isNotEmpty property="searchParam.holStaffCode">
+                AND (nac1.HOL_STAFF_CODE = #searchParam.holStaffCode# OR nac1.OLD_HOL_STAFF_CODE = #searchParam.holStaffCode#)
+              </isNotEmpty>
+              <isNotEmpty property="searchParam.holOfficeCode">
+                AND (nac1.HOL_OFFICE_CODE = #searchParam.holOfficeCode# OR nac1.OLD_HOL_OFFICE_CODE = #searchParam.holOfficeCode#)
+              </isNotEmpty>
+              <isNotEmpty property="searchParam.useStaffCode">
+                AND (nac1.USE_STAFF_CODE = #searchParam.useStaffCode# OR nac1.OLD_USE_STAFF_CODE = #searchParam.useStaffCode#)
+              </isNotEmpty>
+              <isNotEmpty property="searchParam.intHolStaffCode">
+                AND (nac1.INT_HOL_STAFF_CODE = #searchParam.intHolStaffCode# OR nac1.OLD_INT_HOL_STAFF_CODE = #searchParam.intHolStaffCode#)
+              </isNotEmpty>
+              <isNotEmpty property="searchParam.holRepOfficeCode">
+                AND (nac1.HOL_REP_OFFICE_CODE = #searchParam.holRepOfficeCode# OR nac1.OLD_HOL_REP_OFFICE_CODE = #searchParam.holRepOfficeCode#)
+              </isNotEmpty>
+              <isNotEmpty property="searchParam.costType">
+                AND (nac1.COST_TYPE = #searchParam.costType# OR nac1.OLD_COST_TYPE = #searchParam.costType#)
+              </isNotEmpty>
+              <isNotEmpty property="searchParam.costDepPrjCode">
+                AND (nac1.COST_DEP_PRJ_CODE = #searchParam.costDepPrjCode# OR nac1.OLD_COST_DEP_PRJ_CODE = #searchParam.costDepPrjCode#)
+              </isNotEmpty>
+              <isNotEmpty property="searchParam.costSectionCode">
+                AND (nac1.NEW_COST_SECTION_CODE = #searchParam.costSectionCode# OR nac1.OLD_COST_SECTION_CODE = #searchParam.costSectionCode#)
+              </isNotEmpty>
+              <isNotEmpty property="searchParam.holCompanyCode">
+                AND (nac1.HOL_COMPANY_CODE = #searchParam.holCompanyCode# OR nac1.OLD_HOL_COMPANY_CODE = #searchParam.holCompanyCode#)
+              </isNotEmpty>
+            </isEqual>
+            <!-- 検索対象:変更前 -->
+            <isEqual property="searchParam.searchTarget" compareValue="1">
+              <isNotEmpty property="searchParam.holStaffCode">
+                AND (nac1.OLD_HOL_STAFF_CODE = #searchParam.holStaffCode#)
+              </isNotEmpty>
+              <isNotEmpty property="searchParam.holOfficeCode">
+                AND (nac1.OLD_HOL_OFFICE_CODE = #searchParam.holOfficeCode#)
+              </isNotEmpty>
+              <isNotEmpty property="searchParam.useStaffCode">
+                AND (nac1.OLD_USE_STAFF_CODE = #searchParam.useStaffCode#)
+              </isNotEmpty>
+              <isNotEmpty property="searchParam.intHolStaffCode">
+                AND (nac1.OLD_INT_HOL_STAFF_CODE = #searchParam.intHolStaffCode#)
+              </isNotEmpty>
+              <isNotEmpty property="searchParam.holRepOfficeCode">
+                AND (nac1.OLD_HOL_REP_OFFICE_CODE = #searchParam.holRepOfficeCode#)
+              </isNotEmpty>
+              <isNotEmpty property="searchParam.costType">
+                AND (nac1.OLD_COST_TYPE = #searchParam.costType#)
+              </isNotEmpty>
+              <isNotEmpty property="searchParam.costDepPrjCode">
+                AND (nac1.OLD_COST_DEP_PRJ_CODE = #searchParam.costDepPrjCode#)
+              </isNotEmpty>
+              <isNotEmpty property="searchParam.costSectionCode">
+                AND (nac1.OLD_COST_SECTION_CODE = #searchParam.costSectionCode#)
+              </isNotEmpty>
+              <isNotEmpty property="searchParam.holCompanyCode">
+                AND (nac1.OLD_HOL_COMPANY_CODE = #searchParam.holCompanyCode#)
+              </isNotEmpty>
+            </isEqual>
+            <!-- 検索対象:変更後 -->
+            <isEqual property="searchParam.searchTarget" compareValue="2">
+              <isNotEmpty property="searchParam.holStaffCode">
+                AND (nac1.HOL_STAFF_CODE = #searchParam.holStaffCode#)
+              </isNotEmpty>
+              <isNotEmpty property="searchParam.holOfficeCode">
+                AND (nac1.HOL_OFFICE_CODE = #searchParam.holOfficeCode#)
+              </isNotEmpty>
+              <isNotEmpty property="searchParam.useStaffCode">
+                AND (nac1.USE_STAFF_CODE = #searchParam.useStaffCode#)
+              </isNotEmpty>
+              <isNotEmpty property="searchParam.intHolStaffCode">
+                AND (nac1.INT_HOL_STAFF_CODE = #searchParam.intHolStaffCode#)
+              </isNotEmpty>
+              <isNotEmpty property="searchParam.holRepOfficeCode">
+                AND (nac1.HOL_REP_OFFICE_CODE = #searchParam.holRepOfficeCode#)
+              </isNotEmpty>
+              <isNotEmpty property="searchParam.costType">
+                AND (nac1.COST_TYPE = #searchParam.costType#)
+              </isNotEmpty>
+              <isNotEmpty property="searchParam.costDepPrjCode">
+                AND (nac1.COST_DEP_PRJ_CODE = #searchParam.costDepPrjCode#)
+              </isNotEmpty>
+              <isNotEmpty property="searchParam.costSectionCode">
+                AND (nac1.NEW_COST_SECTION_CODE = #searchParam.costSectionCode#)
+              </isNotEmpty>
+              <isNotEmpty property="searchParam.holCompanyCode">
+                AND (NVL(nac1.HOL_COMPANY_CODE, nac1.OLD_HOL_COMPANY_CODE) = #searchParam.holCompanyCode#)
+              </isNotEmpty>
+            </isEqual>
+          )
+
+    <isEmpty property="isDownload">
+       AND ROWNUM <![CDATA[<]]>= (SELECT TO_NUMBER(VALUE1) FROM NEA_CODE_NAME WHERE CATEGORY_CODE = 'MAX_SEARCH_ROW_COUNT' AND DELETE_FLAG = '0')
+    </isEmpty>
+    ORDER BY
+      nac.APPLICATION_ID
+
+  </select>
+
+  <!--
+    移動申請ヘッダ作成
+  -->
+  <insert id="insertApChange_APC" parameterClass="java.util.Map">
+    INSERT INTO NEA_AP_CHANGE (
+        APPLICATION_ID
+      , CREATE_DATE
+      , CREATE_STAFF_CODE
+      , UPDATE_DATE
+      , UPDATE_STAFF_CODE
+      , VERSION
+      , UPDATE_COMMENT
+      , EAPP_ID
+      , AP_STATUS
+      , AP_DATE
+      , AP_CHANGE_TYPE
+      , AP_CHANGE_TYPE_TAN_FLAG
+      , AP_CHANGE_TYPE_EQUIP_FLAG
+      , AP_CHANGE_TYPE_THIN_CL_FLAG
+      , AP_CHANGE_TYPE_TAKE_PC_FLAG
+      , AP_CHANGE_TYPE_LEASE_FLAG
+      , AP_CHANGE_TYPE_RENTAL_FLAG
+      , AP_CHANGE_TYPE_LICENSE_FLAG
+      , AP_CHANGE_TYPE_COST_TYPE_FLAG
+      , AP_CREATE_STAFF_CODE
+      , AP_CREATE_COMPANY_CODE
+      , AP_CREATE_SECTION_CODE
+      , AP_CREATE_SECTION_YEAR
+      , AP_STAFF_CODE
+      , AP_COMPANY_CODE
+      , AP_SECTION_CODE
+      , AP_SECTION_YEAR
+      , AP_TEL
+      , CHG_SCHEDULE_DATE
+      , CHG_SCHEDULE_PERIOD
+      , CHG_DESCRIPTION
+      , HOL_COMPANY_CODE
+      , HOL_SECTION_CODE
+      , HOL_SECTION_YEAR
+      , HOL_SECTION_WITH_FLAG
+      , HOL_STAFF_CODE
+      , HOL_OFFICE_CODE
+      , HOL_OFFICE_FLOOR
+      , HOL_OFFICE_ROOM_NUM
+      , HOL_OFFICE_RACK_NUM
+      , USE_STAFF_CODE
+      , USE_STAFF_COMPANY_CODE
+      , USE_STAFF_SECTION_CODE
+      , USE_STAFF_SECTION_YEAR
+      , COST_TYPE
+      , COST_DEP_PRJ_CODE
+      , APPR_HOL_STAFF_CODE_OLD
+      , APPR_COST_STAFF_CODE_OLD
+      , APPR_SUPERIOR_STAFF_CODE_OLD
+      , APPR_HOL_STAFF_CODE_NEW
+      , APPR_COST_STAFF_CODE_NEW
+      , APPR_SUPERIOR_STAFF_CODE_NEW
+      , APPROVE_DATE
+
+      , COST_COMPANY_CODE
+      , COST_SECTION_CODE
+      , COST_SECTION_YEAR
+      , AP_CHANGE_TYPE_INT1_FLAG
+      , AP_CHANGE_TYPE_INT2_FLAG
+      , HOL_REP_OFFICE_CODE
+      , INT_HOL_STAFF_CODE
+      , INT_HOL_STAFF_COMPANY_CODE
+      , INT_HOL_STAFF_SECTION_CODE
+      , INT_HOL_STAFF_SECTION_YEAR
+      , APPR_COST_STAFF_SKIP_FLAG_OLD
+      , APPR_COST_STAFF_SKIP_FLAG_NEW
+    ) VALUES (
+        #obj.applicationId:VARCHAR# /* APPLICATION_ID*/
+      , #obj.createDate:TIMESTAMP# /* CREATE_DATE*/
+      , #obj.createStaffCode:VARCHAR# /* CREATE_STAFF_CODE*/
+      , #obj.updateDate:TIMESTAMP# /* UPDATE_DATE*/
+      , #obj.updateStaffCode:VARCHAR# /* UPDATE_STAFF_CODE*/
+      , #obj.version:NUMERIC# /* VERSION*/
+      , #obj.updateComment:VARCHAR# /* UPDATE_COMMENT*/
+      , #obj.eappId:NUMERIC# /* EAPP_ID*/
+      , #obj.apStatus:CHAR# /* AP_STATUS*/
+      , #obj.apDate:DATE# /* AP_DATE*/
+      , #obj.apChangeType:CHAR# /* AP_CHANGE_TYPE*/
+      , #obj.apChangeTypeTanFlag:CHAR# /* AP_CHANGE_TYPE_TAN_FLAG*/
+      , #obj.apChangeTypeEquipFlag:CHAR# /* AP_CHANGE_TYPE_EQUIP_FLAG*/
+      , #obj.apChangeTypeThinClFlag:CHAR# /* AP_CHANGE_TYPE_THIN_CL_FLAG*/
+      , #obj.apChangeTypeTakePcFlag:CHAR# /* AP_CHANGE_TYPE_TAKE_PC_FLAG*/
+      , #obj.apChangeTypeLeaseFlag:CHAR# /* AP_CHANGE_TYPE_LEASE_FLAG*/
+      , #obj.apChangeTypeRentalFlag:CHAR# /* AP_CHANGE_TYPE_RENTAL_FLAG*/
+      , #obj.apChangeTypeLicenseFlag:CHAR# /* AP_CHANGE_TYPE_LICENSE_FLAG*/
+      , #obj.apChangeTypeCostTypeFlag:CHAR# /* AP_CHANGE_TYPE_COST_TYPE_FLAG*/
+      , #obj.apCreateStaffCode:VARCHAR# /* AP_CREATE_STAFF_CODE*/
+      , #obj.apCreateCompanyCode:VARCHAR# /* AP_CREATE_COMPANY_CODE*/
+      , #obj.apCreateSectionCode:VARCHAR# /* AP_CREATE_SECTION_CODE*/
+      , #obj.apCreateSectionYear:NUMERIC# /* AP_CREATE_SECTION_YEAR*/
+      , #obj.apStaffCode:VARCHAR# /* AP_STAFF_CODE*/
+      , #obj.apCompanyCode:VARCHAR# /* AP_COMPANY_CODE*/
+      , #obj.apSectionCode:VARCHAR# /* AP_SECTION_CODE*/
+      , #obj.apSectionYear:NUMERIC# /* AP_SECTION_YEAR*/
+      , #obj.apTel:VARCHAR# /* AP_TEL*/
+      , #obj.chgScheduleDate:DATE# /* CHG_SCHEDULE_DATE*/
+      , #obj.chgSchedulePeriod:VARCHAR# /* CHG_SCHEDULE_PERIOD*/
+      , #obj.chgDescription:VARCHAR# /* CHG_DESCRIPTION*/
+      , #obj.holCompanyCode:VARCHAR# /* HOL_COMPANY_CODE*/
+      , #obj.holSectionCode:VARCHAR# /* HOL_SECTION_CODE*/
+      , #obj.holSectionYear:NUMERIC# /* HOL_SECTION_YEAR*/
+      , #obj.holSectionWithFlag:CHAR# /* HOL_SECTION_WITH_FLAG*/
+      , #obj.holStaffCode:VARCHAR# /* HOL_STAFF_CODE*/
+      , #obj.holOfficeCode:VARCHAR# /* HOL_OFFICE_CODE*/
+      , #obj.holOfficeFloor:NUMERIC# /* HOL_OFFICE_FLOOR*/
+      , #obj.holOfficeRoomNum:VARCHAR# /* HOL_OFFICE_ROOM_NUM*/
+      , #obj.holOfficeRackNum:VARCHAR# /* HOL_OFFICE_RACK_NUM*/
+      , #obj.useStaffCode:VARCHAR# /* USE_STAFF_CODE*/
+      , #obj.useStaffCompanyCode:VARCHAR# /* USE_STAFF_COMPANY_CODE*/
+      , #obj.useStaffSectionCode:VARCHAR# /* USE_STAFF_SECTION_CODE*/
+      , #obj.useStaffSectionYear:NUMERIC# /* USE_STAFF_SECTION_YEAR*/
+      , #obj.costType:CHAR# /* COST_TYPE*/
+      , #obj.costDepPrjCode:VARCHAR# /* COST_DEP_PRJ_CODE*/
+      , #obj.apprHolStaffCodeOld:VARCHAR# /* APPR_HOL_STAFF_CODE_OLD*/
+      , #obj.apprCostStaffCodeOld:VARCHAR# /* APPR_COST_STAFF_CODE_OLD*/
+      , #obj.apprSuperiorStaffCodeOld:VARCHAR# /* APPR_SUPERIOR_STAFF_CODE_OLD*/
+      , #obj.apprHolStaffCodeNew:VARCHAR# /* APPR_HOL_STAFF_CODE_NEW*/
+      , #obj.apprCostStaffCodeNew:VARCHAR# /* APPR_COST_STAFF_CODE_NEW*/
+      , #obj.apprSuperiorStaffCodeNew:VARCHAR# /* APPR_SUPERIOR_STAFF_CODE_NEW*/
+      , #obj.approveDate:DATE# /* APPROVE_DATE*/
+
+      , #obj.costCompanyCode:VARCHAR# /* COST_COMPANY_CODE*/
+      , #obj.costSectionCode:VARCHAR# /* COST_SECTION_CODE*/
+      , #obj.costSectionYear:NUMERIC# /* COST_SECTION_YEAR*/
+      , #obj.apChangeTypeInt1Flag:CHAR# /* AP_CHANGE_TYPE_INT1_FLAG*/
+      , #obj.apChangeTypeInt2Flag:CHAR# /* AP_CHANGE_TYPE_INT2_FLAG*/
+      , #obj.holRepOfficeCode:VARCHAR# /* HOL_REP_OFFICE_CODE*/
+      , #obj.intHolStaffCode:VARCHAR# /* INT_HOL_STAFF_CODE*/
+      , #obj.intHolStaffCompanyCode:VARCHAR# /* INT_HOL_STAFF_COMPANY_CODE*/
+      , #obj.intHolStaffSectionCode:VARCHAR# /* INT_HOL_STAFF_SECTION_CODE*/
+      , #obj.intHolStaffSectionYear:NUMERIC# /* INT_HOL_STAFF_SECTION_YEAR*/
+      , #obj.apprCostStaffSkipFlagOld:CHAR# /* APPR_COST_STAFF_SKIP_FLAG_OLD*/
+      , #obj.apprCostStaffSkipFlagNew:CHAR# /* APPR_COST_STAFF_SKIP_FLAG_NEW*/
+    )
+  </insert>
+
+  <!--
+    移動申請_固定資産明細作成
+  -->
+  <insert id="insertApChangeLineFld_APC" parameterClass="java.util.Map">
+    INSERT INTO NEA_AP_CHANGE_LINE_FLD (
+      APPLICATION_ID
+      , AP_CHANGE_LINE_FLD_TYPE
+      , LINE_SEQ
+      , CREATE_DATE
+      , CREATE_STAFF_CODE
+      , UPDATE_DATE
+      , UPDATE_STAFF_CODE
+      , PP_ID
+      , GET_APPLICATION_ID
+      , AST_DATE
+      , AST_NUM
+      , AST_NAME
+      , AST_CLASS
+      , AST_GET_AMOUNT
+      , AST_BOOK_AMOUNT
+      , COST_TYPE
+      , COST_DEP_PRJ_CODE
+      , COST_SECTION_CODE
+      , COST_SECTION_NAME
+      , ITEM_GROUP_CODE
+      , HOL_REP_OFFICE_CODE
+      , COST_DIST_CODE
+      , HOL_COMPANY_CODE
+      , HOL_SECTION_CODE
+      , HOL_SECTION_YEAR
+      , HOL_STAFF_CODE
+      , PP_TRANS_FLAG
+      , TEMP_FLAG
+    ) VALUES (
+      #obj.applicationId:VARCHAR# /* APPLICATION_ID*/
+      , #obj.apChangeLineFldType:CHAR# /* AP_CHANGE_LINE_FLD_TYPE*/
+      , #obj.lineSeq:NUMERIC# /* LINE_SEQ*/
+      , #obj.createDate:TIMESTAMP# /* CREATE_DATE*/
+      , #obj.createStaffCode:VARCHAR# /* CREATE_STAFF_CODE*/
+      , #obj.updateDate:TIMESTAMP# /* UPDATE_DATE*/
+      , #obj.updateStaffCode:VARCHAR# /* UPDATE_STAFF_CODE*/
+      , #obj.ppId:NUMERIC# /* PP_ID*/
+      , #obj.getApplicationId:VARCHAR# /* GET_APPLICATION_ID*/
+      , #obj.astDate:DATE# /* AST_DATE*/
+      , #obj.astNum:VARCHAR# /* AST_NUM*/
+      , #obj.astName:VARCHAR# /* AST_NAME*/
+      , #obj.astClass:VARCHAR# /* AST_CLASS*/
+      , #obj.astGetAmount:NUMERIC# /* AST_GET_AMOUNT*/
+      , #obj.astBookAmount:NUMERIC# /* AST_BOOK_AMOUNT*/
+      , #obj.costType:CHAR# /* COST_TYPE*/
+      , #obj.costDepPrjCode:VARCHAR# /* COST_DEP_PRJ_CODE*/
+      , #obj.costSectionCode:VARCHAR# /* COST_SECTION_CODE*/
+      , #obj.costSectionName:VARCHAR# /* COST_SECTION_NAME*/
+      , #obj.itemGroupCode:VARCHAR# /* ITEM_GROUP_CODE*/
+      , #obj.holRepOfficeCode:VARCHAR# /* HOL_REP_OFFICE_CODE*/
+      , #obj.costDistCode:VARCHAR# /* COST_DIST_CODE*/
+      , #obj.holCompanyCode:VARCHAR# /* HOL_COMPANY_CODE*/
+      , #obj.holSectionCode:VARCHAR# /* HOL_SECTION_CODE*/
+      , #obj.holSectionYear:NUMERIC# /* HOL_SECTION_YEAR*/
+      , #obj.holStaffCode:VARCHAR# /* HOL_STAFF_CODE*/
+      , #obj.ppTransFlag:CHAR# /* PP_TRANS_FLAG*/
+      , #obj.tempFlag:CHAR# /* TEMP_FLAG*/
+    )
+  </insert>
+
+  <!--
+    移動申請_契約明細作成
+  -->
+  <insert id="insertApChangeLineContract_APC" parameterClass="java.util.Map">
+    INSERT INTO NEA_AP_CHANGE_LINE_CONTRACT (
+        APPLICATION_ID
+      , AP_CHANGE_LINE_CONTRACT_TYPE
+      , LINE_SEQ
+      , CREATE_DATE
+      , CREATE_STAFF_CODE
+      , UPDATE_DATE
+      , UPDATE_STAFF_CODE
+      , CONTRACT_COMPANY_CODE
+      , CONTRACT_NUM
+      , CONTRACT_START_DATE
+      , CONTRACT_END_DATE
+      , REMAIN_AMOUNT
+      , MONTH_AMOUNT
+      , COST_TYPE
+      , COST_DEP_PRJ_CODE
+
+      , CONTRACT_BRANCH_NUM
+      , AST_NUM
+      , AST_NAME
+      , REMAIN_TERM
+      , AST_CLASS
+      , COST_SECTION_CODE
+      , ITEM_GROUP_CODE
+      , HOL_REP_OFFICE_CODE
+      , COST_DIST_CODE
+      , PP_ID_CONTRACT
+      , PP_ID_AST
+      , PP_TRANS_FLAG
+    ) VALUES (
+        #obj.applicationId:VARCHAR# /* APPLICATION_ID*/
+      , #obj.apChangeLineContractType:CHAR# /* AP_CHANGE_LINE_CONTRACT_TYPE*/
+      , #obj.lineSeq:NUMERIC# /* LINE_SEQ*/
+      , #obj.createDate:TIMESTAMP# /* CREATE_DATE*/
+      , #obj.createStaffCode:VARCHAR# /* CREATE_STAFF_CODE*/
+      , #obj.updateDate:TIMESTAMP# /* UPDATE_DATE*/
+      , #obj.updateStaffCode:VARCHAR# /* UPDATE_STAFF_CODE*/
+      , #obj.contractCompanyCode:VARCHAR# /* CONTRACT_COMPANY_CODE*/
+      , #obj.contractNum:VARCHAR# /* CONTRACT_NUM*/
+      , #obj.contractStartDate:DATE# /* CONTRACT_START_DATE*/
+      , #obj.contractEndDate:DATE# /* CONTRACT_END_DATE*/
+      , #obj.remainAmount:NUMERIC# /* REMAIN_AMOUNT*/
+      , #obj.monthAmount:NUMERIC# /* MONTH_AMOUNT*/
+      , #obj.costType:CHAR# /* COST_TYPE*/
+      , #obj.costDepPrjCode:VARCHAR# /* COST_DEP_PRJ_CODE*/
+
+      , #obj.contractSubNum:VARCHAR# /* CONTRACT_BRANCH_NUM*/
+      , #obj.astNum:VARCHAR# /* AST_NUM*/
+      , #obj.astName:VARCHAR# /* AST_NAME*/
+      , #obj.remainTerm:NUMERIC# /* REMAIN_TERM*/
+      , #obj.astClass:VARCHAR# /* AST_CLASS*/
+      , #obj.costSectionCode:VARCHAR# /* COST_SECTION_CODE*/
+      , #obj.itemGroupCode:VARCHAR# /* ITEM_GROUP_CODE*/
+      , #obj.holRepOfficeCode:VARCHAR# /* HOL_REP_OFFICE_CODE*/
+      , #obj.costDistCode:VARCHAR# /* COST_DIST_CODE*/
+      , #obj.ppIdContract:NUMERIC# /* PP_ID_CONTRACT*/
+      , #obj.ppIdAst:NUMERIC# /* PP_ID_AST*/
+      , #obj.ppTransFlag:CHAR# /* PP_TRANS_FLAG*/
+    )
+  </insert>
+
+  <!--
+    移動申請_資産(機器)明細作成
+  -->
+  <insert id="insertApChangeLineAst_APC" parameterClass="java.util.Map">
+    INSERT INTO NEA_AP_CHANGE_LINE_AST (
+        APPLICATION_ID
+      , LINE_SEQ
+      , CREATE_DATE
+      , CREATE_STAFF_CODE
+      , UPDATE_DATE
+      , UPDATE_STAFF_CODE
+      , ASSET_ID
+      , HOL_COMPANY_CODE
+      , HOL_SECTION_CODE
+      , HOL_SECTION_YEAR
+      , HOL_STAFF_CODE
+      , HOL_OFFICE_CODE
+      , USE_STAFF_CODE
+      , USE_STAFF_COMPANY_CODE
+      , USE_STAFF_SECTION_CODE
+      , USE_STAFF_SECTION_YEAR
+      , AST_NAME
+      , AST_CATEGORY1_CODE
+      , AST_CATEGORY2_CODE
+      , AST_SYSTEM_SECTION_DEPLOY_FLAG
+      , AST_ASSET_TYPE
+      , AST_MANAGE_TYPE
+      , CONTRACT_NUM
+      , AUTO_ADD_FLAG
+
+      , HOL_QUANTITY
+      , PP_ID
+      , AST_NUM
+      , GET_APPLICATION_ID
+      , CONTRACT_BRANCH_NUM
+    ) VALUES (
+        #obj.applicationId:VARCHAR# /* APPLICATION_ID*/
+      , #obj.lineSeq:NUMERIC# /* LINE_SEQ*/
+      , #obj.createDate:TIMESTAMP# /* CREATE_DATE*/
+      , #obj.createStaffCode:VARCHAR# /* CREATE_STAFF_CODE*/
+      , #obj.updateDate:TIMESTAMP# /* UPDATE_DATE*/
+      , #obj.updateStaffCode:VARCHAR# /* UPDATE_STAFF_CODE*/
+      , #obj.assetId:VARCHAR# /* ASSET_ID*/
+      , #obj.holCompanyCode:VARCHAR# /* HOL_COMPANY_CODE*/
+      , #obj.holSectionCode:VARCHAR# /* HOL_SECTION_CODE*/
+      , #obj.holSectionYear:NUMERIC# /* HOL_SECTION_YEAR*/
+      , #obj.holStaffCode:VARCHAR# /* HOL_STAFF_CODE*/
+      , #obj.holOfficeCode:VARCHAR# /* HOL_OFFICE_CODE*/
+      , #obj.useStaffCode:VARCHAR# /* USE_STAFF_CODE*/
+      , #obj.useStaffCompanyCode:VARCHAR# /* USE_STAFF_COMPANY_CODE*/
+      , #obj.useStaffSectionCode:VARCHAR# /* USE_STAFF_SECTION_CODE*/
+      , #obj.useStaffSectionYear:NUMERIC# /* USE_STAFF_SECTION_YEAR*/
+      , #obj.astName:VARCHAR# /* AST_NAME*/
+      , #obj.astCategory1Code:VARCHAR# /* AST_CATEGORY1_CODE*/
+      , #obj.astCategory2Code:VARCHAR# /* AST_CATEGORY2_CODE*/
+      , #obj.astSystemSectionDeployFlag:CHAR# /* AST_SYSTEM_SECTION_DEPLOY_FLAG*/
+      , #obj.astAssetType:VARCHAR# /* AST_ASSET_TYPE*/
+      , #obj.astManageType:VARCHAR# /* AST_MANAGE_TYPE*/
+      , #obj.contractNum:VARCHAR# /* CONTRACT_NUM*/
+      , #obj.autoAddFlag:CHAR# /* AUTO_ADD_FLAG*/
+
+      , #obj.holQuantity:NUMERIC# /* HOL_QUANTITY*/
+      , #obj.ppId:NUMERIC# /* PP_ID*/
+      , #obj.astNum:VARCHAR# /* AST_NUM*/
+      , #obj.getApplicationId:VARCHAR# /* GET_APPLICATION_ID*/
+      , #obj.contractSubNum:VARCHAR# /* CONTRACT_BRANCH_NUM*/
+    )
+  </insert>
+
+  <!--
+    移動申請_ライセンス明細作成
+  -->
+  <insert id="insertApChangeLineLic_APC" parameterClass="java.util.Map">
+    INSERT INTO NEA_AP_CHANGE_LINE_LIC (
+        APPLICATION_ID
+      , LINE_SEQ
+      , CREATE_DATE
+      , CREATE_STAFF_CODE
+      , UPDATE_DATE
+      , UPDATE_STAFF_CODE
+      , LICENSE_ID
+      , HOL_COMPANY_CODE
+      , HOL_SECTION_CODE
+      , HOL_SECTION_YEAR
+      , HOL_STAFF_CODE
+      , SOFTWARE_MAKER_ID
+      , SOFTWARE_ID
+      , LIC_ASSET_TYPE
+      , CONTRACT_NUM
+      , AUTO_ADD_FLAG
+
+      , LIC_QUANTITY_TYPE
+      , LIC_QUANTITY
+      , PP_ID
+      , AST_NUM
+      , GET_APPLICATION_ID
+      , CONTRACT_BRANCH_NUM
+    ) VALUES (
+        #obj.applicationId:VARCHAR# /* APPLICATION_ID*/
+      , #obj.lineSeq:NUMERIC# /* LINE_SEQ*/
+      , #obj.createDate:TIMESTAMP# /* CREATE_DATE*/
+      , #obj.createStaffCode:VARCHAR# /* CREATE_STAFF_CODE*/
+      , #obj.updateDate:TIMESTAMP# /* UPDATE_DATE*/
+      , #obj.updateStaffCode:VARCHAR# /* UPDATE_STAFF_CODE*/
+      , #obj.licenseId:VARCHAR# /* LICENSE_ID*/
+      , #obj.holCompanyCode:VARCHAR# /* HOL_COMPANY_CODE*/
+      , #obj.holSectionCode:VARCHAR# /* HOL_SECTION_CODE*/
+      , #obj.holSectionYear:NUMERIC# /* HOL_SECTION_YEAR*/
+      , #obj.holStaffCode:VARCHAR# /* HOL_STAFF_CODE*/
+      , #obj.softwareMakerId:NUMERIC# /* SOFTWARE_MAKER_ID*/
+      , #obj.softwareId:NUMERIC# /* SOFTWARE_ID*/
+      , #obj.licAssetType:VARCHAR# /* LIC_ASSET_TYPE*/
+      , #obj.contractNum:VARCHAR# /* CONTRACT_NUM*/
+      , #obj.autoAddFlag:CHAR# /* AUTO_ADD_FLAG*/
+
+      , #obj.licQuantityType:CHAR# /* LIC_QUANTITY_TYPE*/
+      , #obj.licQuantity:NUMERIC# /* LIC_QUANTITY*/
+      , #obj.ppId:NUMERIC# /* PP_ID*/
+      , #obj.astNum:VARCHAR# /* AST_NUM*/
+      , #obj.getApplicationId:VARCHAR# /* GET_APPLICATION_ID*/
+      , #obj.contractSubNum:VARCHAR# /* CONTRACT_BRANCH_NUM*/
+    )
+  </insert>
+
+  <!--
+    移動申請_経費負担部課明細作成
+  -->
+  <insert id="insertApChangeLineCostSec_APC" parameterClass="java.util.Map">
+    INSERT INTO NEA_AP_CHANGE_LINE_COST_SEC (
+        APPLICATION_ID
+      , AP_CHANGE_LINE_COST_TYPE
+      , AST_NUM
+      , LINE_SEQ
+      , CREATE_DATE
+      , CREATE_STAFF_CODE
+      , UPDATE_DATE
+      , UPDATE_STAFF_CODE
+      , COST_COMPANY_CODE
+      , COST_SECTION_CODE
+      , COST_SECTION_YEAR
+      , COST_DIST
+    ) VALUES (
+        #obj.applicationId:VARCHAR# /* APPLICATION_ID*/
+      , #obj.apChangeLineCostType:CHAR# /* AP_CHANGE_LINE_COST_TYPE*/
+      , #obj.astNum:VARCHAR# /* AST_NUM*/
+      , #obj.lineSeq:NUMERIC# /* LINE_SEQ*/
+      , #obj.createDate:TIMESTAMP# /* CREATE_DATE*/
+      , #obj.createStaffCode:VARCHAR# /* CREATE_STAFF_CODE*/
+      , #obj.updateDate:TIMESTAMP# /* UPDATE_DATE*/
+      , #obj.updateStaffCode:VARCHAR# /* UPDATE_STAFF_CODE*/
+      , #obj.costCompanyCode:VARCHAR# /* COST_COMPANY_CODE*/
+      , #obj.costSectionCode:VARCHAR# /* COST_SECTION_CODE*/
+      , #obj.costSectionYear:NUMERIC# /* COST_SECTION_YEAR*/
+      , #obj.costDist:NUMERIC# /* COST_DIST*/
+    )
+  </insert>
+
+  <!--
+    移動申請ヘッダ更新
+  -->
+  <update id="updateApChange_APC" parameterClass="java.util.Map">
+    UPDATE
+      NEA_AP_CHANGE
+    SET
+        APPLICATION_ID = #obj.applicationId:VARCHAR#
+      , CREATE_DATE = #obj.createDate:TIMESTAMP#
+      , CREATE_STAFF_CODE = #obj.createStaffCode:VARCHAR#
+      , UPDATE_DATE = #obj.updateDate:TIMESTAMP#
+      , UPDATE_STAFF_CODE = #obj.updateStaffCode:VARCHAR#
+      , VERSION = #obj.version:NUMERIC#
+      , UPDATE_COMMENT = #obj.updateComment:VARCHAR#
+      , EAPP_ID = #obj.eappId:NUMERIC#
+      , AP_STATUS = #obj.apStatus:CHAR#
+      , AP_DATE = #obj.apDate:DATE#
+      , AP_CHANGE_TYPE = #obj.apChangeType:CHAR#
+      , AP_CHANGE_TYPE_TAN_FLAG = #obj.apChangeTypeTanFlag:CHAR#
+      , AP_CHANGE_TYPE_EQUIP_FLAG = #obj.apChangeTypeEquipFlag:CHAR#
+      , AP_CHANGE_TYPE_THIN_CL_FLAG = #obj.apChangeTypeThinClFlag:CHAR#
+      , AP_CHANGE_TYPE_TAKE_PC_FLAG = #obj.apChangeTypeTakePcFlag:CHAR#
+      , AP_CHANGE_TYPE_LEASE_FLAG = #obj.apChangeTypeLeaseFlag:CHAR#
+      , AP_CHANGE_TYPE_RENTAL_FLAG = #obj.apChangeTypeRentalFlag:CHAR#
+      , AP_CHANGE_TYPE_LICENSE_FLAG = #obj.apChangeTypeLicenseFlag:CHAR#
+      , AP_CHANGE_TYPE_COST_TYPE_FLAG = #obj.apChangeTypeCostTypeFlag:CHAR#
+      , AP_CREATE_STAFF_CODE = #obj.apCreateStaffCode:VARCHAR#
+      , AP_CREATE_COMPANY_CODE = #obj.apCreateCompanyCode:VARCHAR#
+      , AP_CREATE_SECTION_CODE = #obj.apCreateSectionCode:VARCHAR#
+      , AP_CREATE_SECTION_YEAR = #obj.apCreateSectionYear:NUMERIC#
+      , AP_STAFF_CODE = #obj.apStaffCode:VARCHAR#
+      , AP_COMPANY_CODE = #obj.apCompanyCode:VARCHAR#
+      , AP_SECTION_CODE = #obj.apSectionCode:VARCHAR#
+      , AP_SECTION_YEAR = #obj.apSectionYear:NUMERIC#
+      , AP_TEL = #obj.apTel:VARCHAR#
+      , CHG_SCHEDULE_DATE = #obj.chgScheduleDate:DATE#
+      , CHG_SCHEDULE_PERIOD = #obj.chgSchedulePeriod:VARCHAR#
+      , CHG_DESCRIPTION = #obj.chgDescription:VARCHAR#
+      , HOL_COMPANY_CODE = #obj.holCompanyCode:VARCHAR#
+      , HOL_SECTION_CODE = #obj.holSectionCode:VARCHAR#
+      , HOL_SECTION_YEAR = #obj.holSectionYear:NUMERIC#
+      , HOL_SECTION_WITH_FLAG = #obj.holSectionWithFlag:CHAR#
+      , HOL_STAFF_CODE = #obj.holStaffCode:VARCHAR#
+      , HOL_OFFICE_CODE = #obj.holOfficeCode:VARCHAR#
+      , HOL_OFFICE_FLOOR = #obj.holOfficeFloor:NUMERIC#
+      , HOL_OFFICE_ROOM_NUM = #obj.holOfficeRoomNum:VARCHAR#
+      , HOL_OFFICE_RACK_NUM = #obj.holOfficeRackNum:VARCHAR#
+      , USE_STAFF_CODE = #obj.useStaffCode:VARCHAR#
+      , USE_STAFF_COMPANY_CODE = #obj.useStaffCompanyCode:VARCHAR#
+      , USE_STAFF_SECTION_CODE = #obj.useStaffSectionCode:VARCHAR#
+      , USE_STAFF_SECTION_YEAR = #obj.useStaffSectionYear:NUMERIC#
+      , COST_TYPE = #obj.costType:CHAR#
+      , COST_DEP_PRJ_CODE = #obj.costDepPrjCode:VARCHAR#
+      , APPR_HOL_STAFF_CODE_OLD = #obj.apprHolStaffCodeOld:VARCHAR#
+      , APPR_COST_STAFF_CODE_OLD = #obj.apprCostStaffCodeOld:VARCHAR#
+      , APPR_SUPERIOR_STAFF_CODE_OLD = #obj.apprSuperiorStaffCodeOld:VARCHAR#
+      , APPR_HOL_STAFF_CODE_NEW = #obj.apprHolStaffCodeNew:VARCHAR#
+      , APPR_COST_STAFF_CODE_NEW = #obj.apprCostStaffCodeNew:VARCHAR#
+      , APPR_SUPERIOR_STAFF_CODE_NEW = #obj.apprSuperiorStaffCodeNew:VARCHAR#
+      , APPROVE_DATE = #obj.approveDate:DATE#
+
+      , COST_COMPANY_CODE = #obj.costCompanyCode:VARCHAR#
+      , COST_SECTION_CODE = #obj.costSectionCode:VARCHAR#
+      , COST_SECTION_YEAR = #obj.costSectionYear:NUMERIC#
+      , AP_CHANGE_TYPE_INT1_FLAG = #obj.apChangeTypeInt1Flag:CHAR#
+      , AP_CHANGE_TYPE_INT2_FLAG = #obj.apChangeTypeInt2Flag:CHAR#
+      , HOL_REP_OFFICE_CODE = #obj.holRepOfficeCode:VARCHAR#
+      , INT_HOL_STAFF_CODE = #obj.intHolStaffCode:VARCHAR#
+      , INT_HOL_STAFF_COMPANY_CODE = #obj.intHolStaffCompanyCode:VARCHAR#
+      , INT_HOL_STAFF_SECTION_CODE = #obj.intHolStaffSectionCode:VARCHAR#
+      , INT_HOL_STAFF_SECTION_YEAR = #obj.intHolStaffSectionYear:NUMERIC#
+      , APPR_COST_STAFF_SKIP_FLAG_OLD = #obj.apprCostStaffSkipFlagOld:CHAR#
+      , APPR_COST_STAFF_SKIP_FLAG_NEW = #obj.apprCostStaffSkipFlagNew:CHAR#
+    WHERE
+      APPLICATION_ID = #obj.applicationId#
+  </update>
+
+  <!--
+    取得申請ヘッダ削除
+  -->
+  <delete id="deleteApChange_APC" parameterClass="java.util.Map">
+    DELETE FROM
+      NEA_AP_CHANGE
+    WHERE
+      APPLICATION_ID = #applicationId#
+  </delete>
+
+  <!--
+    移動申請_固定資産明細削除
+  -->
+  <delete id="deleteApChangeLineFld_APC" parameterClass="java.util.Map">
+    DELETE FROM
+      NEA_AP_CHANGE_LINE_FLD
+    WHERE
+      APPLICATION_ID = #applicationId#
+  </delete>
+
+  <!--
+    移動申請_契約明細削除
+  -->
+  <delete id="deleteApChangeLineContract_APC" parameterClass="java.util.Map">
+    DELETE FROM
+      NEA_AP_CHANGE_LINE_CONTRACT
+    WHERE
+      APPLICATION_ID = #applicationId#
+  </delete>
+
+  <!--
+    移動申請_資産(機器)明細削除
+  -->
+  <delete id="deleteApChangeLineAst_APC" parameterClass="java.util.Map">
+    DELETE FROM
+      NEA_AP_CHANGE_LINE_AST
+    WHERE
+      APPLICATION_ID = #applicationId#
+  </delete>
+
+  <!--
+    移動申請_ライセンス明細削除
+  -->
+  <delete id="deleteApChangeLineLic_APC" parameterClass="java.util.Map">
+    DELETE FROM
+      NEA_AP_CHANGE_LINE_LIC
+    WHERE
+      APPLICATION_ID = #applicationId#
+  </delete>
+
+  <!--
+    移動申請_経費負担部課明細削除
+  -->
+  <delete id="deleteApChangeLineCostSec_APC" parameterClass="java.util.Map">
+    DELETE FROM
+      NEA_AP_CHANGE_LINE_COST_SEC
+    WHERE
+      APPLICATION_ID = #applicationId#
+  </delete>
+
+  <!--
+    移動申請_承認経路検索
+  -->
+  <select id="selectApChangeEappRoute_APC" parameterClass="java.util.Map" resultClass="jp.co.ctcg.easset.dto.CodeName">
+    SELECT
+      MAX(VALUE3) as value3
+      , MAX(VALUE4) as value4
+      , MAX(VALUE5) as value5
+      , MAX(VALUE6) as value6
+      , MAX(VALUE7) as value7
+      , MAX(VALUE8) as value8
+      , MAX(VALUE9) as value9
+      , MAX(VALUE10) as value10
+      , MAX(VALUE11) as value11
+      , MAX(VALUE12) as value12
+      , MAX(VALUE13) as value13
+      , MAX(VALUE14) as value14
+      , MAX(VALUE15) as value15
+      , MAX(VALUE16) as value16
+      , MAX(VALUE17) as value17
+      , MAX(VALUE18) as value18
+      , MAX(VALUE19) as value19
+      , MAX(VALUE20) as value20
+      , MAX(VALUE21) as value21
+      , MAX(VALUE22) as value22
+      , MAX(VALUE23) as value23
+      , MAX(VALUE24) as value24
+      , MAX(VALUE25) as value25
+      , MAX(VALUE26) as value26
+      , MAX(VALUE27) as value27
+      , MAX(VALUE28) as value28
+      , MAX(VALUE29) as value29
+      , MAX(VALUE30) as value30
+    FROM
+      NEA_CODE_NAME
+    WHERE
+      CATEGORY_CODE = 'EAPP_ROUTE_AUTH_AP_CHANGE'
+      AND DELETE_FLAG = '0'
+      AND COMPANY_CODE LIKE '%' || #companyCode# || '%'
+      <isNotEmpty property="changeItemList">
+        <iterate property="changeItemList" open=" AND VALUE1 IN(" close=")" conjunction=",">
+          #changeItemList[]#
+        </iterate>
+      </isNotEmpty>
+      <isNotEmpty property="changeObjectTypeList">
+        <iterate property="changeObjectTypeList" open=" AND VALUE2 IN(" close=")" conjunction=",">
+          #changeObjectTypeList[]#
+        </iterate>
+      </isNotEmpty>
+  </select>
+
+  <!--
+    配賦マスタ経費負担部署検索
+  -->
+  <select id="selectApChangeLineCostSecDist_APC" parameterClass="java.util.Map" resultClass="jp.co.ctcg.easset.dto.ap_change.ApChangeLineCostSec">
+    SELECT
+      D.SOSHIKI2CD costSectionCode
+    , NEA_UTIL_PKG.GET_COST_SECTION_NAME_F(D.SOSHIKI2CD, (SELECT VALUE1 FROM NEA_CODE_NAME C WHERE C.CATEGORY_CODE = 'CURRENT_YEAR' AND DELETE_FLAG = '0')) costSectionName
+    , D.HFRITSU * 100 as costDist
+    FROM
+      PPFS_MS28_H H
+      , PPFS_MS28_D D
+    WHERE
+      H.HFPK = D.HFPK
+      AND H.KAISHACD = NEA_UTIL_PKG.GET_CN_VALUE_F('USE_COMPANY', #companyCode#, 7)
+      AND H.HFCD = #distCode#
+    ORDER BY
+      D.MEISAINO
+  </select>
+
+</sqlMap>

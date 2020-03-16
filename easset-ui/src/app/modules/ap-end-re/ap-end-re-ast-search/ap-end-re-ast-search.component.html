@@ -1,0 +1,15 @@
+<div class="page-container ap-end-re-ast-search-container">
+  <div class="ap-end-re-ast-search-header">
+    <label class="ap-end-re-ast-search-label" for="search-label">レンタル買取対象の資産(機器)を検索してください。</label>
+  </div>
+  <div class="ap-end-re-ast-search-main">
+    <app-asset-search-condition [currentState]="'AP_END_RE'"></app-asset-search-condition>
+  </div>
+</div>
+<hr class="ap-end-re-ast-search-footer-line">
+<div fxLayout="row" fxLayoutGap="6px" fxLayoutAlign="center center" class="ap-end-re-ast-search-footer">
+  <button type="button" class="wm-btn" id="search" (click)="search()">検索</button>
+  <button type="button" class="wm-btn" id="clear" (click)="clear()">クリア</button>
+  <button type="button" class="wm-btn" id="back" >戻る</button>
+</div>
+

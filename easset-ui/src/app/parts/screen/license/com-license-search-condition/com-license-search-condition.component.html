@@ -1,0 +1,297 @@
+<div class="row">
+    <div class="width-body">
+      <!-- ソフトウェア -->
+      <div class="block-frame-border">
+        <h2 class="frame-title">ソフトウェア</h2>
+        <form [formGroup]="softwareForm" >
+          <div class="row col">
+            <div class="row">
+              <label class="col-label text-right">メーカー:</label>
+              <div>
+                <app-software-maker-selection (select)="selectDataSoftwareMark($event)" [softwareForm]="softwareForm"
+                  [softwareCodeControlName]="'softwareMakerId'" [softwareNameControlName]="'softwareMakerName'"
+                  [selectOnly]="false" [sqlName]="'selectSoftwareMaker_LOV'" [paramMap]="{name: ''}"
+                  [nameClass]="'is-rounded'"></app-software-maker-selection>
+              </div>
+            </div>
+            <div class="row">
+              <label class="col-label text-right">ソフトウェア:</label>
+              <div>
+                <app-software-selection (select)="selectDataSoftware($event)" [softwareForm]="softwareForm"
+                  [softwareCodeControlName]="'softwareId'" [softwareNameControlName]="'softwareName'"
+                  [sqlName]="'selectSoftware_LOV'" [paramMap]="{makerId: softwareForm.get('softwareMakerId').value ? softwareForm.get('softwareMakerId').value : ''}"
+                  [nameClass]="'is-rounded'"></app-software-selection>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+      <!-- 取得・資産 -->
+      <div class="block-frame-border">
+        <h2 class="frame-title">取得・資産</h2>
+        <form [formGroup]="licAssetForm">
+          <div class="row col">
+            <div class="row">
+              <label class="col-label-search text-right">資産区分:</label>
+              <div>
+                <app-license-type [licenseTypeForm]="licAssetForm"
+                  [licenseTypeCodeControlName]="'licAssetType'" [licenseTypeNameControlName]="'licAssetTypeName'"
+                  [nameClass]="'wm-100'" [sqlName]="'selectCodeName_LOV'"
+                  [paramMap]="{categoryCode: 'LICENSE_ASSET_TYPE'}"></app-license-type>
+              </div>
+            </div>
+            <div class="row">
+              <label class="col-label-search text-right">取得方法:</label>
+              <div>
+                <app-license-type [licenseTypeForm]="licAssetForm"
+                  [licenseTypeCodeControlName]="'licGetType'" [licenseTypeNameControlName]="'licGetTypeName'"
+                  [nameClass]="'wm-100'" [sqlName]="'selectCodeName_LOV'"
+                  [paramMap]="{categoryCode: 'LICENSE_GET_TYPE'}"></app-license-type>
+              </div>
+            </div>
+            <div class="row">
+              <label class="col-label-search text-right">取得費用:</label>
+              <div class="ml-1">
+                <ea-input-number class="wm-combo wm-100" id="licAmountFrom" name="licAmountFrom"
+                  formControlName="licAmountFrom">
+                </ea-input-number>
+                <span class="label-date">～</span>
+                <ea-input-number class="wm-combo wm-100" id="licAmountTo" name="licAmountTo"
+                  formControlName="licAmountTo">
+                </ea-input-number>
+              </div>
+            </div>
+            <div class="row">
+              <label class="col-label-search text-right">シリアル番号:</label>
+              <div class="col-8">
+                <div class="row">
+                  <div class="form-group" [hidden]="!isLicSerialCode">
+                    <ea-input-mask id="licSerialCode" class="wm-combo wm-tab-element wm-200"
+                      formControlName="licSerialCode">
+                    </ea-input-mask>
+                    <label class="text-inline">(あいまい)</label>
+                    <span class="e-link col-label-toggle">
+                      <a class="link " (click)="linkBtnClickEvent('licSerialCode')">複数指定</a>
+                    </span>
+                  </div>
+                  <div class="form-group pb-2" [hidden]="isLicSerialCode">
+                    <ea-input-mask id="licSerialCodePlural" class="wm-combo wm-tab-element wm-300"
+                      formControlName="licSerialCodePlural">
+                    </ea-input-mask>
+                  </div>
+                </div>
+                <div class="row" [hidden]="isLicSerialCode">
+                  <label class="text-inline">(スペース区切で複数指定可)</label>
+                  <span class="e-link col-label-toggle">
+                    <a class="link" (click)="linkBtnClickEvent('licSerialCodePlural')">あいまい検索</a>
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <label class="col-label-search text-right">プロダクトKEY:</label>
+              <div class="col-8">
+                <div class="row">
+                  <div class="form-group" [hidden]="!isLicProductKey">
+                    <ea-input-mask id="licProductKey" class="wm-combo wm-tab-element wm-200"
+                      formControlName="licProductKey">
+                    </ea-input-mask>
+                    <label class="text-inline">(あいまい)</label>
+                    <span class="e-link col-label-toggle">
+                      <a class="link " (click)="linkBtnClickEvent('licProductKey')">複数指定</a>
+                    </span>
+                  </div>
+                  <div class="form-group pb-2" [hidden]="isLicProductKey">
+                    <ea-input-mask id="licProductKeyPlural" class="wm-combo wm-tab-element wm-300"
+                      formControlName="licProductKeyPlural">
+                    </ea-input-mask>
+                  </div>
+                </div>
+                <div class="row" [hidden]="isLicProductKey">
+                  <label class="text-inline">(スペース区切で複数指定可)</label>
+                  <span class="e-link col-label-toggle">
+                    <a class="link" (click)="linkBtnClickEvent('licProductKeyPlural')">あいまい検索</a>
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <label class="col-label-search text-right">バンドル:</label>
+              <div class="ml-1">
+                <wj-combo-box class="wm-combo wm-dropdown wm-tab-element wm-200" id="licHrdBandleFlag"
+                  [itemsSource]="licHrdBandleFlagAC" [displayMemberPath]="'label'" [selectedValuePath]="'data'"
+                  [formControl]="licAssetForm.controls['licHrdBandleFlag']" [isEditable]="false" [isRequired]="false">
+                </wj-combo-box>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+      <!-- ライセンス形態 -->
+      <div class="block-frame-border">
+        <h2 class="frame-title">ライセンス形態</h2>
+        <form [formGroup]="licLicenseForm">
+          <div class="row col">
+            <div class="row" [hidden]="statesStatus.isLicLicenseTypePluralFI">
+              <label class="col-label-search text-right">ライセンス形態:</label>
+              <div class="ml-1">
+                <app-license-type [licenseTypeForm]="licLicenseForm"
+                  [licenseTypeCodeControlName]="'licLicenseType'" [licenseTypeNameControlName]="'licLicenseTypeName'"
+                  [nameClass]="'wm-200'" [sqlName]="'selectCodeName_LOV'" [paramMap]="{categoryCode: 'LICENSE_TYPE'}">
+                </app-license-type>
+              </div>
+            </div>
+            <div class="row" [hidden]="!statesStatus.isLicLicenseTypePluralFI">
+              <label class="col-label-search text-right">ライセンス形態:</label>
+              <div class="ml-1">
+                <ea-input-mask id="licLicenseTypePlural" class="wm-combo wm-tab-element wm-300 is-rounded"
+                formControlName="licLicenseTypePlural" [isReadOnly]="true">
+              </ea-input-mask>
+              </div>
+            </div>
+            <div class="row">
+              <label class="col-label-search text-right">アップグレード:</label>
+              <div class="ml-1">
+                <wj-combo-box class="wm-combo wm-dropdown wm-tab-element wm-200" id="licUpgradeFlag"
+                  [itemsSource]="licUpgradeFlagAC" [displayMemberPath]="'label'" [selectedValuePath]="'data'"
+                  [formControl]="licLicenseForm.controls['licUpgradeFlag']" [isEditable]="false" [isRequired]="false">
+                </wj-combo-box>
+              </div>
+            </div>
+            <div class="row">
+              <label class="col-label-search text-right">ボリュームタイプ:</label>
+              <div class="ml-1">
+                <app-license-type [licenseTypeForm]="licLicenseForm"
+                  [licenseTypeCodeControlName]="'licVolumeType'" [licenseTypeNameControlName]="'licVolumeTypeName'"
+                  [nameClass]="'wm-200'" [sqlName]="'selectCodeName_LOV'"
+                  [paramMap]="{categoryCode: 'LICENSE_VOLUME_TYPE'}"></app-license-type>
+              </div>
+            </div>
+            <div class="row">
+              <label class="col-label-search text-right">タームライセンス:</label>
+              <div class="col ml-1">
+                <div class="row">
+                  <wj-combo-box class="wm-combo wm-dropdown wm-tab-element wm-lic-term" id="licTermFlag"
+                    [formControl]="licLicenseForm.controls['licTermFlag']" [itemsSource]="licTermFlagAC"
+                    [displayMemberPath]="'label'" [selectedValuePath]="'data'"
+                    [isEditable]="false" [isRequired]="false">
+                  </wj-combo-box>
+                </div>
+                <div class="row mt-1">
+                  <label>期間終了日:</label>
+                  <wj-input-date id="trmEndDateFrom" formControlName="trmEndDateFrom" name="trmEndDateFrom"
+                    [isRequired]="false" class="wmd-110 ml-1"></wj-input-date>
+                  <span class="label-date">～</span>
+                  <wj-input-date id="trmEndDateTo" formControlName="trmEndDateTo" name="trmEndDateTo"
+                    [isRequired]="false" class="wmd-110"></wj-input-date>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+    <div class="width-body">
+      <!-- 保有・使用許諾 -->
+      <div class="block-frame-border">
+        <h2 class="frame-title">保有・使用許諾</h2>
+        <form [formGroup]="infoForm">
+          <div class="row col">
+            <div class="row">
+              <label class="col-label text-right">保有会社:</label>
+              <ea-input-mask id="holCompanyName" class="wm-combo wm-tab-element wm-100 bg-gray"
+                formControlName="holCompanyName" [isReadOnly]="true">
+              </ea-input-mask>
+              <div class="form-check form-check-inline ml-5" [hidden]="!statesStatus.isShowAllCompanyFlag">
+                <input class="form-check-input wm-checkbox" type="checkbox" id="allCompanyFlag"
+                  formControlName="allCompanyFlag" (change)="dataChange()">
+                <label class="form-check-label" for="allCompanyFlag">他会社保有のライセンスを検索する</label>
+              </div>
+            </div>
+            <div [hidden]="this.infoForm.get('allCompanyFlag').value === true">
+              <div class="row">
+                <label class="col-label text-right">保有/許諾部署:</label>
+                <div class="col col-form">
+                  <app-section-selection (select)="selectDataSection($event)" [sectionForm]="infoForm"
+                    [sectionCodeControlName]="'holSectionCode'" [sectionYearControlName]="'holSectionYear'"
+                    [sectionNameControlName]="'holSectionName'"></app-section-selection>
+                </div>
+              </div>
+              <div class="row mb-1">
+                <label class="col-label text-right"></label>
+                <div class="form-check form-check-inline ml-2">
+                  <input class="form-check-input wm-checkbox" type="checkbox" id="includeSectionHierarchyFlag"
+                    formControlName="includeSectionHierarchyFlag">
+                  <label class="form-check-label"
+                    for="includeSectionHierarchyFlag">指定{{accessLevel === accessLevelSection.ACCESS_LEVEL_SECTION_MANAGER ? '/管轄' : ''}}部署の配下部署も検索に含める</label>
+                </div>
+              </div>
+              <div class="row">
+                <label class="col-label text-right">資産管理担当者:</label>
+                <div class="col col-form">
+                  <app-hol-staff-selection [holStaffForm]="infoForm" [staffCodeControlName]="'holStaffCode'"
+                    [staffNameControlName]="'holStaffName'" [selectOnly]="false" [sqlName]="'selectHolStaff_LOV'"
+                    [paramMap]="{sectionCode: infoForm.get('holSectionCode').value, companyCode: infoForm.get('holCompanyCode').value}">
+                  </app-hol-staff-selection>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+      <!-- 備考・付加情報 -->
+      <div class="block-frame-border">
+        <h2 class="frame-title">備考・付加情報</h2>
+        <form [formGroup]="messageForm">
+          <div class="row col">
+            <div class="row">
+              <label class="col-label text-right">備考:</label>
+              <div class="col">
+                <div class="row">
+                  <ea-input-mask id="dscDescription" class="wm-combo wm-tab-element wm-300"
+                    formControlName="dscDescription">
+                  </ea-input-mask>
+                  <label class="text-inline">(あいまい)</label>
+                </div>
+                <div class="row">
+                  <label class="text-inline">(スペース区切で複数指定可)</label>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <label class="col-label text-right">管理項目:</label>
+              <div class="col" [hidden]="!isDscAttribute">
+                <div class="row">
+                  <ea-input-mask id="dscAttribute" class="wm-combo wm-tab-element wm-300"
+                    formControlName="dscAttribute">
+                  </ea-input-mask>
+                  <label class="text-inline">(あいまい)</label>
+                </div>
+                <div class="row">
+                  <label class="text-inline">(スペース区切で複数指定可)</label>
+                </div>
+                <div class="row">
+                  <span class="e-link col-label-toggle">
+                    <a class="link" (click)="linkBtnClickEvent('dscAttribute')">管理項目を個別に条件指定する</a>
+                  </span>
+                </div>
+              </div>
+              <div class="col" [hidden]="isDscAttribute">
+                <div class="row">
+                  <div *ngFor="let item of dscAttributePlural; let i = index" formArrayName="dscAttributePlural">
+                    <label class="label-attribute" [for]="'dscAttribute' + i">{{item}}</label>
+                    <ea-input-mask class="wm-combo wm-tab-element wm-150" [id]="'dscAttribute' + i"
+                      [formControlName]="i"></ea-input-mask>
+                  </div>
+                  <label class="text-inline">(あいまい、スペース区切で複数指定可)</label>
+                  <span class="e-link col-label-toggle ml-2">
+                    <a class="link" (click)="linkBtnClickEvent('dscAttributePlural')">管理項目の個別条件指定をやめる</a>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>

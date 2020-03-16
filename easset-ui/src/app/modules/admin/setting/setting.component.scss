@@ -1,0 +1,165 @@
+.section-role {
+  padding-bottom: 10px;
+  border-bottom: 1px solid #fff;
+  .sec-message {
+    margin-bottom: 10px;
+    font-size: 14px;
+    color: #0000ff;
+  }
+  .input-company {
+    width: 100px;
+  }
+  .input-privilege {
+    width: 250px;
+  }
+  .col-inputs {
+    span {
+      display: block;
+      white-space: nowrap;
+      padding-top: 2px;
+      margin-right: 5px;
+    }
+    &.col-inputs-company {
+      flex: 0 0 140px !important;
+    }
+    &.col-inputs-privilege {
+      flex: 0 0 330px !important;
+    }
+  }
+
+  > .row {
+    margin: 0;
+    > .col {
+      padding: 0;
+      flex: 0;
+      display: flex;
+      &:not(:first-child) {
+        margin-left: 10px;
+      }
+    }
+  }
+}
+
+.section-setting-search {
+  width: 600px;
+  margin: 20px 0;
+  .block-frame-border {
+    padding: 5px 0 5px 25px;
+  }
+  .col-inputs {
+    padding: 8px 10px;
+    .col {
+      display: flex;
+      padding: 0;
+    }
+    .label {
+      display: block;
+      white-space: nowrap;
+      padding-top: 2px;
+      margin-right: 5px;
+    }
+    .col-label {
+      flex: 0 0 90px;
+      margin-right: 5px;
+      white-space: nowrap;
+      justify-content: flex-end;
+    }
+    .col-form {
+      width: 100%;
+      app-section-selection {
+        width: 100%;
+      }
+      .row-tree-selection {
+        display: flex;
+        padding: 0;
+        margin: 0;
+        .col-tree-form {
+          width: auto;
+          max-width: none;
+          flex: 0 0 70%;
+          padding: 0;
+        }
+        .col-tree-buttons {
+          display: flex;
+          width: auto;
+          max-width: none;
+          flex: 0 0 30%;
+          padding: 0;
+        }
+        .input-display {
+          width: 100%;
+        }
+      }
+      .form-staff {
+        padding: 0;
+        margin: 0;
+      }
+    }
+  }
+  .col-buttons {
+    .wm-btn + .wm-btn {
+      margin-left: 5px;
+    }
+  }
+  .has-border {
+    padding: 5px 10px;
+    border-left: 1px solid #fff;
+  }
+  .row + .row {
+    margin-top: 10px;
+  }
+}
+
+.section-buttons {
+  margin: 15px 0;
+  position: relative;
+  z-index: 10;
+}
+
+.section-add-privileges {
+  margin-bottom: 15px;
+}
+
+.section-search-list {
+  width: auto;
+  margin: 0;
+  .grid-common-count {
+    display: inline-block;
+    margin: 0;
+    position: absolute;
+    top: -25px;
+    right: 0;
+  }
+  .grid-common-wrap {
+    position: relative;
+    width: auto;
+  }
+  .wp-grid-setting {
+    display: block;
+    height: calc(100vh - 270px);
+    .is-privilege-show & {
+      height: calc(100vh - 335px);
+    }
+    .is-role-user & {
+      height: calc(100vh - 300px);
+    }
+    .is-role-user.is-privilege-show & {
+      height: calc(100vh - 445px);
+    }
+    background: #fff;
+  }
+  .grid-setting {
+    display: inline-block;
+    height: 100%;
+    .button-delete {
+      display: inline-block;
+      width: 18px;
+      height: 18px;
+      margin-right: 5px;
+      background: url(/assets/images/button/line_delete_save.png) 50% 50% no-repeat;
+      background-size: 18px auto;
+      vertical-align: middle;
+      cursor: pointer;
+    }
+  }
+}

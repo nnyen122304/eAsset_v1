@@ -1,0 +1,53 @@
+<form [formGroup]="ppfsForm">
+  <ea-input-mask class="wm-combo required is-rounded input-display ipt-name"
+                 formControlName="{{nameControlName}}" [isReadOnly]="isReadOnly" [required]="required" [maxLength]="10"
+                 [pattern]="'a-zA-Z0-9'"
+                 [capitalize]="true"></ea-input-mask>
+  <button type="button"  [hidden]="!visibleStatus" class="wm-btn wm-sm btn-icon btn-tooltip" (click)="clear()" *ngIf="!selectOnly"><span
+    class="ico"><img src="assets/images/button/clear.gif"></span><span class="tooltip-text">クリア</span></button>
+  <button type="button" class="wm-btn wm-sm" (click)="open($event.currentTarget)"><span
+    class="ico"><img src="assets/images/button/popup.png"></span></button>
+</form>
+
+<ea-popup #ppfsSetchiSelectionPopup class="popup-common-sel ppfs-selection" [hideTrigger]="'None'"
+          (hidden)="close()">
+  <div class="form-select-staff">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">代表設置場所</h5>
+        <button type="button" tabindex="-1" class="close bt-close wj-hide">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="col section-search">
+          <form [formGroup]="searchForm">
+            <div class="col search">
+              <div class="form-group">
+                <label class="text-nowrap">代表設置場所名(あいまい):</label>
+                <ea-input-mask formControlName="search"></ea-input-mask>
+                <button type="button" class="wm-btn" (click)="search()">検索</button>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="col">
+          <ea-flex-grid
+            #gridPpfsSetchiSelectionList
+            class="grid-common-list grid-ppfs-setchi-list"
+            [itemsSource]="ppfsSetchiList"
+            [allowResizing]="'None'"
+            [headersVisibility]="'Column'"
+            (dblclick)="submit()">
+            <ea-flex-grid-column header="代表設置場所コード" binding="code" [allowResizing]="false" [allowMerging]=true
+                                 [width]="150"></ea-flex-grid-column>
+            <ea-flex-grid-column header="代表設置場所名" binding="name" [allowResizing]="false" [allowMerging]=true
+                                 [width]="300"></ea-flex-grid-column>
+          </ea-flex-grid>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="wm-btn" (click)="submit()">選択</button>
+        <button type="button" class="wm-btn wj-hide">閉じる</button>
+      </div>
+    </div>
+  </div>
+</ea-popup>

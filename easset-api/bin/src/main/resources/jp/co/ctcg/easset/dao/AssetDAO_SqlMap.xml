@@ -1,0 +1,2560 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<!--
+ *===================================================================
+ * ファイル名 : AssetDAO_SqlMap.xml
+ * 概要説明   : 情報機器等、情報機器等登録申請用SQL文
+ * バージョン : 1.0
+ *===================================================================
+ * 修正履歴
+ * 日付       Ver. 担当者       修正内容
+ * －－－－－ －－ －－－－－－ －－－－－－－－－－－－－－－－－－
+ * 2010-10-06 1.0  リヨン       新規
+ *===================================================================
+ -->
+<sqlMap namespace="AssetDAO" >
+
+  <sql id="selectAssetComColumn_AST">
+       nast.ASSET_ID assetId
+     , nast.CREATE_DATE createDate
+     , nast.CREATE_STAFF_CODE createStaffCode
+     , nast.UPDATE_DATE updateDate
+     , nast.UPDATE_STAFF_CODE updateStaffCode
+     , nast.VERSION version
+
+     <!-- 情報機器 -->
+     <isEmpty property="tableNamePrefix">
+       , TO_CHAR(NULL) apGetTanLineAstId
+       , TO_CHAR(NULL) updateComment
+       , TO_CHAR(NULL) eappId
+       , TO_CHAR(NULL) apStatus
+       , TO_CHAR(NULL) apStatusName
+       , TO_DATE(NULL) apDate
+       , TO_CHAR(NULL) apCreateStaffCode
+       , TO_CHAR(NULL) apCreateStaffName
+       , TO_CHAR(NULL) apCreateCompanyCode
+       , TO_CHAR(NULL) apCreateCompanyName
+       , TO_CHAR(NULL) apCreateSectionCode
+       , TO_NUMBER(NULL) apCreateSectionYear
+       , TO_CHAR(NULL) apCreateSectionName
+       , TO_CHAR(NULL) apStaffCode
+       , TO_CHAR(NULL) apStaffName
+       , TO_CHAR(NULL) apCompanyCode
+       , TO_CHAR(NULL) apCompanyName
+       , TO_CHAR(NULL) apSectionCode
+       , TO_NUMBER(NULL) apSectionYear
+       , TO_CHAR(NULL) apSectionName
+       , TO_CHAR(NULL) apTel
+       , TO_CHAR(NULL) apOfficeName
+     </isEmpty>
+     <!-- 登録申請 -->
+     <isNotEmpty property="tableNamePrefix">
+       , nast.AP_GET_TAN_LINE_AST_ID apGetTanLineAstId
+       , nast.UPDATE_COMMENT updateComment
+       , nast.EAPP_ID eappId
+       , nast.AP_STATUS apStatus
+       , NEA_UTIL_PKG.get_cn_value1_f('AP_STATUS_ASSET', nast.AP_STATUS) apStatusName
+       , nast.AP_DATE apDate
+       , nast.AP_CREATE_STAFF_CODE apCreateStaffCode
+       , NEA_UTIL_PKG.get_staff_name_f(nast.AP_CREATE_STAFF_CODE) apCreateStaffName
+       , nast.AP_CREATE_COMPANY_CODE apCreateCompanyCode
+       , NEA_UTIL_PKG.get_company_name_f(nast.AP_CREATE_COMPANY_CODE) apCreateCompanyName
+       , nast.AP_CREATE_SECTION_CODE apCreateSectionCode
+       , nast.AP_CREATE_SECTION_YEAR apCreateSectionYear
+       , NEA_UTIL_PKG.get_section_name_f(nast.AP_CREATE_COMPANY_CODE, nast.AP_CREATE_SECTION_CODE, nast.AP_CREATE_SECTION_YEAR) apCreateSectionName
+       , nast.AP_STAFF_CODE apStaffCode
+       , NEA_UTIL_PKG.get_staff_name_f(nast.AP_STAFF_CODE) apStaffName
+       , nast.AP_COMPANY_CODE apCompanyCode
+       , NEA_UTIL_PKG.get_company_name_f(nast.AP_COMPANY_CODE) apCompanyName
+       , nast.AP_SECTION_CODE apSectionCode
+       , nast.AP_SECTION_YEAR apSectionYear
+       , NEA_UTIL_PKG.get_section_name_f(nast.AP_COMPANY_CODE, nast.AP_SECTION_CODE, nast.AP_SECTION_YEAR) apSectionName
+       , nast.AP_TEL apTel
+       , nast.AP_OFFICE_NAME apOfficeName
+     </isNotEmpty>
+     , nast.AST_NAME astName
+     , nast.AST_CATEGORY1_CODE astCategory1Code
+     , NEA_UTIL_PKG.get_cn_value1_f('ASSET_CATEGORY1', nast.AST_CATEGORY1_CODE) astCategory1Name
+     , nast.AST_CATEGORY2_CODE astCategory2Code
+     , NEA_UTIL_PKG.get_cn_value1_f('ASSET_CATEGORY2', nast.AST_CATEGORY2_CODE) astCategory2Name
+     , NEA_UTIL_PKG.get_cn_value_f('ASSET_CATEGORY2', nast.AST_CATEGORY2_CODE, 2) astQuantityManageType
+     , NEA_UTIL_PKG.get_cn_value_f('ASSET_CATEGORY2', nast.AST_CATEGORY2_CODE, 5) astSerialManageType
+     , nast.AST_SHAPE_CODE astShapeCode
+     , NEA_UTIL_PKG.get_cn_value1_f('ASSET_SHAPE', nast.AST_SHAPE_CODE) astShapeName
+     , nast.AST_MAKER_CODE astMakerCode
+     , nast.AST_MAKER_NAME astMakerName
+     , nast.AST_SHOP_NAME astShopName
+     , nast.AST_MAKER_MODEL astMakerModel
+     , nast.AST_SERIAL_CODE astSerialCode
+     , nast.AST_GUARANTEE_TERM_DATE astGuaranteeTermDate
+     , nast.AST_GET_TYPE astGetType
+     , NEA_UTIL_PKG.get_cn_value1_f('ASSET_GET_TYPE', nast.AST_GET_TYPE) astGetTypeName
+     , nast.AST_SYSTEM_SECTION_DEPLOY_FLAG astSystemSectionDeployFlag
+     , NEA_UTIL_PKG.get_cn_value1_f('FLAG_YN', nast.AST_SYSTEM_SECTION_DEPLOY_FLAG) astSystemSectionDeployFlagName
+     , nast.AST_ASSET_TYPE astAssetType
+     , NEA_UTIL_PKG.get_cn_value1_f('ASSET_TYPE', nast.AST_ASSET_TYPE) astAssetTypeName
+     , nast.AST_HOLDER_CODE astHolderCode
+     , nast.AST_HOLDER_NAME astHolderName
+     , nast.AST_MANAGE_TYPE astManageType
+     , NEA_UTIL_PKG.get_cn_value1_f('ASSET_MANAGE_TYPE', nast.AST_MANAGE_TYPE) astManageTypeName
+     , NEA_UTIL_PKG.get_cn_value_f('LEASE_RENTAL_CUSTOMER', nast.AST_HOLDER_CODE, 7, nast.HOL_COMPANY_CODE) astOirEnable
+     , nast.AST_OIR astOir
+     , nast.AST_MANAGE_END_DATE astManageEndDate
+     , nast.HOL_COMPANY_CODE holCompanyCode
+     , NEA_UTIL_PKG.get_company_name_f(nast.HOL_COMPANY_CODE) holCompanyName
+     , nast.HOL_SECTION_CODE holSectionCode
+     , nast.HOL_SECTION_YEAR holSectionYear
+     , NEA_UTIL_PKG.get_section_name_f(nast.HOL_COMPANY_CODE, nast.HOL_SECTION_CODE, nast.HOL_SECTION_YEAR) holSectionName
+     , nast.HOL_STAFF_CODE holStaffCode
+     , NEA_UTIL_PKG.get_staff_name_f(nast.HOL_STAFF_CODE) holStaffName
+     , nast.HOL_OFFICE_CODE holOfficeCode
+     , NEA_UTIL_PKG.get_cn_value1_f('OFFICE', nast.HOL_OFFICE_CODE) holOfficeName
+     , nast.HOL_OFFICE_FLOOR holOfficeFloor
+     , nast.HOL_OFFICE_ROOM_NUM holOfficeRoomNum
+     , nast.HOL_OFFICE_RACK_NUM holOfficeRackNum
+     , nast.HOL_PURPOSE_CODE holPurposeCode
+     , NEA_UTIL_PKG.get_cn_value1_f('ASSET_USE_PURPOSE', nast.HOL_PURPOSE_CODE) holPurposeName
+     , nast.HOL_OFFICE_DESCRIPTION holOfficeDescription
+     , nast.HOL_GET_STAFF_CODE holGetStaffCode
+     , NEA_UTIL_PKG.get_staff_name_f(nast.HOL_GET_STAFF_CODE) holGetStaffName
+     , nast.HOL_GET_COMPANY_CODE holGetCompanyCode
+     , NEA_UTIL_PKG.get_company_name_f(nast.HOL_GET_COMPANY_CODE) holGetCompanyName
+     , nast.HOL_GET_SECTION_CODE holGetSectionCode
+     , nast.HOL_GET_SECTION_YEAR holGetSectionYear
+     , NEA_UTIL_PKG.get_section_name_f(nast.HOL_GET_COMPANY_CODE, nast.HOL_GET_SECTION_CODE, nast.HOL_GET_SECTION_YEAR) holGetSectionName
+     , nast.HOL_GET_DATE holGetDate
+     , nast.HOL_QUANTITY holQuantity
+     , nast.USE_COMPANY_CODE useCompanyCode
+     , NEA_UTIL_PKG.get_company_name_f(nast.USE_COMPANY_CODE) useCompanyName
+     , nast.USE_SECTION_CODE useSectionCode
+     , nast.USE_SECTION_YEAR useSectionYear
+     , NEA_UTIL_PKG.get_section_name_f(nast.USE_COMPANY_CODE, nast.USE_SECTION_CODE, nast.USE_SECTION_YEAR) useSectionName
+     , nast.USE_STAFF_CODE useStaffCode
+     , NEA_UTIL_PKG.get_staff_name_f(nast.USE_STAFF_CODE) useStaffName
+     , nast.USE_STAFF_COMPANY_CODE useStaffCompanyCode
+     , NEA_UTIL_PKG.get_company_name_f(nast.USE_STAFF_COMPANY_CODE) useStaffCompanyName
+     , nast.USE_STAFF_SECTION_CODE useStaffSectionCode
+     , nast.USE_STAFF_SECTION_YEAR useStaffSectionYear
+     , NEA_UTIL_PKG.get_section_name_f(nast.USE_STAFF_COMPANY_CODE, nast.USE_STAFF_SECTION_CODE, nast.USE_STAFF_SECTION_YEAR) useStaffSectionName
+     , nast.USE_START_DATE useStartDate
+     , nast.USE_COMMON_FLAG useCommonFlag
+     , NEA_UTIL_PKG.get_cn_value1_f('FLAG_AN', nast.USE_COMMON_FLAG) useCommonFlagName
+     , nast.NET_HOST_NAME netHostName
+     , nast.NET_EGUARD_PERMIT_TYPE netEguardPermitType
+     , nast.MNT_CONTRACT_CODE mntContractCode
+     , nast.MNT_CONTRACT_COMPANY_NAME mntContractCompanyName
+     , nast.MNT_CONTRACT_START_DATE mntContractStartDate
+     , nast.MNT_CONTRACT_END_DATE mntContractEndDate
+     , nast.MNT_CONTRACT_AMOUNT mntContractAmount
+     , nast.MNT_CONTRACT_REGIST_CODE mntContractRegistCode
+     , nast.MNT_CONTRACT_REGIST_DATE mntContractRegistDate
+     , nast.MNT_CONTRACT_STAFF_CODE mntContractStaffCode
+     , NEA_UTIL_PKG.get_staff_name_f(nast.MNT_CONTRACT_STAFF_CODE) mntContractStaffName
+     , NEA_UTIL_PKG.replace_enter_f(nast.DSC_DESCRIPTION, #enterChar#) dscDescription
+     , nast.DSC_ATTRIBUTE1 dscAttribute1
+     , nast.DSC_ATTRIBUTE2 dscAttribute2
+     , nast.DSC_ATTRIBUTE3 dscAttribute3
+     , nast.DSC_ATTRIBUTE4 dscAttribute4
+     , nast.DSC_ATTRIBUTE5 dscAttribute5
+     , nast.DSC_ATTRIBUTE6 dscAttribute6
+     , nast.DSC_ATTRIBUTE7 dscAttribute7
+     , nast.DSC_ATTRIBUTE8 dscAttribute8
+     , nast.DSC_ATTRIBUTE9 dscAttribute9
+     , nast.DSC_ATTRIBUTE10 dscAttribute10
+     , nast.DSC_ATTRIBUTE11 dscAttribute11
+     , nast.DSC_ATTRIBUTE12 dscAttribute12
+     , nast.DSC_ATTRIBUTE13 dscAttribute13
+     , nast.DSC_ATTRIBUTE14 dscAttribute14
+     , nast.DSC_ATTRIBUTE15 dscAttribute15
+     , nast.DSC_ATTRIBUTE16 dscAttribute16
+     , nast.DSC_ATTRIBUTE17 dscAttribute17
+     , nast.DSC_ATTRIBUTE18 dscAttribute18
+     , nast.DSC_ATTRIBUTE19 dscAttribute19
+     , nast.DSC_ATTRIBUTE20 dscAttribute20
+     , nast.DSC_FAILURE_ASSET_ID dscFailureAssetId
+     , nast.INV_IN_COMPANY_ACTUAL_FLAG invInCompanyActualFlag
+     , NEA_UTIL_PKG.get_cn_value1_f('FLAG_YN', nast.INV_IN_COMPANY_ACTUAL_FLAG) invInCompanyActualFlagName
+     , nast.INV_BARCODE invBarcode
+     , nast.INV_SEAL_ISSUE_FLAG invSealIssueFlag
+     , NEA_UTIL_PKG.get_cn_value1_f('FLAG_YN', nast.INV_SEAL_ISSUE_FLAG) invSealIssueFlagName
+     , nast.INV_SEAL_ISSUE_DATE invSealIssueDate
+     , nast.INV_SEAL_ISSUE_DESCRIPTION invSealIssueDescription
+     , nast.DELETE_FLAG deleteFlag
+     , nast.DELETE_DATE deleteDate
+     , nast.DELETE_REASON deleteReason
+     , nast.GET_APPLICATION_ID getApplicationId
+     , nast.REGIST_APPLICATION_ID registApplicationId
+     , nast.DREAMS_NUM dreamsNum
+     , nast.PARENT_ASSET_ID parentAssetId
+     <isEmpty property="tableNamePrefix">
+       , nast.MNT_CONTRACT_SERVICE_LEVEL mntContractServiceLevel
+       , nast.MNT_CONTRACT_DESCRIPTION mntContractDescription
+       , nast.MNT_CONTRACT_CODE2 mntContractCode2
+       , nast.MNT_CONTRACT_COMPANY_NAME2 mntContractCompanyName2
+       , nast.MNT_CONTRACT_START_DATE2 mntContractStartDate2
+       , nast.MNT_CONTRACT_END_DATE2 mntContractEndDate2
+       , nast.MNT_CONTRACT_AMOUNT2 mntContractAmount2
+       , nast.MNT_CONTRACT_REGIST_CODE2 mntContractRegistCode2
+       , nast.MNT_CONTRACT_REGIST_DATE2 mntContractRegistDate2
+       , nast.MNT_CONTRACT_STAFF_CODE2 mntContractStaffCode2
+       , NEA_UTIL_PKG.get_staff_name_f(nast.MNT_CONTRACT_STAFF_CODE2) mntContractStaffName2
+       , nast.MNT_CONTRACT_SERVICE_LEVEL2 mntContractServiceLevel2
+       , nast.MNT_CONTRACT_DESCRIPTION2 mntContractDescription2
+       , nast.MNT_CONTRACT_CODE3 mntContractCode3
+       , nast.MNT_CONTRACT_COMPANY_NAME3 mntContractCompanyName3
+       , nast.MNT_CONTRACT_START_DATE3 mntContractStartDate3
+       , nast.MNT_CONTRACT_END_DATE3 mntContractEndDate3
+       , nast.MNT_CONTRACT_AMOUNT3 mntContractAmount3
+       , nast.MNT_CONTRACT_REGIST_CODE3 mntContractRegistCode3
+       , nast.MNT_CONTRACT_REGIST_DATE3 mntContractRegistDate3
+       , nast.MNT_CONTRACT_STAFF_CODE3 mntContractStaffCode3
+       , NEA_UTIL_PKG.get_staff_name_f(nast.MNT_CONTRACT_STAFF_CODE3) mntContractStaffName3
+       , nast.MNT_CONTRACT_SERVICE_LEVEL3 mntContractServiceLevel3
+       , nast.MNT_CONTRACT_DESCRIPTION3 mntContractDescription3
+       , <include refid="getKoyunoFByAssetId_AST" /> koyunoF
+       , NVL((SELECT f.OYA || f.EDA
+                FROM NEA_PPFS_FLD f
+               WHERE f.KOYUNO = <include refid="getKoyunoFByAssetId_AST" />
+              ),(SELECT l.OYA || l.EDA
+                FROM NEA_PPFS_LLDA l
+               WHERE l.KOYUNO = <include refid="getKoyunoLByAssetId_AST" />
+              )) shisanNum
+       , <include refid="getKoyunoLByAssetId_AST" /> koyunoL
+       , NVL((SELECT l.KYKNO
+                FROM NEA_PPFS_LLDA l
+               WHERE l.KOYUNO = <include refid="getKoyunoLByAssetId_AST" />
+              ),nast.CONTRACT_NUM) contractNum
+       , (SELECT l.NINI_LD_17CD
+            FROM NEA_PPFS_LLDA l
+           WHERE l.KOYUNO = <include refid="getKoyunoLByAssetId_AST" />
+           ) contractEda
+     </isEmpty>
+     <isNotEmpty property="tableNamePrefix">
+       , TO_CHAR(NULL) mntContractServiceLevel
+       , TO_CHAR(NULL) mntContractDescription
+       , TO_CHAR(NULL) mntContractCode2
+       , TO_CHAR(NULL) mntContractCompanyName2
+       , TO_DATE(NULL) mntContractStartDate2
+       , TO_DATE(NULL) mntContractEndDate2
+       , TO_NUMBER(NULL) mntContractAmount2
+       , TO_CHAR(NULL) mntContractRegistCode2
+       , TO_DATE(NULL) mntContractRegistDate2
+       , TO_CHAR(NULL) mntContractStaffCode2
+       , TO_CHAR(NULL) mntContractStaffName2
+       , TO_CHAR(NULL) mntContractServiceLevel2
+       , TO_CHAR(NULL) mntContractDescription2
+       , TO_CHAR(NULL) mntContractCode3
+       , TO_CHAR(NULL) mntContractCompanyName3
+       , TO_DATE(NULL) mntContractStartDate3
+       , TO_DATE(NULL) mntContractEndDate3
+       , TO_NUMBER(NULL) mntContractAmount3
+       , TO_CHAR(NULL) mntContractRegistCode3
+       , TO_DATE(NULL) mntContractRegistDate3
+       , TO_CHAR(NULL) mntContractStaffCode3
+       , TO_CHAR(NULL) mntContractStaffName3
+       , TO_CHAR(NULL) mntContractServiceLevel3
+       , TO_CHAR(NULL) mntContractDescription3
+       , NULL koyunoF
+       , NULL shisanNum
+       , NULL koyunoL
+       , nast.CONTRACT_NUM contractNum
+       , NULL contractEda
+     </isNotEmpty>
+  </sql>
+
+  <sql id="getKoyunoFByAssetId_AST">
+  (SELECT max(f1.KOYUNO)
+     FROM NEA_PPFS_FLD f1
+        , PPFS_LD_SUPPORT s
+     WHERE s.HOJOSPAREC1 = CSCONVERT(nast.ASSET_ID,'NCHAR_CS')
+       AND s.HOJOSHUBETSUCD = '00001'
+       AND s.KOYUNO = f1.KOYUNO
+       AND f1.COMPANY_CODE = nast.HOL_COMPANY_CODE)
+  </sql>
+
+  <sql id="getKoyunoLByAssetId_AST">
+  (SELECT max(l1.KOYUNO)
+     FROM NEA_PPFS_LLDA l1
+        , PPFS_LD_SUPPORT s
+     WHERE s.HOJOSPAREC1 = CSCONVERT(nast.ASSET_ID,'NCHAR_CS')
+       AND s.HOJOSHUBETSUCD = '00001'
+       AND s.KOYUNO = l1.KOYUNO
+       AND l1.COMPANY_CODE = nast.HOL_COMPANY_CODE)
+  </sql>
+
+  <!--
+    情報機器検索(ヘッダ)
+  -->
+  <select id="selectAsset_AST" parameterClass="java.util.Map" resultClass="jp.co.ctcg.easset.dto.asset.Asset">
+    SELECT
+      <include refid="selectAssetComColumn_AST" />
+      <isEmpty property="tableNamePrefix">
+       , TO_CHAR(NULL) apCreateTel
+      </isEmpty>
+      <isNotEmpty property="tableNamePrefix">
+       , NEA_UTIL_PKG.get_tel_f(nast.AP_CREATE_COMPANY_CODE, nast.AP_CREATE_STAFF_CODE, nast.AP_CREATE_SECTION_YEAR) apCreateTel
+      </isNotEmpty>
+    FROM
+      NEA_$tableNamePrefix$ASSET nast
+    WHERE
+      nast.ASSET_ID = #assetId#
+    <isNotEmpty property="lockFlag">
+      FOR UPDATE
+    </isNotEmpty>
+  </select>
+
+  <!--
+    情報機器等_共有ユーザー明細検索
+  -->
+  <select id="selectAssetLineComUsr_AST" parameterClass="java.util.Map" resultClass="jp.co.ctcg.easset.dto.asset.AssetLineComUsr">
+    SELECT
+      ASSET_ID assetId
+    , LINE_SEQ lineSeq
+    , CREATE_DATE createDate
+    , CREATE_STAFF_CODE createStaffCode
+    , UPDATE_DATE updateDate
+    , UPDATE_STAFF_CODE updateStaffCode
+    , COM_STAFF_CODE comStaffCode
+    , COM_STAFF_NAME comStaffName
+    , COM_COMPANY_CODE comCompanyCode
+    , COM_COMPANY_NAME comCompanyName
+    , COM_SECTION_CODE comSectionCode
+    , COM_SECTION_NAME comSectionName
+    , COM_START_DATE comStartDate
+    FROM
+      NEA_$tableNamePrefix$ASSET_LINE_COM_USR
+    WHERE
+      ASSET_ID = #assetId#
+  </select>
+
+  <!--
+    情報機器等_OS明細検索
+  -->
+  <select id="selectAssetLineOs_AST" parameterClass="java.util.Map" resultClass="jp.co.ctcg.easset.dto.asset.AssetLineOs">
+    SELECT
+      ASSET_ID assetId
+    , LINE_SEQ lineSeq
+    , CREATE_DATE createDate
+    , CREATE_STAFF_CODE createStaffCode
+    , UPDATE_DATE updateDate
+    , UPDATE_STAFF_CODE updateStaffCode
+    , ASSET_LINE_OS_ID assetLineOsId
+    , OS_NAME osName
+    , OS_DESCRIPTION osDescription
+    FROM
+      NEA_$tableNamePrefix$ASSET_LINE_OS
+    WHERE
+      ASSET_ID = #assetId#
+  </select>
+
+  <!--
+    情報機器等_ネットワーク明細検索
+  -->
+  <select id="selectAssetLineNetwork_AST" parameterClass="java.util.Map" resultClass="jp.co.ctcg.easset.dto.asset.AssetLineNetwork">
+    SELECT
+      ASSET_ID assetId
+    , LINE_SEQ lineSeq
+    , CREATE_DATE createDate
+    , CREATE_STAFF_CODE createStaffCode
+    , UPDATE_DATE updateDate
+    , UPDATE_STAFF_CODE updateStaffCode
+    , NET_MAC_ADDRESS netMacAddress
+    , NET_IP_ADDRESS netIpAddress
+    , NET_DESCRIPTION netDescription
+    FROM
+      NEA_$tableNamePrefix$ASSET_LINE_NETWORK
+    WHERE
+      ASSET_ID = #assetId#
+  </select>
+
+  <!--
+    情報機器等_棚卸明細検索
+  -->
+  <select id="selectAssetLineInv_AST" parameterClass="java.util.Map" resultClass="jp.co.ctcg.easset.dto.asset.AssetLineInv">
+    SELECT
+      ASSET_ID assetId
+    , LINE_SEQ lineSeq
+    , CREATE_DATE createDate
+    , CREATE_STAFF_CODE createStaffCode
+    , UPDATE_DATE updateDate
+    , UPDATE_STAFF_CODE updateStaffCode
+    , INV_DATE invDate
+    , INV_OFFICE_NAME invOfficeName
+    , INV_COMMENT invComment
+    FROM
+      NEA_$tableNamePrefix$ASSET_LINE_INV
+    WHERE
+      ASSET_ID = #assetId#
+  </select>
+
+  <!--
+    情報機器検索
+  -->
+  <select id="selectAssetList_AST" parameterClass="java.util.Map" resultClass="jp.co.ctcg.easset.dto.asset.AssetSR">
+    SELECT
+      <include refid="selectAssetComColumn_AST" />
+     , nastlo.OS_NAME osNameOne
+     , nastln.NET_MAC_ADDRESS netMacAddressOne
+     , nastln.NET_IP_ADDRESS netIpAddressOne
+     , (SELECT TO_DATE(l.LASTYMD,'YYYYMMDD')
+              FROM NEA_PPFS_LLDA l
+                 , NEA_PPFS_LLDC ptvlc
+                 , NEA_PPFS_RELATION_LA pzvr
+             WHERE l.KOYUNO = <include refid="getKoyunoLByAssetId_AST" />
+             AND ptvlc.LATORIHIKIKBN IN ('1', '2', '4')
+             AND ptvlc.KOYUNO = pzvr.KOYUNO_KYK
+             AND ptvlc.COMPANY_CODE = pzvr.COMPANY_CODE
+             AND ptvlc.PERIOD = pzvr.PERIOD
+             AND l.KOYUNO = pzvr.KOYUNO_SHISAN
+             AND l.COMPANY_CODE = pzvr.COMPANY_CODE
+             AND l.PERIOD = pzvr.PERIOD
+             AND pzvr.YUKOFLG = '1'
+             AND pzvr.CANCELSUMIFLG = '0'
+            ) leaseStartDate
+     , (SELECT TO_DATE(l.LAMANRYOYMD,'YYYYMMDD')
+              FROM NEA_PPFS_LLDA l
+                 , NEA_PPFS_LLDC ptvlc
+                 , NEA_PPFS_RELATION_LA pzvr
+             WHERE l.KOYUNO = <include refid="getKoyunoLByAssetId_AST" />
+             AND ptvlc.LATORIHIKIKBN IN ('1', '2', '4')
+             AND ptvlc.KOYUNO = pzvr.KOYUNO_KYK
+             AND ptvlc.COMPANY_CODE = pzvr.COMPANY_CODE
+             AND ptvlc.PERIOD = pzvr.PERIOD
+             AND l.KOYUNO = pzvr.KOYUNO_SHISAN
+             AND l.COMPANY_CODE = pzvr.COMPANY_CODE
+             AND l.PERIOD = pzvr.PERIOD
+             AND pzvr.YUKOFLG = '1'
+             AND pzvr.CANCELSUMIFLG = '0'
+            ) leaseEndDate
+     , (SELECT TO_DATE(NVL(l.NINI_LD_15CD, l.LASTYMD),'YYYYMMDD')
+              FROM NEA_PPFS_LLDA l
+                 , NEA_PPFS_LLDC ptvlc
+                 , NEA_PPFS_RELATION_LA pzvr
+             WHERE l.KOYUNO = <include refid="getKoyunoLByAssetId_AST" />
+             AND ptvlc.LATORIHIKIKBN = '3'
+             AND ptvlc.KOYUNO = pzvr.KOYUNO_KYK
+             AND ptvlc.COMPANY_CODE = pzvr.COMPANY_CODE
+             AND ptvlc.PERIOD = pzvr.PERIOD
+             AND l.KOYUNO = pzvr.KOYUNO_SHISAN
+             AND l.COMPANY_CODE = pzvr.COMPANY_CODE
+             AND l.PERIOD = pzvr.PERIOD
+             AND pzvr.YUKOFLG = '1'
+             AND pzvr.CANCELSUMIFLG = '0'
+            ) rentalStartDate
+     , (SELECT TO_DATE(NVL(l.NINI_LD_16CD, l.LAMANRYOYMD),'YYYYMMDD')
+              FROM NEA_PPFS_LLDA l
+                 , NEA_PPFS_LLDC ptvlc
+                 , NEA_PPFS_RELATION_LA pzvr
+             WHERE l.KOYUNO = <include refid="getKoyunoLByAssetId_AST" />
+             AND ptvlc.LATORIHIKIKBN = '3'
+             AND ptvlc.KOYUNO = pzvr.KOYUNO_KYK
+             AND ptvlc.COMPANY_CODE = pzvr.COMPANY_CODE
+             AND ptvlc.PERIOD = pzvr.PERIOD
+             AND l.KOYUNO = pzvr.KOYUNO_SHISAN
+             AND l.COMPANY_CODE = pzvr.COMPANY_CODE
+             AND l.PERIOD = pzvr.PERIOD
+             AND pzvr.YUKOFLG = '1'
+             AND pzvr.CANCELSUMIFLG = '0'
+            ) rentalEndDate
+     , NVL((SELECT l.SOSHIKI2CD
+              FROM NEA_PPFS_LLDA l
+             WHERE l.KOYUNO = <include refid="getKoyunoLByAssetId_AST" />
+            ),(SELECT f.SOSHIKI2CD
+              FROM NEA_PPFS_FLD f
+             WHERE f.KOYUNO = <include refid="getKoyunoFByAssetId_AST" />
+            )) costSectionCode
+     , NVL((SELECT l.SOSHIKI2NM
+              FROM NEA_PPFS_LLDA l
+             WHERE l.KOYUNO = <include refid="getKoyunoLByAssetId_AST" />
+            ),(SELECT f.SOSHIKI2NM
+              FROM NEA_PPFS_FLD f
+             WHERE f.KOYUNO = <include refid="getKoyunoFByAssetId_AST" />
+            )) costSectionName
+     , NVL((SELECT l.NINI_LD_6CD
+              FROM NEA_PPFS_LLDA l
+             WHERE l.KOYUNO = <include refid="getKoyunoLByAssetId_AST" />
+            ),(SELECT f.DEP_PRJ_CODE
+              FROM NEA_PPFS_FLD f
+             WHERE f.KOYUNO = <include refid="getKoyunoFByAssetId_AST" />
+            )) costDepPrjCode
+     , NVL((SELECT l.NINI_LD_6NM
+              FROM NEA_PPFS_LLDA l
+             WHERE l.KOYUNO = <include refid="getKoyunoLByAssetId_AST" />
+            ),(SELECT f.DEP_PRJ_NAME
+              FROM NEA_PPFS_FLD f
+             WHERE f.KOYUNO = <include refid="getKoyunoFByAssetId_AST" />
+            )) costDepPrjName
+     <!-- 登録申請 -->
+     <isEmpty property="tableNamePrefix">
+       , TO_CHAR(NULL) assetAssetId
+     </isEmpty>
+     <isNotEmpty property="tableNamePrefix">
+       , (SELECT MAX(na.ASSET_ID) FROM NEA_ASSET na WHERE na.REGIST_APPLICATION_ID = nast.ASSET_ID) assetAssetId
+     </isNotEmpty>
+
+     <!-- 共有ユーザー明細ダウンロード -->
+     <isEqual property="searchParam.dowloadLineItem" compareValue="COM_USR">
+       , nastlcom.LINE_SEQ comLineSeq
+       , nastlcom.COM_STAFF_CODE comStaffCode
+       , nastlcom.COM_STAFF_NAME comStaffName
+       , nastlcom.COM_COMPANY_CODE comCompanyCode
+       , nastlcom.COM_COMPANY_NAME comCompanyName
+       , nastlcom.COM_SECTION_CODE comSectionCode
+       , nastlcom.COM_SECTION_NAME comSectionName
+       , nastlcom.COM_START_DATE comStartDate
+     </isEqual>
+     <isNotEqual property="searchParam.dowloadLineItem" compareValue="COM_USR">
+       , TO_NUMBER(NULL) comLineSeq
+       , TO_CHAR(NULL) comStaffCode
+       , TO_CHAR(NULL) comStaffName
+       , TO_CHAR(NULL) comCompanyCode
+       , TO_CHAR(NULL) comCompanyName
+       , TO_CHAR(NULL) comSectionCode
+       , TO_CHAR(NULL) comSectionName
+       , TO_DATE(NULL) comStartDate
+     </isNotEqual>
+     <!-- OS明細ダウンロード -->
+     <isEqual property="searchParam.dowloadLineItem" compareValue="OS">
+       , nastlos.LINE_SEQ osLineSeq
+       , nastlos.OS_NAME osName
+       , nastlos.OS_DESCRIPTION osDescription
+     </isEqual>
+     <isNotEqual property="searchParam.dowloadLineItem" compareValue="OS">
+       , TO_NUMBER(NULL) osLineSeq
+       , TO_CHAR(NULL) osName
+       , TO_CHAR(NULL) osDescription
+     </isNotEqual>
+     <!-- ネットワーク明細ダウンロード -->
+     <isEqual property="searchParam.dowloadLineItem" compareValue="NETWORK">
+       , nastlnet.LINE_SEQ netLineSeq
+       , nastlnet.NET_MAC_ADDRESS netMacAddress
+       , nastlnet.NET_IP_ADDRESS netIpAddress
+       , nastlnet.NET_DESCRIPTION netDescription
+     </isEqual>
+     <isNotEqual property="searchParam.dowloadLineItem" compareValue="NETWORK">
+       , TO_NUMBER(NULL) netLineSeq
+       , TO_CHAR(NULL) netMacAddress
+       , TO_CHAR(NULL) netIpAddress
+       , TO_CHAR(NULL) netDescription
+     </isNotEqual>
+     <!-- 棚卸明細ダウンロード -->
+     <isEqual property="searchParam.dowloadLineItem" compareValue="INV">
+       , nastlinv.LINE_SEQ invLineSeq
+       , nastlinv.INV_DATE invDate
+       , nastlinv.INV_OFFICE_NAME invOfficeName
+       , nastlinv.INV_COMMENT invComment
+     </isEqual>
+     <isNotEqual property="searchParam.dowloadLineItem" compareValue="INV">
+       , TO_NUMBER(NULL) invLineSeq
+       , TO_DATE(NULL) invDate
+       , TO_CHAR(NULL) invOfficeName
+       , TO_CHAR(NULL) invComment
+     </isNotEqual>
+     <!-- 割当情報(機器から検索)-CSVファイル作成ダウンロード -->
+     <isNotEmpty property="isAllocAsset">
+       , nl.LICENSE_ID licenseId
+       , nsm.SOFTWARE_MAKER_NAME softwareMakerName
+       , ns.SOFTWARE_NAME softwareName
+       , NEA_UTIL_PKG.get_company_name_f(nl.HOL_COMPANY_CODE) swHolCompanyName
+       , NEA_UTIL_PKG.get_section_name_f(nl.HOL_COMPANY_CODE, nl.HOL_SECTION_CODE, nl.HOL_SECTION_YEAR) swHolSectionName
+       , NEA_UTIL_PKG.get_cn_value1_f('LICENSE_USE_TYPE', nl.USE_TYPE) useTypeName
+       , NEA_UTIL_PKG.get_company_name_f(nl.USE_COMPANY_CODE) licUseCompanyName
+       , NEA_UTIL_PKG.get_section_name_f(nl.USE_COMPANY_CODE, nl.USE_SECTION_CODE, nl.USE_SECTION_YEAR) licUseSectionName
+     </isNotEmpty>
+     <isEmpty property="isAllocAsset">
+       , TO_CHAR(NULL) licenseId
+       , TO_CHAR(NULL) softwareMakerName
+       , TO_CHAR(NULL) softwareName
+       , TO_CHAR(NULL) swHolCompanyName
+       , TO_CHAR(NULL) swHolSectionName
+       , TO_CHAR(NULL) useTypeName
+       , TO_CHAR(NULL) licUseCompanyName
+       , TO_CHAR(NULL) licUseSectionName
+     </isEmpty>
+    FROM
+          NEA_$tableNamePrefix$ASSET nast
+        , NEA_$tableNamePrefix$ASSET_LINE_OS nastlo
+        , NEA_$tableNamePrefix$ASSET_LINE_NETWORK nastln
+        <!-- 共有ユーザー明細ダウンロード -->
+        <isEqual property="searchParam.dowloadLineItem" compareValue="COM_USR">
+          , NEA_$tableNamePrefix$ASSET_LINE_COM_USR nastlcom
+        </isEqual>
+        <!-- OS明細ダウンロード -->
+        <isEqual property="searchParam.dowloadLineItem" compareValue="OS">
+          , NEA_$tableNamePrefix$ASSET_LINE_OS nastlos
+        </isEqual>
+        <!-- ネットワーク明細ダウンロード -->
+        <isEqual property="searchParam.dowloadLineItem" compareValue="NETWORK">
+          , NEA_$tableNamePrefix$ASSET_LINE_NETWORK nastlnet
+        </isEqual>
+        <!-- 棚卸明細ダウンロード -->
+        <isEqual property="searchParam.dowloadLineItem" compareValue="INV">
+          , NEA_$tableNamePrefix$ASSET_LINE_INV nastlinv
+        </isEqual>
+        <!-- 割当情報(機器から検索)-CSVファイル作成ダウンロード -->
+        <isNotEmpty property="isAllocAsset">
+          , NEA_ASSET_LINE_OS nastlos
+          , NEA_LICENSE_LINE_ALLOC nlla
+          , NEA_LICENSE_LINE_QTY nllq
+          , NEA_LICENSE nl
+          , NEA_SOFTWARE_MAKER nsm
+          , NEA_SOFTWARE ns
+        </isNotEmpty>
+    WHERE
+      1 = 1
+
+<!--***************************************** 検索条件指定部ここから *************************************************-->
+      <!-- 申請会社 -->
+      <isNotEmpty property="searchParam.apCompanyCode">
+        AND nast.AP_COMPANY_CODE = #searchParam.apCompanyCode#
+      </isNotEmpty>
+      <!-- 情報機器管理番号 -->
+      <isNotEmpty property="searchParam.assetId">
+        AND nast.ASSET_ID LIKE '%' || #searchParam.assetId# || '%'
+      </isNotEmpty>
+      <isNotEmpty property="assetIdPluralList">
+        AND $assetIdPluralList$
+      </isNotEmpty>
+      <!-- 親情報機器管理番号 -->
+      <isNotEmpty property="parentAssetIdPluralList">
+        AND $parentAssetIdPluralList$
+      </isNotEmpty>
+      <!-- 取得申請書番号 -->
+      <isNotEmpty property="searchParam.getApplicationId">
+        AND nast.GET_APPLICATION_ID LIKE '%' || #searchParam.getApplicationId# || '%'
+      </isNotEmpty>
+      <isNotEmpty property="getApplicationIdPluralList">
+        AND $getApplicationIdPluralList$
+      </isNotEmpty>
+      <!-- 申請ステータス -->
+      <isNotEmpty property="apStatusPluralList">
+        AND $apStatusPluralList$
+      </isNotEmpty>
+      <!-- 登録申請書番号 -->
+      <isNotEmpty property="searchParam.registApplicationId">
+        AND nast.REGIST_APPLICATION_ID LIKE '%' || #searchParam.registApplicationId# || '%'
+      </isNotEmpty>
+      <isNotEmpty property="registApplicationIdPluralList">
+        AND $registApplicationIdPluralList$
+      </isNotEmpty>
+      <!-- 申請日 -->
+      <isNotEmpty property="searchParam.apDateFrom">
+        AND nast.AP_DATE <![CDATA[>]]>= #searchParam.apDateFrom#
+      </isNotEmpty>
+      <isNotEmpty property="searchParam.apDateTo">
+        AND nast.AP_DATE <![CDATA[<]]>= #searchParam.apDateTo#
+      </isNotEmpty>
+      <!-- 登録完了日:登録申請 -->
+      <isNotEmpty property="tableNamePrefix">
+        <isNotEmpty property="searchParam.registDateFrom">
+          AND EXISTS (SELECT 'X' FROM NEA_ASSET na WHERE na.REGIST_APPLICATION_ID = nast.ASSET_ID AND na.CREATE_DATE <![CDATA[>]]>= #searchParam.registDateFrom#)
+        </isNotEmpty>
+        <isNotEmpty property="searchParam.registDateTo">
+          AND EXISTS (SELECT 'X' FROM NEA_ASSET na WHERE na.REGIST_APPLICATION_ID = nast.ASSET_ID AND na.CREATE_DATE <![CDATA[<]]> (#searchParam.registDateTo# + 1))
+        </isNotEmpty>
+      </isNotEmpty>
+      <!-- 登録日 -->
+      <isEmpty property="tableNamePrefix">
+        <isNotEmpty property="searchParam.registDateFrom">
+          AND nast.CREATE_DATE <![CDATA[>]]>= #searchParam.registDateFrom#
+        </isNotEmpty>
+        <isNotEmpty property="searchParam.registDateTo">
+          AND nast.CREATE_DATE <![CDATA[<]]> (#searchParam.registDateTo# + 1)
+        </isNotEmpty>
+      </isEmpty>
+      <!-- 更新日 -->
+      <isNotEmpty property="searchParam.updateDateFrom">
+        AND nast.UPDATE_DATE <![CDATA[>]]>= #searchParam.updateDateFrom#
+      </isNotEmpty>
+      <isNotEmpty property="searchParam.updateDateTo">
+        AND nast.UPDATE_DATE <![CDATA[<]]> (#searchParam.updateDateTo# + 1)
+      </isNotEmpty>
+      <!-- 抹消日 -->
+      <isNotEmpty property="searchParam.deleteDateFrom">
+        AND nast.DELETE_DATE <![CDATA[>]]>= #searchParam.deleteDateFrom#
+      </isNotEmpty>
+      <isNotEmpty property="searchParam.deleteDateTo">
+        AND nast.DELETE_DATE <![CDATA[<]]> (#searchParam.deleteDateTo# + 1)
+      </isNotEmpty>
+      <!-- 抹消済みを含む -->
+      <isEqual property="searchParam.deleteFlag" compareValue="0">
+        AND nast.DELETE_FLAG = '0'
+      </isEqual>
+      <!-- 起票/申請者 -->
+      <isNotEmpty property="searchParam.apStaffCode">
+        AND (nast.AP_CREATE_STAFF_CODE = #searchParam.apStaffCode#
+          OR nast.AP_STAFF_CODE = #searchParam.apStaffCode#)
+      </isNotEmpty>
+      <!-- 登録が完了している申請書を除外 -->
+      <isEqual property="searchParam.notCompleteFlag" compareValue="1">
+        AND nast.AP_STATUS <![CDATA[<]]><![CDATA[>]]> '3'
+      </isEqual>
+
+      <!-- 資産・機器 -->
+      <!-- 資産(機器)名 -->
+      <isNotEmpty property="searchParam.astName">
+        AND NEA_UTIL_PKG.TO_FUZZY_F(nast.AST_NAME) LIKE '%' || NEA_UTIL_PKG.TO_FUZZY_F(#searchParam.astName#) || '%'
+      </isNotEmpty>
+      <!-- 資産(機器)分類 -->
+      <isNotEmpty property="searchParam.astCategory1Code">
+        AND nast.AST_CATEGORY1_CODE = #searchParam.astCategory1Code#
+      </isNotEmpty>
+      <isNotEmpty property="searchParam.astCategory2Code">
+        AND nast.AST_CATEGORY2_CODE = #searchParam.astCategory2Code#
+      </isNotEmpty>
+      <isNotEmpty property="astCategoryPluralList">
+        AND $astCategoryPluralList$
+      </isNotEmpty>
+      <!-- メーカー -->
+      <isNotEmpty property="searchParam.astMakerCode">
+        AND nast.AST_MAKER_CODE = #searchParam.astMakerCode#
+      </isNotEmpty>
+      <isEmpty property="searchParam.astMakerCode">
+        <isNotEmpty property="searchParam.astMakerName">
+          AND NEA_UTIL_PKG.TO_FUZZY_F(nast.AST_MAKER_NAME) LIKE '%' || NEA_UTIL_PKG.TO_FUZZY_F(#searchParam.astMakerName#) || '%'
+        </isNotEmpty>
+      </isEmpty>
+      <!-- メーカー型番 -->
+      <isNotEmpty property="searchParam.astMakerModel">
+        AND NEA_UTIL_PKG.TO_FUZZY_F(nast.AST_MAKER_MODEL) LIKE '%' || NEA_UTIL_PKG.TO_FUZZY_F(#searchParam.astMakerModel#) || '%'
+      </isNotEmpty>
+      <!-- シリアル番号 -->
+      <isNotEmpty property="searchParam.astSerialCode">
+        AND NEA_UTIL_PKG.TO_FUZZY_F(nast.AST_SERIAL_CODE) LIKE '%' || NEA_UTIL_PKG.TO_FUZZY_F(#searchParam.astSerialCode#) || '%'
+      </isNotEmpty>
+      <isNotEmpty property="astSerialCodePluralList">
+        AND $astSerialCodePluralList$
+      </isNotEmpty>
+      <!-- 取得形態 -->
+      <isNotEmpty property="searchParam.astGetType">
+        AND nast.AST_GET_TYPE = #searchParam.astGetType#
+      </isNotEmpty>
+      <!-- 情シス配備 -->
+      <isNotEmpty property="searchParam.astSystemSectionDeployFlag">
+        AND nast.AST_SYSTEM_SECTION_DEPLOY_FLAG = #searchParam.astSystemSectionDeployFlag#
+      </isNotEmpty>
+      <!-- 資産区分 -->
+      <isNotEmpty property="searchParam.astAssetType">
+        AND nast.AST_ASSET_TYPE = #searchParam.astAssetType#
+      </isNotEmpty>
+      <isNotEmpty property="astAssetTypePluralList">
+        AND $astAssetTypePluralList$
+      </isNotEmpty>
+      <!-- 資産保有者 -->
+      <isNotEmpty property="searchParam.astHolderCode">
+        AND nast.AST_HOLDER_CODE = #searchParam.astHolderCode#
+      </isNotEmpty>
+      <isEmpty property="searchParam.astHolderCode">
+        <isNotEmpty property="searchParam.astHolderName">
+          AND NEA_UTIL_PKG.TO_FUZZY_F(nast.AST_HOLDER_NAME) LIKE '%' || NEA_UTIL_PKG.TO_FUZZY_F(#searchParam.astHolderName#) || '%'
+        </isNotEmpty>
+      </isEmpty>
+      <!-- 管理区分 -->
+      <isNotEmpty property="searchParam.astManageType">
+        AND nast.AST_MANAGE_TYPE = #searchParam.astManageType#
+      </isNotEmpty>
+      <isNotEmpty property="astManageTypePluralList">
+        AND $astManageTypePluralList$
+      </isNotEmpty>
+      <!-- OIR -->
+      <isNotEmpty property="searchParam.astOir">
+        AND nast.AST_OIR LIKE '%' || #searchParam.astOir# || '%'
+      </isNotEmpty>
+      <isNotEmpty property="astOirPluralList">
+        AND $astOirPluralList$
+      </isNotEmpty>
+
+      <!-- 保有・設置・使用 -->
+      <!-- 保有会社 -->
+      <isNotEmpty property="searchParam.holCompanyCode">
+        AND nast.HOL_COMPANY_CODE = #searchParam.holCompanyCode#
+      </isNotEmpty>
+      <isNotEmpty property="sectionYear">
+        AND nast.HOL_SECTION_YEAR = #sectionYear#
+      </isNotEmpty>
+      <!-- 保有部署 -->
+      <isNotEmpty property="section">
+        AND $section$
+      </isNotEmpty>
+      <!-- 資産管理担当者 -->
+      <isNotEmpty property="searchParam.holStaffCode">
+        AND nast.HOL_STAFF_CODE = #searchParam.holStaffCode#
+      </isNotEmpty>
+      <!-- 設置(使用)場所 -->
+      <isNotEmpty property="searchParam.holOfficeCode">
+        AND nast.HOL_OFFICE_CODE = #searchParam.holOfficeCode#
+      </isNotEmpty>
+      <isNotEmpty property="holOfficePluralList">
+        AND $holOfficePluralList$
+      </isNotEmpty>
+      <isNotEmpty property="searchParam.holOfficeFloor">
+        AND nast.HOL_OFFICE_FLOOR = #searchParam.holOfficeFloor#
+      </isNotEmpty>
+      <!-- 取得/設置者 -->
+      <isNotEmpty property="searchParam.holGetStaffCode">
+        AND nast.HOL_GET_STAFF_CODE = #searchParam.holGetStaffCode#
+      </isNotEmpty>
+      <!-- 使用者 -->
+      <isNotEmpty property="searchParam.useStaffCode">
+        AND nast.USE_STAFF_CODE = #searchParam.useStaffCode#
+      </isNotEmpty>
+
+      <!-- ネットワーク -->
+      <!-- MACアドレス -->
+      <isNotEmpty property="searchParam.netMacAddress1">
+        AND nast.ASSET_ID IN (
+                               SELECT ASSET_ID
+                                 FROM NEA_$tableNamePrefix$ASSET_LINE_NETWORK
+                                WHERE SUBSTR(NET_MAC_ADDRESS, 0, INSTR(NET_MAC_ADDRESS,'-', 1, 1)-1) = #searchParam.netMacAddress1#
+                              )
+      </isNotEmpty>
+      <isNotEmpty property="searchParam.netMacAddress2">
+        AND nast.ASSET_ID IN (
+                               SELECT ASSET_ID
+                                 FROM NEA_$tableNamePrefix$ASSET_LINE_NETWORK
+                                WHERE SUBSTR(NET_MAC_ADDRESS, INSTR(NET_MAC_ADDRESS,'-', 1, 1)+1, INSTR(NET_MAC_ADDRESS,'-', 1, 2)-INSTR(NET_MAC_ADDRESS,'-', 1, 1)-1) = #searchParam.netMacAddress2#
+                              )
+      </isNotEmpty>
+      <isNotEmpty property="searchParam.netMacAddress3">
+        AND nast.ASSET_ID IN (
+                               SELECT ASSET_ID
+                                 FROM NEA_$tableNamePrefix$ASSET_LINE_NETWORK
+                                WHERE SUBSTR(NET_MAC_ADDRESS, INSTR(NET_MAC_ADDRESS,'-', 1, 2)+1, INSTR(NET_MAC_ADDRESS,'-', 1, 3)-INSTR(NET_MAC_ADDRESS,'-', 1, 2)-1) = #searchParam.netMacAddress3#
+                              )
+      </isNotEmpty>
+      <isNotEmpty property="searchParam.netMacAddress4">
+        AND nast.ASSET_ID IN (
+                               SELECT ASSET_ID
+                                 FROM NEA_$tableNamePrefix$ASSET_LINE_NETWORK
+                                WHERE SUBSTR(NET_MAC_ADDRESS, INSTR(NET_MAC_ADDRESS,'-', 1, 3)+1, INSTR(NET_MAC_ADDRESS,'-', 1, 4)-INSTR(NET_MAC_ADDRESS,'-', 1, 3)-1) = #searchParam.netMacAddress4#
+                              )
+      </isNotEmpty>
+      <isNotEmpty property="searchParam.netMacAddress5">
+        AND nast.ASSET_ID IN (
+                               SELECT ASSET_ID
+                                 FROM NEA_$tableNamePrefix$ASSET_LINE_NETWORK
+                                WHERE SUBSTR(NET_MAC_ADDRESS, INSTR(NET_MAC_ADDRESS,'-', 1, 4)+1, INSTR(NET_MAC_ADDRESS,'-', 1, 5)-INSTR(NET_MAC_ADDRESS,'-', 1, 4)-1) = #searchParam.netMacAddress5#
+                              )
+      </isNotEmpty>
+      <isNotEmpty property="searchParam.netMacAddress6">
+        AND nast.ASSET_ID IN (
+                               SELECT ASSET_ID
+                                 FROM NEA_$tableNamePrefix$ASSET_LINE_NETWORK
+                                WHERE SUBSTR(NET_MAC_ADDRESS, INSTR(NET_MAC_ADDRESS,'-', 1, 5)+1) = #searchParam.netMacAddress6#
+                              )
+      </isNotEmpty>
+      <!-- IPアドレス -->
+      <isNotEmpty property="searchParam.netIpAddress1">
+        AND nast.ASSET_ID IN (
+                               SELECT ASSET_ID
+                                 FROM NEA_$tableNamePrefix$ASSET_LINE_NETWORK
+                                WHERE SUBSTR(NET_IP_ADDRESS, 0, INSTR(NET_IP_ADDRESS,'.', 1, 1)-1) = #searchParam.netIpAddress1#
+                              )
+      </isNotEmpty>
+      <isNotEmpty property="searchParam.netIpAddress2">
+        AND nast.ASSET_ID IN (
+                               SELECT ASSET_ID
+                                 FROM NEA_$tableNamePrefix$ASSET_LINE_NETWORK
+                                WHERE SUBSTR(NET_IP_ADDRESS, INSTR(NET_IP_ADDRESS,'.', 1, 1)+1, INSTR(NET_IP_ADDRESS,'.', 1, 2)-INSTR(NET_IP_ADDRESS,'.', 1, 1)-1) = #searchParam.netIpAddress2#
+                              )
+      </isNotEmpty>
+      <isNotEmpty property="searchParam.netIpAddress3">
+        AND nast.ASSET_ID IN (
+                               SELECT ASSET_ID
+                                 FROM NEA_$tableNamePrefix$ASSET_LINE_NETWORK
+                                WHERE SUBSTR(NET_IP_ADDRESS, INSTR(NET_IP_ADDRESS,'.', 1, 2)+1, INSTR(NET_IP_ADDRESS,'.', 1, 3)-INSTR(NET_IP_ADDRESS,'.', 1, 2)-1) = #searchParam.netIpAddress3#
+                              )
+      </isNotEmpty>
+      <isNotEmpty property="searchParam.netIpAddress4">
+        AND nast.ASSET_ID IN (
+                               SELECT ASSET_ID
+                                 FROM NEA_$tableNamePrefix$ASSET_LINE_NETWORK
+                                WHERE SUBSTR(NET_IP_ADDRESS, INSTR(NET_IP_ADDRESS,'.', 1, 3)+1) = #searchParam.netIpAddress4#
+                              )
+      </isNotEmpty>
+      <!-- ホスト名 -->
+      <isNotEmpty property="searchParam.netHostName">
+        AND NEA_UTIL_PKG.TO_FUZZY_F(nast.NET_HOST_NAME) LIKE '%' || NEA_UTIL_PKG.TO_FUZZY_F(#searchParam.netHostName#) || '%'
+      </isNotEmpty>
+      <isNotEmpty property="netHostNamePluralList">
+        AND $netHostNamePluralList$
+      </isNotEmpty>
+
+      <!-- 備考・付加情報 -->
+      <!-- 備考 -->
+      <isNotEmpty property="dscDescriptionPluralList">
+        AND $dscDescriptionPluralList$
+      </isNotEmpty>
+      <!-- 管理項目 -->
+      <isNotEmpty property="dscAttribute1PluralList">
+        AND ($dscAttribute1PluralList$
+          OR $dscAttribute2PluralList$
+          OR $dscAttribute3PluralList$
+          OR $dscAttribute4PluralList$
+          OR $dscAttribute5PluralList$
+          OR $dscAttribute6PluralList$
+          OR $dscAttribute7PluralList$
+          OR $dscAttribute8PluralList$
+          OR $dscAttribute9PluralList$
+          OR $dscAttribute10PluralList$
+          OR $dscAttribute11PluralList$
+          OR $dscAttribute12PluralList$
+          OR $dscAttribute13PluralList$
+          OR $dscAttribute14PluralList$
+          OR $dscAttribute15PluralList$
+          OR $dscAttribute16PluralList$
+          OR $dscAttribute17PluralList$
+          OR $dscAttribute18PluralList$
+          OR $dscAttribute19PluralList$
+          OR $dscAttribute20PluralList$
+            )
+      </isNotEmpty>
+      <isNotEmpty property="dscAttribute1List">
+        AND $dscAttribute1List$
+      </isNotEmpty>
+      <isNotEmpty property="dscAttribute2List">
+        AND $dscAttribute2List$
+      </isNotEmpty>
+      <isNotEmpty property="dscAttribute3List">
+        AND $dscAttribute3List$
+      </isNotEmpty>
+      <isNotEmpty property="dscAttribute4List">
+        AND $dscAttribute4List$
+      </isNotEmpty>
+      <isNotEmpty property="dscAttribute5List">
+        AND $dscAttribute5List$
+      </isNotEmpty>
+      <isNotEmpty property="dscAttribute6List">
+        AND $dscAttribute6List$
+      </isNotEmpty>
+      <isNotEmpty property="dscAttribute7List">
+        AND $dscAttribute7List$
+      </isNotEmpty>
+      <isNotEmpty property="dscAttribute8List">
+        AND $dscAttribute8List$
+      </isNotEmpty>
+      <isNotEmpty property="dscAttribute9List">
+        AND $dscAttribute9List$
+      </isNotEmpty>
+      <isNotEmpty property="dscAttribute10List">
+        AND $dscAttribute10List$
+      </isNotEmpty>
+      <isNotEmpty property="dscAttribute11List">
+        AND $dscAttribute11List$
+      </isNotEmpty>
+      <isNotEmpty property="dscAttribute12List">
+        AND $dscAttribute12List$
+      </isNotEmpty>
+      <isNotEmpty property="dscAttribute13List">
+        AND $dscAttribute13List$
+      </isNotEmpty>
+      <isNotEmpty property="dscAttribute14List">
+        AND $dscAttribute14List$
+      </isNotEmpty>
+      <isNotEmpty property="dscAttribute15List">
+        AND $dscAttribute15List$
+      </isNotEmpty>
+      <isNotEmpty property="dscAttribute16List">
+        AND $dscAttribute16List$
+      </isNotEmpty>
+      <isNotEmpty property="dscAttribute17List">
+        AND $dscAttribute17List$
+      </isNotEmpty>
+      <isNotEmpty property="dscAttribute18List">
+        AND $dscAttribute18List$
+      </isNotEmpty>
+      <isNotEmpty property="dscAttribute19List">
+        AND $dscAttribute19List$
+      </isNotEmpty>
+      <isNotEmpty property="dscAttribute20List">
+        AND $dscAttribute20List$
+      </isNotEmpty>
+
+      <!-- 棚卸 -->
+      <!-- 社内棚卸対象 -->
+      <isNotEmpty property="searchParam.invInCompanyActualFlag">
+        AND nast.INV_IN_COMPANY_ACTUAL_FLAG = #searchParam.invInCompanyActualFlag#
+      </isNotEmpty>
+      <!-- シール発行対象 -->
+      <isNotEmpty property="searchParam.invSealIssueFlag">
+        AND nast.INV_SEAL_ISSUE_FLAG = #searchParam.invSealIssueFlag#
+      </isNotEmpty>
+      <!-- シール発行 -->
+      <isEqual property="searchParam.invSealIssueStatus" compareValue="0">
+        AND nast.INV_SEAL_ISSUE_DATE IS NULL
+      </isEqual>
+      <isEqual property="searchParam.invSealIssueStatus" compareValue="1">
+        AND nast.INV_SEAL_ISSUE_DATE IS NOT NULL
+      </isEqual>
+      <!-- シール発行日 -->
+      <isNotEmpty property="searchParam.invSealIssueDateFrom">
+        AND nast.INV_SEAL_ISSUE_DATE <![CDATA[>]]>= #searchParam.invSealIssueDateFrom#
+      </isNotEmpty>
+      <isNotEmpty property="searchParam.invSealIssueDateTo">
+        AND nast.INV_SEAL_ISSUE_DATE <![CDATA[<]]>= #searchParam.invSealIssueDateTo#
+      </isNotEmpty>
+      <!-- 棚卸実施状況 -->
+      <isNotNull property="searchParam.invSearchDateFrom">
+        <isEqual property="searchParam.invFlag" compareValue="0">
+          AND NOT EXISTS (
+                           SELECT ASSET_ID
+                             FROM NEA_$tableNamePrefix$ASSET_LINE_INV
+                            WHERE ASSET_ID = nast.ASSET_ID
+                              AND INV_DATE <![CDATA[>]]>= #searchParam.invSearchDateFrom#
+                              AND INV_DATE <![CDATA[<]]>= #searchParam.invSearchDateTo#
+                   )
+        </isEqual>
+        <isEqual property="searchParam.invFlag" compareValue="1">
+          AND EXISTS (
+                       SELECT ASSET_ID
+                         FROM NEA_$tableNamePrefix$ASSET_LINE_INV
+                        WHERE ASSET_ID = nast.ASSET_ID
+                          AND INV_DATE <![CDATA[>]]>= #searchParam.invSearchDateFrom#
+                          AND INV_DATE <![CDATA[<]]>= #searchParam.invSearchDateTo#
+                   )
+        </isEqual>
+      </isNotNull>
+
+      <!-- 保守契約 -->
+      <!-- 保守契約番号 -->
+      <isNotEmpty property="searchParam.mntContractCode">
+        AND (NEA_UTIL_PKG.TO_FUZZY_F(nast.MNT_CONTRACT_CODE) LIKE '%' || NEA_UTIL_PKG.TO_FUZZY_F(#searchParam.mntContractCode#) || '%'
+             OR NEA_UTIL_PKG.TO_FUZZY_F(nast.MNT_CONTRACT_CODE2) LIKE '%' || NEA_UTIL_PKG.TO_FUZZY_F(#searchParam.mntContractCode#) || '%'
+             OR NEA_UTIL_PKG.TO_FUZZY_F(nast.MNT_CONTRACT_CODE3) LIKE '%' || NEA_UTIL_PKG.TO_FUZZY_F(#searchParam.mntContractCode#) || '%'
+             )
+      </isNotEmpty>
+      <!-- 保守契約先 -->
+      <isNotEmpty property="searchParam.mntContractCompanyName">
+        AND (NEA_UTIL_PKG.TO_FUZZY_F(nast.MNT_CONTRACT_COMPANY_NAME) LIKE '%' || NEA_UTIL_PKG.TO_FUZZY_F(#searchParam.mntContractCompanyName#) || '%'
+             OR NEA_UTIL_PKG.TO_FUZZY_F(nast.MNT_CONTRACT_COMPANY_NAME2) LIKE '%' || NEA_UTIL_PKG.TO_FUZZY_F(#searchParam.mntContractCompanyName#) || '%'
+             OR NEA_UTIL_PKG.TO_FUZZY_F(nast.MNT_CONTRACT_COMPANY_NAME3) LIKE '%' || NEA_UTIL_PKG.TO_FUZZY_F(#searchParam.mntContractCompanyName#) || '%'
+             )
+      </isNotEmpty>
+      <!-- 契約開始日(From-To) -->
+      <isNotEmpty property="searchParam.mntContractStartDateFrom">
+        <isNotEmpty property="searchParam.mntContractStartDateTo">
+        AND ( (nast.MNT_CONTRACT_START_DATE <![CDATA[>]]>= #searchParam.mntContractStartDateFrom#
+                 AND nast.MNT_CONTRACT_START_DATE <![CDATA[<]]>= #searchParam.mntContractStartDateTo#
+               )
+               OR (nast.MNT_CONTRACT_START_DATE2 <![CDATA[>]]>= #searchParam.mntContractStartDateFrom#
+                 AND nast.MNT_CONTRACT_START_DATE2 <![CDATA[<]]>= #searchParam.mntContractStartDateTo#
+               )
+               OR (nast.MNT_CONTRACT_START_DATE3 <![CDATA[>]]>= #searchParam.mntContractStartDateFrom#
+                 AND nast.MNT_CONTRACT_START_DATE3 <![CDATA[<]]>= #searchParam.mntContractStartDateTo#
+               )
+            )
+        </isNotEmpty>
+      </isNotEmpty>
+      <!-- 契約開始日(Fromのみ) -->
+      <isNotEmpty property="searchParam.mntContractStartDateFrom">
+        AND (nast.MNT_CONTRACT_START_DATE <![CDATA[>]]>= #searchParam.mntContractStartDateFrom#
+             OR nast.MNT_CONTRACT_START_DATE2 <![CDATA[>]]>= #searchParam.mntContractStartDateFrom#
+             OR nast.MNT_CONTRACT_START_DATE3 <![CDATA[>]]>= #searchParam.mntContractStartDateFrom#
+             )
+      </isNotEmpty>
+      <!-- 契約開始日(Toのみ) -->
+      <isNotEmpty property="searchParam.mntContractStartDateTo">
+        AND (nast.MNT_CONTRACT_START_DATE <![CDATA[<]]>= #searchParam.mntContractStartDateTo#
+             OR nast.MNT_CONTRACT_START_DATE2 <![CDATA[<]]>= #searchParam.mntContractStartDateTo#
+             OR nast.MNT_CONTRACT_START_DATE3 <![CDATA[<]]>= #searchParam.mntContractStartDateTo#
+             )
+      </isNotEmpty>
+      <!-- 契約終了日(From-To) -->
+      <isNotEmpty property="searchParam.mntContractEndDateFrom">
+        <isNotEmpty property="searchParam.mntContractEndDateTo">
+        AND ( (nast.MNT_CONTRACT_END_DATE <![CDATA[>]]>= #searchParam.mntContractEndDateFrom#
+                 AND nast.MNT_CONTRACT_END_DATE <![CDATA[<]]>= #searchParam.mntContractEndDateTo#
+               )
+               OR (nast.MNT_CONTRACT_END_DATE2 <![CDATA[>]]>= #searchParam.mntContractEndDateFrom#
+                 AND nast.MNT_CONTRACT_END_DATE2 <![CDATA[<]]>= #searchParam.mntContractEndDateTo#
+               )
+               OR (nast.MNT_CONTRACT_END_DATE3 <![CDATA[>]]>= #searchParam.mntContractEndDateFrom#
+                 AND nast.MNT_CONTRACT_END_DATE3 <![CDATA[<]]>= #searchParam.mntContractEndDateTo#
+               )
+            )
+        </isNotEmpty>
+      </isNotEmpty>
+      <!-- 契約終了日(Fromのみ) -->
+      <isNotEmpty property="searchParam.mntContractEndDateFrom">
+        AND (nast.MNT_CONTRACT_END_DATE <![CDATA[>]]>= #searchParam.mntContractEndDateFrom#
+             OR nast.MNT_CONTRACT_END_DATE2 <![CDATA[>]]>= #searchParam.mntContractEndDateFrom#
+             OR nast.MNT_CONTRACT_END_DATE3 <![CDATA[>]]>= #searchParam.mntContractEndDateFrom#
+             )
+      </isNotEmpty>
+      <!-- 契約終了日(Toのみ) -->
+      <isNotEmpty property="searchParam.mntContractEndDateTo">
+        AND (nast.MNT_CONTRACT_END_DATE <![CDATA[<]]>= #searchParam.mntContractEndDateTo#
+             OR nast.MNT_CONTRACT_END_DATE2 <![CDATA[<]]>= #searchParam.mntContractEndDateTo#
+             OR nast.MNT_CONTRACT_END_DATE3 <![CDATA[<]]>= #searchParam.mntContractEndDateTo#
+             )
+      </isNotEmpty>
+
+      <isNotEmpty property="accessLevelSection">
+        AND $accessLevelSection$
+      </isNotEmpty>
+
+      <!-- e申請書類ID -->
+      <isNotEmpty property="searchParam.searchEapp">
+        <isNotEmpty property="searchParam.eappId">
+          AND nast.EAPP_ID = #searchParam.eappId#
+        </isNotEmpty>
+      </isNotEmpty>
+      <isEmpty property="searchParam.searchEapp">
+        <isNotEmpty property="searchParam.eappId">
+          AND nast.EAPP_ID LIKE '%' || #searchParam.eappId# || '%'
+        </isNotEmpty>
+        <isNotEmpty property="eappIdPluralList">
+          AND $eappIdPluralList$
+        </isNotEmpty>
+      </isEmpty>
+
+<!--***************************************** 検索条件指定部ここまで *************************************************-->
+
+<!--***************************************** テーブル結合指定部ここから *********************************************-->
+        AND nast.ASSET_ID = nastlo.ASSET_ID(+)
+        AND 1 = nastlo.LINE_SEQ(+)
+        AND nast.ASSET_ID = nastln.ASSET_ID(+)
+        AND 1 = nastln.LINE_SEQ(+)
+
+        <!-- 共有ユーザー明細ダウンロード -->
+        <isEqual property="searchParam.dowloadLineItem" compareValue="COM_USR">
+          AND nast.ASSET_ID = nastlcom.ASSET_ID(+)
+        </isEqual>
+        <!-- OS明細ダウンロード -->
+        <isEqual property="searchParam.dowloadLineItem" compareValue="OS">
+          AND nast.ASSET_ID = nastlos.ASSET_ID(+)
+        </isEqual>
+        <!-- ネットワーク明細ダウンロード -->
+        <isEqual property="searchParam.dowloadLineItem" compareValue="NETWORK">
+          AND nast.ASSET_ID = nastlnet.ASSET_ID(+)
+        </isEqual>
+        <!-- 棚卸明細ダウンロード -->
+        <isEqual property="searchParam.dowloadLineItem" compareValue="INV">
+          AND nast.ASSET_ID = nastlinv.ASSET_ID(+)
+        </isEqual>
+
+        <!-- 割当情報(機器から検索)-CSVファイル作成ダウンロード -->
+        <isNotEmpty property="isAllocAsset">
+          AND nast.ASSET_ID = nastlos.ASSET_ID
+          AND nastlos.ASSET_ID = nlla.ASSET_ID
+          AND nastlos.ASSET_LINE_OS_ID = nlla.ASSET_LINE_OS_ID
+          AND nlla.LICENSE_ID = nllq.LICENSE_ID
+          AND nlla.LICENSE_LINE_QTY_ID = nllq.LICENSE_LINE_QTY_ID
+          AND nl.LICENSE_ID = nllq.LICENSE_ID
+          AND nl.SOFTWARE_MAKER_ID = nsm.SOFTWARE_MAKER_ID(+)
+          AND nl.SOFTWARE_ID = ns.SOFTWARE_ID(+)
+        </isNotEmpty>
+
+        <isEmpty property="isDownload">
+          AND ROWNUM <![CDATA[<]]>= (SELECT TO_NUMBER(VALUE1) FROM NEA_CODE_NAME WHERE CATEGORY_CODE = 'MAX_SEARCH_ROW_COUNT' AND DELETE_FLAG = '0')
+        </isEmpty>
+<!--***************************************** テーブル結合指定部ここまで *********************************************-->
+
+<!--***************************************** テーブル結合の検索条件ここから *********************************************-->
+
+        <!-- 契約番号からの機器管理番号 -->
+        <isNotEmpty property="assetIdPluralByContractNumList">
+          AND $assetIdPluralByContractNumList$
+        </isNotEmpty>
+        <!-- 契約枝番からの機器管理番号 -->
+        <isNotEmpty property="assetIdPluralByContractEdaList">
+          AND $assetIdPluralByContractEdaList$
+        </isNotEmpty>
+        <!-- 資産番号からの機器管理番号 -->
+        <isNotEmpty property="assetIdPluralByShisanNumList">
+          AND $assetIdPluralByShisanNumList$
+        </isNotEmpty>
+
+<!--***************************************** テーブル結合の検索条件ここまで *********************************************-->
+
+    ORDER BY
+      <isEmpty property="tableNamePrefix">
+          assetId
+        <isNotEmpty property="isAllocAsset">
+        , licenseId
+        </isNotEmpty>
+        <isEmpty property="isAllocAsset">
+        , comLineSeq
+        , osLineSeq
+        , netLineSeq
+        , invLineSeq
+        </isEmpty>
+     </isEmpty>
+     <isNotEmpty property="tableNamePrefix">
+        getApplicationId
+      , assetId
+     </isNotEmpty>
+
+  </select>
+
+  <!--
+    契約番号 => 機器管理番号一覧変換
+  -->
+  <select id="selectAssetIdByContractNum_AST" parameterClass="java.util.Map" resultClass="java.lang.String">
+    <isNotEmpty property="searchParam.contractNum">
+      SELECT CSCONVERT(s.HOJOSPAREC1,'CHAR_CS')
+        FROM NEA_PPFS_LLDA l
+           , PPFS_LD_SUPPORT s
+       WHERE l.KYKNO LIKE '%' || #searchParam.contractNum# || '%'
+         <isNotEmpty property="searchParam.holCompanyCode">
+           AND l.COMPANY_CODE = #searchParam.holCompanyCode#
+         </isNotEmpty>
+         AND l.KOYUNO = s.KOYUNO
+         AND s.HOJOSHUBETSUCD = '00001'
+         AND s.HOJOSPAREC1 IS NOT NULL
+      UNION ALL
+      SELECT a.ASSET_ID
+        FROM NEA_ASSET a
+       WHERE a.CONTRACT_NUM LIKE '%' || #searchParam.contractNum# || '%'
+         AND NOT EXISTS ( SELECT s.HOJOSPAREC1
+                            FROM NEA_PPFS_LLDA l
+                               , PPFS_LD_SUPPORT s
+                           WHERE s.HOJOSPAREC1 = CSCONVERT(a.ASSET_ID,'NCHAR_CS')
+                             AND s.KOYUNO = l.KOYUNO
+                             <isNotEmpty property="searchParam.holCompanyCode">
+                               AND l.COMPANY_CODE = #searchParam.holCompanyCode#
+                             </isNotEmpty>
+                             AND s.HOJOSHUBETSUCD = '00001'
+                        )
+    </isNotEmpty>
+    <isNotEmpty property="contractNumPluralList_pps">
+      SELECT CSCONVERT(s.HOJOSPAREC1,'CHAR_CS')
+        FROM NEA_PPFS_LLDA l
+           , PPFS_LD_SUPPORT s
+       WHERE $contractNumPluralList_pps$
+         <isNotEmpty property="searchParam.holCompanyCode">
+           AND l.COMPANY_CODE = #searchParam.holCompanyCode#
+         </isNotEmpty>
+         AND l.KOYUNO = s.KOYUNO
+         AND s.HOJOSHUBETSUCD = '00001'
+         AND s.HOJOSPAREC1 IS NOT NULL
+      UNION ALL
+      SELECT a.ASSET_ID
+        FROM NEA_ASSET a
+       WHERE $contractNumPluralList_ast$
+         AND NOT EXISTS ( SELECT s.HOJOSPAREC1
+                            FROM NEA_PPFS_LLDA l
+                               , PPFS_LD_SUPPORT s
+                           WHERE s.HOJOSPAREC1 = CSCONVERT(a.ASSET_ID,'NCHAR_CS')
+                             AND s.KOYUNO = l.KOYUNO
+                             <isNotEmpty property="searchParam.holCompanyCode">
+                               AND l.COMPANY_CODE = #searchParam.holCompanyCode#
+                             </isNotEmpty>
+                             AND s.HOJOSHUBETSUCD = '00001'
+                        )
+    </isNotEmpty>
+  </select>
+
+  <!--
+    契約枝番 => 機器管理番号一覧変換
+  -->
+  <select id="selectAssetIdByContractEda_AST" parameterClass="java.util.Map" resultClass="java.lang.String">
+    <!-- 契約枝番 -->
+    <isNotEmpty property="searchParam.contractEda">
+      SELECT CSCONVERT(s.HOJOSPAREC1,'CHAR_CS')
+        FROM NEA_PPFS_LLDA l
+           , PPFS_LD_SUPPORT s
+       WHERE l.NINI_LD_17CD LIKE '%' || #searchParam.contractEda# || '%'
+         <isNotEmpty property="searchParam.holCompanyCode">
+           AND l.COMPANY_CODE = #searchParam.holCompanyCode#
+         </isNotEmpty>
+         AND l.KOYUNO = s.KOYUNO
+         AND s.HOJOSHUBETSUCD = '00001'
+         AND s.HOJOSPAREC1 IS NOT NULL
+    </isNotEmpty>
+    <isNotEmpty property="contractEdaPluralList">
+      SELECT CSCONVERT(s.HOJOSPAREC1,'CHAR_CS')
+        FROM NEA_PPFS_LLDA l
+           , PPFS_LD_SUPPORT s
+       WHERE $contractEdaPluralList$
+         <isNotEmpty property="searchParam.holCompanyCode">
+           AND l.COMPANY_CODE = #searchParam.holCompanyCode#
+         </isNotEmpty>
+         AND l.KOYUNO = s.KOYUNO
+         AND s.HOJOSHUBETSUCD = '00001'
+         AND s.HOJOSPAREC1 IS NOT NULL
+    </isNotEmpty>
+  </select>
+
+  <!--
+    資産番号 => 機器管理番号一覧変換
+  -->
+  <select id="selectAssetIdByShisanNum_AST" parameterClass="java.util.Map" resultClass="java.lang.String">
+    <isNotEmpty property="searchParam.shisanNum">
+      <isEqual property="searchParam.relationShisanNumFlag" compareValue="1">
+        SELECT CSCONVERT(s.HOJOSPAREC1,'CHAR_CS')
+          FROM NEA_PPFS_FLD f
+             , PPFS_LD_SUPPORT s
+         WHERE f.OYA LIKE '%' || #searchParam.shisanNum# || '%'
+           <isNotEmpty property="searchParam.holCompanyCode">
+             AND f.COMPANY_CODE = #searchParam.holCompanyCode#
+           </isNotEmpty>
+           AND f.KOYUNO = s.KOYUNO
+           AND s.HOJOSHUBETSUCD = '00001'
+           AND s.HOJOSPAREC1 IS NOT NULL
+        UNION ALL
+        SELECT CSCONVERT(s.HOJOSPAREC1,'CHAR_CS')
+          FROM NEA_PPFS_LLDA l
+             , PPFS_LD_SUPPORT s
+         WHERE l.OYA LIKE '%' || #searchParam.shisanNum# || '%'
+           <isNotEmpty property="searchParam.holCompanyCode">
+             AND l.COMPANY_CODE = #searchParam.holCompanyCode#
+           </isNotEmpty>
+           AND l.KOYUNO = s.KOYUNO
+           AND s.HOJOSHUBETSUCD = '00001'
+           AND s.HOJOSPAREC1 IS NOT NULL
+      </isEqual>
+      <isNotEqual property="searchParam.relationShisanNumFlag" compareValue="1">
+        SELECT CSCONVERT(s.HOJOSPAREC1,'CHAR_CS')
+          FROM NEA_PPFS_FLD f
+             , PPFS_LD_SUPPORT s
+         WHERE (f.OYA || f.EDA) LIKE '%' || #searchParam.shisanNum# || '%'
+           <isNotEmpty property="searchParam.holCompanyCode">
+             AND f.COMPANY_CODE = #searchParam.holCompanyCode#
+           </isNotEmpty>
+           AND f.KOYUNO = s.KOYUNO
+           AND s.HOJOSHUBETSUCD = '00001'
+           AND s.HOJOSPAREC1 IS NOT NULL
+        UNION ALL
+        SELECT CSCONVERT(s.HOJOSPAREC1,'CHAR_CS')
+          FROM NEA_PPFS_LLDA l
+             , PPFS_LD_SUPPORT s
+         WHERE (l.OYA || l.EDA) LIKE '%' || #searchParam.shisanNum# || '%'
+           <isNotEmpty property="searchParam.holCompanyCode">
+             AND l.COMPANY_CODE = #searchParam.holCompanyCode#
+           </isNotEmpty>
+           AND l.KOYUNO = s.KOYUNO
+           AND s.HOJOSHUBETSUCD = '00001'
+           AND s.HOJOSPAREC1 IS NOT NULL
+      </isNotEqual>
+    </isNotEmpty>
+    <isNotEmpty property="shisanNumPluralList">
+      SELECT CSCONVERT(s.HOJOSPAREC1,'CHAR_CS')
+        FROM NEA_PPFS_FLD f
+           , PPFS_LD_SUPPORT s
+       WHERE $shisanNumPluralList$
+         <isNotEmpty property="searchParam.holCompanyCode">
+           AND f.COMPANY_CODE = #searchParam.holCompanyCode#
+         </isNotEmpty>
+         AND f.KOYUNO = s.KOYUNO
+         AND s.HOJOSHUBETSUCD = '00001'
+         AND s.HOJOSPAREC1 IS NOT NULL
+      UNION ALL
+      SELECT CSCONVERT(s.HOJOSPAREC1,'CHAR_CS')
+        FROM NEA_PPFS_LLDA f
+           , PPFS_LD_SUPPORT s
+       WHERE $shisanNumPluralList$
+         <isNotEmpty property="searchParam.holCompanyCode">
+           AND f.COMPANY_CODE = #searchParam.holCompanyCode#
+         </isNotEmpty>
+         AND f.KOYUNO = s.KOYUNO
+         AND s.HOJOSHUBETSUCD = '00001'
+         AND s.HOJOSPAREC1 IS NOT NULL
+    </isNotEmpty>
+  </select>
+
+  <!--
+    情報機器等ヘッダ作成
+  -->
+   <insert id="insertAsset_AST" parameterClass="java.util.Map">
+     INSERT INTO NEA_$tableNamePrefix$ASSET (
+         ASSET_ID
+       , CREATE_DATE
+       , CREATE_STAFF_CODE
+       , UPDATE_DATE
+       , UPDATE_STAFF_CODE
+       , VERSION
+       <!-- 登録申請 -->
+       <isNotEmpty property="tableNamePrefix">
+         , AP_GET_TAN_LINE_AST_ID
+         , UPDATE_COMMENT
+         , EAPP_ID
+         , AP_STATUS
+         , AP_DATE
+         , AP_CREATE_STAFF_CODE
+         , AP_CREATE_COMPANY_CODE
+         , AP_CREATE_SECTION_CODE
+         , AP_CREATE_SECTION_YEAR
+         , AP_STAFF_CODE
+         , AP_COMPANY_CODE
+         , AP_SECTION_CODE
+         , AP_SECTION_YEAR
+         , AP_TEL
+         , AP_OFFICE_NAME
+       </isNotEmpty>
+       , AST_NAME
+       , AST_CATEGORY1_CODE
+       , AST_CATEGORY2_CODE
+       , AST_SHAPE_CODE
+       , AST_MAKER_CODE
+       , AST_MAKER_NAME
+       , AST_SHOP_NAME
+       , AST_MAKER_MODEL
+       , AST_SERIAL_CODE
+       , AST_GUARANTEE_TERM_DATE
+       , AST_GET_TYPE
+       , AST_SYSTEM_SECTION_DEPLOY_FLAG
+       , AST_ASSET_TYPE
+       , AST_HOLDER_CODE
+       , AST_HOLDER_NAME
+       , AST_MANAGE_TYPE
+       , AST_OIR
+       , AST_MANAGE_END_DATE
+       , HOL_COMPANY_CODE
+       , HOL_SECTION_CODE
+       , HOL_SECTION_YEAR
+       , HOL_STAFF_CODE
+       , HOL_OFFICE_CODE
+       , HOL_OFFICE_FLOOR
+       , HOL_OFFICE_ROOM_NUM
+       , HOL_OFFICE_RACK_NUM
+       , HOL_PURPOSE_CODE
+       , HOL_OFFICE_DESCRIPTION
+       , HOL_GET_STAFF_CODE
+       , HOL_GET_COMPANY_CODE
+       , HOL_GET_SECTION_CODE
+       , HOL_GET_SECTION_YEAR
+       , HOL_GET_DATE
+       , HOL_QUANTITY
+       , USE_COMPANY_CODE
+       , USE_SECTION_CODE
+       , USE_SECTION_YEAR
+       , USE_STAFF_CODE
+       , USE_STAFF_COMPANY_CODE
+       , USE_STAFF_SECTION_CODE
+       , USE_STAFF_SECTION_YEAR
+       , USE_START_DATE
+       , USE_COMMON_FLAG
+       , NET_HOST_NAME
+       , NET_EGUARD_PERMIT_TYPE
+       , MNT_CONTRACT_CODE
+       , MNT_CONTRACT_COMPANY_NAME
+       , MNT_CONTRACT_START_DATE
+       , MNT_CONTRACT_END_DATE
+       , MNT_CONTRACT_AMOUNT
+       , MNT_CONTRACT_REGIST_CODE
+       , MNT_CONTRACT_REGIST_DATE
+       , MNT_CONTRACT_STAFF_CODE
+       , DSC_DESCRIPTION
+       , DSC_ATTRIBUTE1
+       , DSC_ATTRIBUTE2
+       , DSC_ATTRIBUTE3
+       , DSC_ATTRIBUTE4
+       , DSC_ATTRIBUTE5
+       , DSC_ATTRIBUTE6
+       , DSC_ATTRIBUTE7
+       , DSC_ATTRIBUTE8
+       , DSC_ATTRIBUTE9
+       , DSC_ATTRIBUTE10
+       , DSC_ATTRIBUTE11
+       , DSC_ATTRIBUTE12
+       , DSC_ATTRIBUTE13
+       , DSC_ATTRIBUTE14
+       , DSC_ATTRIBUTE15
+       , DSC_ATTRIBUTE16
+       , DSC_ATTRIBUTE17
+       , DSC_ATTRIBUTE18
+       , DSC_ATTRIBUTE19
+       , DSC_ATTRIBUTE20
+       , DSC_FAILURE_ASSET_ID
+       , INV_IN_COMPANY_ACTUAL_FLAG
+       , INV_BARCODE
+       , INV_SEAL_ISSUE_FLAG
+       , INV_SEAL_ISSUE_DATE
+       , INV_SEAL_ISSUE_DESCRIPTION
+       , DELETE_FLAG
+       , DELETE_DATE
+       , DELETE_REASON
+       , GET_APPLICATION_ID
+       , REGIST_APPLICATION_ID
+       , CONTRACT_NUM
+       , DREAMS_NUM
+       , PARENT_ASSET_ID
+       <!-- 機器 -->
+       <isEmpty property="tableNamePrefix">
+         , PP_TRANS_FLAG
+       </isEmpty>
+     ) VALUES (
+         #obj.assetId:VARCHAR# /* ASSET_ID*/
+       , #obj.createDate:TIMESTAMP# /* CREATE_DATE*/
+       , #obj.createStaffCode:VARCHAR# /* CREATE_STAFF_CODE*/
+       , #obj.updateDate:TIMESTAMP# /* UPDATE_DATE*/
+       , #obj.updateStaffCode:VARCHAR# /* UPDATE_STAFF_CODE*/
+       , #obj.version:NUMERIC# /* VERSION*/
+       <!-- 登録申請 -->
+       <isNotEmpty property="tableNamePrefix">
+         , #obj.apGetTanLineAstId:NUMERIC# /* AP_GET_TAN_LINE_AST_ID*/
+         , #obj.updateComment:VARCHAR# /* UPDATE_COMMENT*/
+         , #obj.eappId:NUMERIC# /* EAPP_ID*/
+         , #obj.apStatus:CHAR# /* AP_STATUS*/
+         , #obj.apDate:DATE# /* AP_DATE*/
+         , #obj.apCreateStaffCode:VARCHAR# /* AP_CREATE_STAFF_CODE*/
+         , #obj.apCreateCompanyCode:VARCHAR# /* AP_CREATE_COMPANY_CODE*/
+         , #obj.apCreateSectionCode:VARCHAR# /* AP_CREATE_SECTION_CODE*/
+         , #obj.apCreateSectionYear:NUMERIC# /* AP_CREATE_SECTION_YEAR*/
+         , #obj.apStaffCode:VARCHAR# /* AP_STAFF_CODE*/
+         , #obj.apCompanyCode:VARCHAR# /* AP_COMPANY_CODE*/
+         , #obj.apSectionCode:VARCHAR# /* AP_SECTION_CODE*/
+         , #obj.apSectionYear:NUMERIC# /* AP_SECTION_YEAR*/
+         , #obj.apTel:VARCHAR# /* AP_TEL*/
+         , #obj.apOfficeName:VARCHAR# /* AP_OFFICE_NAME*/
+       </isNotEmpty>
+       , #obj.astName:VARCHAR# /* AST_NAME*/
+       , #obj.astCategory1Code:VARCHAR# /* AST_CATEGORY1_CODE*/
+       , #obj.astCategory2Code:VARCHAR# /* AST_CATEGORY2_CODE*/
+       , #obj.astShapeCode:VARCHAR# /* AST_SHAPE_CODE*/
+       , #obj.astMakerCode:VARCHAR# /* AST_MAKER_CODE*/
+       , #obj.astMakerName:VARCHAR# /* AST_MAKER_NAME*/
+       , #obj.astShopName:VARCHAR# /* AST_SHOP_NAME*/
+       , #obj.astMakerModel:VARCHAR# /* AST_MAKER_MODEL*/
+       , #obj.astSerialCode:VARCHAR# /* AST_SERIAL_CODE*/
+       , #obj.astGuaranteeTermDate:DATE# /* AST_GUARANTEE_TERM_DATE*/
+       , #obj.astGetType:VARCHAR# /* AST_GET_TYPE*/
+       , #obj.astSystemSectionDeployFlag:CHAR# /* AST_SYSTEM_SECTION_DEPLOY_FLAG*/
+       , #obj.astAssetType:VARCHAR# /* AST_ASSET_TYPE*/
+       , #obj.astHolderCode:VARCHAR# /* AST_HOLDER_CODE*/
+       , #obj.astHolderName:VARCHAR# /* AST_HOLDER_NAME*/
+       , #obj.astManageType:VARCHAR# /* AST_MANAGE_TYPE*/
+       , #obj.astOir:VARCHAR# /* AST_OIR*/
+       , #obj.astManageEndDate:DATE# /* AST_MANAGE_END_DATE*/
+       , #obj.holCompanyCode:VARCHAR# /* HOL_COMPANY_CODE*/
+       , #obj.holSectionCode:VARCHAR# /* HOL_SECTION_CODE*/
+       , #obj.holSectionYear:NUMERIC# /* HOL_SECTION_YEAR*/
+       , #obj.holStaffCode:VARCHAR# /* HOL_STAFF_CODE*/
+       , #obj.holOfficeCode:VARCHAR# /* HOL_OFFICE_CODE*/
+       , #obj.holOfficeFloor:NUMERIC# /* HOL_OFFICE_FLOOR*/
+       , #obj.holOfficeRoomNum:VARCHAR# /* HOL_OFFICE_ROOM_NUM*/
+       , #obj.holOfficeRackNum:VARCHAR# /* HOL_OFFICE_RACK_NUM*/
+       , #obj.holPurposeCode:VARCHAR# /* HOL_PURPOSE_CODE*/
+       , #obj.holOfficeDescription:VARCHAR# /* HOL_OFFICE_DESCRIPTION*/
+       , #obj.holGetStaffCode:VARCHAR# /* HOL_GET_STAFF_CODE*/
+       , #obj.holGetCompanyCode:VARCHAR# /* HOL_GET_COMPANY_CODE*/
+       , #obj.holGetSectionCode:VARCHAR# /* HOL_GET_SECTION_CODE*/
+       , #obj.holGetSectionYear:NUMERIC# /* HOL_GET_SECTION_YEAR*/
+       , #obj.holGetDate:DATE# /* HOL_GET_DATE*/
+       , #obj.holQuantity:NUMERIC# /* HOL_QUANTITY*/
+       , #obj.useCompanyCode:VARCHAR# /* USE_COMPANY_CODE*/
+       , #obj.useSectionCode:VARCHAR# /* USE_SECTION_CODE*/
+       , #obj.useSectionYear:NUMERIC# /* USE_SECTION_YEAR*/
+       , #obj.useStaffCode:VARCHAR# /* USE_STAFF_CODE*/
+       , #obj.useStaffCompanyCode:VARCHAR# /* USE_STAFF_COMPANY_CODE*/
+       , #obj.useStaffSectionCode:VARCHAR# /* USE_STAFF_SECTION_CODE*/
+       , #obj.useStaffSectionYear:NUMERIC# /* USE_STAFF_SECTION_YEAR*/
+       , #obj.useStartDate:DATE# /* USE_START_DATE*/
+       , #obj.useCommonFlag:CHAR# /* USE_COMMON_FLAG*/
+       , #obj.netHostName:VARCHAR# /* NET_HOST_NAME*/
+       , #obj.netEguardPermitType:CHAR# /* NET_EGUARD_PERMIT_TYPE*/
+       , #obj.mntContractCode:VARCHAR# /* MNT_CONTRACT_CODE*/
+       , #obj.mntContractCompanyName:VARCHAR# /* MNT_CONTRACT_COMPANY_NAME*/
+       , #obj.mntContractStartDate:DATE# /* MNT_CONTRACT_START_DATE*/
+       , #obj.mntContractEndDate:DATE# /* MNT_CONTRACT_END_DATE*/
+       , #obj.mntContractAmount:NUMERIC# /* MNT_CONTRACT_AMOUNT*/
+       , #obj.mntContractRegistCode:VARCHAR# /* MNT_CONTRACT_REGIST_CODE*/
+       , #obj.mntContractRegistDate:DATE# /* MNT_CONTRACT_REGIST_DATE*/
+       , #obj.mntContractStaffCode:VARCHAR# /* MNT_CONTRACT_STAFF_CODE*/
+       , #obj.dscDescription:VARCHAR# /* DSC_DESCRIPTION*/
+       , #obj.dscAttribute1:VARCHAR# /* DSC_ATTRIBUTE1*/
+       , #obj.dscAttribute2:VARCHAR# /* DSC_ATTRIBUTE2*/
+       , #obj.dscAttribute3:VARCHAR# /* DSC_ATTRIBUTE3*/
+       , #obj.dscAttribute4:VARCHAR# /* DSC_ATTRIBUTE4*/
+       , #obj.dscAttribute5:VARCHAR# /* DSC_ATTRIBUTE5*/
+       , #obj.dscAttribute6:VARCHAR# /* DSC_ATTRIBUTE6*/
+       , #obj.dscAttribute7:VARCHAR# /* DSC_ATTRIBUTE7*/
+       , #obj.dscAttribute8:VARCHAR# /* DSC_ATTRIBUTE8*/
+       , #obj.dscAttribute9:VARCHAR# /* DSC_ATTRIBUTE9*/
+       , #obj.dscAttribute10:VARCHAR# /* DSC_ATTRIBUTE10*/
+       , #obj.dscAttribute11:VARCHAR# /* DSC_ATTRIBUTE11*/
+       , #obj.dscAttribute12:VARCHAR# /* DSC_ATTRIBUTE12*/
+       , #obj.dscAttribute13:VARCHAR# /* DSC_ATTRIBUTE13*/
+       , #obj.dscAttribute14:VARCHAR# /* DSC_ATTRIBUTE14*/
+       , #obj.dscAttribute15:VARCHAR# /* DSC_ATTRIBUTE15*/
+       , #obj.dscAttribute16:VARCHAR# /* DSC_ATTRIBUTE16*/
+       , #obj.dscAttribute17:VARCHAR# /* DSC_ATTRIBUTE17*/
+       , #obj.dscAttribute18:VARCHAR# /* DSC_ATTRIBUTE18*/
+       , #obj.dscAttribute19:VARCHAR# /* DSC_ATTRIBUTE19*/
+       , #obj.dscAttribute20:VARCHAR# /* DSC_ATTRIBUTE20*/
+       , #obj.dscFailureAssetId:VARCHAR# /* DSC_FAILURE_ASSET_ID*/
+       , #obj.invInCompanyActualFlag:CHAR# /* INV_IN_COMPANY_ACTUAL_FLAG*/
+       , #obj.invBarcode:VARCHAR# /* INV_BARCODE*/
+       , #obj.invSealIssueFlag:CHAR# /* INV_SEAL_ISSUE_FLAG*/
+       , #obj.invSealIssueDate:DATE# /* INV_SEAL_ISSUE_DATE*/
+       , #obj.invSealIssueDescription:VARCHAR# /* INV_SEAL_ISSUE_DESCRIPTION*/
+       , #obj.deleteFlag:CHAR# /* DELETE_FLAG*/
+       , #obj.deleteDate:DATE# /* DELETE_DATE*/
+       , #obj.deleteReason:VARCHAR# /* DELETE_REASON*/
+       , #obj.getApplicationId:VARCHAR# /* GET_APPLICATION_ID*/
+       , #obj.registApplicationId:VARCHAR# /* REGIST_APPLICATION_ID*/
+       , #obj.contractNum:VARCHAR# /* CONTRACT_NUM*/
+       , #obj.dreamsNum:VARCHAR# /* DREAMS_NUM*/
+       , #obj.parentAssetId:VARCHAR# /* PARENT_ASSET_ID*/
+       <!-- 機器 -->
+       <isEmpty property="tableNamePrefix">
+         , '0'
+       </isEmpty>
+     )
+  </insert>
+
+  <!--
+    情報機器等_共有ユーザー明細作成
+  -->
+   <insert id="insertAssetLineComUsr_AST" parameterClass="java.util.Map">
+     INSERT INTO NEA_$tableNamePrefix$ASSET_LINE_COM_USR (
+         ASSET_ID
+       , LINE_SEQ
+       , CREATE_DATE
+       , CREATE_STAFF_CODE
+       , UPDATE_DATE
+       , UPDATE_STAFF_CODE
+       , COM_STAFF_CODE
+       , COM_STAFF_NAME
+       , COM_COMPANY_CODE
+       , COM_COMPANY_NAME
+       , COM_SECTION_CODE
+       , COM_SECTION_NAME
+       , COM_START_DATE
+     ) VALUES (
+         #obj.assetId:VARCHAR# /* ASSET_ID*/
+       , #obj.lineSeq:NUMERIC# /* LINE_SEQ*/
+       , #obj.createDate:TIMESTAMP# /* CREATE_DATE*/
+       , #obj.createStaffCode:VARCHAR# /* CREATE_STAFF_CODE*/
+       , #obj.updateDate:TIMESTAMP# /* UPDATE_DATE*/
+       , #obj.updateStaffCode:VARCHAR# /* UPDATE_STAFF_CODE*/
+       , #obj.comStaffCode:VARCHAR# /* COM_STAFF_CODE*/
+       , #obj.comStaffName:VARCHAR# /* COM_STAFF_NAME*/
+       , #obj.comCompanyCode:VARCHAR# /* COM_COMPANY_CODE*/
+       , #obj.comCompanyName:VARCHAR# /* COM_COMPANY_NAME*/
+       , #obj.comSectionCode:VARCHAR# /* COM_SECTION_CODE*/
+       , #obj.comSectionName:VARCHAR# /* COM_SECTION_NAME*/
+       , #obj.comStartDate:DATE# /* COM_START_DATE*/
+     )
+   </insert>
+
+  <!--
+    情報機器等_OS明細作成
+  -->
+   <insert id="insertAssetLineOs_AST" parameterClass="java.util.Map">
+     INSERT INTO NEA_$tableNamePrefix$ASSET_LINE_OS (
+         ASSET_ID
+       , LINE_SEQ
+       , CREATE_DATE
+       , CREATE_STAFF_CODE
+       , UPDATE_DATE
+       , UPDATE_STAFF_CODE
+       , ASSET_LINE_OS_ID
+       , OS_NAME
+       , OS_DESCRIPTION
+     ) VALUES (
+         #obj.assetId:VARCHAR# /* ASSET_ID*/
+       , #obj.lineSeq:NUMERIC# /* LINE_SEQ*/
+       , #obj.createDate:TIMESTAMP# /* CREATE_DATE*/
+       , #obj.createStaffCode:VARCHAR# /* CREATE_STAFF_CODE*/
+       , #obj.updateDate:TIMESTAMP# /* UPDATE_DATE*/
+       , #obj.updateStaffCode:VARCHAR# /* UPDATE_STAFF_CODE*/
+       , #obj.assetLineOsId:NUMERIC# /* ASSET_LINE_OS_ID*/
+       , #obj.osName:VARCHAR# /* OS_NAME*/
+       , #obj.osDescription:VARCHAR# /* OS_DESCRIPTION*/
+     )
+   </insert>
+
+  <!--
+    情報機器等_ネットワーク明細作成
+  -->
+   <insert id="insertAssetLineNetwork_AST" parameterClass="java.util.Map">
+     INSERT INTO NEA_$tableNamePrefix$ASSET_LINE_NETWORK (
+         ASSET_ID
+       , LINE_SEQ
+       , CREATE_DATE
+       , CREATE_STAFF_CODE
+       , UPDATE_DATE
+       , UPDATE_STAFF_CODE
+       , NET_MAC_ADDRESS
+       , NET_IP_ADDRESS
+       , NET_DESCRIPTION
+     ) VALUES (
+         #obj.assetId:VARCHAR# /* ASSET_ID*/
+       , #obj.lineSeq:NUMERIC# /* LINE_SEQ*/
+       , #obj.createDate:TIMESTAMP# /* CREATE_DATE*/
+       , #obj.createStaffCode:VARCHAR# /* CREATE_STAFF_CODE*/
+       , #obj.updateDate:TIMESTAMP# /* UPDATE_DATE*/
+       , #obj.updateStaffCode:VARCHAR# /* UPDATE_STAFF_CODE*/
+       , #obj.netMacAddress:VARCHAR# /* NET_MAC_ADDRESS*/
+       , #obj.netIpAddress:VARCHAR# /* NET_IP_ADDRESS*/
+       , #obj.netDescription:VARCHAR# /* NET_DESCRIPTION*/
+     )
+   </insert>
+
+  <!--
+    情報機器等_棚卸明細作成
+  -->
+   <insert id="insertAssetLineInv_AST" parameterClass="java.util.Map">
+     INSERT INTO NEA_$tableNamePrefix$ASSET_LINE_INV (
+         ASSET_ID
+       , LINE_SEQ
+       , CREATE_DATE
+       , CREATE_STAFF_CODE
+       , UPDATE_DATE
+       , UPDATE_STAFF_CODE
+       , INV_DATE
+       , INV_OFFICE_NAME
+       , INV_COMMENT
+     ) VALUES (
+         #obj.assetId:VARCHAR# /* ASSET_ID*/
+       , #obj.lineSeq:NUMERIC# /* LINE_SEQ*/
+       , #obj.createDate:TIMESTAMP# /* CREATE_DATE*/
+       , #obj.createStaffCode:VARCHAR# /* CREATE_STAFF_CODE*/
+       , #obj.updateDate:TIMESTAMP# /* UPDATE_DATE*/
+       , #obj.updateStaffCode:VARCHAR# /* UPDATE_STAFF_CODE*/
+       , #obj.invDate:DATE# /* INV_DATE*/
+       , #obj.invOfficeName:VARCHAR# /* INV_OFFICE_NAME*/
+       , #obj.invComment:VARCHAR# /* INV_COMMENT*/
+     )
+   </insert>
+
+  <!--
+    情報機器等ヘッダ更新
+  -->
+  <update id="updateAsset_AST" parameterClass="java.util.Map">
+    UPDATE
+      NEA_$tableNamePrefix$ASSET
+    SET
+         ASSET_ID = #obj.assetId:VARCHAR#
+       , CREATE_DATE = #obj.createDate:TIMESTAMP#
+       , CREATE_STAFF_CODE = #obj.createStaffCode:VARCHAR#
+       , UPDATE_DATE = #obj.updateDate:TIMESTAMP#
+       , UPDATE_STAFF_CODE = #obj.updateStaffCode:VARCHAR#
+       , VERSION = #obj.version:NUMERIC#
+       <!-- 登録申請 -->
+       <isNotEmpty property="tableNamePrefix">
+         , AP_GET_TAN_LINE_AST_ID = #obj.apGetTanLineAstId:NUMERIC#
+         , UPDATE_COMMENT = #obj.updateComment:VARCHAR#
+         , EAPP_ID = #obj.eappId:NUMERIC#
+         , AP_STATUS = #obj.apStatus:CHAR#
+         , AP_DATE = #obj.apDate:DATE#
+         , AP_CREATE_STAFF_CODE = #obj.apCreateStaffCode:VARCHAR#
+         , AP_CREATE_COMPANY_CODE = #obj.apCreateCompanyCode:VARCHAR#
+         , AP_CREATE_SECTION_CODE = #obj.apCreateSectionCode:VARCHAR#
+         , AP_CREATE_SECTION_YEAR = #obj.apCreateSectionYear:NUMERIC#
+         , AP_STAFF_CODE = #obj.apStaffCode:VARCHAR#
+         , AP_COMPANY_CODE = #obj.apCompanyCode:VARCHAR#
+         , AP_SECTION_CODE = #obj.apSectionCode:VARCHAR#
+         , AP_SECTION_YEAR = #obj.apSectionYear:NUMERIC#
+         , AP_TEL = #obj.apTel:VARCHAR#
+         , AP_OFFICE_NAME = #obj.apOfficeName:VARCHAR#
+       </isNotEmpty>
+       , AST_NAME = #obj.astName:VARCHAR#
+       , AST_CATEGORY1_CODE = #obj.astCategory1Code:VARCHAR#
+       , AST_CATEGORY2_CODE = #obj.astCategory2Code:VARCHAR#
+       , AST_SHAPE_CODE = #obj.astShapeCode:VARCHAR#
+       , AST_MAKER_CODE = #obj.astMakerCode:VARCHAR#
+       , AST_MAKER_NAME = #obj.astMakerName:VARCHAR#
+       , AST_SHOP_NAME = #obj.astShopName:VARCHAR#
+       , AST_MAKER_MODEL = #obj.astMakerModel:VARCHAR#
+       , AST_SERIAL_CODE = #obj.astSerialCode:VARCHAR#
+       , AST_GUARANTEE_TERM_DATE = #obj.astGuaranteeTermDate:DATE#
+       , AST_GET_TYPE = #obj.astGetType:VARCHAR#
+       , AST_SYSTEM_SECTION_DEPLOY_FLAG = #obj.astSystemSectionDeployFlag:CHAR#
+       , AST_ASSET_TYPE = #obj.astAssetType:VARCHAR#
+       , AST_HOLDER_CODE = #obj.astHolderCode:VARCHAR#
+       , AST_HOLDER_NAME = #obj.astHolderName:VARCHAR#
+       , AST_MANAGE_TYPE = #obj.astManageType:VARCHAR#
+       , AST_OIR = #obj.astOir:VARCHAR#
+       , AST_MANAGE_END_DATE = #obj.astManageEndDate:DATE#
+       , HOL_COMPANY_CODE = #obj.holCompanyCode:VARCHAR#
+       , HOL_SECTION_CODE = #obj.holSectionCode:VARCHAR#
+       , HOL_SECTION_YEAR = #obj.holSectionYear:NUMERIC#
+       , HOL_STAFF_CODE = #obj.holStaffCode:VARCHAR#
+       , HOL_OFFICE_CODE = #obj.holOfficeCode:VARCHAR#
+       , HOL_OFFICE_FLOOR = #obj.holOfficeFloor:NUMERIC#
+       , HOL_OFFICE_ROOM_NUM = #obj.holOfficeRoomNum:VARCHAR#
+       , HOL_OFFICE_RACK_NUM = #obj.holOfficeRackNum:VARCHAR#
+       , HOL_PURPOSE_CODE = #obj.holPurposeCode:VARCHAR#
+       , HOL_OFFICE_DESCRIPTION = #obj.holOfficeDescription:VARCHAR#
+       , HOL_GET_STAFF_CODE = #obj.holGetStaffCode:VARCHAR#
+       , HOL_GET_COMPANY_CODE = #obj.holGetCompanyCode:VARCHAR#
+       , HOL_GET_SECTION_CODE = #obj.holGetSectionCode:VARCHAR#
+       , HOL_GET_SECTION_YEAR = #obj.holGetSectionYear:NUMERIC#
+       , HOL_GET_DATE = #obj.holGetDate:DATE#
+       , HOL_QUANTITY = #obj.holQuantity:NUMERIC#
+       , USE_COMPANY_CODE = #obj.useCompanyCode:VARCHAR#
+       , USE_SECTION_CODE = #obj.useSectionCode:VARCHAR#
+       , USE_SECTION_YEAR = #obj.useSectionYear:NUMERIC#
+       , USE_STAFF_CODE = #obj.useStaffCode:VARCHAR#
+       , USE_STAFF_COMPANY_CODE = #obj.useStaffCompanyCode:VARCHAR#
+       , USE_STAFF_SECTION_CODE = #obj.useStaffSectionCode:VARCHAR#
+       , USE_STAFF_SECTION_YEAR = #obj.useStaffSectionYear:NUMERIC#
+       , USE_START_DATE = #obj.useStartDate:DATE#
+       , USE_COMMON_FLAG = #obj.useCommonFlag:CHAR#
+       , NET_HOST_NAME = #obj.netHostName:VARCHAR#
+       , NET_EGUARD_PERMIT_TYPE = #obj.netEguardPermitType:CHAR#
+       , MNT_CONTRACT_CODE = #obj.mntContractCode:VARCHAR#
+       , MNT_CONTRACT_COMPANY_NAME = #obj.mntContractCompanyName:VARCHAR#
+       , MNT_CONTRACT_START_DATE = #obj.mntContractStartDate:DATE#
+       , MNT_CONTRACT_END_DATE = #obj.mntContractEndDate:DATE#
+       , MNT_CONTRACT_AMOUNT = #obj.mntContractAmount:NUMERIC#
+       , MNT_CONTRACT_REGIST_CODE = #obj.mntContractRegistCode:VARCHAR#
+       , MNT_CONTRACT_REGIST_DATE = #obj.mntContractRegistDate:DATE#
+       , MNT_CONTRACT_STAFF_CODE = #obj.mntContractStaffCode:VARCHAR#
+       , DSC_DESCRIPTION = #obj.dscDescription:VARCHAR#
+       , DSC_ATTRIBUTE1 = #obj.dscAttribute1:VARCHAR#
+       , DSC_ATTRIBUTE2 = #obj.dscAttribute2:VARCHAR#
+       , DSC_ATTRIBUTE3 = #obj.dscAttribute3:VARCHAR#
+       , DSC_ATTRIBUTE4 = #obj.dscAttribute4:VARCHAR#
+       , DSC_ATTRIBUTE5 = #obj.dscAttribute5:VARCHAR#
+       , DSC_ATTRIBUTE6 = #obj.dscAttribute6:VARCHAR#
+       , DSC_ATTRIBUTE7 = #obj.dscAttribute7:VARCHAR#
+       , DSC_ATTRIBUTE8 = #obj.dscAttribute8:VARCHAR#
+       , DSC_ATTRIBUTE9 = #obj.dscAttribute9:VARCHAR#
+       , DSC_ATTRIBUTE10 = #obj.dscAttribute10:VARCHAR#
+       , DSC_ATTRIBUTE11 = #obj.dscAttribute11:VARCHAR#
+       , DSC_ATTRIBUTE12 = #obj.dscAttribute12:VARCHAR#
+       , DSC_ATTRIBUTE13 = #obj.dscAttribute13:VARCHAR#
+       , DSC_ATTRIBUTE14 = #obj.dscAttribute14:VARCHAR#
+       , DSC_ATTRIBUTE15 = #obj.dscAttribute15:VARCHAR#
+       , DSC_ATTRIBUTE16 = #obj.dscAttribute16:VARCHAR#
+       , DSC_ATTRIBUTE17 = #obj.dscAttribute17:VARCHAR#
+       , DSC_ATTRIBUTE18 = #obj.dscAttribute18:VARCHAR#
+       , DSC_ATTRIBUTE19 = #obj.dscAttribute19:VARCHAR#
+       , DSC_ATTRIBUTE20 = #obj.dscAttribute20:VARCHAR#
+       , DSC_FAILURE_ASSET_ID = #obj.dscFailureAssetId:VARCHAR#
+       , INV_IN_COMPANY_ACTUAL_FLAG = #obj.invInCompanyActualFlag:CHAR#
+       , INV_BARCODE = #obj.invBarcode:VARCHAR#
+       , INV_SEAL_ISSUE_FLAG = #obj.invSealIssueFlag:CHAR#
+       , INV_SEAL_ISSUE_DATE = #obj.invSealIssueDate:DATE#
+       , INV_SEAL_ISSUE_DESCRIPTION = #obj.invSealIssueDescription:VARCHAR#
+       , DELETE_FLAG = #obj.deleteFlag:CHAR#
+       , DELETE_DATE = #obj.deleteDate:DATE#
+       , DELETE_REASON = #obj.deleteReason:VARCHAR#
+       , GET_APPLICATION_ID = #obj.getApplicationId:VARCHAR#
+       , REGIST_APPLICATION_ID = #obj.registApplicationId:VARCHAR#
+       , CONTRACT_NUM = #obj.contractNum:VARCHAR#
+       , DREAMS_NUM = #obj.dreamsNum:VARCHAR#
+       , PARENT_ASSET_ID = #obj.parentAssetId:VARCHAR#
+       <isEmpty property="tableNamePrefix">
+         , MNT_CONTRACT_SERVICE_LEVEL = #obj.mntContractServiceLevel:VARCHAR#
+         , MNT_CONTRACT_DESCRIPTION = #obj.mntContractDescription:VARCHAR#
+         , MNT_CONTRACT_CODE2 = #obj.mntContractCode2:VARCHAR#
+         , MNT_CONTRACT_COMPANY_NAME2 = #obj.mntContractCompanyName2:VARCHAR#
+         , MNT_CONTRACT_START_DATE2 = #obj.mntContractStartDate2:DATE#
+         , MNT_CONTRACT_END_DATE2 = #obj.mntContractEndDate2:DATE#
+         , MNT_CONTRACT_AMOUNT2 = #obj.mntContractAmount2:NUMERIC#
+         , MNT_CONTRACT_REGIST_CODE2 = #obj.mntContractRegistCode2:VARCHAR#
+         , MNT_CONTRACT_REGIST_DATE2 = #obj.mntContractRegistDate2:DATE#
+         , MNT_CONTRACT_STAFF_CODE2 = #obj.mntContractStaffCode2:VARCHAR#
+         , MNT_CONTRACT_SERVICE_LEVEL2 = #obj.mntContractServiceLevel2:VARCHAR#
+         , MNT_CONTRACT_DESCRIPTION2 = #obj.mntContractDescription2:VARCHAR#
+         , MNT_CONTRACT_CODE3 = #obj.mntContractCode3:VARCHAR#
+         , MNT_CONTRACT_COMPANY_NAME3 = #obj.mntContractCompanyName3:VARCHAR#
+         , MNT_CONTRACT_START_DATE3 = #obj.mntContractStartDate3:DATE#
+         , MNT_CONTRACT_END_DATE3 = #obj.mntContractEndDate3:DATE#
+         , MNT_CONTRACT_AMOUNT3 = #obj.mntContractAmount3:NUMERIC#
+         , MNT_CONTRACT_REGIST_CODE3 = #obj.mntContractRegistCode3:VARCHAR#
+         , MNT_CONTRACT_REGIST_DATE3 = #obj.mntContractRegistDate3:DATE#
+         , MNT_CONTRACT_STAFF_CODE3 = #obj.mntContractStaffCode3:VARCHAR#
+         , MNT_CONTRACT_SERVICE_LEVEL3 = #obj.mntContractServiceLevel3:VARCHAR#
+         , MNT_CONTRACT_DESCRIPTION3 = #obj.mntContractDescription3:VARCHAR#
+       </isEmpty>
+    WHERE
+      ASSET_ID = #obj.assetId:VARCHAR#
+  </update>
+
+  <!--
+    情報機器等ヘッダ削除
+  -->
+  <delete id="deleteAsset_AST" parameterClass="java.util.Map">
+    DELETE FROM
+      NEA_$tableNamePrefix$ASSET
+    WHERE
+      ASSET_ID = #assetId#
+  </delete>
+
+  <!--
+    情報機器等_共有ユーザー明細削除
+  -->
+  <delete id="deleteAssetLineComUsr_AST" parameterClass="java.util.Map">
+    DELETE FROM
+      NEA_$tableNamePrefix$ASSET_LINE_COM_USR
+    WHERE
+      ASSET_ID = #assetId#
+  </delete>
+
+  <!--
+    情報機器等_OS明細削除
+  -->
+  <delete id="deleteAssetLineOs_AST" parameterClass="java.util.Map">
+    DELETE FROM
+      NEA_$tableNamePrefix$ASSET_LINE_OS
+    WHERE
+      ASSET_ID = #assetId#
+  </delete>
+
+  <!--
+    情報機器等_ネットワーク明細削除
+  -->
+  <delete id="deleteAssetLineNetwork_AST" parameterClass="java.util.Map">
+    DELETE FROM
+      NEA_$tableNamePrefix$ASSET_LINE_NETWORK
+    WHERE
+      ASSET_ID = #assetId#
+  </delete>
+
+  <!--
+    情報機器等_棚卸明細削除
+  -->
+  <delete id="deleteAssetLineInv_AST" parameterClass="java.util.Map">
+    DELETE FROM
+      NEA_$tableNamePrefix$ASSET_LINE_INV
+    WHERE
+      ASSET_ID = #assetId#
+  </delete>
+
+  <!--
+    取得申請明細から登録申請データ取得
+  -->
+  <select id="selectApAssetByApGetTan_AST" parameterClass="java.util.Map" resultClass="jp.co.ctcg.easset.dto.asset.Asset">
+    SELECT
+      nagtla.AP_GET_TAN_LINE_AST_ID apGetTanLineAstId
+      , nagtla.LINE_SEQ apGetTanLineAstLineSeq
+      , nagtla.AST_NAME astName
+      , nagtla.AST_CATEGORY1_CODE astCategory1Code
+      , NEA_UTIL_PKG.get_cn_value1_f('ASSET_CATEGORY1', nagtla.AST_CATEGORY1_CODE) astCategory1Name
+      , nagtla.AST_CATEGORY2_CODE astCategory2Code
+      , NEA_UTIL_PKG.get_cn_value1_f('ASSET_CATEGORY2', nagtla.AST_CATEGORY2_CODE) astCategory2Name
+      , NEA_UTIL_PKG.get_cn_value_f('ASSET_CATEGORY2', nagtla.AST_CATEGORY2_CODE, 2) astQuantityManageType
+      , NEA_UTIL_PKG.get_cn_value_f('ASSET_CATEGORY2', nagtla.AST_CATEGORY2_CODE, 5) astSerialManageType
+      , nagtla.AST_SHAPE_CODE astShapeCode
+      , NEA_UTIL_PKG.get_cn_value1_f('ASSET_SHAPE', nagtla.AST_SHAPE_CODE) astShapeName
+      , nagtla.AST_MAKER_CODE astMakerCode
+      , nagtla.AST_MAKER_NAME astMakerName
+      , nagtla.AST_MAKER_MODEL astMakerModel
+      , cn_agtype.INTERNAL_CODE astGetType
+      , NEA_UTIL_PKG.get_cn_value1_f('ASSET_GET_TYPE',
+          cn_agtype.INTERNAL_CODE
+        ) astGetTypeName
+      , nagt.GET_SYSTEM_SECTION_DEPLOY_FLAG astSystemSectionDeployFlag
+      , NEA_UTIL_PKG.get_cn_value1_f('FLAG_YN', nagt.GET_SYSTEM_SECTION_DEPLOY_FLAG) astSystemSectionDeployFlagName
+      , (SELECT INTERNAL_CODE FROM NEA_CODE_NAME cn_astype WHERE cn_astype.CATEGORY_CODE = 'ASSET_TYPE' AND (cn_astype.VALUE2 = cn_agtype.INTERNAL_CODE OR cn_astype.VALUE3 = cn_agtype.INTERNAL_CODE) AND cn_astype.VALUE4 = '1' AND cn_astype.DELETE_FLAG = '0') astAssetType
+      , NEA_UTIL_PKG.get_cn_value1_f('ASSET_TYPE',
+          (SELECT INTERNAL_CODE FROM NEA_CODE_NAME cn_astype WHERE cn_astype.CATEGORY_CODE = 'ASSET_TYPE' AND (cn_astype.VALUE2 = cn_agtype.INTERNAL_CODE OR cn_astype.VALUE3 = cn_agtype.INTERNAL_CODE) AND cn_astype.VALUE4 = '1' AND cn_astype.DELETE_FLAG = '0')
+        ) astAssetTypeName
+      , CASE
+          WHEN nagt.AP_GET_TYPE IN ('1', '2') THEN /* リース・レンタル */
+            nagt.GET_LE_RE_COMPANY_CODE
+          ELSE
+            NULL
+        END astHolderCode
+      , NEA_UTIL_PKG.get_cn_value_f('LEASE_RENTAL_CUSTOMER',
+          CASE
+            WHEN nagt.AP_GET_TYPE IN ('1', '2') THEN /* リース・レンタル */
+              nagt.GET_LE_RE_COMPANY_CODE
+            ELSE
+              NULL
+          END
+        , 7, nagt.HOL_COMPANY_CODE) astOirEnable
+      , CASE
+          WHEN nagt.AP_GET_TYPE IN ('1', '2') THEN /* リース・レンタル */
+            NEA_UTIL_PKG.get_cn_value1_f('LEASE_RENTAL_CUSTOMER',
+              nagt.GET_LE_RE_COMPANY_CODE
+              , nagt.AP_COMPANY_CODE
+            )
+          WHEN nagt.AP_GET_TYPE IN ('6') THEN /* 借受 */
+            (SELECT GET_PUR_COMPANY_NAME FROM NEA_AP_GET_TAN_LINE_PUR nagtlp WHERE nagtlp.APPLICATION_ID = nagt.APPLICATION_ID AND LINE_SEQ = '1')
+          ELSE
+            NULL
+        END astHolderName
+      , nagt.GET_RETURN_DATE astManageEndDate
+      , nagt.HOL_COMPANY_CODE holCompanyCode
+      , NEA_UTIL_PKG.get_company_name_f(nagt.HOL_COMPANY_CODE) holCompanyName
+      , CASE
+          WHEN nagt.HOL_SECTION_YEAR = (SELECT VALUE1 FROM NEA_CODE_NAME CN WHERE CN.CATEGORY_CODE = 'CURRENT_YEAR' AND CN.DELETE_FLAG = '0') THEN
+            nagt.HOL_SECTION_CODE
+          ELSE
+            NULL
+        END holSectionCode
+      , CASE
+          WHEN nagt.HOL_SECTION_YEAR = (SELECT VALUE1 FROM NEA_CODE_NAME CN WHERE CN.CATEGORY_CODE = 'CURRENT_YEAR' AND CN.DELETE_FLAG = '0') THEN
+            nagt.HOL_SECTION_YEAR
+          ELSE
+            NULL
+        END holSectionYear
+      , CASE
+          WHEN nagt.HOL_SECTION_YEAR = (SELECT VALUE1 FROM NEA_CODE_NAME CN WHERE CN.CATEGORY_CODE = 'CURRENT_YEAR' AND CN.DELETE_FLAG = '0') THEN
+            NEA_UTIL_PKG.get_section_name_f(nagt.HOL_COMPANY_CODE, nagt.HOL_SECTION_CODE, nagt.HOL_SECTION_YEAR)
+          ELSE
+            NULL
+        END holSectionName
+      , CASE
+          WHEN nagt.HOL_SECTION_YEAR = (SELECT VALUE1 FROM NEA_CODE_NAME CN WHERE CN.CATEGORY_CODE = 'CURRENT_YEAR' AND CN.DELETE_FLAG = '0') THEN
+            nagt.HOL_STAFF_CODE
+          ELSE
+            NULL
+        END holStaffCode
+      , CASE
+          WHEN nagt.HOL_SECTION_YEAR = (SELECT VALUE1 FROM NEA_CODE_NAME CN WHERE CN.CATEGORY_CODE = 'CURRENT_YEAR' AND CN.DELETE_FLAG = '0') THEN
+            NEA_UTIL_PKG.get_staff_name_f(nagt.HOL_STAFF_CODE)
+          ELSE
+            NULL
+        END holStaffName
+      , nagt.HOL_OFFICE_CODE holOfficeCode
+      , NEA_UTIL_PKG.get_cn_value1_f('OFFICE', nagt.HOL_OFFICE_CODE) holOfficeName
+      , nagt.HOL_OFFICE_FLOOR holOfficeFloor
+      , nagt.HOL_OFFICE_DESCRIPTION holOfficeDescription
+      , nagt.AP_STAFF_CODE holGetStaffCode
+      , NEA_UTIL_PKG.get_staff_name_f(nagt.AP_STAFF_CODE) holGetStaffName
+      , nagt.AP_COMPANY_CODE holGetCompanyCode
+      , NEA_UTIL_PKG.get_company_name_f(nagt.AP_COMPANY_CODE) holGetCompanyName
+      , nagt.AP_SECTION_CODE holGetSectionCode
+      , nagt.AP_SECTION_YEAR holGetSectionYear
+      , NEA_UTIL_PKG.get_section_name_f(nagt.AP_COMPANY_CODE, nagt.AP_SECTION_CODE, nagt.AP_SECTION_YEAR) holGetSectionName
+      , nagt.GET_DELIVERY_DATE holGetDate
+      , CASE
+          WHEN NEA_UTIL_PKG.get_cn_value_f('ASSET_CATEGORY2', nagtla.AST_CATEGORY2_CODE, 2) = '1' THEN /* 数量管理 */
+            NVL(nagtla.QUANTITY, 0) - NVL(nagtla.REGIST_QUANTITY, 0)
+          ELSE
+            1
+        END holQuantity
+      , nagt.HOL_COMPANY_CODE useCompanyCode
+      , NEA_UTIL_PKG.get_company_name_f(nagt.HOL_COMPANY_CODE) useCompanyName
+      , CASE
+          WHEN nagt.HOL_SECTION_YEAR = (SELECT VALUE1 FROM NEA_CODE_NAME CN WHERE CN.CATEGORY_CODE = 'CURRENT_YEAR' AND CN.DELETE_FLAG = '0') THEN
+            nagt.HOL_SECTION_CODE
+          ELSE
+            NULL
+        END useSectionCode
+      , CASE
+          WHEN nagt.HOL_SECTION_YEAR = (SELECT VALUE1 FROM NEA_CODE_NAME CN WHERE CN.CATEGORY_CODE = 'CURRENT_YEAR' AND CN.DELETE_FLAG = '0') THEN
+            nagt.HOL_SECTION_YEAR
+          ELSE
+            NULL
+        END useSectionYear
+      , CASE
+          WHEN nagt.HOL_SECTION_YEAR = (SELECT VALUE1 FROM NEA_CODE_NAME CN WHERE CN.CATEGORY_CODE = 'CURRENT_YEAR' AND CN.DELETE_FLAG = '0') THEN
+            NEA_UTIL_PKG.get_section_name_f(nagt.HOL_COMPANY_CODE, nagt.HOL_SECTION_CODE, nagt.HOL_SECTION_YEAR)
+          ELSE
+            NULL
+        END useSectionName
+      , '0' useCommonFlag
+      , NEA_UTIL_PKG.get_cn_value1_f('FLAG_AN', '0') useCommonFlagName
+      , nagtla.FAILURE_ASSET_ID dscFailureAssetId
+      , CASE
+          WHEN nagtla.FAILURE_ASSET_ID IS NOT NULL THEN /* 故障交換の場合契約番号もコピー */
+            nagtla.FAILURE_CONTRACT_NUM
+          ELSE
+            NULL
+        END contractNum
+      , nagt.GET_INTRA_INVENTORY_FLAG invInCompanyActualFlag
+      , NEA_UTIL_PKG.get_cn_value1_f('FLAG_YN', nagt.GET_INTRA_INVENTORY_FLAG) invInCompanyActualFlagName
+      , nagtla.SEAL_ISSUE_FLAG invSealIssueFlag
+      , NEA_UTIL_PKG.get_cn_value1_f('FLAG_YN', nagtla.SEAL_ISSUE_FLAG) invSealIssueFlagName
+      , nagt.APPLICATION_ID getApplicationId
+    FROM
+      NEA_AP_GET_TAN nagt
+      , NEA_AP_GET_TAN_LINE_AST nagtla
+      , NEA_CODE_NAME cn_agtype
+      , NEA_CODE_NAME cn_ar
+    WHERE
+      nagtla.AP_GET_TAN_LINE_AST_ID = #apGetTanLineAstId#
+      AND nagt.APPLICATION_ID = nagtla.APPLICATION_ID
+      AND cn_agtype.CATEGORY_CODE (+) = 'ASSET_GET_TYPE'
+      AND cn_agtype.VALUE2 (+) = nagt.AP_GET_TYPE
+      AND cn_ar.CATEGORY_CODE (+) = 'AP_GET_AMOUNT_RANGE'
+      AND cn_ar.INTERNAL_CODE (+) = nagt.AP_GET_AMOUNT_RANGE
+      AND cn_agtype.DELETE_FLAG (+) = '0'
+      AND cn_ar.DELETE_FLAG (+) = '0'
+      AND (
+        cn_agtype.VALUE3 IS NULL /* 有形固定資産・備品以外 */
+        OR ( /* 備品 */
+          cn_agtype.VALUE3 = '1'
+          AND (TO_NUMBER(cn_ar.VALUE3) <![CDATA[<]]> 200000 OR nagtla.EQUIPMENT_FLAG = '1')
+        )
+        OR ( /* 固定資産 */
+          cn_agtype.VALUE3 = '2'
+          AND TO_NUMBER(NVL(cn_ar.VALUE3, 200001)) <![CDATA[>]]> 200000
+          AND nagtla.EQUIPMENT_FLAG = '0'
+        )
+      )
+  </select>
+
+  <!--
+      取得申請明細識別ID取得
+  -->
+  <select id="selectApGetTanLineAstId_AST" parameterClass="java.util.Map" resultClass="jp.co.ctcg.easset.dto.CaseInsensitiveHashMap">
+    SELECT
+      nagtla.AP_GET_TAN_LINE_AST_ID
+      , nagtla.FAILURE_ASSET_ID
+    FROM
+      NEA_AP_GET_TAN_LINE_AST nagtla
+    WHERE
+      nagtla.APPLICATION_ID = #applicationId#
+      AND nagtla.LINE_SEQ = #lineSeq#
+  </select>
+
+  <!--
+     ファイル・直入力可能マスタ値取得
+  -->
+  <select id="selectAssetPossibleInputMasterList_AST" parameterClass="java.util.Map" resultClass="jp.co.ctcg.easset.dto.CodeName">
+    SELECT
+      *
+    FROM
+      (
+      SELECT
+        1 sort1
+        , CP.SORT_NUMBER sort2
+        , CP.INTERNAL_CODE sort3
+        , CC.SORT_NUMBER sort4
+        , CC.INTERNAL_CODE sort5
+        , '資産(機器)分類' categoryCode
+        , CC.VALUE1 value1
+        , '大分類:' || CP.VALUE1 description
+        , 'astCategory2Name' property
+      FROM
+        NEA_CODE_NAME CC
+        , NEA_CODE_NAME CP
+      WHERE
+        CC.PARENT_INTERNAL_CODE = CP.INTERNAL_CODE
+        AND CC.CATEGORY_CODE = 'ASSET_CATEGORY2'
+        AND CP.CATEGORY_CODE = 'ASSET_CATEGORY1'
+        AND CC.DELETE_FLAG = '0'
+        AND CP.DELETE_FLAG = '0'
+      UNION ALL
+      SELECT
+        2
+        , C.SORT_NUMBER
+        , C.INTERNAL_CODE
+        , C.SORT_NUMBER
+        , C.INTERNAL_CODE
+        , '筐体/形状'
+        , C.VALUE1
+        , NULL
+        , 'astShapeName' property
+      FROM
+        NEA_CODE_NAME C
+      WHERE
+        C.CATEGORY_CODE = 'ASSET_SHAPE'
+        AND C.DELETE_FLAG = '0'
+      UNION ALL
+      SELECT
+        3
+        , C.SORT_NUMBER
+        , C.INTERNAL_CODE
+        , C.SORT_NUMBER
+        , C.INTERNAL_CODE
+        , 'メーカー'
+        , C.VALUE1
+        , NULL
+        , 'astMakerName' property
+      FROM
+        NEA_CODE_NAME C
+      WHERE
+        C.CATEGORY_CODE = 'ASSET_MAKER'
+        AND C.DELETE_FLAG = '0'
+      UNION ALL
+      SELECT
+        4
+        , C.SORT_NUMBER
+        , C.INTERNAL_CODE
+        , C.SORT_NUMBER
+        , C.INTERNAL_CODE
+        , '取得形態'
+        , C.VALUE1
+        , NULL
+        , 'astGetTypeName' property
+      FROM
+        NEA_CODE_NAME C
+      WHERE
+        C.CATEGORY_CODE = 'ASSET_GET_TYPE'
+        AND C.DELETE_FLAG = '0'
+      UNION ALL
+      SELECT
+        5
+        , C.SORT_NUMBER
+        , C.INTERNAL_CODE
+        , C.SORT_NUMBER
+        , C.INTERNAL_CODE
+        , '情報システム部配備'
+        , C.VALUE1
+        , NULL
+        , 'astSystemSectionDeployFlagName' property
+      FROM
+        NEA_CODE_NAME C
+      WHERE
+        C.CATEGORY_CODE = 'FLAG_YN'
+        AND C.DELETE_FLAG = '0'
+      UNION ALL
+      SELECT
+        6
+        , C.SORT_NUMBER
+        , C.INTERNAL_CODE
+        , C.SORT_NUMBER
+        , C.INTERNAL_CODE
+        , '資産区分'
+        , C.VALUE1
+        , NULL
+        , 'astAssetTypeName' property
+      FROM
+        NEA_CODE_NAME C
+      WHERE
+        C.CATEGORY_CODE = 'ASSET_TYPE'
+        AND C.DELETE_FLAG = '0'
+      UNION ALL
+      SELECT
+        7
+        , C.SORT_NUMBER
+        , C.INTERNAL_CODE
+        , C.SORT_NUMBER
+        , C.INTERNAL_CODE
+        , '管理区分'
+        , C.VALUE1
+        , NULL
+        , 'astManageTypeName' property
+      FROM
+        NEA_CODE_NAME C
+      WHERE
+        C.CATEGORY_CODE = 'ASSET_MANAGE_TYPE'
+        AND C.DELETE_FLAG = '0'
+      UNION ALL
+      SELECT
+        8
+        , C.SORT_NUMBER
+        , C.INTERNAL_CODE
+        , C.SORT_NUMBER
+        , C.INTERNAL_CODE
+        , '資産保有者'
+        , C.VALUE1
+        , '※ リース・レンタル会社のみ表示されていますが、その他の会社も自由入力が可能です。'
+        , 'astHolderName' property
+      FROM
+        NEA_CODE_NAME C
+      WHERE
+        C.CATEGORY_CODE = 'LEASE_RENTAL_CUSTOMER'
+        AND C.COMPANY_CODE LIKE '%' || #companyCode# || '%'
+        AND C.DELETE_FLAG = '0'
+      UNION ALL
+      SELECT
+        9
+        , NULL
+        , ND.DIVISIONCODE
+        , NULL
+        , ND.DIVISIONCODE
+        , '保有部署/使用部署'
+        , ND.DIVISIONCODE
+        , NEA_UTIL_PKG.GET_SECTION_NAME_F(ND.COMPANYCODE, ND.DIVISIONKANJI)
+        , 'holSectionName' property
+      FROM
+        NEA_NEWDIVISIONMASTERTABLE_V ND
+      WHERE
+        ND.COMPANYCODE = #companyCode#
+        AND ND.NENDO = (SELECT VALUE1 FROM NEA_CODE_NAME CN WHERE CN.CATEGORY_CODE = 'CURRENT_YEAR' AND CN.DELETE_FLAG = '0')
+      UNION ALL
+      SELECT
+        10
+        , C.SORT_NUMBER
+        , C.INTERNAL_CODE
+        , C.SORT_NUMBER
+        , C.INTERNAL_CODE
+        , '設置(使用)場所'
+        , C.VALUE1
+        , NULL
+        , 'holOfficeName' property
+      FROM
+        NEA_CODE_NAME C
+      WHERE
+        C.CATEGORY_CODE = 'OFFICE'
+        AND C.DELETE_FLAG = '0'
+        <isNotEmpty property="companyCode">
+          AND C.COMPANY_CODE LIKE '%' || #companyCode# || '%' /* 1.91次 設置場所対応*/
+        </isNotEmpty>
+      UNION ALL
+      SELECT
+        11
+        , C.SORT_NUMBER
+        , C.INTERNAL_CODE
+        , C.SORT_NUMBER
+        , C.INTERNAL_CODE
+        , '使用目的'
+        , C.VALUE1
+        , NULL
+        , 'holPurposeName' property
+      FROM
+        NEA_CODE_NAME C
+      WHERE
+        C.CATEGORY_CODE = 'ASSET_USE_PURPOSE'
+        AND C.DELETE_FLAG = '0'
+      UNION ALL
+      SELECT
+        13
+        , C.SORT_NUMBER
+        , C.INTERNAL_CODE
+        , C.SORT_NUMBER
+        , C.INTERNAL_CODE
+        , '社内実地棚卸対象'
+        , C.VALUE1
+        , NULL
+        , 'astSystemSectionDeployFlagName' property
+      FROM
+        NEA_CODE_NAME C
+      WHERE
+        C.CATEGORY_CODE = 'FLAG_YN'
+        AND C.DELETE_FLAG = '0'
+      UNION ALL
+      SELECT
+        14
+        , C.SORT_NUMBER
+        , C.INTERNAL_CODE
+        , C.SORT_NUMBER
+        , C.INTERNAL_CODE
+        , 'シール発行対象'
+        , C.VALUE1
+        , NULL
+        , 'astSystemSectionDeployFlagName' property
+      FROM
+        NEA_CODE_NAME C
+      WHERE
+        C.CATEGORY_CODE = 'FLAG_YN'
+        AND C.DELETE_FLAG = '0'
+      )
+      <dynamic open=" WHERE " close="" >
+        <isNotEmpty property="propertyList">
+          <iterate property="propertyList" open=" property IN(" close=")" conjunction=",">
+            #propertyList[]#
+          </iterate>
+        </isNotEmpty>
+      </dynamic>
+
+    ORDER BY
+      1, 2, 3, 4, 5
+  </select>
+
+  <!--
+     ファイル・直入力可能マスタ値取得(保有会社変更用)
+  -->
+  <select id="selectAssetCompanyMoveInputMasterList_AST" parameterClass="java.util.Map" resultClass="jp.co.ctcg.easset.dto.CodeName">
+    SELECT *
+      FROM (
+            SELECT 1 sort1
+                 , SORT_NUMBER sort2
+                 , INTERNAL_CODE sort3
+                 , 0 sort4
+                 , '' sort5
+                 , '保有会社/使用会社' categoryCode
+                 , VALUE1 value1
+                 , '' description
+              FROM NEA_CODE_NAME
+             WHERE CATEGORY_CODE = 'USE_COMPANY'
+               AND DELETE_FLAG = '0'
+               AND INTERNAL_CODE <![CDATA[<]]><![CDATA[>]]> #companyCode#
+            UNION ALL
+            SELECT 2 sort1
+                 , C.SORT_NUMBER sort2
+                 , C.INTERNAL_CODE sort3
+                 , 0 sort4
+                 , ND.DIVISIONCODE sort5
+                 , '保有部署/使用部署' categoryCode
+                 , ND.DIVISIONCODE value1
+                 , C.VALUE1 || '用　' || NEA_UTIL_PKG.GET_SECTION_NAME_F(ND.COMPANYCODE, ND.DIVISIONKANJI) description
+              FROM NEA_CODE_NAME C
+                 , NEA_NEWDIVISIONMASTERTABLE_V ND
+             WHERE C.CATEGORY_CODE = 'USE_COMPANY'
+               AND C.DELETE_FLAG = '0'
+               AND C.INTERNAL_CODE <![CDATA[<]]><![CDATA[>]]> #companyCode#
+               AND ND.COMPANYCODE = C.INTERNAL_CODE
+               AND ND.NENDO = (SELECT VALUE1 FROM NEA_CODE_NAME CN WHERE CN.CATEGORY_CODE = 'CURRENT_YEAR' AND CN.DELETE_FLAG = '0')
+            UNION ALL
+            SELECT 3 sort1
+                 , C2.SORT_NUMBER sort2
+                 , C2.INTERNAL_CODE sort3
+                 , C1.SORT_NUMBER sort4
+                 , C1.INTERNAL_CODE sort5
+                 , '設置場所' categoryCode
+                 , C1.VALUE1 value1
+                 , C2.VALUE1 || '用' description
+              FROM NEA_CODE_NAME C1
+                 , NEA_CODE_NAME C2
+             WHERE C1.CATEGORY_CODE = 'OFFICE'
+               AND C1.DELETE_FLAG = '0'
+               AND C2.CATEGORY_CODE = 'USE_COMPANY'
+               AND C2.DELETE_FLAG = '0'
+               AND C2.INTERNAL_CODE <![CDATA[<]]><![CDATA[>]]> #companyCode#
+               AND C1.COMPANY_CODE LIKE '%' || C2.INTERNAL_CODE || '%'
+            UNION ALL
+            SELECT 4 sort1
+                 , C2.SORT_NUMBER sort2
+                 , C2.INTERNAL_CODE sort3
+                 , C1.SORT_NUMBER sort4
+                 , C1.INTERNAL_CODE sort5
+                 , '資産保有者' categoryCode
+                 , C1.VALUE1 value1
+                 , C2.VALUE1 || '用' description
+              FROM NEA_CODE_NAME C1
+                 , NEA_CODE_NAME C2
+             WHERE C1.CATEGORY_CODE = 'LEASE_RENTAL_CUSTOMER'
+               AND C1.DELETE_FLAG = '0'
+               AND C2.CATEGORY_CODE = 'USE_COMPANY'
+               AND C2.DELETE_FLAG = '0'
+               AND C2.INTERNAL_CODE <![CDATA[<]]><![CDATA[>]]> #companyCode#
+               AND C1.COMPANY_CODE LIKE '%' || C2.INTERNAL_CODE || '%'
+           )
+    ORDER BY 1, 2, 3, 4, 5
+  </select>
+
+  <!--
+    情報機器抹消
+  -->
+  <parameterMap id="param_callDeleteAssetLogical_AST" class="java.util.Map">
+    <parameter property="updateStaffCode" jdbcType="VARCHAR" javaType="String" mode="IN"/>
+    <parameter property="assetId" jdbcType="VARCHAR" javaType="String" mode="IN"/>
+    <parameter property="deleteDate" jdbcType="DATE" javaType="Date" mode="IN"/>
+    <parameter property="deleteReason" jdbcType="VARCHAR" javaType="String" mode="IN"/>
+  </parameterMap>
+  <procedure id="callDeleteAssetLogical_AST" parameterMap="param_callDeleteAssetLogical_AST">
+    { call NEA_UTIL_PKG.DELETE_ASSET_LOGICAL(?, ?, ?, ?) }
+  </procedure>
+
+  <!--
+    重複情報取得
+  -->
+  <select id="selectDuplicateAsset_AST" parameterClass="java.util.Map" resultClass="jp.co.ctcg.easset.dto.asset.AssetSR">
+    SELECT
+      MAX(AST_OIR) astOir
+      , MAX(AST_SERIAL_CODE) astSerialCode
+      , MAX(NET_MAC_ADDRESS) netMacAddress
+      , MAX(NET_IP_ADDRESS) netIpAddress
+      , MAX(NET_HOST_NAME) netHostName
+    FROM
+      (
+        SELECT
+          AST_OIR
+          , TO_CHAR(NULL) AST_SERIAL_CODE
+          , TO_CHAR(NULL) NET_MAC_ADDRESS
+          , TO_CHAR(NULL) NET_IP_ADDRESS
+          , TO_CHAR(NULL) NET_HOST_NAME
+        FROM
+          NEA_$tableNamePrefix$ASSET
+        WHERE
+          AST_OIR = #obj.astOir:VARCHAR#
+          AND AST_OIR != '99999999'
+          AND DELETE_FLAG != '1'
+          <isNotEmpty property="obj.assetId">
+            AND ASSET_ID != #obj.assetId:VARCHAR#
+          </isNotEmpty>
+          <isNotEmpty property="tableNamePrefix">
+            AND AP_STATUS = '2'
+          </isNotEmpty>
+        UNION ALL
+        SELECT
+          TO_CHAR(NULL) AST_OIR
+          , AST_SERIAL_CODE
+          , TO_CHAR(NULL) NET_MAC_ADDRESS
+          , TO_CHAR(NULL) NET_IP_ADDRESS
+          , TO_CHAR(NULL) NET_HOST_NAME
+        FROM
+          NEA_$tableNamePrefix$ASSET
+        WHERE
+          AST_SERIAL_CODE = #obj.astSerialCode:VARCHAR#
+          AND DELETE_FLAG != '1'
+          <isNotEmpty property="obj.assetId">
+            AND ASSET_ID != #obj.assetId:VARCHAR#
+          </isNotEmpty>
+          <isNotEmpty property="tableNamePrefix">
+            AND AP_STATUS = '2'
+          </isNotEmpty>
+        UNION ALL
+        SELECT
+          TO_CHAR(NULL) AST_OIR
+          , TO_CHAR(NULL) AST_SERIAL_CODE
+          , TO_CHAR(NULL) NET_MAC_ADDRESS
+          , TO_CHAR(NULL) NET_IP_ADDRESS
+          , NET_HOST_NAME NET_HOST_NAME
+        FROM
+          NEA_$tableNamePrefix$ASSET
+        WHERE
+          NET_HOST_NAME = #obj.netHostName:VARCHAR#
+          AND DELETE_FLAG != '1'
+          <isNotEmpty property="obj.assetId">
+            AND ASSET_ID != #obj.assetId:VARCHAR#
+          </isNotEmpty>
+          <isNotEmpty property="tableNamePrefix">
+            AND AP_STATUS = '2'
+          </isNotEmpty>
+        <isNotEmpty property="obj.assetLineNetwork">
+          UNION ALL
+          SELECT
+            TO_CHAR(NULL) AST_OIR
+            , TO_CHAR(NULL) AST_SERIAL_CODE
+            , L.NET_MAC_ADDRESS
+            , TO_CHAR(NULL) NET_IP_ADDRESS
+            , TO_CHAR(NULL) NET_HOST_NAME
+          FROM
+            NEA_$tableNamePrefix$ASSET_LINE_NETWORK L
+            , NEA_$tableNamePrefix$ASSET A
+          WHERE
+            L.NET_MAC_ADDRESS IN (
+              <iterate property="obj.assetLineNetwork" conjunction=",">
+                #obj.assetLineNetwork[].netMacAddress:VARCHAR#
+              </iterate>
+            )
+            AND DELETE_FLAG != '1'
+            <isNotEmpty property="obj.assetId">
+              AND L.ASSET_ID != #obj.assetId:VARCHAR#
+            </isNotEmpty>
+            AND A.ASSET_ID = L.ASSET_ID
+            <isNotEmpty property="tableNamePrefix">
+              AND A.AP_STATUS = '2'
+            </isNotEmpty>
+        </isNotEmpty>
+        <isNotEmpty property="obj.assetLineNetwork">
+          UNION ALL
+          SELECT
+            TO_CHAR(NULL) AST_OIR
+            , TO_CHAR(NULL) AST_SERIAL_CODE
+            , TO_CHAR(NULL) NET_MAC_ADDRESS
+            , L.NET_IP_ADDRESS
+            , TO_CHAR(NULL) NET_HOST_NAME
+          FROM
+            NEA_$tableNamePrefix$ASSET_LINE_NETWORK L
+            , NEA_$tableNamePrefix$ASSET A
+          WHERE
+            L.NET_IP_ADDRESS IN (
+              <iterate property="obj.assetLineNetwork" conjunction=",">
+                #obj.assetLineNetwork[].netIpAddress:VARCHAR#
+              </iterate>
+            )
+            AND DELETE_FLAG != '1'
+            <isNotEmpty property="obj.assetId">
+              AND L.ASSET_ID != #obj.assetId:VARCHAR#
+            </isNotEmpty>
+            AND A.ASSET_ID = L.ASSET_ID
+            <isNotEmpty property="tableNamePrefix">
+              AND A.AP_STATUS = '2'
+            </isNotEmpty>
+        </isNotEmpty>
+      )
+
+  </select>
+
+  <!--
+    情報機器等_親子同時検索用一時テーブル作成
+  -->
+   <insert id="insertParentAssetId_AST" parameterClass="java.util.Map">
+     INSERT INTO NEA_PARENT_ASSET_ID (
+         SEARCH_ID
+       , ASSET_ID
+       , REL_ASSET_ID
+       , PARENT_ASSET_ID
+     ) VALUES (
+         #searchId:VARCHAR# /* SEARCH_ID*/
+       , #assetId:VARCHAR# /* ASSET_ID*/
+       , #relAssetId:VARCHAR# /* REL_ASSET_ID*/
+       , #parentAssetId:VARCHAR# /* PARENT_ASSET_ID*/
+     )
+   </insert>
+
+  <!--
+    情報機器等_親子同時検索用ワークテーブル削除
+  -->
+  <delete id="deleteParentAssetId_AST" parameterClass="java.util.Map">
+    DELETE FROM
+      NEA_PARENT_ASSET_ID
+    WHERE
+      SEARCH_ID = #searchId#
+  </delete>
+</sqlMap>

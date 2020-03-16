@@ -1,0 +1,808 @@
+<div class="section-form">
+  <form [formGroup]="assetForm">
+    <div class="block-frame">
+      <h2 class="frame-title bg-green">申　請　者</h2>
+      <div class="frame-body bd-none">
+        <div class="block-frame-border">
+          <h2 class="frame-title horizontal-tb">起票者</h2>
+          <div fxLayout="row" class="frame-content">
+            <div class="form-group wr-14">
+              <label for="apCreateStaffCode">社員番号:</label>
+              <ea-input-mask [attr.disabled]="true" formControlName="apCreateStaffCode"
+                             class="input-display wm-combo wr-5 bg-gray"
+                             id="apCreateStaffCode" name="apCreateStaffCode"></ea-input-mask>
+            </div>
+            <div class="form-group">
+              <label for="apCreateStaffName">氏名:</label>
+              <ea-input-mask [attr.disabled]="true"
+                             class="input-display wm-combo wr-10 bg-gray" formControlName="apCreateStaffName"
+                             id="apCreateStaffName" name="apCreateStaffName"></ea-input-mask>
+            </div>
+            <div class="form-group">
+              <label for="apCreateCompanyName">会社:</label>
+              <ea-input-mask [attr.disabled]="true"
+                             class="input-display wm-combo wr-5 bg-gray" formControlName="apCreateCompanyName"
+                             id="apCreateCompanyName" name="apCreateCompanyName"></ea-input-mask>
+            </div>
+            <div class="form-group wr-25">
+              <label for="apCreateSectionName">所属部署:</label>
+              <ea-input-mask [attr.disabled]="true"
+                             class="input-display wm-combo wr-17 bg-gray"
+                             id="apCreateSectionName" formControlName="apCreateSectionName"
+                             name="apCreateSectionName"></ea-input-mask>
+            </div>
+            <div class="form-group">
+              <label for="apCreateTel">連絡先TEL:</label>
+              <ea-input-mask [attr.disabled]="true"
+                             class="input-display wm-combo wr-10 bg-gray"
+                             id="apCreateTel" formControlName="apCreateTel"
+                             name="apCreateTel"></ea-input-mask>
+              <button type="button" class="wm-btn wm-sm">
+                <span class="ico"><img src="assets/images/button/mail.png"/></span>
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="block-frame-border">
+          <h2 class="frame-title horizontal-tb">申請者</h2>
+          <div fxLayout="row" class="frame-content">
+            <div class="form-group wr-14">
+              <app-staff-selection [title]="'社員番号:'"
+                                   [staffForm]="assetForm" [onlyStaffCode]="true" extClass="wr-5"
+                                   [staffCodeControlName]="'apStaffCode'" [staffNameControlName]="'apStaffName'"
+                                   [usableDataOnly]="true" [required]="true"
+                                   [companyOnly]="true"></app-staff-selection>
+            </div>
+            <div class="form-group">
+              <label for="apStaffName">氏名:</label>
+              <ea-input-mask [attr.disabled]="true"
+                             class="input-display wm-combo wr-10 bg-gray"
+                             id="apStaffName" formControlName="apStaffName"
+                             name="apStaffName"
+              ></ea-input-mask>
+            </div>
+            <div class="form-group">
+              <label for="apCompanyName">会社:</label>
+              <ea-input-mask [attr.disabled]="true"
+                             class="input-display wm-combo wr-5 bg-gray"
+                             id="apCompanyName" formControlName="apCompanyName"
+                             name="apCompanyName"></ea-input-mask>
+            </div>
+            <div class="form-group wr-25">
+              <label>所属部署:</label>
+              <ea-input-mask [attr.disabled]="true"
+                             class="input-display wm-combo wr-17 bg-gray"
+                             id="apSectionName" formControlName="apSectionName"
+                             name="apSectionName"></ea-input-mask>
+            </div>
+            <div class="form-group">
+              <label for="apTel">連絡先TEL:</label>
+              <div>
+                <ea-input-mask
+                  class="input-display wm-combo wr-10 bg-gray required"
+                  id="apTel" formControlName="apTel"
+                  name="apTel"></ea-input-mask>
+                <button type="button" class="wm-btn wm-sm">
+                  <span class="ico"><img src="assets/images/button/mail.png"/></span>
+                </button>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>申請者オフィス:</label>
+              <div>
+                <app-code-name-selection
+                  [formExportSearch]="assetForm"
+                  [statusCodeControlName]="'apOfficeCode'"
+                  [statusNameControlName]="'apOfficeName'"
+                  [modalTitle]="'オフィス選択'"
+                  [modalLabelTitle]="'設置場所名(あいまい)：'"
+                  [headerGrid]="'設置場所'"
+                  [sqlName]="'selectCodeName_LOV'"
+                  [paramMap]="{companyCode: sessionInfo.loginCompanyCode, categoryCode: 'OFFICE', whereClause: 'VALUE5 = 0'}"
+                  [isShowButtonClear]="false"
+                  [extClass]="'required non-rounded'">
+                </app-code-name-selection>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="block-frame pt-2">
+      <h2 class="frame-title bg-violet">資　産・機　器</h2>
+      <div class="frame-body bd-none">
+        <div class="block-frame-border">
+          <h2 class="frame-title horizontal-tb">資産固有情報</h2>
+          <div fxLayout="row" class="frame-content">
+            <div class="col-6 p-0">
+              <div class="form-group">
+                <label class="wr-9">資産(機器)名:</label>
+                <ea-input-mask class="input-display wm-combo wr-25 required" formControlName="astName"
+                               id="astName" name="astName"></ea-input-mask>
+              </div>
+              <div class="form-group">
+                <label class="wr-9">資産(機器)分類:</label>
+                <app-asset-category
+                  [categoryForm]="assetForm"
+                  [categoryNameControlParent]="'astCategory1Name'"
+                  [categoryCodeControlParent]="'astCategory1Code'"
+                  [categoryNameControlName]="'astCategory2Name'"
+                  [categoryCodeControlName]="'astCategory2Code'"
+                  [category2]="true"
+                  [categoryName]="'ASSET_CATEGORY2'"
+                  [selectedAssetCategory1]="assetObj.astCategory1Code"
+                  [selectOnly]="true"
+                  [parentInputClass]="'required'"
+                  [inputClass]="'required'"></app-asset-category>
+              </div>
+              <div class="form-group">
+                <label class="wr-9">筐体/形状:</label>
+                <app-ast-selection
+                  [formExportSearch]="assetForm"
+                  [statusCodeControlName]="'astShapeCode'"
+                  [statusNameControlName]="'astShapeName'"
+                  [sqlName]="'selectCodeName_LOV'"
+                  [paramMap]="{categoryCode: 'ASSET_SHAPE'}"
+                  [modalTitle]="'筐体/形状選択'"
+                  [headerGrid]="'筐体/形状'"
+                  [popupClass]="'wm-250'">
+                </app-ast-selection>
+              </div>
+            </div>
+            <div class="col-6 p-0">
+              <div class="form-group">
+                <label class="wr-7">メーカー:</label>
+                <app-code-name-selection
+                  [formExportSearch]="assetForm"
+                  [statusCodeControlName]="'astMakerCode'"
+                  [statusNameControlName]="'astMakerName'"
+                  [modalTitle]="'メーカー選択'"
+                  [modalLabelTitle]="'メーカー名(あいまい)：'"
+                  [headerGrid]="'メーカー'"
+                  [sqlName]="'selectCodeName_LOV'"
+                  [paramMap]="{categoryCode: 'ASSET_MAKER' }"
+                  [extClass]="'required wr-20'">
+                </app-code-name-selection>
+              </div>
+              <div class="form-group">
+                <label class="wr-7">販売元:</label>
+                <ea-input-mask class="input-display wm-combo wr-20" formControlName="astShopName"
+                               id="astShopName" name="astShopName"></ea-input-mask>
+              </div>
+              <div class="form-group">
+                <label class="wr-7">メーカー型番:</label>
+                <ea-input-mask class="input-display wm-combo wr-20" formControlName="astMakerModel" [required]="true"
+                               id="astMakerModel" name="astMakerModel"></ea-input-mask>
+              </div>
+              <div class="form-group">
+                <label class="wr-7">シリアル番号:</label>
+                <ea-input-mask class="input-display wm-combo wr-20" formControlName="astSerialCode" [required]="true"
+                               id="astSerialCode" name="astSerialCode"></ea-input-mask>
+              </div>
+              <div class="form-group">
+                <label class="wr-7">保証期限:</label>
+                <wj-input-date class="wm-combo wr-10" id="astGuaranteeTermDate"
+                               name="astGuaranteeTermDate"
+                               formControlName="astGuaranteeTermDate"
+                               [isRequired]="false"></wj-input-date>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="block-frame-border">
+          <h2 class="frame-title horizontal-tb">資産区分情報</h2>
+          <div fxLayout="row" class="frame-content">
+            <div class="col-6 p-0">
+              <div class="form-group">
+                <label class="wr-10">取得形態:</label>
+                <app-ast-selection
+                  [statusCodeControlName]="'astGetType'"
+                  [statusNameControlName]="'astGetTypeName'"
+                  [formExportSearch]="assetForm"
+                  [sqlName]="'selectCodeName_LOV'"
+                  [paramMap]="{categoryCode: 'ASSET_GET_TYPE'}"
+                  [modalTitle]="'取得形態選択'"
+                  [headerGrid]="'取得形態'"
+                  [isShowButtonClear]="false"
+                  [extClass]="'required wr-13'">
+                </app-ast-selection>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input required" type="checkbox" value="1"
+                         formControlName="astSystemSectionDeployFlag"
+                         id="astSystemSectionDeployFlag">
+                  <label class="form-check-label" for="astSystemSectionDeployFlag">情報システム部配備</label>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="wr-10">資産区分:</label>
+                <app-ast-selection
+                  [formExportSearch]="assetForm"
+                  [statusCodeControlName]="'astAssetType'"
+                  [statusNameControlName]="'astAssetTypeName'"
+                  [sqlName]="'selectCodeName_LOV'"
+                  [paramMap]="{categoryCode: 'ASSET_TYPE', whereClause: 'VALUE2 = ' + assetForm.controls?.astGetType.value + ' OR VALUE3 = ' + assetForm.controls?.astGetType.value}"
+                  [modalTitle]="'資産区分選択'"
+                  [headerGrid]="'資産区分'"
+                  [gridClass]="'h-300'"
+                  [isShowButtonClear]="false"
+                  [extClass]="'required wr-20'">
+                </app-ast-selection>
+              </div>
+              <div class="form-group">
+                <label class="wr-10">管理区分:</label>
+                <app-ast-selection
+                  [formExportSearch]="assetForm"
+                  [statusCodeControlName]="'astManageType'"
+                  [statusNameControlName]="'astManageTypeName'"
+                  [sqlName]="'selectCodeName_LOV'"
+                  [paramMap]="{}"
+                  [modalTitle]="'管理区分選択'"
+                  [headerGrid]="'管理区分'"
+                  [gridClass]="'h-300'"
+                  [isShowButtonClear]="false"
+                  [extClass]="'wr-20'">
+                </app-ast-selection>
+              </div>
+            </div>
+            <div class="col-6 p-0">
+              <div class="form-group">
+                <label class="wr-7">資産保有者:</label>
+                <app-code-name-selection
+                  [formExportSearch]="assetForm"
+                  [statusCodeControlName]="'astHolderCode'"
+                  [statusNameControlName]="'astHolderName'"
+                  [modalTitle]="'資産保有者選択'"
+                  [modalLabelTitle]="'会社名(あいまい)：'"
+                  [headerGrid]="'会社'"
+                  [sqlName]="'selectCodeName_LOV'"
+                  [paramMap]="{categoryCode: 'LEASE_RENTAL_CUSTOMER', companyCode: sessionInfo.loginCompanyCode, whereClause: 'VALUE9 = 1'}">
+                </app-code-name-selection>
+              </div>
+              <div class="form-group">
+                <label class="wr-7">管理終了日:</label>
+                <wj-input-date class="wm-combo wr-10" id="astManageEndDate"
+                               name="astManageEndDate"
+                               formControlName="astManageEndDate"
+                               [isRequired]="false"></wj-input-date>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="section-form pt-2">
+      <div class="block-frame">
+        <h2 class="frame-title bg-primary">保　有・設　置</h2>
+        <div class="frame-body bd-none">
+          <div class="block-frame-border">
+            <h2 class="frame-title horizontal-tb">保有部署/資産管理担当者</h2>
+            <div fxLayout="row" class="frame-content">
+              <div class="form-group">
+                <label for="holCompanyCode">会社:</label>
+                <ea-input-mask [attr.disabled]="true"
+                               class="input-display wm-combo wm-100 bg-gray"
+                               id="holCompanyCode"
+                               name="holCompanyCode"
+                               formControlName="holCompanyName"></ea-input-mask>
+              </div>
+              <div class="form-group">
+                <app-section-selection [selectOnly]="true" [sectionForm]="assetForm"
+                                       [extClass]="'required wr-20'" [title]="'保有部署:'"
+                                       [sectionYearControlName]="'holSectionYear'"
+                                       [visibleStatus]="true"
+                                       [sectionCodeControlName]="'holSectionCode'"
+                                       [sectionNameControlName]="'holSectionName'"></app-section-selection>
+              </div>
+              <div class="form-group">
+                <label>部署年度:</label>
+                <ea-input-number [attr.disabled]="true"
+                                 class="input-display wm-combo wr-5 bg-gray"
+                                 id="holSectionYear"
+                                 name="holSectionYear"
+                                 formControlName="holSectionYear"></ea-input-number>
+              </div>
+              <div class="form-group">
+                <label>資産管理担当者:</label>
+                <app-hol-staff-selection
+                  [holStaffForm]="assetForm"
+                  [staffCodeControlName]="'holStaffCode'"
+                  [staffNameControlName]="'holStaffName'"
+                  [sqlName]="'selectCodeName_LOV'"
+                  [selectOnly]="true"
+                  [paramMap]="assetForm.controls?.holSectionCode.value !== '' ? {sectionCode: sessionInfo.loginCompanyCode, openRetrieveFlag: true} : ''"
+                  [holStaffClass]="'required'">
+                </app-hol-staff-selection>
+
+              </div>
+            </div>
+          </div>
+          <div class="block-frame-border">
+            <h2 class="frame-title horizontal-tb">設置(使用)場所/使用目的</h2>
+            <div class="frame-content">
+              <div class="row col p-0">
+                <div class="form-group">
+                  <label class="wr-10">設置(使用)場所:</label>
+                  <app-code-name-selection
+                    [formExportSearch]="assetForm"
+                    [statusCodeControlName]="'holOfficeCode'"
+                    [statusNameControlName]="'holOfficeName'"
+                    [modalTitle]="'設置（使用）場所選択'"
+                    [modalLabelTitle]="'設置場所名(あいまい)：'"
+                    [headerGrid]="'設置場所'"
+                    [isShowButtonClear]="false"
+                    [sqlName]="'selectCodeName_LOV'"
+                    [paramMap]="{categoryCode: 'OFFICE', companyCode: sessionInfo.loginCompanyCode }"
+                    [extClass]="'required'">
+                  </app-code-name-selection>
+                </div>
+                <div class="form-group">
+                  <ea-input-number class="input-display wm-combo wr-3" formControlName="holOfficeFloor"
+                                   [required]="true"
+                                   id="holOfficeFloor" name="holOfficeFloor"></ea-input-number>
+                  <label>F</label>
+                </div>
+                <div class="form-group">
+                  <label class="wr-7">部屋番号:</label>
+                  <ea-input-mask class="input-display wm-combo wr-7" formControlName="holOfficeRoomNum"
+                                 id="holOfficeRoomNum" name="holOfficeRoomNum"></ea-input-mask>
+                </div>
+                <div class="form-group">
+                  <label class="wr-7">ラック番号:</label>
+                  <ea-input-mask class="input-display wm-combo wr-9" formControlName="holOfficeRackNum"
+                                 id="holOfficeRackNum" name="holOfficeRackNum"></ea-input-mask>
+                </div>
+              </div>
+              <!--              <div class="col pt-2">-->
+              <!--                <label style="color: #FF0000;">※　設置(使用)場所の変更は、移動申請(「申請＞移動申請」メニュー)にて行ってください。</label>-->
+              <!--              </div>-->
+              <div class="col p-0">
+                <div class="form-group">
+                  <label class="wr-10">使用目的:</label>
+                  <app-code-name-selection
+                    [formExportSearch]="assetForm"
+                    [statusCodeControlName]="'holPurposeCode'"
+                    [statusNameControlName]="'holPurposeName'"
+                    [modalTitle]="'使用目的選択'"
+                    [modalLabelTitle]="'設置場所名(あいまい)：'"
+                    [headerGrid]="'設置場所'"
+                    [isShowButtonClear]="false"
+                    [sqlName]="'selectCodeName_LOV'"
+                    [paramMap]="{}"
+                    [extClass]="'required'">
+                  </app-code-name-selection>
+                </div>
+              </div>
+              <div class="col p-0">
+                <div class="form-group">
+                  <label class="wr-10">補足:</label>
+                  <textarea style="width: 550px" formControlName="holOfficeDescription"
+                            name="holOfficeDescription"></textarea>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="block-frame-border">
+            <h2 class="frame-title horizontal-tb">取得(設置)者/取得(設置)日</h2>
+            <div fxLayout="row" class="frame-content">
+              <div class="form-group">
+                <app-staff-selection
+                  [staffForm]="assetForm"
+                  [staffCodeControlName]="'holGetStaffCode'"
+                  [staffNameControlName]="'holGetStaffName'"
+                  [onlyStaffCode]="true" [usableDataOnly]="true"
+                  [required]="true"
+                  [title]="'社員番号:'" [companyOnly]="true"></app-staff-selection>
+              </div>
+              <div class="form-group">
+                <label>氏名:</label>
+                <ea-input-mask [attr.disabled]="true"
+                               class="input-display wm-combo wm-100 bg-gray"
+                               id="holGetStaffName"
+                               name="holGetStaffName"
+                               formControlName="holGetStaffName"></ea-input-mask>
+              </div>
+              <div class="form-group">
+                <label>所属会社:</label>
+                <ea-input-mask [attr.disabled]="true"
+                               class="input-display wm-combo wr-6 bg-gray"
+                               id="holGetCompanyName"
+                               name="holGetCompanyName"
+                               formControlName="holGetCompanyName"></ea-input-mask>
+              </div>
+              <div class="form-group wm-300">
+                <label>所属部署:</label>
+                <ea-input-mask [attr.disabled]="true"
+                               class="input-display wm-combo wr-20 bg-gray"
+                               id="holGetSectionCode"
+                               name="holGetSectionCode"
+                               formControlName="holGetSectionCode"></ea-input-mask>
+              </div>
+              <div class="form-group">
+                <label class="wr-7">取得(設置)日:</label>
+                <wj-input-date class="wm-combo wr-10" id="astManageEndDate"
+                               name="astManageEndDate"
+                               formControlName="astManageEndDate"
+                               [isRequired]="false"></wj-input-date>
+              </div>
+            </div>
+          </div>
+          <div class="block-frame-border">
+            <h2 class="frame-title horizontal-tb">数量</h2>
+            <div fxLayout="row" class="frame-content">
+              <ea-input-number class="input-display wm-combo wr-7" formControlName="holQuantity"
+                               id="holQuantity" name="holQuantity"></ea-input-number>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="section-form pt-2">
+      <div class="block-frame">
+        <h2 class="frame-title" style="background-color: #848400">使　用</h2>
+        <div class="frame-body bd-none">
+          <div class="block-frame-border">
+            <h2 class="frame-title horizontal-tb">使用部署</h2>
+            <div fxLayout="row" class="frame-content">
+              <div class="form-group">
+                <label for="holCompanyCode">会社:</label>
+                <ea-input-mask [attr.disabled]="true"
+                               class="input-display wm-combo wm-100 bg-gray"
+                               id="useCompanyCode"
+                               name="useCompanyCode"
+                               formControlName="useCompanyCode"></ea-input-mask>
+              </div>
+              <div class="form-group">
+                <app-section-selection [selectOnly]="true" [sectionForm]="assetForm"
+                                       [extClass]="'required wr-20'" [title]="'部署:'"
+                                       [sectionYearControlName]="'useSectionYear'"
+                                       [sectionCodeControlName]="'useSectionCode'"
+                                       [sectionNameControlName]="'useSectionName'"></app-section-selection>
+              </div>
+              <div class="form-group">
+                <label>部署年度:</label>
+                <ea-input-number [attr.disabled]="true"
+                                 class="input-display wm-combo wr-5 bg-gray"
+                                 id="useSectionYear"
+                                 name="useSectionYear"
+                                 formControlName="useSectionYear"></ea-input-number>
+              </div>
+            </div>
+          </div>
+          <div class="block-frame-border">
+            <h2 class="frame-title horizontal-tb">使用者</h2>
+            <div class="frame-content">
+              <div fxLayout="row">
+                <div class="form-group">
+                  <label>社員番号:</label>
+                  <app-staff-selection
+                    [staffForm]="assetForm"
+                    [staffCodeControlName]="'useStaffCode'"
+                    [staffNameControlName]="'useStaffName'"
+                    [onlyStaffCode]="true" [usableDataOnly]="true"
+                    [required]="true"
+                    [title]="''" [companyOnly]="true"></app-staff-selection>
+                </div>
+                <div class="form-group">
+                  <label>氏名:</label>
+                  <ea-input-mask [attr.disabled]="true"
+                                 class="input-display wm-combo wm-100 bg-gray"
+                                 id="useStaffName"
+                                 name="useStaffName"
+                                 formControlName="useStaffName"></ea-input-mask>
+                </div>
+                <div class="form-group">
+                  <label>所属会社:</label>
+                  <ea-input-mask [attr.disabled]="true"
+                                 class="input-display wm-combo wr-6 bg-gray"
+                                 id="useStaffCompanyCode"
+                                 name="useStaffCompanyCode"
+                                 formControlName="useStaffCompanyCode"></ea-input-mask>
+                </div>
+                <div class="form-group wm-300">
+                  <label>所属部署:</label>
+                  <ea-input-mask [attr.disabled]="true"
+                                 class="input-display wm-combo wr-20 bg-gray"
+                                 id="useStaffSectionCode"
+                                 name="useStaffSectionCode"
+                                 formControlName="useStaffSectionCode"></ea-input-mask>
+                </div>
+              </div>
+              <div fxLayout="row">
+                <div class="form-group">
+                  <label>使用開始日:</label>
+                  <wj-input-date class="wm-combo wr-10" id="astManageEndDate"
+                                 name="astManageEndDate"
+                                 formControlName="astManageEndDate"
+                                 [isRequired]="false"></wj-input-date>
+                </div>
+                <div class="form-group">
+                  <label class="wr-10">共有ユーザー:</label>
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" value="1"
+                           formControlName="useCommonFlag"
+                           id="useCommonFlag1">
+                    <label class="form-check-label" for="useCommonFlag1">有り</label>
+                  </div>
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" value="1"
+                           formControlName="useCommonFlag"
+                           id="useCommonFlag2">
+                    <label class="form-check-label" for="useCommonFlag2">無し</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="section-form pt-2">
+      <div class="block-frame">
+        <h2 class="frame-title bg-primary">ＯＳ・ネットワ│ク</h2>
+        <div class="frame-body bd-none">
+          <div class="block-frame-border">
+            <h2 class="frame-title horizontal-tb">OS</h2>
+            <div class="frame-content">
+              <app-asset-line-os>管理項目:</app-asset-line-os>
+            </div>
+          </div>
+          <div class="block-frame-border">
+            <h2 class="frame-title horizontal-tb">ネットワーク</h2>
+            <div class="frame-content">
+              <app-asset-line-network></app-asset-line-network>
+            </div>
+          </div>
+          <div class="block-frame-border">
+            <h2 class="frame-title horizontal-tb">ホスト名</h2>
+            <div fxLayout="row" class="frame-content">
+              <ea-input-number class="input-display wm-combo wp-150" formControlName="netHostName"
+                               id="netHostName" name="netHostName"></ea-input-number>
+              <label *ngIf="apAssetMode">※　省略時は情報機器管理番号が自動設定されます。</label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="section-form pt-2">
+      <div class="block-frame">
+        <h2 class="frame-title bg-orange">保　守　契　約</h2>
+        <div class="frame-body bd-none">
+          <div class="block-frame-border">
+            <h2 class="frame-title horizontal-tb">保守契約</h2>
+            <div fxLayout="row" class="frame-content">
+              <div class="col-4 p-0">
+                <div class="form-group">
+                  <label class="wr-8">保守契約番号:</label>
+                  <ea-input-mask class="input-display wm-combo wp-150" formControlName="mntContractCode"
+                                 id="mntContractCode" name="mntContractCode"></ea-input-mask>
+                </div>
+                <div class="form-group">
+                  <label class="wr-8">保守契約先:</label>
+                  <ea-input-mask class="wm-combo wp-230" id="mntContractCompanyName"
+                                 name="mntContractCompanyName"
+                                 formControlName="mntContractCompanyName"></ea-input-mask>
+                </div>
+                <div class="form-group">
+                  <label class="wr-8">契約期間:</label>
+                  <wj-input-date class="wm-combo wr-10" id="mntContractStartDate"
+                                 name="mntContractStartDate"
+                                 formControlName="mntContractStartDate"
+                                 [isRequired]="false"></wj-input-date>
+                  <label>～</label>
+                  <wj-input-date class="wm-combo wr-10" id="mntContractEndDate"
+                                 name="mntContractEndDate"
+                                 formControlName="mntContractEndDate"
+                                 [isRequired]="false"></wj-input-date>
+                </div>
+                <div class="form-group">
+                  <label class="wr-8">契約金額:</label>
+                  <ea-input-mask class="wm-combo wp-100" id="mntContractAmount"
+                                 name="mntContractAmount"
+                                 formControlName="mntContractAmount"></ea-input-mask>
+                </div>
+              </div>
+              <div class="col-6 p-0">
+                <div class="form-group">
+                  <label class="wr-8">ユーザー登録番号:</label>
+                  <ea-input-mask class="input-display wm-combo wp-150" formControlName="mntContractRegistCode"
+                                 id="mntContractRegistCode" name="mntContractRegistCode"></ea-input-mask>
+                </div>
+                <div class="form-group">
+                  <label class="wr-8">契約期間:</label>
+                  <wj-input-date class="wm-combo wr-10" id="mntContractRegistDate"
+                                 name="mntContractRegistDate"
+                                 formControlName="mntContractRegistDate" [isRequired]="false"></wj-input-date>
+                </div>
+                <div class="form-group">
+                  <label class="wr-8">保守契約先:</label>
+                  <app-staff-selection [staffForm]="assetForm" [staffCodeControlName]="'mntContractStaffCode'"
+                                       [title]="''"
+                                       [staffNameControlName]="'mntContractStaffName'" [companyOnly]="true"
+                                       [usableDataOnly]="true">
+                  </app-staff-selection>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="section-form pt-2">
+      <div class="block-frame">
+        <h2 class="frame-title bg-brown">備考・付加情報</h2>
+        <div class="frame-body bd-none">
+          <div class="block-frame-border">
+            <h2 class="frame-title horizontal-tb">備考</h2>
+            <div fxLayout="row" class="frame-content">
+              <textarea style="width: 550px;" formcontrolName="dscDescription" id="dscDescription"
+                        name="dscDescription"></textarea>
+            </div>
+          </div>
+          <div class="block-frame-border">
+            <h2 class="frame-title horizontal-tb">付加情報１</h2>
+            <div class="frame-content">
+              <label>※　各部の資産管理担当者／使用者が資産管理用の項目として自由に入力できます。</label>
+              <div class="form-group">
+                <label class="wr-10">管理項目:</label>
+                <div class="col-6">
+                  <div class="row p-0">
+                    <div class="form-group">
+                      <label class="wr-2">１</label>
+                      <ea-input-mask class="input-display wm-combo dsc-attribute" id="dscAttribute1"
+                                     formcontrolName="dscAttribute1" name="dscAttribute1"></ea-input-mask>
+                    </div>
+                    <div class="form-group">
+                      <label class="wr-2">２</label>
+                      <ea-input-mask class="input-display wm-combo dsc-attribute" id="dscAttribute2"
+                                     formcontrolName="dscAttribute2" name="dscAttribute2"></ea-input-mask>
+                    </div>
+                    <div class="form-group">
+                      <label class="wr-2">３</label>
+                      <ea-input-mask class="input-display wm-combo dsc-attribute" id="dscAttribute3"
+                                     formcontrolName="dscAttribute3" name="dscAttribute3"></ea-input-mask>
+                    </div>
+                    <div class="form-group">
+                      <label class="wr-2">４</label>
+                      <ea-input-mask class="input-display wm-combo dsc-attribute" id="dscAttribute4"
+                                     formcontrolName="dscAttribute4" name="dscAttribute4"></ea-input-mask>
+                    </div>
+                    <div class="form-group">
+                      <label class="wr-2">５</label>
+                      <ea-input-mask class="input-display wm-combo dsc-attribute" id="dscAttribute5"
+                                     formcontrolName="dscAttribute5" name="dscAttribute5"></ea-input-mask>
+                    </div>
+                    <div class="form-group">
+                      <label class="wr-2">６</label>
+                      <ea-input-mask class="input-display wm-combo dsc-attribute" id="dscAttribute6"
+                                     formcontrolName="dscAttribute6" name="dscAttribute6"></ea-input-mask>
+                    </div>
+                    <div class="form-group">
+                      <label class="wr-2">７</label>
+                      <ea-input-mask class="input-display wm-combo dsc-attribute" id="dscAttribute7"
+                                     formcontrolName="dscAttribute7" name="dscAttribute7"></ea-input-mask>
+                    </div>
+                    <div class="form-group">
+                      <label class="wr-2">８</label>
+                      <ea-input-mask class="input-display wm-combo dsc-attribute" id="dscAttribute8"
+                                     formcontrolName="dscAttribute8" name="dscAttribute8"></ea-input-mask>
+                    </div>
+                    <div class="form-group">
+                      <label class="wr-2">９</label>
+                      <ea-input-mask class="input-display wm-combo dsc-attribute" id="dscAttribute9"
+                                     formcontrolName="dscAttribute9" name="dscAttribute9"></ea-input-mask>
+                    </div>
+                    <div class="form-group">
+                      <label class="wr-2">１０</label>
+                      <ea-input-mask class="input-display wm-combo dsc-attribute" id="dscAttribute10"
+                                     formcontrolName="dscAttribute10" name="dscAttribute10"></ea-input-mask>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+          <div class="block-frame-border">
+            <h2 class="frame-title horizontal-tb">付加情報２（管理者入力）</h2>
+            <div class="frame-content">
+              <div class="form-group">
+                <label class="wr-10">管理項目:</label>
+                <div class="col-6">
+                  <div class="row p-0">
+                    <div class="form-group">
+                      <label class="wr-2">１１</label>
+                      <ea-input-mask class="input-display wm-combo dsc-attribute" id="dscAttribute11"
+                                     formcontrolName="dscAttribute11" name="dscAttribute11"></ea-input-mask>
+                    </div>
+                    <div class="form-group">
+                      <label class="wr-2">１２</label>
+                      <ea-input-mask class="input-display wm-combo dsc-attribute" id="dscAttribute12"
+                                     formcontrolName="dscAttribute13" name="dscAttribute12"></ea-input-mask>
+                    </div>
+                    <div class="form-group">
+                      <label class="wr-2">１３</label>
+                      <ea-input-mask class="input-display wm-combo dsc-attribute" id="dscAttribute13"
+                                     formcontrolName="dscAttribute13" name="dscAttribute13"></ea-input-mask>
+                    </div>
+                    <div class="form-group">
+                      <label class="wr-2">１４</label>
+                      <ea-input-mask class="input-display wm-combo dsc-attribute" id="dscAttribute14"
+                                     formcontrolName="dscAttribute14" name="dscAttribute14"></ea-input-mask>
+                    </div>
+                    <div class="form-group">
+                      <label class="wr-2">１５</label>
+                      <ea-input-mask class="input-display wm-combo dsc-attribute" id="dscAttribute15"
+                                     formcontrolName="dscAttribute15" name="dscAttribute15"></ea-input-mask>
+                    </div>
+                    <div class="form-group">
+                      <label class="wr-2">１６</label>
+                      <ea-input-mask class="input-display wm-combo dsc-attribute" id="dscAttribute16"
+                                     formcontrolName="dscAttribute16" name="dscAttribute16"></ea-input-mask>
+                    </div>
+                    <div class="form-group">
+                      <label class="wr-2">１７</label>
+                      <ea-input-mask class="input-display wm-combo dsc-attribute" id="dscAttribute17"
+                                     formcontrolName="dscAttribute17" name="dscAttribute17"></ea-input-mask>
+                    </div>
+                    <div class="form-group">
+                      <label class="wr-2">１８</label>
+                      <ea-input-mask class="input-display wm-combo dsc-attribute" id="dscAttribute18"
+                                     formcontrolName="dscAttribute18" name="dscAttribute18"></ea-input-mask>
+                    </div>
+                    <div class="form-group">
+                      <label class="wr-2">１９</label>
+                      <ea-input-mask class="input-display wm-combo dsc-attribute" id="dscAttribute19"
+                                     formcontrolName="dscAttribute19" name="dscAttribute19"></ea-input-mask>
+                    </div>
+                    <div class="form-group">
+                      <label class="wr-2">２０</label>
+                      <ea-input-mask class="input-display wm-combo dsc-attribute" id="dscAttribute20"
+                                     formcontrolName="dscAttribute20" dscAttribute20="dscAttribute10"></ea-input-mask>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="block-frame-border">
+            <h2 class="frame-title horizontal-tb">付加情報３</h2>
+            <div class="frame-content">
+              <div class="form-group">
+                <label for="apCreateStaffCode">故障交換元の情報機器管理番号:</label>
+                <div class="col-content">
+                  <ea-input-mask class="input-display wm-combo wr-9" id="dscFailureAssetId" name="dscFailureAssetId"
+                                 formcontrolName="dscFailureAssetId"></ea-input-mask>
+                  <label>※　故障交換（リース・レンタル）により取得した場合に、故障した機器の情報管理番号が自動設定されます。</label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="section-form pt-2">
+      <div class="block-frame">
+        <h2 class="frame-title bg-green">棚卸</h2>
+        <div class="frame-body bd-none">
+          <div class="block-frame-border">
+            <h2 class="frame-title horizontal-tb">棚卸区分</h2>
+            <div fxLayout="row" class="frame-content">
+              <div class="form-check form-check-inline">
+                <input class="form-check-input required" type="checkbox" value="1"
+                       formControlName="invInCompanyActualFlag"
+                       id="invInCompanyActualFlag">
+                <label class="form-check-label" for="invInCompanyActualFlag">社内実地棚卸対象</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input required" type="checkbox" value="1"
+                       formControlName="invSealIssueFlag"
+                       id="invSealIssueFlag">
+                <label class="form-check-label" for="invSealIssueFlag">シール発行対象</label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>

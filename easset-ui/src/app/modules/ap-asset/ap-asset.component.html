@@ -1,0 +1,94 @@
+<wj-tab-panel #viewStack class="view-stack" (selectedIndexChange)="this.selectedIndexChangeHandler($event)">
+  <ea-view-stack-tab [keepViewState]="true"> <!-- 画面切替後も状態を維持する画面：true、維持しない画面:false-->
+    <a>取得申請検索</a>
+    <div>
+      <app-ap-asset-ap-get-tan-search [parent]="this" #childViewApGetTanSearch
+                                      *ngIf="this.isLoaded.get(this.viewIndexApGetTanSearch)">
+        {{this.changeChildSubject.set(this.viewIndexApGetTanSearch, childViewApGetTanSearch.changeChildSubject)}}
+      </app-ap-asset-ap-get-tan-search>
+    </div>
+  </ea-view-stack-tab>
+
+  <ea-view-stack-tab [keepViewState]="true"> <!-- 画面切替後も状態を維持する画面：true、維持しない画面:false-->
+    <a>取得申請検索結果</a>
+    <div>
+      <app-ap-asset-ap-get-tan-result [parent]="this" #childViewApGetTanResult
+                                      *ngIf="this.isLoaded.get(this.viewIndexApGetTanResult)">
+        {{this.changeChildSubject.set(this.viewIndexApGetTanResult, childViewApGetTanResult.changeChildSubject)}}
+      </app-ap-asset-ap-get-tan-result>
+    </div>
+  </ea-view-stack-tab>
+
+  <ea-view-stack-tab [keepViewState]="true"> <!-- 画面切替後も状態を維持する画面：true、維持しない画面:false-->
+    <a>取得申請検索結果</a>
+    <div>
+      <app-ap-asset-ap-get-tan-result-line [parent]="this" #childViewApGetTanResultLine
+                                           *ngIf="this.isLoaded.get(this.viewIndexApGetTanResultLine)">
+        {{this.changeChildSubject.set(this.viewIndexApGetTanResultLine, childViewApGetTanResultLine.changeChildSubject)}}
+      </app-ap-asset-ap-get-tan-result-line>
+    </div>
+  </ea-view-stack-tab>
+
+  <ea-view-stack-tab [keepViewState]="true"> <!-- 画面切替後も状態を維持する画面：true、維持しない画面:false-->
+    <a>取得申請検索</a>
+    <div>
+      <app-ap-asset-entry [parent]="this" #childViewApAssetEntry
+                          *ngIf="this.isLoaded.get(this.viewIndexEntry)">
+        {{this.changeChildSubject.set(this.viewIndexEntry, childViewApAssetEntry.changeChildSubject)}}
+      </app-ap-asset-entry>
+    </div>
+  </ea-view-stack-tab>
+
+  <ea-view-stack-tab [keepViewState]="true"> <!-- 画面切替後も状態を維持する画面：true、維持しない画面:false-->
+    <a>取得申請検索</a>
+    <div>
+      <app-ap-asset-hist [parent]="this" #childViewApAssetHist *ngIf="this.isLoaded.get(this.viewIndexHist)">
+        {{this.changeChildSubject.set(this.viewIndexHist, childViewApAssetHist.changeChildSubject)}}
+      </app-ap-asset-hist>
+    </div>
+  </ea-view-stack-tab>
+
+  <ea-view-stack-tab [keepViewState]="true"> <!-- 画面切替後も状態を維持する画面：true、維持しない画面:false-->
+    <a>取得申請検索</a>
+    <div>
+      <app-ap-asset-search [parent]="this" #childViewApAssetSearch
+                           *ngIf="this.isLoaded.get(this.viewIndexSearch)">
+        {{this.changeChildSubject.set(this.viewIndexSearch, childViewApAssetSearch.changeChildSubject)}}
+      </app-ap-asset-search>
+    </div>
+  </ea-view-stack-tab>
+
+  <ea-view-stack-tab [keepViewState]="true"> <!-- 画面切替後も状態を維持する画面：true、維持しない画面:false-->
+    <a>取得申請検索</a>
+    <div>
+      <app-ap-asset-result [parent]="this" #childViewResult
+                           *ngIf="this.isLoaded.get(this.viewIndexResult)">
+        {{this.changeChildSubject.set(this.viewIndexResult, childViewResult.changeChildSubject)}}
+      </app-ap-asset-result>
+    </div>
+  </ea-view-stack-tab>
+
+  <ea-view-stack-tab [keepViewState]="false">
+    <!-- 画面切替後も状態を維持する画面：true、維持しない画面:false-->
+    <a>新規作成(仮想機器)</a>
+    <div>
+      <app-ap-asset-vm-search [parent]="this" #childViewApAssetVmSearch
+                              *ngIf="this.isLoaded.get(this.viewIndexAssetVmSearch)">
+        {{this.changeChildSubject.set(this.viewIndexAssetVmSearch, childViewApAssetVmSearch.changeChildSubject)}}
+      </app-ap-asset-vm-search>
+    </div>
+  </ea-view-stack-tab>
+  <ea-view-stack-tab [keepViewState]="false">
+    <!-- 画面切替後も状態を維持する画面：true、維持しない画面:false-->
+    <a>新規作成(仮想機器)</a>
+    <div>
+      <app-ap-asset-vm-result [parent]="this" #childViewApAssetVmResult
+                              *ngIf="this.isLoaded.get(this.viewIndexAssetVmResult)">
+        {{this.changeChildSubject.set(this.viewIndexAssetVmResult, childViewApAssetVmResult.changeChildSubject)}}
+      </app-ap-asset-vm-result>
+    </div>
+  </ea-view-stack-tab>
+
+</wj-tab-panel>
+
+<app-confirm-popup #confirmPopup (confirm)="onConfirm()"></app-confirm-popup>

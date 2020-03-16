@@ -1,0 +1,19 @@
+<div class="int-head">
+  <div>
+    <a class="head-search" href="javascript: void(0)" (click)="goBack()">
+      <img src="assets/images/button/to_search.gif">
+      <span>検索条件画面へ戻る</span>
+    </a>
+  </div>
+  <hr>
+  <div class="row">
+    <div class="col">
+      <label>※　取得申請を選択(ダブルクリック)してください。</label>
+    </div>
+  </div>
+
+</div>
+<div class="int-list">
+  <app-ap-get-int-result-list (select)="clickRow($event)" [dataList]="apGetIntSRList"
+                              [currentState]="'AP_LICENSE'"></app-ap-get-int-result-list>
+</div>

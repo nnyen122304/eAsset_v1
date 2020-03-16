@@ -1,0 +1,16 @@
+
+<div class="page-container page-search-license">
+  <div class="section-header text-blue mb-1" [hidden]="currentMenuId !== MENU_ID_LICENSE_DELETE">抹消するライセンスを検索してください。</div>
+  <div class="section-body" [ngClass]="currentMenuId === MENU_ID_LICENSE_DELETE ? 'is-header': ''">
+    <app-license-search-condition [currentState]="currentMenuId === MENU_ID_LICENSE_DELETE ? 'LICENSE_DELETE' :'LICENSE_SEARCH'"></app-license-search-condition>
+  </div>
+  <div class="section-footer mt-1 pt-2">
+    <div class="button-bottom ">
+      <button type="button" class="wm-btn wm-tab-element ml-3" (click)="search()">検索</button>
+      <button type="button" class="wm-btn wm-tab-element ml-3" (click)="popupDownload.open($event.currentTarget)"
+        [hidden]="currentMenuId === MENU_ID_LICENSE_DELETE">ダウンロード</button>
+      <button type="button" class="wm-btn wm-tab-element ml-3" (click)="resetSearch()">クリア</button>
+    </div>
+  </div>
+</div>
+<app-download-option-prop (select)="downloadCSV($event)" [paramObj]="{itemDefName: 'ITEM_DEF_LICENSE'}"></app-download-option-prop>

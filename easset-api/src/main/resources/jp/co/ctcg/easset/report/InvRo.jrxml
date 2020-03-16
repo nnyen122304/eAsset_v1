@@ -1,0 +1,1314 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="InvRo" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<property name="ireport.zoom" value="1.2100000000000035"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="27"/>
+	<style name="BaseFont" isDefault="true" isBlankWhenNull="true" fontSize="8" pdfFontName="HeiseiMin-W3" pdfEncoding="UniJIS-UCS2-HW-H" isPdfEmbedded="false">
+		<box leftPadding="1" rightPadding="1"/>
+	</style>
+	<style name="Cell" isDefault="false" style="BaseFont" mode="Transparent" fill="Solid" isBlankWhenNull="true" fontSize="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false">
+		<box leftPadding="1" rightPadding="1">
+			<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineStyle="Solid"/>
+			<bottomPen lineWidth="0.5" lineStyle="Solid"/>
+			<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="CellTitle" isDefault="false" style="Cell" mode="Opaque" backcolor="#C0C0C0" fill="Solid" isBlankWhenNull="true">
+		<box leftPadding="1" rightPadding="1">
+			<topPen lineWidth="0.5"/>
+			<leftPen lineWidth="0.0"/>
+			<bottomPen lineWidth="0.5"/>
+			<rightPen lineWidth="0.0"/>
+		</box>
+	</style>
+	<style name="Cell2" isDefault="false" mode="Transparent" fill="Solid" isBlankWhenNull="true" fontSize="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="HeiseiMin-W3" pdfEncoding="UniJIS-UCS2-HW-H" isPdfEmbedded="true">
+		<pen lineWidth="0.5"/>
+		<box topPadding="0" leftPadding="0" bottomPadding="0" rightPadding="0">
+			<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+			<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#F0F0F0"/>
+			<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table" isDefault="false">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TH" isDefault="false" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_CH" isDefault="false" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TD" isDefault="false" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1" isDefault="false">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Cell3" isDefault="false" mode="Transparent" fill="Solid" isBlankWhenNull="true" fontSize="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="HeiseiMin-W3" pdfEncoding="UniJIS-UCS2-HW-H" isPdfEmbedded="true">
+		<pen lineWidth="0.5"/>
+		<box topPadding="0" leftPadding="0" bottomPadding="0" rightPadding="0">
+			<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+			<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#F0F0F0"/>
+			<leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+			<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#F0F0F0"/>
+			<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+		</box>
+	</style>
+	<parameter name="holSectionWhere" class="java.lang.String">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="invStaffWhere" class="java.lang.String">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="period" class="java.lang.String"/>
+	<parameter name="companyCode" class="java.lang.String"/>
+	<parameter name="histTablePrefixLdFld" class="java.lang.String">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="histTablePrefixLdInv" class="java.lang.String">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT
+	nil.COMPANY_CODE
+	, NEA_UTIL_PKG.get_company_name_f(nil.COMPANY_CODE) companyName
+	,nil.HOL_SECTION_CODE
+	, NEA_UTIL_PKG.get_section_name_f(nil.COMPANY_CODE, nil.HOL_SECTION_CODE, nil.HOL_SECTION_YEAR) holSectionName
+	,nil.HOL_SECTION_YEAR
+	,nil.CREATE_DATE
+	,nil.UPDATE_DATE
+	,nil.PERIOD
+	, NEA_UTIL_PKG.format_date_char_f(nil.PERIOD) periodF
+	,nil.INV_ASSET_TYPE
+	,nil.INV_STATUS
+	,nil.INV_COMMENT
+	,nil.AST_LIC_ID
+	,nil.PP_ID
+	,nil.AST_NUM
+	,nil.APPLICATION_ID
+	,nil.DELETE_FLAG
+	,nil.DELETE_DATE
+	,nil.AST_NAME
+	,nil.HOL_STAFF_CODE
+	, NEA_UTIL_PKG.get_staff_name_f(nil.HOL_STAFF_CODE) holStaffName
+	,nil.USE_STAFF_CODE
+	, NEA_UTIL_PKG.get_staff_name_f(nil.USE_STAFF_CODE) useStaffName
+	,nil.HOL_OFFICE_CODE
+	, NEA_UTIL_PKG.get_cn_value1_f('OFFICE', nil.HOL_OFFICE_CODE) holOfficeName
+	,nil.HOL_OFFICE_FLOOR
+	,nil.HOL_OFFICE_ROOM_NUM
+	,nil.HOL_OFFICE_RACK_NUM
+	,nil.HOL_QUANTITY
+	,nil.DSC_DESCRIPTION
+	,nisum.AP_STATUS
+	, NEA_UTIL_PKG.get_cn_value1_f('AP_STATUS_INV', nisum.AP_STATUS) apStatusName
+	,nisum.AP_DATE
+	,nisum.APPROVE_DATE
+	,ptvf.SHISANKNRKBN
+	,ptvf.SETCHICD
+	,ptvf.SETCHINM
+	,ptvf.SHURUINM
+	,ptvf.SKKHOK
+	, NEA_UTIL_PKG.get_cn_value1_f('PPFS_FLD_SKKHO', ptvf.SKKHOK)  skkhokName
+	, DECODE(ptvf.SKKHOK, '3', ptvf.SKKMMSUK, 'D', ptvf.SKKMMSUK, ptvf.TAINENK ) tainenk
+	,ptvf.SKKHIHFCD
+	,ptvf.HFNM
+	,ptvf.STKYMD
+	,NVL(NEA_UTIL_PKG.format_date_char_f(ptvf.STKYMD),NEA_UTIL_PKG.format_date_char_f(ptvf.CPKEIJOYMD)) stkymdF
+	,ptvf.KADOYMD
+	,NVL(NEA_UTIL_PKG.format_date_char_f(ptvf.KADOYMD),NEA_UTIL_PKG.format_date_char_f(ptvf.ADD_UP_PLAN_DATE)) kadoymdF
+	,ptvf.SURYO
+	,ptvf.COST_TYPE_NAME
+	,ptvf.DEP_PRJ_CODE
+	,ptvf.DEP_PRJ_NAME
+	,ptvf.SOSHIKI2CD
+	,ptvf.SOSHIKI2NM
+	,ptvf.BIKO1
+	,ptvf.BIKO2
+	,ptvf.STKGKK
+	,ptvf.TO_BOKAK
+	,ptvf.SHISANNM
+	,stat.LAST_SUCCESS_CREATE_END_DATE
+	, CASE
+		WHEN ptvf.SHISANKNRKBN = '1' THEN '非償却'
+			WHEN ptvf.SKKHOK = '9' THEN '非償却'
+		WHEN (ptvf.SKKHOK != '9' and SUBSTR(ptvf.KADOYMD, 1, 6) > ptvf.PERIOD) THEN '未償却'
+		WHEN ptvf.SKKKANRYOFLGK = '1' THEN '償却完了'
+		ELSE '償却中'
+	END skkStatusName
+	,ptvr.MITSUMORIGK_WARIBIKIMAEK
+	,ptvr.TO_SAIMUBOKAK
+	,ptvr.WARIBIKIRITSUK
+	,ptvr.SAIMURIKOYMD
+	, NEA_UTIL_PKG.format_date_char_f(ptvr.SAIMURIKOYMD) saimurikoymdF
+	,CASE
+		WHEN nil.INV_STATUS IN('1','2','3')THEN '1'
+		ELSE '2'
+	END invStatusSort
+
+FROM
+	NEA_$P!{histTablePrefixLdInv}INV_LINE nil
+	,NEA_$P!{histTablePrefixLdInv}INV_SUM nisum
+	,NEA_$P!{histTablePrefixLdFld}PPFS_FLD ptvf
+	,NEA_$P!{histTablePrefixLdFld}PPFS_FLD_RO ptvr
+	,NEA_INV_STAT stat
+
+WHERE
+	$P!{holSectionWhere}
+	$P!{invStaffWhere}
+	AND nil.PERIOD = $P{period}
+	AND nil.COMPANY_CODE = $P{companyCode}
+	AND nil.INV_ASSET_TYPE = '2'
+	AND nil.INV_LINK_TYPE = '1'
+
+	AND nil.PERIOD = nisum.PERIOD
+	AND nil.COMPANY_CODE = nisum.COMPANY_CODE
+	AND nil.INV_ASSET_TYPE = nisum.INV_ASSET_TYPE
+	AND nil.HOL_SECTION_CODE = nisum.HOL_SECTION_CODE
+
+	AND nil.PERIOD = ptvf.PERIOD
+	AND nil.COMPANY_CODE = ptvf.COMPANY_CODE
+	AND nil.PP_ID = ptvf.KOYUNO
+
+	AND ptvf.PERIOD = ptvr.PERIOD
+	AND ptvf.COMPANY_CODE = ptvr.COMPANY_CODE
+	AND ptvf.KOYUNO = ptvr.KOYUNO
+
+	AND stat.COMPANY_CODE = nil.COMPANY_CODE
+	AND stat.PERIOD = nil.PERIOD
+
+ORDER BY
+	nil.HOL_SECTION_CODE
+	,ptvf.SETCHICD
+	,nil.AST_NUM
+	,nil.PP_ID
+	,invStatusSort
+	,nil.AST_LIC_ID]]>
+	</queryString>
+	<field name="COMPANY_CODE" class="java.lang.String"/>
+	<field name="COMPANYNAME" class="java.lang.String"/>
+	<field name="HOL_SECTION_CODE" class="java.lang.String"/>
+	<field name="HOLSECTIONNAME" class="java.lang.String"/>
+	<field name="HOL_SECTION_YEAR" class="java.math.BigDecimal"/>
+	<field name="CREATE_DATE" class="java.sql.Timestamp"/>
+	<field name="UPDATE_DATE" class="java.sql.Timestamp"/>
+	<field name="PERIOD" class="java.lang.String"/>
+	<field name="PERIODF" class="java.lang.String"/>
+	<field name="INV_ASSET_TYPE" class="java.lang.String"/>
+	<field name="INV_STATUS" class="java.lang.String"/>
+	<field name="INV_COMMENT" class="java.lang.String"/>
+	<field name="AST_LIC_ID" class="java.lang.String"/>
+	<field name="PP_ID" class="java.math.BigDecimal"/>
+	<field name="AST_NUM" class="java.lang.String"/>
+	<field name="APPLICATION_ID" class="java.lang.String"/>
+	<field name="DELETE_FLAG" class="java.lang.String"/>
+	<field name="DELETE_DATE" class="java.sql.Timestamp"/>
+	<field name="AST_NAME" class="java.lang.String"/>
+	<field name="HOL_STAFF_CODE" class="java.lang.String"/>
+	<field name="HOLSTAFFNAME" class="java.lang.String"/>
+	<field name="USE_STAFF_CODE" class="java.lang.String"/>
+	<field name="USESTAFFNAME" class="java.lang.String"/>
+	<field name="HOL_OFFICE_CODE" class="java.lang.String"/>
+	<field name="HOLOFFICENAME" class="java.lang.String"/>
+	<field name="HOL_OFFICE_FLOOR" class="java.math.BigDecimal"/>
+	<field name="HOL_OFFICE_ROOM_NUM" class="java.lang.String"/>
+	<field name="HOL_OFFICE_RACK_NUM" class="java.lang.String"/>
+	<field name="HOL_QUANTITY" class="java.math.BigDecimal"/>
+	<field name="DSC_DESCRIPTION" class="java.lang.String"/>
+	<field name="AP_STATUS" class="java.lang.String"/>
+	<field name="APSTATUSNAME" class="java.lang.String"/>
+	<field name="AP_DATE" class="java.sql.Timestamp"/>
+	<field name="APPROVE_DATE" class="java.sql.Timestamp"/>
+	<field name="SHISANKNRKBN" class="java.lang.String"/>
+	<field name="SETCHICD" class="java.lang.String"/>
+	<field name="SETCHINM" class="java.lang.String"/>
+	<field name="SHURUINM" class="java.lang.String"/>
+	<field name="SKKHOK" class="java.lang.String"/>
+	<field name="SKKHOKNAME" class="java.lang.String"/>
+	<field name="TAINENK" class="java.math.BigDecimal"/>
+	<field name="SKKHIHFCD" class="java.lang.String"/>
+	<field name="HFNM" class="java.lang.String"/>
+	<field name="STKYMD" class="java.lang.String"/>
+	<field name="STKYMDF" class="java.lang.String"/>
+	<field name="KADOYMD" class="java.lang.String"/>
+	<field name="KADOYMDF" class="java.lang.String"/>
+	<field name="SURYO" class="java.math.BigDecimal"/>
+	<field name="COST_TYPE_NAME" class="java.lang.String"/>
+	<field name="DEP_PRJ_CODE" class="java.lang.String"/>
+	<field name="DEP_PRJ_NAME" class="java.lang.String"/>
+	<field name="SOSHIKI2CD" class="java.lang.String"/>
+	<field name="SOSHIKI2NM" class="java.lang.String"/>
+	<field name="BIKO1" class="java.lang.String"/>
+	<field name="BIKO2" class="java.lang.String"/>
+	<field name="STKGKK" class="java.math.BigDecimal"/>
+	<field name="TO_BOKAK" class="java.math.BigDecimal"/>
+	<field name="SHISANNM" class="java.lang.String"/>
+	<field name="LAST_SUCCESS_CREATE_END_DATE" class="java.sql.Timestamp"/>
+	<field name="SKKSTATUSNAME" class="java.lang.String"/>
+	<field name="MITSUMORIGK_WARIBIKIMAEK" class="java.math.BigDecimal"/>
+	<field name="TO_SAIMUBOKAK" class="java.math.BigDecimal"/>
+	<field name="WARIBIKIRITSUK" class="java.math.BigDecimal"/>
+	<field name="SAIMURIKOYMD" class="java.lang.String"/>
+	<field name="SAIMURIKOYMDF" class="java.lang.String"/>
+	<field name="INVSTATUSSORT" class="java.lang.String"/>
+	<variable name="Number" class="java.lang.Integer" resetType="Group" resetGroup="ASTNUM">
+		<variableExpression><![CDATA[($V{Number} != null) ? (new Integer($V{Number}.intValue() + 1)):(new Integer(1))]]></variableExpression>
+		<initialValueExpression><![CDATA[]]></initialValueExpression>
+	</variable>
+	<variable name="STKGKK_AMOUNT" class="java.math.BigDecimal" resetType="Group" resetGroup="HOLSEC_SETCHICD" calculation="Sum">
+		<variableExpression><![CDATA[$V{Number} > 1 ? 0 : $F{STKGKK}]]></variableExpression>
+	</variable>
+	<variable name="TO_BOKAK_AMOUNT" class="java.math.BigDecimal" resetType="Group" resetGroup="HOLSEC_SETCHICD" calculation="Sum">
+		<variableExpression><![CDATA[$V{Number} > 1 ? 0 : $F{TO_BOKAK}]]></variableExpression>
+	</variable>
+	<variable name="MITSUMORIGK_AMOUNT" class="java.math.BigDecimal" resetType="Group" resetGroup="HOLSEC_SETCHICD" calculation="Sum">
+		<variableExpression><![CDATA[$V{Number} > 1 ? 0 : $F{MITSUMORIGK_WARIBIKIMAEK}]]></variableExpression>
+	</variable>
+	<variable name="TO_SAIMUBOKAK_AMOUNT" class="java.math.BigDecimal" resetType="Group" resetGroup="HOLSEC_SETCHICD" calculation="Sum">
+		<variableExpression><![CDATA[$V{Number} > 1 ? 0 : $F{TO_SAIMUBOKAK}]]></variableExpression>
+	</variable>
+	<variable name="CONFIRM_SUM1" class="java.math.BigDecimal" resetType="Group" resetGroup="ASTNUM" calculation="Sum">
+		<variableExpression><![CDATA[$F{INV_STATUS} == "1" ? 1 : 0]]></variableExpression>
+	</variable>
+	<variable name="CONFIRM_SUM2" class="java.math.BigDecimal" resetType="Group" resetGroup="ASTNUM" calculation="Sum">
+		<variableExpression><![CDATA[$F{INV_STATUS} == "2" ? 1 : 0]]></variableExpression>
+	</variable>
+	<variable name="CONFIRM_SUM3" class="java.math.BigDecimal" resetType="Group" resetGroup="ASTNUM" calculation="Sum">
+		<variableExpression><![CDATA[$F{INV_STATUS} == "3" ? 1 : 0]]></variableExpression>
+	</variable>
+	<variable name="PAGE_NUM_HOL_SETCHI" class="java.lang.Integer" resetType="Group" resetGroup="HOLSEC_SETCHICD" incrementType="Page" calculation="Count">
+		<variableExpression><![CDATA[$V{PAGE_NUMBER}]]></variableExpression>
+	</variable>
+	<variable name="HOLSEC_SETCHICD_AST_COUNT" class="java.lang.Integer" resetType="Group" resetGroup="HOLSEC_SETCHICD" calculation="DistinctCount">
+		<variableExpression><![CDATA[$F{AST_NUM}]]></variableExpression>
+	</variable>
+	<group name="HOLSECTIONCODE"/>
+	<group name="HOLSEC_SETCHICD" isStartNewPage="true">
+		<groupExpression><![CDATA[$F{HOL_SECTION_CODE} + $F{SETCHINM}]]></groupExpression>
+		<groupFooter>
+			<band height="24">
+				<staticText>
+					<reportElement style="Cell" positionType="Float" mode="Opaque" x="572" y="0" width="100" height="24" backcolor="#C0C0C0"/>
+					<textElement/>
+					<text><![CDATA[保有部署・代表設置場所計]]></text>
+				</staticText>
+				<rectangle>
+					<reportElement style="Cell" mode="Transparent" x="672" y="0" width="64" height="24"/>
+					<graphicElement>
+						<pen lineWidth="0.5"/>
+					</graphicElement>
+				</rectangle>
+				<textField pattern="¤ #,##0" isBlankWhenNull="true">
+					<reportElement stretchType="RelativeToBandHeight" x="672" y="0" width="64" height="12"/>
+					<textElement textAlignment="Right" verticalAlignment="Top">
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression class="java.math.BigDecimal"><![CDATA[$V{STKGKK_AMOUNT}]]></textFieldExpression>
+				</textField>
+				<textField pattern="¤ #,##0" isBlankWhenNull="true">
+					<reportElement stretchType="RelativeToBandHeight" x="672" y="12" width="64" height="12"/>
+					<textElement textAlignment="Right" verticalAlignment="Top">
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression class="java.math.BigDecimal"><![CDATA[$V{TO_BOKAK_AMOUNT}]]></textFieldExpression>
+				</textField>
+				<rectangle>
+					<reportElement style="Cell" mode="Transparent" x="736" y="0" width="66" height="24"/>
+					<graphicElement>
+						<pen lineWidth="0.5"/>
+					</graphicElement>
+				</rectangle>
+				<textField pattern="¤ #,##0" isBlankWhenNull="true">
+					<reportElement stretchType="RelativeToBandHeight" x="736" y="12" width="66" height="12"/>
+					<textElement textAlignment="Right" verticalAlignment="Top">
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression class="java.math.BigDecimal"><![CDATA[$V{TO_SAIMUBOKAK_AMOUNT}]]></textFieldExpression>
+				</textField>
+				<textField pattern="¤ #,##0" isBlankWhenNull="true">
+					<reportElement stretchType="RelativeToBandHeight" x="736" y="0" width="66" height="12"/>
+					<textElement textAlignment="Right" verticalAlignment="Top">
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression class="java.math.BigDecimal"><![CDATA[$V{MITSUMORIGK_AMOUNT}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement positionType="Float" mode="Transparent" x="592" y="12" width="46" height="12" backcolor="#C0C0C0"/>
+					<textElement/>
+					<text><![CDATA[(資産件数：]]></text>
+				</staticText>
+				<textField pattern="#,##0">
+					<reportElement x="638" y="12" width="28" height="12"/>
+					<textElement textAlignment="Right"/>
+					<textFieldExpression class="java.lang.Integer"><![CDATA[$V{HOLSEC_SETCHICD_AST_COUNT}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="666" y="12" width="6" height="12"/>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+					<text><![CDATA[)]]></text>
+				</staticText>
+			</band>
+		</groupFooter>
+	</group>
+	<group name="ASTNUM" isReprintHeaderOnEachPage="true">
+		<groupExpression><![CDATA[$F{AST_NUM} + $F{PP_ID} + $F{HOL_SECTION_CODE} + $F{SETCHINM}]]></groupExpression>
+		<groupHeader>
+			<band height="72">
+				<staticText>
+					<reportElement style="Cell2" positionType="Float" mode="Opaque" x="134" y="36" width="668" height="36" backcolor="#F0F0F0"/>
+					<textElement/>
+					<text><![CDATA[]]></text>
+				</staticText>
+				<textField pattern="">
+					<reportElement style="Cell" stretchType="RelativeToBandHeight" mode="Transparent" x="397" y="24" width="275" height="12" backcolor="#F0F0F0"/>
+					<textElement/>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{BIKO2}]]></textFieldExpression>
+				</textField>
+				<textField pattern="" isBlankWhenNull="true">
+					<reportElement stretchType="RelativeToBandHeight" mode="Transparent" x="50" y="0" width="84" height="17" backcolor="#F0F0F0"/>
+					<textElement verticalAlignment="Bottom">
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{AST_NUM}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement style="Cell" stretchType="RelativeToBandHeight" mode="Transparent" x="134" y="24" width="263" height="12" backcolor="#F0F0F0"/>
+					<textElement/>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{BIKO1}]]></textFieldExpression>
+				</textField>
+				<textField evaluationTime="Group" evaluationGroup="ASTNUM">
+					<reportElement style="Cell" stretchType="RelativeToBandHeight" mode="Transparent" x="0" y="0" width="50" height="36" backcolor="#F0F0F0"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font isItalic="false"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$V{CONFIRM_SUM1} != 0 ? "未" : $V{CONFIRM_SUM2} == 0 ? "済：無し" : $V{CONFIRM_SUM3} == 0 ? "済：有り" :"済：一部無し"]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement style="Cell" stretchType="RelativeToBandHeight" mode="Transparent" x="134" y="0" width="263" height="12" backcolor="#F0F0F0"/>
+					<textElement/>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{SHISANNM}]]></textFieldExpression>
+				</textField>
+				<textField pattern="">
+					<reportElement style="Cell" positionType="Float" mode="Transparent" x="397" y="0" width="98" height="12" backcolor="#F0F0F0"/>
+					<textElement verticalAlignment="Top"/>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{SHURUINM}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement style="Cell" stretchType="RelativeToBandHeight" mode="Transparent" x="495" y="0" width="38" height="12" backcolor="#F0F0F0"/>
+					<textElement/>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{SKKHOKNAME}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement style="Cell" stretchType="RelativeToBandHeight" mode="Transparent" x="533" y="0" width="36" height="12" backcolor="#F0F0F0"/>
+					<textElement textAlignment="Right"/>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{SKKHOK} == '3' ? $F{TAINENK} + "ヶ月" :
+$F{SKKHOK} == 'D' ? $F{TAINENK} + "ヶ月" :
+$F{TAINENK} + "年"]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement style="Cell" stretchType="RelativeToBandHeight" mode="Transparent" x="569" y="0" width="103" height="12" backcolor="#F0F0F0"/>
+					<textElement/>
+					<textFieldExpression class="java.lang.String"><![CDATA[($F{SKKHIHFCD} == null ? "" : $F{SKKHIHFCD} +" ") + ($F{HFNM} == null ? "" : $F{HFNM})]]></textFieldExpression>
+				</textField>
+				<textField pattern="¤ #,##0" isBlankWhenNull="true">
+					<reportElement stretchType="RelativeToBandHeight" mode="Transparent" x="672" y="0" width="64" height="17" backcolor="#F0F0F0"/>
+					<textElement textAlignment="Right" verticalAlignment="Bottom">
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{STKGKK}]]></textFieldExpression>
+				</textField>
+				<textField pattern="¤ #,##0" isBlankWhenNull="true">
+					<reportElement stretchType="RelativeToBandHeight" mode="Transparent" x="672" y="17" width="64" height="19" backcolor="#F0F0F0"/>
+					<textElement textAlignment="Right" verticalAlignment="Top">
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{TO_BOKAK}]]></textFieldExpression>
+				</textField>
+				<rectangle>
+					<reportElement style="Cell" x="672" y="0" width="64" height="36"/>
+					<graphicElement>
+						<pen lineWidth="0.5"/>
+					</graphicElement>
+				</rectangle>
+				<textField pattern="yyyy/MM/dd">
+					<reportElement style="Cell" positionType="Float" mode="Transparent" x="134" y="12" width="58" height="12" backcolor="#F0F0F0"/>
+					<textElement verticalAlignment="Top"/>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{STKYMDF}]]></textFieldExpression>
+				</textField>
+				<textField pattern="yyyy/MM/dd">
+					<reportElement style="Cell" positionType="Float" mode="Transparent" x="192" y="12" width="66" height="12" backcolor="#F0F0F0"/>
+					<textElement verticalAlignment="Top"/>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{KADOYMDF}]]></textFieldExpression>
+				</textField>
+				<textField pattern="">
+					<reportElement style="Cell" positionType="Float" mode="Transparent" x="258" y="12" width="60" height="12" backcolor="#F0F0F0"/>
+					<textElement verticalAlignment="Top"/>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{SKKSTATUSNAME}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0">
+					<reportElement style="Cell" positionType="Float" mode="Transparent" x="318" y="12" width="25" height="12" backcolor="#F0F0F0"/>
+					<textElement textAlignment="Right" verticalAlignment="Top"/>
+					<textFieldExpression class="java.lang.Integer"><![CDATA[$F{SURYO}]]></textFieldExpression>
+				</textField>
+				<textField pattern="" isBlankWhenNull="true">
+					<reportElement style="Cell" positionType="Float" mode="Transparent" x="343" y="12" width="54" height="12" backcolor="#F0F0F0"/>
+					<textElement verticalAlignment="Top"/>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{COST_TYPE_NAME}]]></textFieldExpression>
+				</textField>
+				<textField pattern="">
+					<reportElement style="Cell" positionType="Float" mode="Transparent" x="397" y="12" width="172" height="12" backcolor="#F0F0F0"/>
+					<textElement verticalAlignment="Top"/>
+					<textFieldExpression class="java.lang.String"><![CDATA[($F{DEP_PRJ_CODE} == null ? "":$F{DEP_PRJ_CODE} +" ") + ($F{DEP_PRJ_NAME} == null ? "":$F{DEP_PRJ_NAME})]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement style="Cell" stretchType="RelativeToBandHeight" mode="Transparent" x="569" y="12" width="103" height="12" backcolor="#F0F0F0"/>
+					<textElement/>
+					<textFieldExpression class="java.lang.String"><![CDATA[($F{SOSHIKI2CD} == null ? "" : $F{SOSHIKI2CD} + " ")
++ ($F{SOSHIKI2NM} == null ? "" : $F{SOSHIKI2NM})]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement mode="Transparent" x="134" y="37" width="557" height="11" backcolor="#F0F0F0"/>
+					<textElement>
+						<font size="8" isItalic="true" isUnderline="false" pdfEncoding="UniJIS-UCS2-HW-H"/>
+					</textElement>
+					<text><![CDATA[現物情報]]></text>
+				</staticText>
+				<staticText>
+					<reportElement mode="Transparent" x="164" y="48" width="48" height="12" backcolor="#F0F0F0"/>
+					<textElement>
+						<font size="8" isUnderline="false"/>
+					</textElement>
+					<text><![CDATA[担当確認]]></text>
+				</staticText>
+				<staticText>
+					<reportElement mode="Transparent" x="212" y="48" width="42" height="12" backcolor="#F0F0F0"/>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+					<text><![CDATA[管理番号]]></text>
+				</staticText>
+				<staticText>
+					<reportElement mode="Transparent" x="254" y="48" width="143" height="12" backcolor="#F0F0F0"/>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+					<text><![CDATA[資産名]]></text>
+				</staticText>
+				<staticText>
+					<reportElement mode="Transparent" x="397" y="48" width="86" height="12" backcolor="#F0F0F0"/>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+					<text><![CDATA[資産管理担当者]]></text>
+				</staticText>
+				<staticText>
+					<reportElement mode="Transparent" x="483" y="48" width="86" height="12" backcolor="#F0F0F0"/>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+					<text><![CDATA[使用者]]></text>
+				</staticText>
+				<staticText>
+					<reportElement mode="Transparent" x="569" y="48" width="96" height="12" backcolor="#F0F0F0"/>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+					<text><![CDATA[設置場所]]></text>
+				</staticText>
+				<staticText>
+					<reportElement mode="Transparent" x="665" y="48" width="26" height="12" backcolor="#F0F0F0"/>
+					<textElement textAlignment="Right">
+						<font size="8"/>
+					</textElement>
+					<text><![CDATA[数量]]></text>
+				</staticText>
+				<textField isBlankWhenNull="true">
+					<reportElement stretchType="RelativeToBandHeight" mode="Transparent" x="50" y="17" width="40" height="19" backcolor="#F0F0F0"/>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{APPLICATION_ID}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement stretchType="RelativeToBandHeight" mode="Transparent" x="90" y="17" width="44" height="19" backcolor="#F0F0F0"/>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{SHISANKNRKBN} == "1" ? "(仮勘定)" : ""]]></textFieldExpression>
+				</textField>
+				<rectangle>
+					<reportElement style="Cell" mode="Transparent" x="50" y="0" width="84" height="36" backcolor="#FFFFFF"/>
+					<graphicElement>
+						<pen lineWidth="0.5"/>
+					</graphicElement>
+				</rectangle>
+				<staticText>
+					<reportElement mode="Transparent" x="134" y="48" width="26" height="12" backcolor="#F0F0F0"/>
+					<textElement textAlignment="Right">
+						<font size="8" isUnderline="false"/>
+					</textElement>
+					<text><![CDATA[№]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="Cell2" mode="Transparent" x="134" y="36" width="0" height="24" backcolor="#FFFFFF"/>
+					<textElement>
+						<font size="8" pdfEncoding="Cp1252"/>
+					</textElement>
+					<text><![CDATA[]]></text>
+				</staticText>
+				<staticText>
+					<reportElement mode="Transparent" x="691" y="36" width="62" height="12" backcolor="#F0F0F0"/>
+					<textElement textAlignment="Right">
+						<font size="8" isItalic="false" isUnderline="false" pdfEncoding="UniJIS-UCS2-HW-H"/>
+					</textElement>
+					<text><![CDATA[割引率：]]></text>
+				</staticText>
+				<line direction="BottomUp">
+					<reportElement positionType="Float" mode="Transparent" x="147" y="70" width="546" height="1"/>
+					<graphicElement>
+						<pen lineWidth="1.0" lineStyle="Solid"/>
+					</graphicElement>
+				</line>
+				<staticText>
+					<reportElement mode="Transparent" x="691" y="48" width="62" height="12" backcolor="#F0F0F0"/>
+					<textElement textAlignment="Right">
+						<font size="8" isItalic="false" isUnderline="false" pdfEncoding="UniJIS-UCS2-HW-H"/>
+					</textElement>
+					<text><![CDATA[債務履行日：]]></text>
+				</staticText>
+				<textField pattern="#,##0.000 %">
+					<reportElement positionType="Float" mode="Transparent" x="753" y="37" width="49" height="12" backcolor="#F0F0F0"/>
+					<textElement verticalAlignment="Top"/>
+					<textFieldExpression class="java.lang.Number"><![CDATA[$F{WARIBIKIRITSUK}]]></textFieldExpression>
+				</textField>
+				<textField pattern="yyyy/MM/dd">
+					<reportElement positionType="Float" mode="Transparent" x="753" y="48" width="49" height="12" backcolor="#F0F0F0"/>
+					<textElement verticalAlignment="Top"/>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{SAIMURIKOYMDF}]]></textFieldExpression>
+				</textField>
+				<textField pattern="¤ #,##0" isBlankWhenNull="true">
+					<reportElement stretchType="RelativeToBandHeight" mode="Transparent" x="736" y="17" width="66" height="19" backcolor="#F0F0F0"/>
+					<textElement textAlignment="Right" verticalAlignment="Top">
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{TO_SAIMUBOKAK}]]></textFieldExpression>
+				</textField>
+				<textField pattern="¤ #,##0" isBlankWhenNull="true">
+					<reportElement stretchType="RelativeToBandHeight" mode="Transparent" x="736" y="0" width="66" height="17" backcolor="#F0F0F0"/>
+					<textElement textAlignment="Right" verticalAlignment="Bottom">
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{MITSUMORIGK_WARIBIKIMAEK}]]></textFieldExpression>
+				</textField>
+				<rectangle>
+					<reportElement style="Cell" x="736" y="0" width="66" height="36"/>
+					<graphicElement>
+						<pen lineWidth="0.5"/>
+					</graphicElement>
+				</rectangle>
+				<staticText>
+					<reportElement mode="Transparent" x="254" y="60" width="437" height="12" backcolor="#F0F0F0"/>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+					<text><![CDATA[現物備考]]></text>
+				</staticText>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="1">
+				<line direction="BottomUp">
+					<reportElement positionType="Float" mode="Transparent" x="134" y="0" width="668" height="1"/>
+					<graphicElement>
+						<pen lineWidth="0.5" lineStyle="Solid"/>
+					</graphicElement>
+				</line>
+			</band>
+		</groupFooter>
+	</group>
+	<group name="APPLICATIONID">
+		<groupExpression><![CDATA[$V{PAGE_NUMBER}]]></groupExpression>
+	</group>
+	<group name="LINETYPE2">
+		<groupExpression><![CDATA[]]></groupExpression>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<pageHeader>
+		<band height="90">
+			<staticText>
+				<reportElement x="248" y="0" width="300" height="18"/>
+				<textElement textAlignment="Center">
+					<font size="12" isBold="true" isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[資産除去費用実査表]]></text>
+			</staticText>
+			<textField evaluationTime="Group" evaluationGroup="HOLSEC_SETCHICD">
+				<reportElement x="782" y="13" width="20" height="12"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$V{PAGE_NUM_HOL_SETCHI}]]></textFieldExpression>
+			</textField>
+			<textField pattern="yyyy/MM/dd HH:mm">
+				<reportElement x="735" y="0" width="67" height="12"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.util.Date"><![CDATA[new Date()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="669" y="13" width="66" height="12"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[ページ　：]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="767" y="13" width="15" height="12"/>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[/]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="669" y="0" width="66" height="12"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[出力日付：]]></text>
+			</staticText>
+			<textField evaluationTime="Page">
+				<reportElement x="747" y="13" width="20" height="12"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$V{PAGE_NUM_HOL_SETCHI}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement style="Cell" positionType="Float" mode="Opaque" x="397" y="66" width="172" height="12" backcolor="#C0C0C0"/>
+				<textElement/>
+				<text><![CDATA[減価償却プロジェクト]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Cell" positionType="Float" mode="Opaque" x="569" y="54" width="103" height="12" backcolor="#C0C0C0"/>
+				<textElement/>
+				<text><![CDATA[配賦]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Cell" positionType="Float" mode="Opaque" x="192" y="66" width="66" height="12" backcolor="#C0C0C0"/>
+				<textElement textAlignment="Left"/>
+				<text><![CDATA[稼動(振替予定)日]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Cell" positionType="Float" mode="Opaque" x="343" y="66" width="54" height="12" backcolor="#C0C0C0"/>
+				<textElement/>
+				<text><![CDATA[販管/原価区分]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Cell" positionType="Float" mode="Opaque" x="736" y="54" width="66" height="36" backcolor="#C0C0C0"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<text><![CDATA[見積価額(割引前)
+債務帳簿価額]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Cell" positionType="Float" mode="Opaque" x="533" y="54" width="36" height="12" backcolor="#C0C0C0"/>
+				<textElement textAlignment="Right"/>
+				<text><![CDATA[耐用年数]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Cell" positionType="Float" mode="Opaque" x="495" y="54" width="38" height="12" backcolor="#C0C0C0"/>
+				<textElement/>
+				<text><![CDATA[償却方法]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Cell" positionType="Float" mode="Opaque" x="569" y="66" width="103" height="12" backcolor="#C0C0C0"/>
+				<textElement/>
+				<text><![CDATA[資産計上部課]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Cell" positionType="Float" mode="Opaque" x="134" y="54" width="263" height="12" backcolor="#C0C0C0"/>
+				<textElement/>
+				<text><![CDATA[資産名]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Cell" positionType="Float" mode="Opaque" x="134" y="66" width="58" height="12" backcolor="#C0C0C0"/>
+				<textElement/>
+				<text><![CDATA[取得日]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Cell" positionType="Float" mode="Opaque" x="258" y="66" width="60" height="12" backcolor="#C0C0C0"/>
+				<textElement/>
+				<text><![CDATA[償却ステータス]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Cell" positionType="Float" mode="Opaque" x="134" y="78" width="263" height="12" backcolor="#C0C0C0"/>
+				<textElement/>
+				<text><![CDATA[備考1]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Cell" positionType="Float" mode="Opaque" x="318" y="66" width="25" height="12" backcolor="#C0C0C0"/>
+				<textElement textAlignment="Right"/>
+				<text><![CDATA[数量]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Cell" positionType="Float" mode="Opaque" x="0" y="54" width="50" height="36" backcolor="#C0C0C0"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isStrikeThrough="false" pdfFontName="HeiseiMin-W3" pdfEncoding="UniJIS-UCS2-HW-H"/>
+				</textElement>
+				<text><![CDATA[担当確認]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Cell" positionType="Float" mode="Opaque" x="50" y="54" width="84" height="36" backcolor="#C0C0C0"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[資産番号
+取得申請書番号]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Cell" positionType="Float" mode="Opaque" x="397" y="54" width="98" height="12" backcolor="#C0C0C0"/>
+				<textElement/>
+				<text><![CDATA[種類]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Cell" positionType="Float" mode="Opaque" x="397" y="78" width="275" height="12" backcolor="#C0C0C0"/>
+				<textElement/>
+				<text><![CDATA[備考2]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Cell" positionType="Float" mode="Opaque" x="672" y="54" width="64" height="36" backcolor="#C0C0C0"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<text><![CDATA[取得価額
+帳簿価額]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="346" y="25" width="456" height="12" isRemoveLineWhenBlank="true"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{HOLSECTIONNAME}]]></textFieldExpression>
+			</textField>
+			<textField pattern="yyyy/MM/dd" isBlankWhenNull="true">
+				<reportElement x="230" y="39" width="50" height="12"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.sql.Timestamp"><![CDATA[$F{APPROVE_DATE}]]></textFieldExpression>
+			</textField>
+			<textField pattern="yyyy/MM/dd HH:mm">
+				<reportElement x="47" y="39" width="67" height="12"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.sql.Timestamp"><![CDATA[$F{LAST_SUCCESS_CREATE_END_DATE}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="346" y="39" width="456" height="12"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{SETCHINM}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="39" width="47" height="12"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[集計日　 ：]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="126" y="25" width="105" height="12"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[棚卸完了報告ステータス：]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="126" y="39" width="105" height="12"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[棚卸完了報告承認日　　：]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="25" width="47" height="12"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[会計年月 ：]]></text>
+			</staticText>
+			<textField pattern="yyyy/MM/dd">
+				<reportElement x="47" y="25" width="67" height="12"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{PERIODF}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="283" y="39" width="63" height="12"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[代表設置場所 ：]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="230" y="25" width="50" height="12"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{APSTATUSNAME}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="283" y="25" width="63" height="12"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[保有部署　　 ：]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<detail>
+		<band height="12" splitType="Stretch">
+			<printWhenExpression><![CDATA[$F{INV_COMMENT} == null && $F{DSC_DESCRIPTION} == null]]></printWhenExpression>
+			<staticText>
+				<reportElement style="Cell3" positionType="Float" mode="Opaque" x="134" y="0" width="668" height="12" backcolor="#F0F0F0"/>
+				<textElement/>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement positionType="Float" mode="Transparent" x="254" y="0" width="143" height="12" backcolor="#F0F0F0"/>
+				<textElement verticalAlignment="Top">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{AST_NAME}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement positionType="Float" mode="Transparent" x="397" y="0" width="86" height="12" backcolor="#F0F0F0"/>
+				<textElement verticalAlignment="Top">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[($F{HOL_STAFF_CODE} == null ? "" : $F{HOL_STAFF_CODE} + " ")
++ ($F{HOLSTAFFNAME} == null ? "" : $F{HOLSTAFFNAME})]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" mode="Transparent" x="483" y="0" width="86" height="12" backcolor="#F0F0F0"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[($F{USE_STAFF_CODE} == null ? "" : $F{USE_STAFF_CODE} + " ")
++ ($F{USESTAFFNAME} == null ? "" : $F{USESTAFFNAME})]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" mode="Transparent" x="569" y="0" width="96" height="12" backcolor="#F0F0F0"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[($F{HOLOFFICENAME} == null ? "" : $F{HOLOFFICENAME} + " ")
++ ($F{HOL_OFFICE_FLOOR} == null ? "" : $F{HOL_OFFICE_FLOOR} + "Ｆ" + " ")
++ ($F{HOL_OFFICE_ROOM_NUM} == null ? "" : $F{HOL_OFFICE_ROOM_NUM} + " ")
++ ($F{HOL_OFFICE_RACK_NUM} == null ? "" : $F{HOL_OFFICE_RACK_NUM})]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" mode="Transparent" x="665" y="0" width="26" height="12" backcolor="#F0F0F0"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$F{HOL_QUANTITY}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement positionType="Float" mode="Transparent" x="164" y="0" width="48" height="12" backcolor="#F0F0F0"/>
+				<textElement verticalAlignment="Top">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{INV_STATUS} == "1" ? "未" :
+$F{INV_STATUS} == "2" ? "済：有り" :
+$F{INV_STATUS} == "3" ? "済：無し" :
+$F{INV_STATUS} == "4" ? "他部署保有" :
+$F{INV_STATUS}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement positionType="Float" mode="Transparent" x="212" y="0" width="42" height="12" backcolor="#F0F0F0"/>
+				<textElement verticalAlignment="Top">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{AST_LIC_ID}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement positionType="Float" mode="Transparent" x="134" y="0" width="26" height="12" backcolor="#F0F0F0"/>
+				<textElement textAlignment="Right" verticalAlignment="Top">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$V{Number}]]></textFieldExpression>
+			</textField>
+			<line direction="BottomUp">
+				<reportElement positionType="Float" mode="Transparent" x="147" y="0" width="546" height="1">
+					<printWhenExpression><![CDATA[$V{Number} > 1]]></printWhenExpression>
+				</reportElement>
+				<graphicElement>
+					<pen lineWidth="0.5" lineStyle="Dashed"/>
+				</graphicElement>
+			</line>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement positionType="Float" mode="Transparent" x="692" y="0" width="63" height="12" backcolor="#F0F0F0"/>
+				<textElement verticalAlignment="Top">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{DELETE_FLAG} == "1" ? "(抹消済)":""]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="24">
+			<printWhenExpression><![CDATA[$F{INV_COMMENT} != null && $F{DSC_DESCRIPTION} == null]]></printWhenExpression>
+			<staticText>
+				<reportElement style="Cell3" positionType="Float" mode="Opaque" x="134" y="0" width="668" height="24" backcolor="#F0F0F0"/>
+				<textElement/>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement positionType="Float" mode="Transparent" x="254" y="0" width="143" height="12" backcolor="#F0F0F0"/>
+				<textElement verticalAlignment="Top">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{AST_NAME}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement positionType="Float" mode="Transparent" x="397" y="0" width="86" height="12" backcolor="#F0F0F0"/>
+				<textElement verticalAlignment="Top">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[($F{HOL_STAFF_CODE} == null ? "" : $F{HOL_STAFF_CODE} + " ")
++ ($F{HOLSTAFFNAME} == null ? "" : $F{HOLSTAFFNAME})]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" mode="Transparent" x="483" y="0" width="86" height="12" backcolor="#F0F0F0"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[($F{USE_STAFF_CODE} == null ? "" : $F{USE_STAFF_CODE} + " ")
++ ($F{USESTAFFNAME} == null ? "" : $F{USESTAFFNAME})]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" mode="Transparent" x="569" y="0" width="96" height="12" backcolor="#F0F0F0"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[($F{HOLOFFICENAME} == null ? "" : $F{HOLOFFICENAME} + " ")
++ ($F{HOL_OFFICE_FLOOR} == null ? "" : $F{HOL_OFFICE_FLOOR} + "Ｆ" + " ")
++ ($F{HOL_OFFICE_ROOM_NUM} == null ? "" : $F{HOL_OFFICE_ROOM_NUM} + " ")
++ ($F{HOL_OFFICE_RACK_NUM} == null ? "" : $F{HOL_OFFICE_RACK_NUM})]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" mode="Transparent" x="665" y="0" width="26" height="12" backcolor="#F0F0F0"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$F{HOL_QUANTITY}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement positionType="Float" stretchType="RelativeToBandHeight" mode="Transparent" x="183" y="12" width="508" height="12" backcolor="#F0F0F0"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{INV_COMMENT}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement positionType="Float" mode="Transparent" x="164" y="0" width="48" height="12" backcolor="#F0F0F0"/>
+				<textElement verticalAlignment="Top">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{INV_STATUS} == "1" ? "未" :
+$F{INV_STATUS} == "2" ? "済：有り" :
+$F{INV_STATUS} == "3" ? "済：無し" :
+$F{INV_STATUS} == "4" ? "他部署保有":
+$F{INV_STATUS}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement positionType="Float" mode="Transparent" x="212" y="0" width="42" height="12" backcolor="#F0F0F0"/>
+				<textElement verticalAlignment="Top">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{AST_LIC_ID}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement positionType="Float" mode="Transparent" x="134" y="0" width="26" height="12" backcolor="#F0F0F0"/>
+				<textElement textAlignment="Right" verticalAlignment="Top">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$V{Number}]]></textFieldExpression>
+			</textField>
+			<line direction="BottomUp">
+				<reportElement positionType="Float" mode="Transparent" x="175" y="13" width="1" height="6"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineStyle="Solid"/>
+				</graphicElement>
+			</line>
+			<line direction="BottomUp">
+				<reportElement positionType="Float" mode="Transparent" x="175" y="19" width="8" height="1"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineStyle="Solid"/>
+				</graphicElement>
+			</line>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement positionType="Float" mode="Transparent" x="160" y="0" width="4" height="12" backcolor="#F0F0F0"/>
+				<textElement verticalAlignment="Top">
+					<font size="8"/>
+				</textElement>
+			</textField>
+			<line direction="BottomUp">
+				<reportElement positionType="Float" mode="Transparent" x="147" y="0" width="546" height="1">
+					<printWhenExpression><![CDATA[$V{Number} > 1]]></printWhenExpression>
+				</reportElement>
+				<graphicElement>
+					<pen lineWidth="0.5" lineStyle="Dashed"/>
+				</graphicElement>
+			</line>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement positionType="Float" mode="Transparent" x="692" y="0" width="63" height="12" backcolor="#F0F0F0"/>
+				<textElement verticalAlignment="Top">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{DELETE_FLAG} == "1" ? "(抹消済)":""]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="24">
+			<printWhenExpression><![CDATA[$F{INV_COMMENT} == null && $F{DSC_DESCRIPTION} != null]]></printWhenExpression>
+			<staticText>
+				<reportElement style="Cell3" positionType="Float" mode="Opaque" x="134" y="0" width="668" height="24" backcolor="#F0F0F0"/>
+				<textElement/>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement positionType="Float" mode="Transparent" x="254" y="0" width="143" height="12" backcolor="#F0F0F0"/>
+				<textElement verticalAlignment="Top">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{AST_NAME}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement positionType="Float" mode="Transparent" x="397" y="0" width="86" height="12" backcolor="#F0F0F0"/>
+				<textElement verticalAlignment="Top">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[($F{HOL_STAFF_CODE} == null ? "" : $F{HOL_STAFF_CODE} + " ")
++ ($F{HOLSTAFFNAME} == null ? "" : $F{HOLSTAFFNAME})]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" mode="Transparent" x="483" y="0" width="86" height="12" backcolor="#F0F0F0"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[($F{USE_STAFF_CODE} == null ? "" : $F{USE_STAFF_CODE} + " ")
++ ($F{USESTAFFNAME} == null ? "" : $F{USESTAFFNAME})]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" mode="Transparent" x="569" y="0" width="96" height="12" backcolor="#F0F0F0"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[($F{HOLOFFICENAME} == null ? "" : $F{HOLOFFICENAME} + " ")
++ ($F{HOL_OFFICE_FLOOR} == null ? "" : $F{HOL_OFFICE_FLOOR} + "Ｆ" + " ")
++ ($F{HOL_OFFICE_ROOM_NUM} == null ? "" : $F{HOL_OFFICE_ROOM_NUM} + " ")
++ ($F{HOL_OFFICE_RACK_NUM} == null ? "" : $F{HOL_OFFICE_RACK_NUM})]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" mode="Transparent" x="665" y="0" width="26" height="12" backcolor="#F0F0F0"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$F{HOL_QUANTITY}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement positionType="Float" mode="Transparent" x="164" y="0" width="48" height="12" backcolor="#F0F0F0"/>
+				<textElement verticalAlignment="Top">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{INV_STATUS} == "1" ? "未" :
+$F{INV_STATUS} == "2" ? "済：有り" :
+$F{INV_STATUS} == "3" ? "済：無し" :
+$F{INV_STATUS} == "4" ? "他部署保有" :
+$F{INV_STATUS}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement positionType="Float" mode="Transparent" x="212" y="0" width="42" height="12" backcolor="#F0F0F0"/>
+				<textElement verticalAlignment="Top">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{AST_LIC_ID}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement positionType="Float" mode="Transparent" x="134" y="0" width="26" height="12" backcolor="#F0F0F0"/>
+				<textElement textAlignment="Right" verticalAlignment="Top">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$V{Number}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement positionType="Float" mode="Transparent" x="254" y="12" width="437" height="12" backcolor="#F0F0F0"/>
+				<textElement verticalAlignment="Top">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{DSC_DESCRIPTION}]]></textFieldExpression>
+			</textField>
+			<line direction="BottomUp">
+				<reportElement positionType="Float" mode="Transparent" x="147" y="0" width="546" height="1">
+					<printWhenExpression><![CDATA[$V{Number} > 1]]></printWhenExpression>
+				</reportElement>
+				<graphicElement>
+					<pen lineWidth="0.5" lineStyle="Dashed"/>
+				</graphicElement>
+			</line>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement positionType="Float" mode="Transparent" x="692" y="0" width="63" height="12" backcolor="#F0F0F0"/>
+				<textElement verticalAlignment="Top">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{DELETE_FLAG} == "1" ? "(抹消済)":""]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="36">
+			<printWhenExpression><![CDATA[$F{INV_COMMENT} != null && $F{DSC_DESCRIPTION} != null]]></printWhenExpression>
+			<staticText>
+				<reportElement style="Cell3" positionType="Float" mode="Opaque" x="134" y="0" width="668" height="36" backcolor="#F0F0F0"/>
+				<textElement/>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement positionType="Float" mode="Transparent" x="254" y="0" width="143" height="12" backcolor="#F0F0F0"/>
+				<textElement verticalAlignment="Top">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{AST_NAME}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement positionType="Float" mode="Transparent" x="397" y="0" width="86" height="12" backcolor="#F0F0F0"/>
+				<textElement verticalAlignment="Top">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[($F{HOL_STAFF_CODE} == null ? "" : $F{HOL_STAFF_CODE} + " ")
++ ($F{HOLSTAFFNAME} == null ? "" : $F{HOLSTAFFNAME})]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" mode="Transparent" x="483" y="0" width="86" height="12" backcolor="#F0F0F0"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[($F{USE_STAFF_CODE} == null ? "" : $F{USE_STAFF_CODE} + " ")
++ ($F{USESTAFFNAME} == null ? "" : $F{USESTAFFNAME})]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" mode="Transparent" x="569" y="0" width="96" height="12" backcolor="#F0F0F0"/>
+				<textElement>
+					<font size="8" isUnderline="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[($F{HOLOFFICENAME} == null ? "" : $F{HOLOFFICENAME} + " ")
++ ($F{HOL_OFFICE_FLOOR} == null ? "" : $F{HOL_OFFICE_FLOOR} + "Ｆ" + " ")
++ ($F{HOL_OFFICE_ROOM_NUM} == null ? "" : $F{HOL_OFFICE_ROOM_NUM} + " ")
++ ($F{HOL_OFFICE_RACK_NUM} == null ? "" : $F{HOL_OFFICE_RACK_NUM})]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" mode="Transparent" x="665" y="0" width="26" height="12" backcolor="#F0F0F0"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$F{HOL_QUANTITY}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement positionType="Float" stretchType="RelativeToBandHeight" mode="Transparent" x="183" y="24" width="508" height="12" backcolor="#F0F0F0"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{INV_COMMENT}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement positionType="Float" mode="Transparent" x="164" y="0" width="48" height="12" backcolor="#F0F0F0"/>
+				<textElement verticalAlignment="Top">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{INV_STATUS} == "1" ? "未" :
+$F{INV_STATUS} == "2" ? "済：有り" :
+$F{INV_STATUS} == "3" ? "済：無し" :
+$F{INV_STATUS} == "4" ? "他部署保有":
+$F{INV_STATUS}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement positionType="Float" mode="Transparent" x="212" y="0" width="42" height="12" backcolor="#F0F0F0"/>
+				<textElement verticalAlignment="Top">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{AST_LIC_ID}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement positionType="Float" mode="Transparent" x="134" y="0" width="26" height="12" backcolor="#F0F0F0"/>
+				<textElement textAlignment="Right" verticalAlignment="Top">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$V{Number}]]></textFieldExpression>
+			</textField>
+			<line direction="BottomUp">
+				<reportElement positionType="Float" mode="Transparent" x="175" y="25" width="1" height="6"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineStyle="Solid"/>
+				</graphicElement>
+			</line>
+			<line direction="BottomUp">
+				<reportElement positionType="Float" mode="Transparent" x="175" y="31" width="8" height="1"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineStyle="Solid"/>
+				</graphicElement>
+			</line>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement positionType="Float" mode="Transparent" x="160" y="0" width="4" height="12" backcolor="#F0F0F0"/>
+				<textElement verticalAlignment="Top">
+					<font size="8"/>
+				</textElement>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement positionType="Float" mode="Transparent" x="254" y="12" width="437" height="12" backcolor="#F0F0F0"/>
+				<textElement verticalAlignment="Top">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{DSC_DESCRIPTION}]]></textFieldExpression>
+			</textField>
+			<line direction="BottomUp">
+				<reportElement positionType="Float" mode="Transparent" x="147" y="0" width="546" height="1">
+					<printWhenExpression><![CDATA[$V{Number} > 1]]></printWhenExpression>
+				</reportElement>
+				<graphicElement>
+					<pen lineWidth="0.5" lineStyle="Dashed"/>
+				</graphicElement>
+			</line>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement positionType="Float" mode="Transparent" x="692" y="0" width="63" height="12" backcolor="#F0F0F0"/>
+				<textElement verticalAlignment="Top">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{DELETE_FLAG} == "1" ? "(抹消済)":""]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="12" splitType="Stretch">
+			<textField isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" x="755" y="0" width="47" height="12"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{COMPANYNAME}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+</jasperReport>

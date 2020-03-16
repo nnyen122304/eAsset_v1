@@ -1,0 +1,29 @@
+<ea-popup class="popup-common-sel popup-status-selection" #openInputSectionPopup [hideTrigger]="'None'" (hidden)="close()">
+  <form class="" [formGroup]="sectionForm">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">{{modalTitle}}</h5>
+        <button type="button" tabindex="-1" class="close bt-close wj-hide">
+          &times;
+        </button>
+      </div>
+      <div class="modal-body modal-body-input-section">
+        <div class="d-flex modal-body-content">
+          <label class="col-label">精査担当部署:</label>
+          <div class="wm-combo wm-200">
+            <app-section-selection [sectionForm]="sectionForm" [sectionCodeControlName]="'ipCostScrSectionCode'"
+              [sectionNameControlName]="'ipCostScrSectionName'" [sectionYearControlName]="'ipCostScrSectionYear'"
+              [selectOnly]="showButtonClear"></app-section-selection>
+          </div>
+        </div>
+      </div>
+      <div class="dropdown-divider"></div>
+      <div class="modal-footer modal-footer-input-section">
+        <button type="button" class="wm-btn" (click)="ok()">OK</button>
+        <button type="button" class="wm-btn wj-hide">キャンセル</button>
+      </div>
+    </div>
+  </form>
+</ea-popup>
+
+<app-confirm-popup #confirmPopup></app-confirm-popup>

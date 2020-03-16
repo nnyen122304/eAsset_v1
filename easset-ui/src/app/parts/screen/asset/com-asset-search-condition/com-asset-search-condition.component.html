@@ -1,0 +1,567 @@
+<div class="com-asset-search-condition-container" fxLayout="row" fxLayoutGap="10px">
+  <div fxLayout="column" fxLayoutGap="10px">
+    <div class="block-frame-border asset-block-frame-border">
+      <label class="frame-title">資産・機器</label>
+      <!-- 資産・機器 -->
+      <form class="p-1" [formGroup]="formAssetsEquipment">
+        <div class="asset-group-control d-flex flex-row">
+          <label class="label-col text-right">資産(機器)名:</label>
+          <div class="d-inline-block">
+            <ea-input-mask id="astName" formControlName="astName" class="wm-combo wm-200"></ea-input-mask>
+            <label class="mx-2">(あいまい)</label>
+          </div>
+        </div>
+
+        <div class="asset-group-control d-flex flex-row">
+          <label class="label-col text-right">資産(機器)分類:</label>
+          <div class="d-flex">
+            <app-asset-category [hidden]="!isAstCategoryEqual" [categoryForm]="formAssetsEquipment"
+              [categoryNameControlParent]="'astCategory1Name'" [categoryNameControlName]="'astCategory2Name'"
+              [categoryCodeControlParent]="'astCategory1Code'" [categoryCodeControlName]="'astCategory2Code'"
+              [categoryName]="titleCategory" [selectedAssetCategory1]="''" [selectOnly]="false">
+            </app-asset-category>
+            <a id="astCategory2Name_LNK" class="cell-link mx-2"
+              *ngIf="isAstCategoryEqual && titleCategory === 'ASSET_CATEGORY1'" (click)="linkBtnClick($event)">複数指定</a>
+          </div>
+          <div class="d-flex flex-column">
+            <ea-input-mask id="astCategory2Plural" [hidden]="isAstCategoryEqual" formControlName="astCategory2Plural"
+              class="wm-combo wm-300">
+            </ea-input-mask>
+            <ng-container *ngIf="!isAstCategoryEqual">
+              <div class="d-inline">
+                <label class="mr-2">(スペース区切で複数指定可) ※条件に指定できる値は</label>
+                <a id="astCategory2Plural_LNK" (click)="linkBtnClick($event)" class="cell-link">こちら</a>
+              </div>
+              <div class="d-inline">
+                <a id="astCategory_DEF" class="cell-link" (click)="linkBtnClick($event)">複数指定をやめる</a>
+              </div>
+            </ng-container>
+          </div>
+        </div>
+
+        <div class="asset-group-control d-flex flex-row">
+          <label class="label-col text-right">メーカー:</label>
+          <div class="d-flex">
+            <app-code-name-selection [formExportSearch]="formAssetsEquipment" [modalTitle]="'メーカー選択'"
+              [extClass]="'wm-200'" [statusCodeControlName]="'astMakerCode'" [statusNameControlName]="'astMakerName'"
+              [headerGrid]="'メーカー'" [modalLabelTitle]="'メーカー選択'" [sqlName]="'selectCodeName_LOV'"
+              [paramMap]="{categoryCode: 'ASSET_MAKER'}" [isReadOnly]="isAstMakerCodeNameBtn"
+              [isShowButtonClear]="isAstMakerCodeNameBtn">
+            </app-code-name-selection>
+            <a class="cell-link mx-2" id="astMakerName_LNK" (click)="linkBtnClick($event)"
+              *ngIf="isAstMakerCodeNameBtn">手入力</a>
+          </div>
+        </div>
+
+        <div class="asset-group-control d-flex flex-row">
+          <label class="label-col text-right">メーカー型番:</label>
+          <div class="d-inline-block">
+            <ea-input-mask id="astMakerModel" formControlName="astMakerModel" class="wm-combo wm-200"></ea-input-mask>
+            <label class="mx-2">(あいまい)</label>
+          </div>
+        </div>
+
+        <div class="asset-group-control d-flex flex-row">
+          <label class="label-col text-right">シリアル番号:</label>
+          <div class="d-inline-block">
+            <ea-input-mask id="astSerialCode" [hidden]="!isAstSerialCode" formControlName="astSerialCode"
+              class="wm-combo wm-200"></ea-input-mask>
+            <ng-container *ngIf="isAstSerialCode">
+              <label class="mx-2">(あいまい)</label>
+              <a id="astSerialCode_LNK" class="cell-link" (click)="linkBtnClick($event)">複数指定</a>
+            </ng-container>
+          </div>
+          <div class="d-flex flex-column">
+            <ea-input-mask id="astSerialCodePlural" [hidden]="isAstSerialCode" formControlName="astSerialCodePlural"
+              class="wm-combo wm-300">
+            </ea-input-mask>
+            <div class="d-inline" *ngIf="!isAstSerialCode">
+              <label class="mr-2">(スペース区切で複数指定可)</label>
+              <a class="cell-link" id="astSerialCodePlural_LNK" (click)="linkBtnClick($event)">あいまい検索</a>
+            </div>
+          </div>
+        </div>
+        <div class="asset-group-control d-flex flex-row">
+          <label class="label-col text-right">取得形態:</label>
+          <div class="d-inline-block">
+            <app-code-name-selection [formExportSearch]="formAssetsEquipment" [modalTitle]="'取得形態選択'"
+              [extClass]="'wm-200'" [statusCodeControlName]="'astGetType'" [statusNameControlName]="'astGetTypeName'"
+              [headerGrid]="'メーカー'" [modalLabelTitle]="'取得形態'" [sqlName]="'selectCodeName_LOV'"
+              [paramMap]="{categoryCode: 'ASSET_GET_TYPE'}" [hidenSearch]="true">
+            </app-code-name-selection>
+          </div>
+        </div>
+        <div class="asset-group-control d-flex flex-row">
+          <label class="label-col text-right" *ngIf="isAstSystemSectionDeployFlagFi">資産区分:</label>
+          <div class="form-check form-check-inline">
+            <input type="checkbox" class="form-check-input" [value]="1" [hidden]="!isAstSystemSectionDeployFlagFi"
+              formControlName="astSystemSectionDeployFlag" />
+            <label class="form-check-label mx-2" *ngIf="isAstSystemSectionDeployFlagFi">情報システム部配備</label>
+          </div>
+        </div>
+
+        <div class="asset-group-control d-flex flex-row">
+          <label class="label-col text-right" *ngIf="isAstAssetypeFP">資産区分:</label>
+          <div class="d-inline-block">
+            <app-code-name-selection [hidden]="!isAstAssetypeFP" [formExportSearch]="formAssetsEquipment"
+              [modalTitle]="'資産区分選択'" [extClass]="'wm-200'" [statusCodeControlName]="'astAssetType'"
+              [statusNameControlName]="'astAssetTypeName'" [headerGrid]="'メーカー'" [modalLabelTitle]="'資産区分'"
+              [sqlName]="'selectCodeName_LOV'" [paramMap]="{categoryCode: 'ASSET_TYPE'}" [hidenSearch]="true">
+            </app-code-name-selection>
+          </div>
+        </div>
+
+        <div class="asset-group-control d-flex flex-row">
+          <label class="label-col text-right">資産保有者:</label>
+          <div class="d-flex">
+            <app-code-name-selection #astHolderCodeInput [formExportSearch]="formAssetsEquipment"
+              [modalTitle]="'資産保有者選択'" [extClass]="'wm-200'" [statusCodeControlName]="'astHolderCode'"
+              [statusNameControlName]="'astHolderName'" [headerGrid]="'メーカー'" [modalLabelTitle]="'資産保有者'"
+              [sqlName]="'selectCodeName_LOV'" [paramMap]="{categoryCode: 'LEASE_RENTAL_CUSTOMER'}"
+              [isShowButtonClear]="isAstHolderCodeNameBtn" [isReadOnly]="isAstHolderCodeNameBtn">
+            </app-code-name-selection>
+            <a class="cell-link mx-2" (click)="linkBtnClick($event)" id="astHolderName_LNK"
+              *ngIf="isAstHolderCodeNameBtn">手入力</a>
+          </div>
+        </div>
+
+        <div class="asset-group-control d-flex flex-row">
+          <label class="label-col text-right">管理区分:</label>
+          <div class="d-inline-block">
+            <app-code-name-selection [hidden]="!isAstAssetypeFP" [formExportSearch]="formAssetsEquipment"
+              [modalTitle]="'管理区分選択'" [extClass]="'wm-200'" [statusCodeControlName]="'astManageType'"
+              [statusNameControlName]="'astManageTypeName'" [headerGrid]="'メーカー'" [modalLabelTitle]="'管理区分'"
+              [sqlName]="'selectCodeName_LOV'" [paramMap]="{categoryCode: 'ASSET_MANAGE_TYPE'}">
+            </app-code-name-selection>
+            <ea-input-mask [hidden]="isAstManageTypeFP" formControlName="astManageTypePlural" class="wm-combo wm-300">
+            </ea-input-mask>
+          </div>
+        </div>
+
+        <div class="asset-group-control d-flex flex-row">
+          <label class="label-col text-right">OIR:</label>
+          <div class="d-inline-block">
+            <ea-input-mask id="astOir" [hidden]="!isAstOir" formControlName="astOir" class="wm-combo wm-80">
+            </ea-input-mask>
+            <ng-container *ngIf="isAstOir">
+              <label class="mx-2">(あいまい)</label>
+              <a class="cell-link" (click)="isAstOir = !isAstOir">複数指定</a>
+            </ng-container>
+          </div>
+          <div class="d-flex flex-column">
+            <ea-input-mask id="astOirPlural" [hidden]="isAstOir" formControlName="astOirPlural" class="wm-combo wm-300">
+            </ea-input-mask>
+            <div class="d-inline" *ngIf="!isAstOir">
+              <label class="mr-2">(スペース区切で複数指定可)</label>
+              <a class="cell-link" id="astOirPlural_LNK" (click)="linkBtnClick($event)">あいまい検索</a>
+            </div>
+          </div>
+        </div>
+      </form>
+      <!-- 資産・機器 -->
+    </div>
+
+    <div class="block-frame-border asset-block-frame-border">
+      <label class="frame-title">ネットワーク</label>
+      <!-- ネットワーク -->
+      <form class="p-1" [formGroup]="formNetWork">
+        <div class="asset-group-control d-flex flex-row">
+          <label class="label-col text-right">MACアドレス:</label>
+          <div class="d-inline-block">
+            <ea-input-number id="netMacAddress1" maxlength="2" (keyup)="dataChange($event)"
+              formControlName="netMacAddress1" class="wm-combo wm-25">
+            </ea-input-number>
+            <label>－</label>
+            <ea-input-number id="netMacAddress2" maxlength="2" (keyup)="dataChange($event)"
+              formControlName="netMacAddress2" class="wm-combo wm-25">
+            </ea-input-number>
+            <label>－</label>
+            <ea-input-number id="netMacAddress3" maxlength="2" (keyup)="dataChange($event)"
+              formControlName="netMacAddress3" class="wm-combo wm-25">
+            </ea-input-number>
+            <label>－</label>
+            <ea-input-number id="netMacAddress4" maxlength="2" (keyup)="dataChange($event)"
+              formControlName="netMacAddress4" class="wm-combo wm-25">
+            </ea-input-number>
+            <label>－</label>
+            <ea-input-number id="netMacAddress5" maxlength="2" (keyup)="dataChange($event)"
+              formControlName="netMacAddress5" class="wm-combo wm-25">
+            </ea-input-number>
+            <label>－</label>
+            <ea-input-number id="netMacAddress6" maxlength="2" (keyup)="dataChange($event)"
+              formControlName="netMacAddress6" class="wm-combo wm-25">
+            </ea-input-number>
+          </div>
+        </div>
+        <div class="asset-group-control d-flex flex-row">
+          <label class="label-col text-right">IPアドレス:</label>
+          <div class="d-inline-block">
+            <ea-input-number id="netIpAddress1" maxlength="3" formControlName="netIpAddress1" class="wm-combo wm-35"
+              (keyup)="dataChange($event)">
+            </ea-input-number>
+            <label>.</label>
+            <ea-input-number id="netIpAddress2" maxlength="3" formControlName="netIpAddress2" class="wm-combo wm-35"
+              (keyup)="dataChange($event)">
+            </ea-input-number>
+            <label>.</label>
+            <ea-input-number id="netIpAddress3" maxlength="3" formControlName="netIpAddress3" class="wm-combo wm-35"
+              (keyup)="dataChange($event)">
+            </ea-input-number>
+            <label>.</label>
+            <ea-input-number id="netIpAddress4" maxlength="3" formControlName="netIpAddress4" class="wm-combo wm-35"
+              (keyup)="dataChange($event)">
+            </ea-input-number>
+          </div>
+        </div>
+
+        <div class="asset-group-control d-flex flex-row">
+          <label class="label-col text-right">ホスト名:</label>
+          <div class="d-inline-block">
+            <ea-input-mask id="netHostName" [hidden]="!isNetHostName" class="wm-combo wm-100"></ea-input-mask>
+            <ng-container *ngIf="isNetHostName">
+              <label class="mx-2">(あいまい)</label>
+              <a class="cell-link" id="netHostName_LNK" (click)="linkBtnClick($event)">複数指定</a>
+            </ng-container>
+          </div>
+          <div class="d-flex flex-column">
+            <ea-input-mask id="netHostNamePlural" [hidden]="isNetHostName" class="wm-combo wm-300"></ea-input-mask>
+            <div class="d-inline" *ngIf="!isNetHostName">
+              <label class="mr-2">(スペース区切で複数指定可)</label>
+              <a class="cell-link" id="netHostNamePlural_LNK" (click)="linkBtnClick($event)">あいまい検索</a>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="block-frame-border asset-block-frame-border" [hidden]="isMntContGBox">
+      <label class="frame-title">保守契約</label>
+      <form class="p-2" [formGroup]="formMaintenanceContract">
+        <div class="asset-group-control d-flex flex-row">
+          <label class="label-col text-right">保守契約先:</label>
+          <div class="d-inline-block">
+            <ea-input-mask id="mntContractCompanyName" formControlName="mntContractCompanyName" [maxlength]="128"
+              class="wm-combo wm-200">
+            </ea-input-mask>
+            <label class="mx-2">(あいまい)</label>
+          </div>
+        </div>
+
+        <div class="asset-group-control d-flex flex-row">
+          <label class="label-col text-right">保守契約番号:</label>
+          <div class="d-inline-block">
+            <ea-input-mask id="mntContractCode" formControlName="mntContractCode" class="wm-combo wm-200"
+              [maxlength]="30">
+            </ea-input-mask>
+            <label class="mx-2">(あいまい)</label>
+          </div>
+        </div>
+
+        <div class="asset-group-control d-flex flex-row">
+          <label class="label-col text-right">契約開始日:</label>
+          <div class="d-inline-block">
+            <wj-input-date id="mntContractStartDateFrom" formControlName="mntContractStartDateFrom" [maxlength]="10"
+              [format]="'yyyy/MM/dd'" class="wm-combo wm-120" [isRequired]="false"></wj-input-date>
+            <label class="mx-2">～</label>
+            <wj-input-date id="mntContractStartDateTo" formControlName="mntContractStartDateTo" [maxlength]="10"
+              class="wm-combo wm-120" [format]="'yyyy/MM/dd'" [isRequired]="false"></wj-input-date>
+          </div>
+        </div>
+
+        <div class="asset-group-control d-flex flex-row">
+          <label class="label-col text-right">契約終了日:</label>
+          <div class="d-inline-block">
+            <wj-input-date id="mntContractEndDateFrom" formControlName="mntContractEndDateFrom" class="wm-combo wm-120"
+              [maxlength]="10" [format]="'yyyy/MM/dd'" [isRequired]="false"></wj-input-date>
+            <label class="mx-2">～</label>
+            <wj-input-date id="mntContractEndDateTo" formControlName="mntContractEndDateTo" class="wm-combo wm-120"
+              [maxlength]="10" [format]="'yyyy/MM/dd'" [isRequired]="false"></wj-input-date>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div fxLayout="column" fxLayoutGap="10px">
+    <div class="block-frame-border asset-block-frame-border">
+      <label class="frame-title">保有・設置・使用</label>
+      <form class="p-2" [formGroup]="formProssessionInstallationUse">
+        <div class="asset-group-control d-flex flex-row">
+          <label class="label-col text-right">保有会社:</label>
+          <div class="d-inline-block">
+            <ea-input-mask id="holCompanyName" [isReadOnly]="true" formControlName="holCompanyName"
+              class="wm-combo wm-100 bg-gray">
+            </ea-input-mask>
+          </div>
+          <div class="form-check form-check-inline ml-3">
+            <input type="checkbox" formControlName="allCompanyFlag" (click)="dataValueChanged($event)"
+              class="form-check-input" id="allCompanyFlag" name="allCompanyFlag" />
+            <label class="form-check-label mx-2" for="allCompanyFlag">他会社保有の資産(機器)を検索する</label>
+          </div>
+        </div>
+        <div class="asset-group-control d-flex flex-row">
+          <label class="label-col text-right" *ngIf="isHolSectionSearch">保有/使用部署:</label>
+          <div class="d-flex flex-column">
+            <div class="d-inline-block">
+              <div class="wm-combo wm-300">
+                <app-section-selection class="wm-combo wm-200 " [hidden]="!isHolSectionSearch"
+                  [sectionForm]="formProssessionInstallationUse" [sectionCodeControlName]="'holSectionCode'"
+                  [sectionNameControlName]="'holSectionName'" [sectionYearControlName]="'holSectionYear'">
+                </app-section-selection>
+              </div>
+            </div>
+            <div class="form-check form-check-inline">
+              <input type="checkbox" class="form-check-input" formControlName="includeSectionHierarchyFlag"
+                [hidden]="!isHolSectionSearch" id="includeSectionHierarchyFlag" />
+              <label class="form-check-label" *ngIf="isHolSectionSearch">
+                指定{{
+                  sessionInfo.currentAccessLevel === 'B' ? '/管轄' : ''
+                }}部署の配下部署も検索に含める
+              </label>
+            </div>
+          </div>
+        </div>
+        <div class="asset-group-control d-flex flex-row">
+          <label class="label-col text-right" *ngIf="isHolSectionSearch">資産管理担当者:</label>
+          <div class="d-flex flex-row">
+            <div class="d-inline-block">
+              <app-hol-staff-selection [holStaffForm]="formProssessionInstallationUse" [holStaffClass]="'wm-100'"
+                [hidden]="!isHolSectionSearch" [staffCodeControlName]="'holStaffCode'"
+                [staffNameControlName]="'holStaffName'" [sqlName]="'selectHolStaff_LOV'" [paramMap]="{
+                  sectionCode: '',
+                  companyCode: sessionInfo.loginUser.companyCode
+                }">
+              </app-hol-staff-selection>
+            </div>
+          </div>
+        </div>
+
+        <div class="asset-group-control d-flex flex-row">
+          <label class="label-col text-right">設置(使用)場所:</label>
+          <div class="d-flex">
+            <app-code-name-selection [hidden]="!isHolOfficeCodeName" [formExportSearch]="formProssessionInstallationUse"
+              [modalTitle]="'設置（使用）場所選択'" [extClass]="'wm-100'" [statusCodeControlName]="'holOfficeCode'"
+              [statusNameControlName]="'holOfficeName'" [headerGrid]="'メーカー'" [modalLabelTitle]="'資産区分'"
+              [sqlName]="'selectCodeName_LOV'" [paramMap]="{categoryCode: 'OFFICE'}">
+            </app-code-name-selection>
+            <a class="cell-link mx-2" *ngIf="isHolOfficeCodeName" id="holOfficeName_LNK"
+              (click)="linkBtnClick($event)">複数指定</a>
+            <ea-input-number id="holOfficeFloor" [hidden]="!isHolOfficeCodeName" formControlName="holOfficeFloor"
+              class="wm-combo wm-25" maxlength="2">
+            </ea-input-number>
+            <label class="ml-2" *ngIf="isHolOfficeCodeName">F</label>
+          </div>
+
+          <div class="d-flex flex-column">
+            <ea-input-mask id="holOfficePlural" [hidden]="isHolOfficeCodeName" formControlName="holOfficePlural"
+              class="wm-combo"></ea-input-mask>
+            <ng-container *ngIf="!isHolOfficeCodeName">
+              <div class="d-inline">
+                <label class="mr-2">(スペース区切で複数指定可) ※条件に指定できる値は</label>
+                <a id="holOfficePlural_LNK" (click)="linkBtnClick($event)" class="cell-link">こちら</a>
+              </div>
+              <div class="d-inline">
+                <a id="holOffice_DEF" class="cell-link" (click)="linkBtnClick($event)">複数指定をやめる</a>
+              </div>
+            </ng-container>
+          </div>
+        </div>
+        <div class="asset-group-control d-flex flex-row">
+          <label class="label-col text-right">取得/設置者:</label>
+          <div class="d-inline-block ml-2">
+            <app-staff-selection [staffForm]="formProssessionInstallationUse" [staffCodeControlName]="'holGetStaffCode'"
+              [staffNameControlName]="'holGetStaffName'" [usableDataOnly]="true">
+            </app-staff-selection>
+          </div>
+        </div>
+        <div class="asset-group-control d-flex flex-row">
+          <label class="label-col text-right">使用者:</label>
+          <div class="d-inline-block ml-2">
+            <app-staff-selection [staffForm]="formProssessionInstallationUse" [staffCodeControlName]="'useStaffCode'"
+              [staffNameControlName]="'useStaffName'" [usableDataOnly]="true">
+            </app-staff-selection>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <div class="block-frame-border asset-block-frame-border">
+      <label class="frame-title">備考・付加情報</label>
+      <form class="p-2" [formGroup]="formRemaksAdditionalInfomation">
+        <div class="asset-group-control d-flex flex-row">
+          <label class="label-col text-right">備考:</label>
+          <div class="d-flex flex-column">
+            <div class="d-inline-block">
+              <ea-input-mask id="dscDescription" formControlName="dscDescription" class="wm-combo"></ea-input-mask>
+              <label class="mx-2">(あいまい)</label>
+            </div>
+            <label>(スペース区切で複数指定可)</label>
+          </div>
+        </div>
+        <div class="asset-group-control d-flex flex-row">
+          <label class="label-col text-right">管理項目:</label>
+          <div class="d-flex flex-column">
+            <div class="d-inline-block">
+              <ea-input-mask id="dscAttribute" [hidden]="!isDscAttribute" formControlName="dscAttribute"
+                class="wm-combo"></ea-input-mask>
+              <label class="mx-2" *ngIf="isDscAttribute">(あいまい)</label>
+            </div>
+            <div fxLayout="row" [hidden]="isDscAttribute">
+              <div class="d-flex flex-wrap" style="width: 363px;">
+                <div class="d-block">
+                  <label class="label-number">1</label>
+                  <ea-input-mask id="dscAttribute1" formControlName="dscAttribute1" class="wm-combo"></ea-input-mask>
+                </div>
+                <div class="d-block">
+                  <label class="label-number">2</label>
+                  <ea-input-mask id="dscAttribute2" formControlName="dscAttribute2" class="wm-combo"></ea-input-mask>
+                </div>
+                <div class="d-block">
+                  <label class="label-number">3</label>
+                  <ea-input-mask id="dscAttribute3" formControlName="dscAttribute3" class="wm-combo"></ea-input-mask>
+                </div>
+                <div class="d-block">
+                  <label class="label-number">4</label>
+                  <ea-input-mask id="dscAttribute4" formControlName="dscAttribute4" class="wm-combo"></ea-input-mask>
+                </div>
+                <div class="d-block">
+                  <label class="label-number">5</label>
+                  <ea-input-mask id="dscAttribute5" formControlName="dscAttribute5" class="wm-combo"></ea-input-mask>
+                </div>
+                <div class="d-block">
+                  <label class="label-number">6</label>
+                  <ea-input-mask id="dscAttribute6" formControlName="dscAttribute6" class="wm-combo"></ea-input-mask>
+                </div>
+                <div class="d-block">
+                  <label class="label-number">7</label>
+                  <ea-input-mask id="dscAttribute7" formControlName="dscAttribute7" class="wm-combo"></ea-input-mask>
+                </div>
+                <div class="d-block">
+                  <label class="label-number">8</label>
+                  <ea-input-mask id="dscAttribute8" formControlName="dscAttribute8" class="wm-combo"></ea-input-mask>
+                </div>
+                <div class="d-block">
+                  <label class="label-number">9</label>
+                  <ea-input-mask id="dscAttribute9" formControlName="dscAttribute9" class="wm-combo"></ea-input-mask>
+                </div>
+                <div class="d-block">
+                  <label class="label-number">10</label>
+                  <ea-input-mask id="dscAttribute10" formControlName="dscAttribute10" class="wm-combo"></ea-input-mask>
+                </div>
+                <div class="my-2"></div>
+                <div class="d-block">
+                  <label class="label-number">11</label>
+                  <ea-input-mask id="dscAttribute11" formControlName="dscAttribute11" class="wm-combo"></ea-input-mask>
+                </div>
+                <div class="d-block">
+                  <label class="label-number">12</label>
+                  <ea-input-mask id="dscAttribute12" formControlName="dscAttribute12" class="wm-combo"></ea-input-mask>
+                </div>
+                <div class="d-block">
+                  <label class="label-number">13</label>
+                  <ea-input-mask id="dscAttribute13" formControlName="dscAttribute13" class="wm-combo"></ea-input-mask>
+                </div>
+                <div class="d-block">
+                  <label class="label-number">14</label>
+                  <ea-input-mask id="dscAttribute14" formControlName="dscAttribute14" class="wm-combo"></ea-input-mask>
+                </div>
+                <div class="d-block">
+                  <label class="label-number">15</label>
+                  <ea-input-mask id="dscAttribute15" formControlName="dscAttribute15" class="wm-combo"></ea-input-mask>
+                </div>
+                <span class="my-1"></span>
+                <div class="d-block">
+                  <label class="label-number">16</label>
+                  <ea-input-mask id="dscAttribute16" formControlName="dscAttribute16" class="wm-combo"></ea-input-mask>
+                </div>
+                <div class="d-block">
+                  <label class="label-number">17</label>
+                  <ea-input-mask id="dscAttribute17" formControlName="dscAttribute17" class="wm-combo"></ea-input-mask>
+                </div>
+                <div class="d-block">
+                  <label class="label-number">18</label>
+                  <ea-input-mask id="dscAttribute18" formControlName="dscAttribute18" class="wm-combo"></ea-input-mask>
+                </div>
+                <div class="d-block">
+                  <label class="label-number">19</label>
+                  <ea-input-mask id="dscAttribute19" formControlName="dscAttribute19" class="wm-combo"></ea-input-mask>
+                </div>
+                <div class="d-block">
+                  <label class="label-number">20</label>
+                  <ea-input-mask id="dscAttribute20" formControlName="dscAttribute20" class="wm-combo"></ea-input-mask>
+                </div>
+              </div>
+            </div>
+            <label>(スペース区切で複数指定可)</label>
+            <div class="d-block">
+              <a class="cell-link" id="dscAttributePlural_LNK" (click)="linkBtnClick($event)">管理項目を個別に条件指定する</a>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <div class="block-frame-border asset-block-frame-border" [hidden]="!isInvGBox">
+      <label class="frame-title">棚卸</label>
+      <form class="p-2" [formGroup]="formInventory">
+        <div class="asset-group-control d-flex flex-row">
+          <label class="label-col text-right">社内棚卸対象:</label>
+          <div class="d-inline-block">
+            <wj-combo-box id="invInCompanyActualFlag" formControlName="invInCompanyActualFlag"
+              [itemsSource]="invInCompanyActualFlagAC" [isEditable]="false" [displayMemberPath]="'label'"
+              class="wm-combo wm-dropdown wm-100"></wj-combo-box>
+          </div>
+        </div>
+
+        <div class="asset-group-control d-flex flex-row">
+          <label class="label-col text-right" *ngIf="!isInvSealIssueFI">シール発行対象:</label>
+          <div class="d-inline-block">
+            <wj-combo-box id="invSealIssueFlag" [hidden]="isInvSealIssueFI" formControlName="invSealIssueFlag"
+              class="wm-combo wm-dropdown wm-100" [itemsSource]="invSealIssueFlagAC" [isEditable]="false"
+              [displayMemberPath]="'label'">
+            </wj-combo-box>
+          </div>
+          <label class="label-col text-right" *ngIf="!isInvSealIssueFI">シール発行:</label>
+          <div class="d-inline-block">
+            <wj-combo-box id="invSealIssueStatus" [hidden]="isInvSealIssueFI" formControlName="invSealIssueStatus"
+              [itemsSource]="invSealIssueStatusAC" [isEditable]="false" [displayMemberPath]="'label'"
+              class="wm-combo wm-dropdown wm-100"></wj-combo-box>
+          </div>
+        </div>
+        <div class="asset-group-control d-flex flex-row">
+          <label class="label-col text-right" *ngIf="!isInvSealIssueDateFI">シール発行日:</label>
+          <div class="d-inline-block">
+            <wj-input-date id="invSealIssueDateFrom" [hidden]="isInvSealIssueDateFI"
+              formControlName="invSealIssueDateFrom" class="wm-combo wm-120" [isRequired]="false"></wj-input-date>
+            <label class="mx-2" *ngIf="!isInvSealIssueDateFI">～</label>
+            <wj-input-date id="invSealIssueDateTo" [hidden]="isInvSealIssueDateFI" formControlName="invSealIssueDateTo"
+              class="wm-combo wm-120" [isRequired]="false"></wj-input-date>
+          </div>
+        </div>
+        <div class="asset-group-control d-flex flex-row">
+          <label class="label-col text-right">棚卸実施状況:</label>
+          <div class="d-flex flex-column">
+            <div class="d-inline-block">
+              <wj-combo-box id="invFlag" [formControlName]="'invFlag'" #invStatus class="wm-combo wm-dropdown wm-100"
+                style="height: 20px;" [itemsSource]="invFlagAC" [isEditable]="false" [displayMemberPath]="'label'"
+                [selectedValuePath]="'data'" [required]="false" (selectedItemChange)="
+                  changeInventoryStatus(invStatus.selectedItem)
+                ">
+              </wj-combo-box>
+            </div>
+            <div class="d-flex flex-row justify-content-end">
+              <label class="label-col text-right mr-2" *ngIf="isInvSearchDateFi">検索対象期間:</label>
+              <div class="d-inline-block">
+                <wj-input-date id="invSearchDateFrom" [hidden]="!isInvSearchDateFi" formControlName="invSearchDateFrom"
+                  class="wm-combo required wm-100" [isRequired]="false">
+                </wj-input-date>
+                <label class="mx-2" *ngIf="isInvSearchDateFi">～</label>
+                <wj-input-date id="invSearchDateTo" [hidden]="!isInvSearchDateFi" formControlName="invSearchDateTo"
+                  class="wm-combo required wm-100" [isRequired]="false">
+                </wj-input-date>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,1803 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<!--
+ *===================================================================
+ * ファイル名 : ApGetTanDAO_SqlMap.xml
+ * 概要説明   : 取得申請用SQL文
+ * バージョン : 1.0
+ *===================================================================
+ * 修正履歴
+ * 日付       Ver. 担当者       修正内容
+ * －－－－－ －－ －－－－－－ －－－－－－－－－－－－－－－－－－
+ * 2010-10-06 1.0  リヨン       新規
+ *===================================================================
+ -->
+<sqlMap namespace="ApGetTanDAO" >
+  <sql id="selectApGetTanComColumn_APGT">
+      nagt.APPLICATION_ID applicationId
+     ,nagt.CREATE_DATE createDate
+     ,nagt.CREATE_STAFF_CODE createStaffCode
+     ,nagt.UPDATE_DATE updateDate
+     ,nagt.UPDATE_STAFF_CODE updateStaffCode
+     ,nagt.VERSION version
+     ,nagt.DISPLAY_VERSION displayVersion
+     ,nagt.UPDATE_COMMENT updateComment
+     ,nagt.EAPP_ID eappId
+     ,nagt.AP_STATUS apStatus
+     ,NEA_UTIL_PKG.get_cn_value1_f('AP_STATUS_GET_TAN', nagt.AP_STATUS) apStatusName
+     ,nagt.AP_DATE apDate
+     ,nagt.AP_GET_TYPE apGetType
+     ,NEA_UTIL_PKG.get_cn_value1_f('AP_GET_TYPE', nagt.AP_GET_TYPE) apGetTypeName
+     ,nagt.AP_GET_AMOUNT_RANGE apGetAmountRange
+     ,NEA_UTIL_PKG.get_cn_value1_f('AP_GET_AMOUNT_RANGE', nagt.AP_GET_AMOUNT_RANGE, nagt.AP_COMPANY_CODE) apGetAmountRangeName
+     ,NEA_UTIL_PKG.get_cn_value_f('AP_GET_AMOUNT_RANGE', nagt.AP_GET_AMOUNT_RANGE, 7, nagt.AP_COMPANY_CODE) apGetAmountRangeUseCostSecType
+     ,NEA_UTIL_PKG.get_cn_value_f('AP_GET_AMOUNT_RANGE', nagt.AP_GET_AMOUNT_RANGE, 10, nagt.AP_COMPANY_CODE) apGetAmountRangeUseLineType
+     ,nagt.SPECIAL_APPROVE_FLAG specialApproveFlag
+     ,nagt.SPECIAL_APPROVE_DATE specialApproveDate
+     ,nagt.AP_CREATE_STAFF_CODE apCreateStaffCode
+     ,NEA_UTIL_PKG.get_staff_name_f(nagt.AP_CREATE_STAFF_CODE) apCreateStaffName
+     ,nagt.AP_CREATE_COMPANY_CODE apCreateCompanyCode
+     ,NEA_UTIL_PKG.get_company_name_f(nagt.AP_CREATE_COMPANY_CODE) apCreateCompanyName
+     ,nagt.AP_CREATE_SECTION_CODE apCreateSectionCode
+     ,NEA_UTIL_PKG.get_section_name_f(nagt.AP_CREATE_COMPANY_CODE, nagt.AP_CREATE_SECTION_CODE, nagt.AP_CREATE_SECTION_YEAR) apCreateSectionName
+     ,nagt.AP_CREATE_SECTION_YEAR apCreateSectionYear
+     ,nagt.AP_STAFF_CODE apStaffCode
+     ,NEA_UTIL_PKG.get_staff_name_f(nagt.AP_STAFF_CODE) apStaffName
+     ,nagt.AP_COMPANY_CODE apCompanyCode
+     ,NEA_UTIL_PKG.get_company_name_f(nagt.AP_COMPANY_CODE) apCompanyName
+     ,nagt.AP_SECTION_CODE apSectionCode
+     ,NEA_UTIL_PKG.get_section_name_f(nagt.AP_COMPANY_CODE, nagt.AP_SECTION_CODE, nagt.AP_SECTION_YEAR) apSectionName
+     ,nagt.AP_SECTION_YEAR apSectionYear
+     ,nagt.AP_TEL apTel
+     ,nagt.AP_SKIP_APPROVE_FLAG apSkipApproveFlag
+     ,nagt.AP_REGIST_STAFF_CODE apRegistStaffCode
+     ,NEA_UTIL_PKG.get_staff_name_f(nagt.AP_REGIST_STAFF_CODE) apRegistStaffName
+     ,nagt.AP_REGIST_COMPANY_CODE apRegistCompanyCode
+     ,NEA_UTIL_PKG.get_company_name_f(nagt.AP_REGIST_COMPANY_CODE) apRegistCompanyName
+     ,nagt.AP_REGIST_SECTION_CODE apRegistSectionCode
+     ,NEA_UTIL_PKG.get_section_name_f(nagt.AP_REGIST_COMPANY_CODE, nagt.AP_REGIST_SECTION_CODE, nagt.AP_REGIST_SECTION_YEAR) apRegistSectionName
+     ,nagt.AP_REGIST_SECTION_YEAR apRegistSectionYear
+     ,nagt.GET_PURPOSE_CODE getPurposeCode
+     ,NEA_UTIL_PKG.get_cn_value1_f('AP_GET_PURPOSE', nagt.GET_PURPOSE_CODE) getPurposeName
+     ,NEA_UTIL_PKG.replace_enter_f(nagt.GET_REASON, #enterChar#) getReason
+     ,nagt.GET_ITEM_NAME getItemName
+     ,nagt.GET_ITEM_CLOUD_TYPE getItemCloudType
+     ,nagt.GET_ITEM_GROUP_CODE getItemGroupCode
+     ,NEA_UTIL_PKG.get_item_group_name_f(nagt.AP_COMPANY_CODE, nagt.GET_ITEM_GROUP_CODE) getItemGroupName
+     ,nagt.GET_DELIVERY_DATE getDeliveryDate
+     ,nagt.GET_RETURN_DATE getReturnDate
+     ,nagt.GET_NEED_CIO_JUDGE_FLAG getNeedCioJudgeFlag
+     ,nagt.GET_SYSTEM_SECTION_DEPLOY_FLAG getSystemSectionDeployFlag
+     ,nagt.GET_INTRA_INVENTORY_FLAG getIntraInventoryFlag
+     ,nagt.GET_LE_RE_COMPANY_CODE getLeReCompanyCode
+     ,NEA_UTIL_PKG.get_cn_value1_f('LEASE_RENTAL_CUSTOMER', nagt.GET_LE_RE_COMPANY_CODE, nagt.AP_COMPANY_CODE) getLeReCompanyName
+     ,nagt.GET_LE_RE_ESTIMATE_NUMBER getLeReEstimateNumber
+     ,nagt.GET_LE_RE_COMMENT getLeReComment
+     ,nagt.GET_LE_RE_MONTH_AMOUNT getLeReMonthAmount
+     ,nagt.GET_LE_RE_COUNT getLeReCount
+     ,nagt.GET_LE_RE_TOTAL_AMOUNT getLeReTotalAmount
+     ,nagt.GET_LE_EAPP_ID getLeEappId
+     ,nagt.GET_TOTAL_AMOUNT getTotalAmount
+     ,NEA_UTIL_PKG.replace_enter_f(nagt.ATT_DESCRIPTION, #enterChar#) attDescription
+     ,nagt.HOL_COMPANY_CODE holCompanyCode
+     ,NEA_UTIL_PKG.get_company_name_f(nagt.HOL_COMPANY_CODE) holCompanyName
+     ,nagt.HOL_SECTION_CODE holSectionCode
+     ,nagt.HOL_SECTION_YEAR holSectionYear
+     ,NEA_UTIL_PKG.get_section_name_f(nagt.HOL_COMPANY_CODE, nagt.HOL_SECTION_CODE, nagt.HOL_SECTION_YEAR) holSectionName
+     ,nagt.HOL_STAFF_CODE holStaffCode
+     ,NEA_UTIL_PKG.get_staff_name_f(nagt.HOL_STAFF_CODE) holStaffName
+     ,nagt.HOL_OFFICE_CODE holOfficeCode
+     ,NEA_UTIL_PKG.get_cn_value1_f('OFFICE', nagt.HOL_OFFICE_CODE) holOfficeName
+     ,NEA_UTIL_PKG.get_cn_value_f('OFFICE', nagt.HOL_OFFICE_CODE, 5) holOfficeOutsideFlag
+     ,nagt.HOL_OFFICE_FLOOR holOfficeFloor
+     ,nagt.HOL_OFFICE_OUTSIDE_PC_ID holOfficeOutsidePcId
+     ,NEA_UTIL_PKG.replace_enter_f(nagt.HOL_OFFICE_DESCRIPTION, #enterChar#) holOfficeDescription
+     ,nagt.COST_TYPE costType
+     ,nagt.COST_DEP_PRJ_UNDECIDED_FLAG costDepPrjUndecidedFlag
+     ,nagt.COST_DEP_PRJ_CODE costDepPrjCode
+     ,NEA_UTIL_PKG.get_project_name_f(nagt.AP_COMPANY_CODE, nagt.COST_DEP_PRJ_CODE) costDepPrjName
+     ,NEA_UTIL_PKG.get_project_type_f(nagt.AP_COMPANY_CODE, nagt.COST_DEP_PRJ_CODE) costDepPrjType
+     ,NEA_UTIL_PKG.replace_enter_f(nagt.DESCRIPTION_AP, #enterChar#) descriptionAp
+     ,NEA_UTIL_PKG.replace_enter_f(nagt.DESCRIPTION_ADMIN, #enterChar#) descriptionAdmin
+     ,nagt.LINE_EDIT_APPROVE_FLAG lineEditApproveFlag
+     ,nagt.STOP_REGIST_FLAG stopRegistFlag
+     ,nagt.REGIST_COMPLETE_FLAG registCompleteFlag
+     ,nagt.APPROVE_SUPERIOR_FLAG approveSuperiorFlag
+     ,nagt.APPROVE_DATE approveDate
+     ,nagt.COST_COMPANY_CODE costCompanyCode
+     ,nagt.COST_SECTION_CODE costSectionCode
+     ,nagt.COST_SECTION_YEAR costSectionYear
+     ,NEA_UTIL_PKG.get_cost_section_name_f(nagt.COST_SECTION_CODE, nagt.COST_SECTION_YEAR) costSectionName
+     <!-- 注文書項目 -->
+     , nagt.GET_LE_RE_MONTH_LESS_AMOUNT getLeReMonthLessAmount
+     , nagt.REO_RECEPT_NUMBER reoReceptNumber
+     , nagt.REO_ORDER_TYPE reoOrderType
+     , nagt.REO_AST_STAFF_CODE reoAstStaffCode
+     , nagt.REO_AST_COMPANY_CODE reoAstCompanyCode
+     , nagt.REO_AST_SECTION_CODE reoAstSectionCode
+     , nagt.REO_AST_SECTION_YEAR reoAstSectionYear
+     , nagt.REO_AST_TEL reoAstTel
+     , nagt.REO_AST_FAX reoAstFax
+     , nagt.REO_AST_MAIL_ADDRESS reoAstMailAddress
+     , nagt.REO_USE_HOPE_START_DATE reoUseHopeStartDate
+     , nagt.REO_INV_ADDRESS reoInvAddress
+     , nagt.REO_INV_TEL reoInvTel
+     , nagt.REO_INV_FAX reoInvFax
+     , nagt.REO_INV_MAIL_ADDRESS reoInvMailAddress
+     , nagt.REO_DLV_STAFF_CODE reoDlvStaffCode
+     , nagt.REO_DLV_COMPANY_CODE reoDlvCompanyCode
+     , nagt.REO_DLV_SECTION_CODE reoDlvSectionCode
+     , nagt.REO_DLV_SECTION_YEAR reoDlvSectionYear
+     , nagt.REO_DLV_ADDRESS reoDlvAddress
+     , nagt.REO_DLV_TEL reoDlvTel
+     , nagt.REO_DLV_FAX reoDlvFax
+     , nagt.REO_DLV_MAIL_ADDRESS reoDlvMailAddress
+     , nagt.REO_DESCRIPTION reoDescription
+     , nagt.REO_ORDER_DATE reoOrderDate
+     , nagt.REO_ORDER_FLAG reoOrderFlag
+     , nagt.REO_INV_STAFF_INPUT_TYPE reoInvStaffInputType
+     , nagt.REO_INV_STAFF_NAME reoInvStaffName
+     , nagt.REO_INV_COMPANY_NAME reoInvCompanyName
+     , nagt.REO_INV_SECTION_NAME reoInvSectionName
+     , nagt.REO_INV_COMPANY_OFFICAIL_NAME reoInvCompanyOfficailName
+     , nagt.REO_DISUSE_FLAG reoDisuseFlag
+     , nagt.GET_LE_RE_DATE_COUNT getLeReDateCount
+     , NEA_UTIL_PKG.get_cn_value1_f('REO_ORDER_SET', nagt.REO_ORDER_TYPE, nagt.AP_COMPANY_CODE) reoOrderTypeName
+     , NEA_UTIL_PKG.get_staff_name_f(nagt.REO_AST_STAFF_CODE) reoAstStaffName
+     , NEA_UTIL_PKG.get_staff_name_f(nagt.REO_DLV_STAFF_CODE) reoDlvStaffName
+     , NEA_UTIL_PKG.get_company_name_f(nagt.REO_AST_COMPANY_CODE) reoAstCompanyName
+     , NEA_UTIL_PKG.get_company_name_f(nagt.REO_DLV_COMPANY_CODE) reoDlvCompanyName
+     , NEA_UTIL_PKG.get_section_name_f(nagt.REO_AST_COMPANY_CODE, nagt.REO_AST_SECTION_CODE, nagt.REO_AST_SECTION_YEAR) reoAstSectionName
+     , NEA_UTIL_PKG.get_section_name_f(nagt.REO_DLV_COMPANY_CODE, nagt.REO_DLV_SECTION_CODE, nagt.REO_DLV_SECTION_YEAR) reoDlvSectionName
+     , CASE
+         WHEN (nagt.REO_ORDER_FLAG = '0' AND nagt.REO_DISUSE_FLAG = '0')  THEN '未発注'
+         WHEN (nagt.REO_ORDER_FLAG = '1' AND nagt.REO_DISUSE_FLAG = '0')  THEN '発注済'
+         WHEN nagt.REO_DISUSE_FLAG = '1' THEN '発注不要'
+         ELSE null
+       END reoOrderFlagName
+     , nagt.REO_AST_OIR reoAstOir
+  </sql>
+
+  <!--
+    取得申請取得
+  -->
+  <select id="selectApGetTan_APGT" parameterClass="java.util.Map" resultClass="jp.co.ctcg.easset.dto.ap_get_tan.ApGetTan">
+    SELECT
+      <include refid="selectApGetTanComColumn_APGT" />
+     ,NEA_UTIL_PKG.get_tel_f(nagt.AP_CREATE_COMPANY_CODE, nagt.AP_CREATE_STAFF_CODE, nagt.AP_CREATE_SECTION_YEAR) apCreateTel
+    FROM
+      NEA_AP_GET_TAN nagt
+    WHERE
+      <isNotEmpty property="applicationId">
+        nagt.APPLICATION_ID = #applicationId#
+      </isNotEmpty>
+      <isNotEmpty property="eappId">
+        nagt.EAPP_ID = #eappId#
+      </isNotEmpty>
+    <isNotEmpty property="lockFlag">
+      FOR UPDATE
+    </isNotEmpty>
+  </select>
+
+  <!--
+    受付番号数取得
+  -->
+  <select id="selectMaxReoReceptNumber_APGT" parameterClass="java.util.Map" resultClass="java.lang.Long">
+    SELECT
+      MAX(TO_NUMBER(REO_RECEPT_NUMBER))
+    FROM
+      NEA_AP_GET_TAN
+    WHERE
+      REO_RECEPT_NUMBER LIKE TO_CHAR(#date#, 'YYYYMMDD') || '%'
+  </select>
+
+  <!--
+    取得申請購入明細取得
+  -->
+  <select id="selectApGetTanLinePur_APGT" parameterClass="java.util.Map" resultClass="jp.co.ctcg.easset.dto.ap_get_tan.ApGetTanLinePur">
+    SELECT
+      APPLICATION_ID applicationId
+      , LINE_SEQ lineSeq
+      , CREATE_DATE createDate
+      , CREATE_STAFF_CODE createStaffCode
+      , UPDATE_DATE updateDate
+      , UPDATE_STAFF_CODE updateStaffCode
+      , GET_PUR_COMPANY_CODE getPurCompanyCode
+      , GET_PUR_COMPANY_NAME  getPurCompanyName
+      , GET_PUR_ESTIMATE_NUMBER getPurEstimateNumber
+      , GET_PUR_AMOUNT getPurAmount
+      , GET_PUR_COMMENT getPurComment
+    FROM
+      NEA_AP_GET_TAN_LINE_PUR
+    WHERE
+      APPLICATION_ID = #applicationId#
+    ORDER BY
+      APPLICATION_ID
+      , LINE_SEQ
+  </select>
+
+  <!--
+    取得申請その他費用明細取得
+  -->
+  <select id="selectApGetTanLineOtrCost_APGT" parameterClass="java.util.Map" resultClass="jp.co.ctcg.easset.dto.ap_get_tan.ApGetTanLineOtrCost">
+    SELECT
+      APPLICATION_ID applicationId
+      , LINE_SEQ lineSeq
+      , CREATE_DATE createDate
+      , CREATE_STAFF_CODE createStaffCode
+      , UPDATE_DATE updateDate
+      , UPDATE_STAFF_CODE updateStaffCode
+      , GET_OTR_AMOUNT getOtrAmount
+      , GET_OTR_COMMENT getOtrComment
+    FROM
+      NEA_AP_GET_TAN_LINE_OTR_COST
+    WHERE
+      APPLICATION_ID = #applicationId#
+    ORDER BY
+      APPLICATION_ID
+      , LINE_SEQ
+  </select>
+
+  <!--
+    取得申請添付ファイル明細取得
+  -->
+  <select id="selectApGetTanLineAtt_APGT" parameterClass="java.util.Map" resultClass="jp.co.ctcg.easset.dto.ap_get_tan.ApGetTanLineAtt">
+    SELECT
+      APPLICATION_ID applicationId
+      , LINE_SEQ lineSeq
+      , CREATE_DATE createDate
+      , CREATE_STAFF_CODE createStaffCode
+      , NEA_UTIL_PKG.GET_STAFF_NAME_F(CREATE_STAFF_CODE) createStaffName
+      , UPDATE_DATE updateDate
+      , UPDATE_STAFF_CODE updateStaffCode
+      , ATT_FILE_NAME attFileName
+      , ATT_FILE_ID attFileId
+      , ATT_FILE_COMMENT attFileComment
+    FROM
+      NEA_AP_GET_TAN_LINE_ATT
+    WHERE
+      APPLICATION_ID = #applicationId#
+    ORDER BY
+      APPLICATION_ID
+      , LINE_SEQ
+  </select>
+
+  <!--
+    取得申請経費負担明細取得
+  -->
+  <select id="selectApGetTanLineCostSec_APGT" parameterClass="java.util.Map" resultClass="jp.co.ctcg.easset.dto.ap_get_tan.ApGetTanLineCostSec">
+    SELECT
+      APPLICATION_ID applicationId
+      , LINE_SEQ lineSeq
+      , CREATE_DATE createDate
+      , CREATE_STAFF_CODE createStaffCode
+      , UPDATE_DATE updateDate
+      , UPDATE_STAFF_CODE updateStaffCode
+      , COST_COMPANY_CODE costCompanyCode
+      , NEA_UTIL_PKG.get_company_name_f(COST_COMPANY_CODE) costCompanyName
+      , COST_SECTION_CODE costSectionCode
+      , COST_SECTION_YEAR costSectionYear
+      , NEA_UTIL_PKG.get_cost_section_name_f(COST_SECTION_CODE, COST_SECTION_YEAR) costSectionName
+      , COST_DIST costDist
+    FROM
+      NEA_AP_GET_TAN_LINE_COST_SEC
+    WHERE
+      APPLICATION_ID = #applicationId#
+    ORDER BY
+      APPLICATION_ID
+      , LINE_SEQ
+  </select>
+
+  <!--
+    取得申請資産(機器)明細取得
+  -->
+  <select id="selectApGetTanLineAst_APGT" parameterClass="java.util.Map" resultClass="jp.co.ctcg.easset.dto.ap_get_tan.ApGetTanLineAst">
+    SELECT
+      nagtla.APPLICATION_ID applicationId
+      , nagtla.LINE_SEQ lineSeq
+      , nagtla.CREATE_DATE createDate
+      , nagtla.CREATE_STAFF_CODE createStaffCode
+      , nagtla.UPDATE_DATE updateDate
+      , nagtla.UPDATE_STAFF_CODE updateStaffCode
+      , nagtla.AP_GET_TAN_LINE_AST_ID apGetTanLineAstId
+      , nagtla.AST_NAME astName
+      , nagtla.AST_CATEGORY1_CODE astCategory1Code
+      , NEA_UTIL_PKG.get_cn_value1_f('ASSET_CATEGORY1', nagtla.AST_CATEGORY1_CODE) astCategory1Name
+      , nagtla.AST_CATEGORY2_CODE astCategory2Code
+      , NEA_UTIL_PKG.get_cn_value1_f('ASSET_CATEGORY2', nagtla.AST_CATEGORY2_CODE) astCategory2Name
+      , NEA_UTIL_PKG.get_cn_value_f('ASSET_CATEGORY2', nagtla.AST_CATEGORY2_CODE, 2) astQuantityManageType
+      , NEA_UTIL_PKG.get_cn_value_f('ASSET_CATEGORY2', nagtla.AST_CATEGORY2_CODE, 3) astThinClientType
+      , nagtla.QUANTITY quantity
+      , nagtla.REGIST_QUANTITY registQuantity
+      , nagtla.AST_MAKER_CODE astMakerCode
+      , nagtla.AST_MAKER_NAME astMakerName
+      , nagtla.AST_MAKER_MODEL astMakerModel
+      , nagtla.AST_SHAPE_CODE astShapeCode
+      , NEA_UTIL_PKG.get_cn_value1_f('ASSET_SHAPE', nagtla.AST_SHAPE_CODE) astShapeName
+      , nagtla.AST_PRJ_CODE astPrjCode
+      , NEA_UTIL_PKG.get_project_name_f(nagt.AP_COMPANY_CODE, nagtla.AST_PRJ_CODE) astPrjName
+      , NEA_UTIL_PKG.get_project_type_f(nagt.AP_COMPANY_CODE, nagtla.AST_PRJ_CODE) astPrjType
+      , nagtla.FAILURE_ASSET_ID failureAssetId
+      , nagtla.FAILURE_CONTRACT_NUM failureContractNum
+      , nagtla.FAILURE_AST_OIR failureAstOir
+      , nagtla.FAILURE_AST_SERIAL_CODE failureAstSerialCode
+      , nagtla.FAILURE_USE_STAFF_CODE failureUseStaffCode
+      , nagtla.AUTO_REGIST_FLAG autoRegistFlag
+      , nagtla.NO_REGIST_FLAG noRegistFlag
+      , nagtla.SEAL_ISSUE_FLAG sealIssueFlag
+      , nagtla.EQUIPMENT_FLAG equipmentFlag
+      , nagtla.AST_MODEL_CODE astModelCode
+      , nagtla.AST_GET_LE_MONTH_AMOUNT astGetLeMonthAmount
+      , nagtla.REO_AST_NAME reoAstName
+      , nagtla.REO_AGREEMENT reoAgreement
+      , nagtla.REO_PRICE_LIST reoPriceList
+      , NEA_UTIL_PKG.get_staff_name_f(nagtla.FAILURE_USE_STAFF_CODE) failureUseStaffName
+      , nagtla.AST_GET_LE_CONTRACT_MONTH astGetLeContractMonth
+    FROM
+      NEA_AP_GET_TAN_LINE_AST nagtla
+      , NEA_AP_GET_TAN nagt
+    WHERE
+      nagtla.APPLICATION_ID = #applicationId#
+      AND nagtla.APPLICATION_ID = nagt.APPLICATION_ID
+    ORDER BY
+      nagtla.APPLICATION_ID
+      , nagtla.LINE_SEQ
+  </select>
+
+  <!--
+    取得申請ライセンス明細取得
+  -->
+  <select id="selectApGetTanLineLic_APGT" parameterClass="java.util.Map" resultClass="jp.co.ctcg.easset.dto.ap_get_tan.ApGetTanLineLic">
+    SELECT
+      APPLICATION_ID applicationId
+      , LINE_SEQ lineSeq
+      , CREATE_DATE createDate
+      , CREATE_STAFF_CODE createStaffCode
+      , UPDATE_DATE updateDate
+      , UPDATE_STAFF_CODE updateStaffCode
+      , AP_GET_TAN_LINE_LIC_ID apGetTanLineLicId
+      , SOFTWARE_MAKER_ID softwareMakerId
+      , SOFTWARE_MAKER_NAME softwareMakerName
+      , SOFTWARE_ID softwareId
+      , SOFTWARE_NAME softwareName
+      , QUANTITY quantity
+      , REGIST_QUANTITY registQuantity
+      , LIC_QUANTITY_TYPE licQuantityType
+      , NEA_UTIL_PKG.get_cn_value1_f('LICENSE_QUANTITY_TYPE', LIC_QUANTITY_TYPE) licQuantityTypeName
+      , LIC_QUANTITY licQuantity
+    FROM
+      NEA_AP_GET_TAN_LINE_LIC
+    WHERE
+      APPLICATION_ID = #applicationId#
+    ORDER BY
+      APPLICATION_ID
+      , LINE_SEQ
+  </select>
+
+  <!--
+    取得申請検索(共通)
+  -->
+  <sql id="selectApGetTanComList_APGT">
+    SELECT
+      <include refid="selectApGetTanComColumn_APGT" />
+     ,NEA_UTIL_PKG.get_cn_value1_f('FLAG_YN', nagt.SPECIAL_APPROVE_FLAG) specialApproveFlagName
+     ,NEA_UTIL_PKG.get_cn_value1_f('FLAG_YN', nagt.AP_SKIP_APPROVE_FLAG) apSkipApproveFlagName
+     ,NEA_UTIL_PKG.get_cn_value1_f('ITEM_CLOUD_TYPE', nagt.GET_ITEM_CLOUD_TYPE) getItemCloudTypeName
+     ,NEA_UTIL_PKG.get_cn_value1_f('FLAG_YN', nagt.GET_NEED_CIO_JUDGE_FLAG) getNeedCioJudgeFlagName
+     ,NEA_UTIL_PKG.get_cn_value1_f('FLAG_YN', nagt.GET_SYSTEM_SECTION_DEPLOY_FLAG) getSystemSectionDeployFlagName
+     ,NEA_UTIL_PKG.get_cn_value1_f('COST_TYPE', nagt.COST_TYPE) costTypeName
+     ,NEA_UTIL_PKG.get_cn_value1_f('FLAG_YN', nagt.GET_INTRA_INVENTORY_FLAG) getIntraInventoryFlagName
+     ,NEA_UTIL_PKG.get_cn_value1_f('FLAG_YN', nagt.COST_DEP_PRJ_UNDECIDED_FLAG) costDepPrjUndecidedFlagName
+     ,NEA_UTIL_PKG.get_cn_value1_f('FLAG_YN', nagt.LINE_EDIT_APPROVE_FLAG) lineEditApproveFlagName
+     ,NEA_UTIL_PKG.get_cn_value1_f('FLAG_YN', nagt.STOP_REGIST_FLAG) stopRegistFlagName
+     ,NEA_UTIL_PKG.get_cn_value1_f('FLAG_YN', nagt.REGIST_COMPLETE_FLAG) registCompleteFlagName
+
+     ,NEA_UTIL_PKG.get_ap_get_tan_pur_name_f(nagt.APPLICATION_ID) getPurCompanyName
+     ,NEA_UTIL_PKG.get_ap_get_tan_pur_est_num_f(nagt.APPLICATION_ID) getPurEstimateNumber
+     ,NEA_UTIL_PKG.get_ap_get_tan_pur_comment_f(nagt.APPLICATION_ID) getPurComment
+     ,(
+       SELECT
+         SUM(nagtlp.GET_PUR_AMOUNT)
+       FROM
+         NEA_AP_GET_TAN_LINE_PUR nagtlp
+       WHERE
+         nagtlp.APPLICATION_ID = nagt.APPLICATION_ID
+      ) getPurAmountSum
+
+     ,NEA_UTIL_PKG.get_ap_get_tan_otr_comment_f(nagt.APPLICATION_ID) getOtrComment
+     ,(
+       SELECT
+         SUM(nagtlo.GET_OTR_AMOUNT)
+       FROM
+         NEA_AP_GET_TAN_LINE_OTR_COST nagtlo
+       WHERE
+         nagtlo.APPLICATION_ID = nagt.APPLICATION_ID
+      ) getOtrAmountSum
+
+     ,NEA_UTIL_PKG.get_ap_get_tan_company_name_f(nagt.APPLICATION_ID, nagt.AP_GET_TYPE, nagt.GET_LE_RE_COMPANY_CODE, nagt.AP_COMPANY_CODE) getCompanyName
+
+     ,NEA_UTIL_PKG.get_ap_get_tan_cost_sec_dist_f(nagt.APPLICATION_ID) costSectionDistName
+
+     ,nagtla.AST_NAME astNameOne
+     ,nagtla.AST_MAKER_NAME astMakerNameOne
+     ,nagtla.AST_MAKER_MODEL astMakerModelOne
+     ,nagtla.AST_PRJ_CODE astPrjCodeOne
+     ,NEA_UTIL_PKG.get_project_name_f(nagt.AP_COMPANY_CODE, nagtla.AST_PRJ_CODE) astPrjNameOne
+     ,nagtll.SOFTWARE_MAKER_NAME softwareMakerNameOne
+     ,nagtll.SOFTWARE_NAME softwareNameOne
+     ,(
+       SELECT
+         count(*)
+       FROM
+         NEA_AP_GET_TAN_LINE_AST nagtla
+       WHERE
+         nagtla.APPLICATION_ID = nagt.APPLICATION_ID
+       ) astLineCount
+     ,(
+       SELECT
+         NVL(SUM(nagtla.QUANTITY), 0)
+       FROM
+         NEA_AP_GET_TAN_LINE_AST nagtla
+       WHERE
+         nagtla.APPLICATION_ID = nagt.APPLICATION_ID
+       ) astQuantitySum
+     ,(
+       SELECT
+         NVL(SUM(nagtla.REGIST_QUANTITY), 0)
+       FROM
+         NEA_AP_GET_TAN_LINE_AST nagtla
+       WHERE
+         nagtla.APPLICATION_ID = nagt.APPLICATION_ID
+       ) astRegistQuantitySum
+     ,(
+       SELECT
+         NVL(SUM(nagtla.QUANTITY), 0) - NVL(SUM(nagtla.REGIST_QUANTITY), 0)
+       FROM
+         NEA_AP_GET_TAN_LINE_AST nagtla
+       WHERE
+         nagtla.APPLICATION_ID = nagt.APPLICATION_ID
+       AND
+         nagtla.NO_REGIST_FLAG = '1'
+       ) astNoRegistQuantitySum
+     ,(
+       SELECT
+         count(*)
+       FROM
+         NEA_AP_GET_TAN_LINE_LIC nagtll
+       WHERE
+         nagtll.APPLICATION_ID = nagt.APPLICATION_ID
+      ) licLineCount
+     ,(
+       SELECT
+         NVL(SUM(nagtll.QUANTITY), 0)
+       FROM
+         NEA_AP_GET_TAN_LINE_LIC nagtll
+       WHERE
+         nagtll.APPLICATION_ID = nagt.APPLICATION_ID
+      ) licQuantitySum
+     ,(
+       SELECT
+         NVL(SUM(nagtll.REGIST_QUANTITY), 0)
+       FROM
+         NEA_AP_GET_TAN_LINE_LIC nagtll
+       WHERE
+         nagtll.APPLICATION_ID = nagt.APPLICATION_ID
+      ) licRegistQuantitySum
+     ,nagtla.FAILURE_ASSET_ID failureAssetIdOne
+    FROM
+      NEA_AP_GET_TAN nagt
+     ,NEA_AP_GET_TAN_LINE_AST nagtla
+     ,NEA_AP_GET_TAN_LINE_LIC nagtll
+    WHERE
+      nagt.APPLICATION_ID = nagtla.APPLICATION_ID(+)
+      AND nagt.APPLICATION_ID = nagtll.APPLICATION_ID(+)
+      AND 1 = nagtla.LINE_SEQ(+)
+      AND 1 = nagtll.LINE_SEQ(+)
+      <isEmpty property="isDownload">
+        AND ROWNUM <![CDATA[<]]>= (SELECT TO_NUMBER(VALUE1) FROM NEA_CODE_NAME WHERE CATEGORY_CODE = 'MAX_SEARCH_ROW_COUNT' AND DELETE_FLAG = '0')
+      </isEmpty>
+
+      <!-- 申請会社 -->
+      <isNotEmpty property="searchParam.apCompanyCode">
+        AND nagt.AP_COMPANY_CODE = #searchParam.apCompanyCode#
+      </isNotEmpty>
+
+      <!-- 基本 -->
+      <isNotEmpty property="searchParam.applicationId">
+        AND nagt.APPLICATION_ID LIKE '%' || #searchParam.applicationId# || '%'
+      </isNotEmpty>
+      <isNotEmpty property="applicationIdPluralList">
+        AND $applicationIdPluralList$
+      </isNotEmpty>
+      <isNotEmpty property="apStatusPluralList">
+        AND $apStatusPluralList$
+      </isNotEmpty>
+      <isNotEmpty property="searchParam.apDateFrom">
+        AND nagt.AP_DATE <![CDATA[>]]>= #searchParam.apDateFrom#
+      </isNotEmpty>
+      <isNotEmpty property="searchParam.apDateTo">
+        AND nagt.AP_DATE <![CDATA[<]]>= #searchParam.apDateTo#
+      </isNotEmpty>
+      <isNotEmpty property="searchParam.apStaffCode">
+        AND (nagt.AP_STAFF_CODE = #searchParam.apStaffCode# OR nagt.AP_CREATE_STAFF_CODE = #searchParam.apStaffCode# OR nagt.AP_REGIST_STAFF_CODE = #searchParam.apStaffCode# OR nagt.REO_DLV_STAFF_CODE = #searchParam.apStaffCode#)
+      </isNotEmpty>
+      <isNotEmpty property="apGetTypePluralList">
+        AND $apGetTypePluralList$
+      </isNotEmpty>
+      <isEqual property="searchParam.excludeCompleteFlag" compareValue="1">
+        AND nagt.REGIST_COMPLETE_FLAG = '0'
+      </isEqual>
+
+      <isNotEmpty property="searchParam.eappId">
+        AND nagt.EAPP_ID LIKE '%' || #searchParam.eappId# || '%'
+      </isNotEmpty>
+      <isNotEmpty property="eappIdPluralList">
+        AND $eappIdPluralList$
+      </isNotEmpty>
+
+      <isNotEmpty property="reoOrderFlagPluralList">
+        AND (
+        ($reoOrderFlagPluralList$ AND nagt.REO_DISUSE_FLAG = '0' )
+        <isNotEmpty property="reoDisuseFlagPluralList">
+           OR $reoDisuseFlagPluralList$
+        </isNotEmpty>
+        )
+      </isNotEmpty>
+
+      <isEmpty property="reoOrderFlagPluralList">
+        <isNotEmpty property="reoDisuseFlagPluralList">
+          AND $reoDisuseFlagPluralList$
+        </isNotEmpty>
+      </isEmpty>
+
+      <!-- 取得 -->
+      <isNotEmpty property="searchParam.getItemName">
+        AND NEA_UTIL_PKG.to_fuzzy_f(nagt.GET_ITEM_NAME) LIKE '%' || NEA_UTIL_PKG.to_fuzzy_f(#searchParam.getItemName#) || '%'
+      </isNotEmpty>
+      <isNotEmpty property="searchParam.getItemCloudType">
+        AND nagt.GET_ITEM_CLOUD_TYPE = #searchParam.getItemCloudType#
+      </isNotEmpty>
+      <isNotEmpty property="searchParam.getItemGroupCode">
+        AND nagt.GET_ITEM_GROUP_CODE = #searchParam.getItemGroupCode#
+      </isNotEmpty>
+      <isNotEmpty property="searchParam.getDeliveryDateFrom">
+        AND nagt.GET_DELIVERY_DATE <![CDATA[>]]>= #searchParam.getDeliveryDateFrom#
+      </isNotEmpty>
+      <isNotEmpty property="searchParam.getDeliveryDateTo">
+        AND nagt.GET_DELIVERY_DATE <![CDATA[<]]>= #searchParam.getDeliveryDateTo#
+      </isNotEmpty>
+      <isNotEmpty property="searchParam.getSystemSectionDeployFlag">
+        AND nagt.GET_SYSTEM_SECTION_DEPLOY_FLAG = #searchParam.getSystemSectionDeployFlag#
+      </isNotEmpty>
+      <isNotEmpty property="searchParam.getPurCompanyName">
+        AND EXISTS (
+          SELECT
+            'X'
+          FROM
+            NEA_AP_GET_TAN_LINE_PUR nagtlp
+          WHERE
+            nagtlp.APPLICATION_ID = nagt.APPLICATION_ID
+            AND NEA_UTIL_PKG.to_fuzzy_f(nagtlp.GET_PUR_COMPANY_NAME) LIKE '%' || NEA_UTIL_PKG.to_fuzzy_f(#searchParam.getPurCompanyName#) || '%'
+        )
+      </isNotEmpty>
+      <isNotEmpty property="searchParam.getPurEstimateNumber">
+        AND EXISTS (
+          SELECT
+            'X'
+          FROM
+            NEA_AP_GET_TAN_LINE_PUR nagtlp
+          WHERE
+            nagtlp.APPLICATION_ID = nagt.APPLICATION_ID
+            AND NEA_UTIL_PKG.to_fuzzy_f(nagtlp.GET_PUR_ESTIMATE_NUMBER) LIKE '%' || NEA_UTIL_PKG.to_fuzzy_f(#searchParam.getPurEstimateNumber#) || '%'
+        )
+      </isNotEmpty>
+      <isNotEmpty property="getPurEstimateNumberPluralList">
+        AND EXISTS (
+          SELECT
+            'X'
+          FROM
+            NEA_AP_GET_TAN_LINE_PUR nagtlp
+          WHERE
+            nagtlp.APPLICATION_ID = nagt.APPLICATION_ID
+          AND $getPurEstimateNumberPluralList$
+        )
+      </isNotEmpty>
+      <isNotEmpty property="searchParam.getLeReCompanyCode">
+        AND nagt.GET_LE_RE_COMPANY_CODE = #searchParam.getLeReCompanyCode#
+      </isNotEmpty>
+      <isNotEmpty property="searchParam.getLeReEstimateNumber">
+        AND NEA_UTIL_PKG.to_fuzzy_f(nagt.GET_LE_RE_ESTIMATE_NUMBER) LIKE '%' || NEA_UTIL_PKG.to_fuzzy_f(#searchParam.getLeReEstimateNumber#) || '%'
+      </isNotEmpty>
+      <isNotEmpty property="getLeReEstimateNumberPluralList">
+        AND $getLeReEstimateNumberPluralList$
+      </isNotEmpty>
+      <isNotEmpty property="searchParam.getLeEappId">
+        AND nagt.GET_LE_EAPP_ID LIKE '%' || #searchParam.getLeEappId# || '%'
+      </isNotEmpty>
+      <isNotEmpty property="searchParam.getTotalAmountFrom">
+        AND nagt.GET_TOTAL_AMOUNT <![CDATA[>]]>= #searchParam.getTotalAmountFrom#
+      </isNotEmpty>
+      <isNotEmpty property="searchParam.getTotalAmountTo">
+        AND nagt.GET_TOTAL_AMOUNT <![CDATA[<]]>= #searchParam.getTotalAmountTo#
+      </isNotEmpty>
+
+      <!-- 保有・設置 -->
+      <isNotEmpty property="searchParam.holCompanyCode">
+        AND nagt.HOL_COMPANY_CODE = #searchParam.holCompanyCode#
+      </isNotEmpty>
+      <isNotEmpty property="sectionYear">
+        AND nagt.HOL_SECTION_YEAR = #sectionYear#
+      </isNotEmpty>
+      <isNotEmpty property="accessLevelSection">
+        AND $accessLevelSection$
+      </isNotEmpty>
+      <isNotEmpty property="section">
+        AND $section$
+      </isNotEmpty>
+      <isNotEmpty property="searchParam.holStaffCode">
+        AND nagt.HOL_STAFF_CODE = #searchParam.holStaffCode#
+      </isNotEmpty>
+      <isNotEmpty property="searchParam.holOfficeCode">
+        AND nagt.HOL_OFFICE_CODE = #searchParam.holOfficeCode#
+      </isNotEmpty>
+      <isNotEmpty property="searchParam.holOfficeFloor">
+        AND nagt.HOL_OFFICE_FLOOR = #searchParam.holOfficeFloor#
+      </isNotEmpty>
+
+      <!-- 経費負担 -->
+      <isNotEmpty property="searchParam.costType">
+        AND nagt.COST_TYPE = #searchParam.costType#
+      </isNotEmpty>
+      <isNotEmpty property="searchParam.costDepPrjCode">
+        AND nagt.COST_DEP_PRJ_CODE = #searchParam.costDepPrjCode#
+      </isNotEmpty>
+      <isEqual property="searchParam.costDepPrjUndecidedFlag" compareValue="1">
+        AND nagt.COST_DEP_PRJ_UNDECIDED_FLAG = '1'
+      </isEqual>
+
+      <!-- 備考 -->
+      <isNotEmpty property="descriptionPluralListAp">
+        AND (($descriptionPluralListAp$) OR ($descriptionPluralListAdmin$))
+      </isNotEmpty>
+
+      <!-- 資産(機器)明細、故障交換対象の資産(機器)明細 -->
+      <dynamic open=" AND EXISTS(SELECT 'X' FROM NEA_AP_GET_TAN_LINE_AST la WHERE la.APPLICATION_ID = nagt.APPLICATION_ID " close=")" >
+        <isNotEmpty property="searchParam.astName">
+          AND NEA_UTIL_PKG.to_fuzzy_f(la.AST_NAME) LIKE '%' || NEA_UTIL_PKG.to_fuzzy_f(#searchParam.astName#) || '%'
+        </isNotEmpty>
+        <isNotEmpty property="searchParam.astMakerCode">
+          AND la.AST_MAKER_CODE = #searchParam.astMakerCode#
+        </isNotEmpty>
+        <isEmpty property="searchParam.astMakerCode">
+          <isNotEmpty property="searchParam.astMakerName">
+            AND NEA_UTIL_PKG.to_fuzzy_f(la.AST_MAKER_NAME) LIKE '%' || NEA_UTIL_PKG.to_fuzzy_f(#searchParam.astMakerName#) || '%'
+          </isNotEmpty>
+        </isEmpty>
+        <isNotEmpty property="searchParam.astMakerModel">
+          AND NEA_UTIL_PKG.to_fuzzy_f(la.AST_MAKER_MODEL) LIKE '%' || NEA_UTIL_PKG.to_fuzzy_f(#searchParam.astMakerModel#) || '%'
+        </isNotEmpty>
+        <isNotEmpty property="searchParam.astPrjCode">
+          AND la.AST_PRJ_CODE = #searchParam.astPrjCode#
+        </isNotEmpty>
+        <isNotEmpty property="searchParam.failureAssetId">
+          AND la.FAILURE_ASSET_ID LIKE '%' || #searchParam.failureAssetId# || '%'
+        </isNotEmpty>
+        <isNotEmpty property="failureAssetIdPluralList">
+          AND $failureAssetIdPluralList$
+        </isNotEmpty>
+      </dynamic>
+
+      <!-- ライセンス明細 -->
+      <dynamic open=" AND EXISTS(SELECT 'X' FROM NEA_AP_GET_TAN_LINE_LIC ll WHERE ll.APPLICATION_ID = nagt.APPLICATION_ID " close=")">
+        <isNotEmpty property="searchParam.softwareMakerId">
+          AND ll.SOFTWARE_MAKER_ID = #searchParam.softwareMakerId#
+        </isNotEmpty>
+        <isEmpty property="searchParam.softwareMakerId">
+          <isNotEmpty property="searchParam.softwareMakerName">
+            AND NEA_UTIL_PKG.to_fuzzy_f(ll.SOFTWARE_MAKER_NAME) LIKE '%' || NEA_UTIL_PKG.to_fuzzy_f(#searchParam.softwareMakerName#) || '%'
+          </isNotEmpty>
+        </isEmpty>
+        <isNotEmpty property="searchParam.softwareId">
+          AND ll.SOFTWARE_ID = #searchParam.softwareId#
+        </isNotEmpty>
+        <isEmpty property="searchParam.softwareId">
+          <isNotEmpty property="searchParam.softwareName">
+            AND NEA_UTIL_PKG.to_fuzzy_f(ll.SOFTWARE_NAME) LIKE '%' || NEA_UTIL_PKG.to_fuzzy_f(#searchParam.softwareName#) || '%'
+          </isNotEmpty>
+        </isEmpty>
+      </dynamic>
+
+      <!-- 明細存在条件(1：機器,2:ライセンス)  -->
+      <isEqual property="searchParam.lineExistsType" compareValue="1">
+        AND EXISTS(SELECT 'X' FROM NEA_AP_GET_TAN_LINE_AST la WHERE la.APPLICATION_ID = nagt.APPLICATION_ID AND la.NO_REGIST_FLAG = '0' AND QUANTITY > REGIST_QUANTITY)
+      </isEqual>
+      <isEqual property="searchParam.lineExistsType" compareValue="2">
+        AND EXISTS(SELECT 'X' FROM NEA_AP_GET_TAN_LINE_LIC ll WHERE ll.APPLICATION_ID = nagt.APPLICATION_ID AND QUANTITY > REGIST_QUANTITY)
+      </isEqual>
+  </sql>
+
+  <!--
+    取得申請検索(共通)
+  -->
+  <sql id="selectApGetTanComLineColumn_APGT">
+      applicationId
+     ,createDate
+     ,createStaffCode
+     ,updateDate
+     ,updateStaffCode
+     ,version
+     ,displayVersion
+     ,updateComment
+     ,eappId
+     ,apStatus
+     ,apStatusName
+     ,apDate
+     ,apGetType
+     ,apGetTypeName
+     ,apGetAmountRange
+     ,apGetAmountRangeName
+     ,apGetAmountRangeUseCostSecType
+     ,apGetAmountRangeUseLineType
+     ,specialApproveFlag
+     ,specialApproveDate
+     ,apCreateStaffCode
+     ,apCreateStaffName
+     ,apCreateCompanyCode
+     ,apCreateCompanyName
+     ,apCreateSectionCode
+     ,apCreateSectionName
+     ,apCreateSectionYear
+     ,apStaffCode
+     ,apStaffName
+     ,apCompanyCode
+     ,apCompanyName
+     ,apSectionCode
+     ,apSectionName
+     ,apSectionYear
+     ,apTel
+     ,apSkipApproveFlag
+     ,apRegistStaffCode
+     ,apRegistStaffName
+     ,apRegistCompanyCode
+     ,apRegistCompanyName
+     ,apRegistSectionCode
+     ,apRegistSectionName
+     ,apRegistSectionYear
+     ,getPurposeCode
+     ,getPurposeName
+     ,getReason
+     ,getItemName
+     ,getItemCloudType
+     ,getItemGroupCode
+     ,getItemGroupName
+     ,getDeliveryDate
+     ,getReturnDate
+     ,getNeedCioJudgeFlag
+     ,getSystemSectionDeployFlag
+     ,getIntraInventoryFlag
+     ,getLeReCompanyCode
+     ,getLeReCompanyName
+     ,getLeReEstimateNumber
+     ,getLeReComment
+     ,getLeReMonthAmount
+     ,getLeReCount
+     ,getLeReTotalAmount
+     ,getLeEappId
+     ,getTotalAmount
+     ,attDescription
+     ,holCompanyCode
+     ,holCompanyName
+     ,holSectionCode
+     ,holSectionYear
+     ,holSectionName
+     ,holStaffCode
+     ,holStaffName
+     ,holOfficeCode
+     ,holOfficeName
+     ,holOfficeFloor
+     ,holOfficeOutsidePcId
+     ,holOfficeDescription
+     ,costType
+     ,costDepPrjUndecidedFlag
+     ,costDepPrjCode
+     ,costDepPrjName
+     ,descriptionAp
+     ,descriptionAdmin
+     ,lineEditApproveFlag
+     ,stopRegistFlag
+     ,registCompleteFlag
+     ,approveSuperiorFlag
+     ,approveDate
+     ,specialApproveFlagName
+     ,apSkipApproveFlagName
+     ,getItemCloudTypeName
+     ,getNeedCioJudgeFlagName
+     ,getSystemSectionDeployFlagName
+     ,costTypeName
+     ,getIntraInventoryFlagName
+     ,costDepPrjUndecidedFlagName
+     ,lineEditApproveFlagName
+     ,stopRegistFlagName
+     ,registCompleteFlagName
+     ,getPurCompanyName
+     ,getPurEstimateNumber
+     ,getPurComment
+     ,getPurAmountSum
+     ,getOtrComment
+     ,getOtrAmountSum
+     ,getCompanyName
+     ,costSectionCode
+     ,costSectionName
+     ,costSectionDistName
+     ,astNameOne
+     ,astMakerNameOne
+     ,astMakerModelOne
+     ,astPrjCodeOne
+     ,astPrjNameOne
+     ,softwareMakerNameOne
+     ,softwareNameOne
+     ,astLineCount
+     ,astQuantitySum
+     ,astRegistQuantitySum
+     ,astNoRegistQuantitySum
+     ,licLineCount
+     ,licQuantitySum
+     ,licRegistQuantitySum
+     ,failureAssetIdOne
+     ,reoOrderFlagName
+  </sql>
+
+  <!--
+    取得申請検索
+  -->
+  <select id="selectApGetTanList_APGT" parameterClass="java.util.Map" resultClass="jp.co.ctcg.easset.dto.ap_get_tan.ApGetTanSR">
+    <include refid="selectApGetTanComList_APGT" />
+    ORDER BY
+      nagt.APPLICATION_ID
+  </select>
+
+  <!--
+    取得申請_明細単位
+  -->
+  <select id="selectApGetTanLineList_APGT" parameterClass="java.util.Map" resultClass="jp.co.ctcg.easset.dto.ap_get_tan.ApGetTanSR">
+      SELECT
+        <include refid="selectApGetTanComLineColumn_APGT" />
+       ,nagtla1.LINE_SEQ astLineSeq
+       ,nagtla1.AST_NAME astName
+       ,NEA_UTIL_PKG.get_cn_value1_f('ASSET_CATEGORY2', nagtla1.AST_CATEGORY2_CODE) astCategory2Name
+       ,nagtla1.QUANTITY astQuantity
+       ,nagtla1.REGIST_QUANTITY astRegistQuantity
+       ,NEA_UTIL_PKG.get_cn_value1_f('FLAG_YN', nagtla1.NO_REGIST_FLAG) astNoRegistFlagName
+       ,nagtla1.AST_MAKER_NAME astMakerName
+       ,nagtla1.AST_MAKER_MODEL astMakerModel
+       ,NEA_UTIL_PKG.get_cn_value1_f('ASSET_SHAPE', nagtla1.AST_SHAPE_CODE) astShapeName
+       ,nagtla1.AST_PRJ_CODE astPrjCode
+       ,NEA_UTIL_PKG.get_project_name_f(a.apCompanyCode, nagtla1.AST_PRJ_CODE) astPrjName
+       ,null licLineSeq
+       ,null softwareMakerName
+       ,null softwareName
+       ,null licQuantity
+       ,null licRegistQuantity
+       ,null licQuantityTypeName
+       ,null licLicQuantity
+       ,null failureLineSeq
+       ,null failureAssetId
+       ,null failureContractNum
+       ,null failureAstName
+       ,null failureAstOir
+       ,null failureAstSerialCode
+       ,null failureUseStaffCode
+       ,null failureUseStaffName
+       ,null failureQuantity
+       ,null failureRegistQuantity
+      FROM
+        (<include refid="selectApGetTanComList_APGT" />) a
+       ,NEA_AP_GET_TAN_LINE_AST nagtla1
+      WHERE
+        applicationId = nagtla1.APPLICATION_ID
+      AND
+        apGetType != '4'
+      UNION ALL
+      SELECT
+        <include refid="selectApGetTanComLineColumn_APGT" />
+       ,null astLineSeq
+       ,null astName
+       ,null astCategory2Name
+       ,null astQuantity
+       ,null astRegistQuantity
+       ,null astNoRegistFlagName
+       ,null astMakerName
+       ,null astMakerModel
+       ,null astShapeName
+       ,null astPrjCode
+       ,null astPrjName
+       ,nagtll.LINE_SEQ licLineSeq
+       ,nagtll.SOFTWARE_MAKER_NAME softwareMakerName
+       ,nagtll.SOFTWARE_NAME softwareName
+       ,nagtll.QUANTITY licQuantity
+       ,nagtll.REGIST_QUANTITY licRegistQuantity
+       ,NEA_UTIL_PKG.get_cn_value1_f('LICENSE_QUANTITY_TYPE', nagtll.LIC_QUANTITY_TYPE) licQuantityTypeName
+       ,nagtll.LIC_QUANTITY licLicQuantity
+       ,null failureLineSeq
+       ,null failureAssetId
+       ,null failureContractNum
+       ,null failureAstName
+       ,null failureAstOir
+       ,null failureAstSerialCode
+       ,null failureUseStaffCode
+       ,null failureUseStaffName
+       ,null failureQuantity
+       ,null failureRegistQuantity
+      FROM
+        (<include refid="selectApGetTanComList_APGT" />) b
+       ,NEA_AP_GET_TAN_LINE_LIC nagtll
+      WHERE
+        applicationId = nagtll.APPLICATION_ID
+      UNION ALL
+      SELECT
+        <include refid="selectApGetTanComLineColumn_APGT" />
+       ,null astLineSeq
+       ,null astName
+       ,null astCategory2Name
+       ,null astQuantity
+       ,null astRegistQuantity
+       ,null astNoRegistFlagName
+       ,null astMakerName
+       ,null astMakerModel
+       ,null astShapeName
+       ,null astPrjCode
+       ,null astPrjName
+       ,null licLineSeq
+       ,null softwareMakerName
+       ,null softwareName
+       ,null licQuantity
+       ,null licRegistQuantity
+       ,null licQuantityTypeName
+       ,null licLicQuantity
+       ,nagtla2.LINE_SEQ failureLineSeq
+       ,nagtla2.FAILURE_ASSET_ID failureAssetId
+       ,nagtla2.FAILURE_CONTRACT_NUM failureContractNum
+       ,nagtla2.AST_NAME failureAstName
+       ,nagtla2.FAILURE_AST_OIR failureAstOir
+       ,nagtla2.FAILURE_AST_SERIAL_CODE failureAstSerialCode
+       ,nagtla2.FAILURE_USE_STAFF_CODE failureUseStaffCode
+       ,NEA_UTIL_PKG.get_staff_name_f(nagtla2.FAILURE_USE_STAFF_CODE) failureUseStaffName
+       ,nagtla2.QUANTITY failureQuantity
+       ,nagtla2.REGIST_QUANTITY failureRegistQuantity
+      FROM
+        (<include refid="selectApGetTanComList_APGT" />) c
+       ,NEA_AP_GET_TAN_LINE_AST nagtla2
+      WHERE
+        applicationId = nagtla2.APPLICATION_ID
+      AND
+        apGetType = '4'
+      UNION ALL
+      SELECT
+        <include refid="selectApGetTanComLineColumn_APGT" />
+       ,null astLineSeq
+       ,null astName
+       ,null astCategory2Name
+       ,null astQuantity
+       ,null astRegistQuantity
+       ,null astNoRegistFlagName
+       ,null astMakerName
+       ,null astMakerModel
+       ,null astShapeName
+       ,null astPrjCode
+       ,null astPrjName
+       ,null licLineSeq
+       ,null softwareMakerName
+       ,null softwareName
+       ,null licQuantity
+       ,null licRegistQuantity
+       ,null licQuantityTypeName
+       ,null licLicQuantity
+       ,null failureLineSeq
+       ,null failureAssetId
+       ,null failureContractNum
+       ,null failureAstName
+       ,null failureAstOir
+       ,null failureAstSerialCode
+       ,null failureUseStaffCode
+       ,null failureUseStaffName
+       ,null failureQuantity
+       ,null failureRegistQuantity
+      FROM
+        (<include refid="selectApGetTanComList_APGT" />) d
+      WHERE
+        NOT EXISTS
+          (
+            SELECT
+              'X'
+            FROM
+             (<include refid="selectApGetTanComList_APGT" />) e
+             ,NEA_AP_GET_TAN_LINE_AST nagtla3
+            WHERE
+              e.applicationId = nagtla3.APPLICATION_ID
+            AND
+              e.apGetType != '4'
+          )
+      AND
+        NOT EXISTS
+          (
+            SELECT
+              'X'
+            FROM
+              (<include refid="selectApGetTanComList_APGT" />) f
+             ,NEA_AP_GET_TAN_LINE_LIC nagtll3
+            WHERE
+              f.applicationId = nagtll3.APPLICATION_ID
+          )
+      AND
+        NOT EXISTS
+          (
+            SELECT
+              'X'
+            FROM
+              (<include refid="selectApGetTanComList_APGT" />) g
+             ,NEA_AP_GET_TAN_LINE_AST nagtla4
+            WHERE
+              g.applicationId = nagtla4.APPLICATION_ID
+            AND
+              g.apGetType = '4'
+          )
+       ORDER BY
+         applicationId, astLineSeq, licLineSeq, failureLineSeq
+  </select>
+
+  <!--
+    取得申請ヘッダ作成
+  -->
+  <insert id="insertApGetTan_APGT" parameterClass="java.util.Map">
+    INSERT INTO NEA_AP_GET_TAN (
+      APPLICATION_ID
+      , CREATE_DATE
+      , CREATE_STAFF_CODE
+      , UPDATE_DATE
+      , UPDATE_STAFF_CODE
+      , VERSION
+      , DISPLAY_VERSION
+      , UPDATE_COMMENT
+      , EAPP_ID
+      , AP_STATUS
+      , AP_DATE
+      , AP_GET_TYPE
+      , AP_GET_AMOUNT_RANGE
+      , SPECIAL_APPROVE_FLAG
+      , SPECIAL_APPROVE_DATE
+      , AP_CREATE_STAFF_CODE
+      , AP_CREATE_COMPANY_CODE
+      , AP_CREATE_SECTION_CODE
+      , AP_CREATE_SECTION_YEAR
+      , AP_STAFF_CODE
+      , AP_COMPANY_CODE
+      , AP_SECTION_CODE
+      , AP_SECTION_YEAR
+      , AP_TEL
+      , AP_SKIP_APPROVE_FLAG
+      , AP_REGIST_STAFF_CODE
+      , AP_REGIST_COMPANY_CODE
+      , AP_REGIST_SECTION_CODE
+      , AP_REGIST_SECTION_YEAR
+      , GET_PURPOSE_CODE
+      , GET_REASON
+      , GET_ITEM_NAME
+      , GET_ITEM_CLOUD_TYPE
+      , GET_ITEM_GROUP_CODE
+      , GET_DELIVERY_DATE
+      , GET_RETURN_DATE
+      , GET_NEED_CIO_JUDGE_FLAG
+      , GET_SYSTEM_SECTION_DEPLOY_FLAG
+      , GET_INTRA_INVENTORY_FLAG
+      , GET_LE_RE_COMPANY_CODE
+      , GET_LE_RE_ESTIMATE_NUMBER
+      , GET_LE_RE_COMMENT
+      , GET_LE_RE_MONTH_AMOUNT
+      , GET_LE_RE_COUNT
+      , GET_LE_RE_TOTAL_AMOUNT
+      , GET_LE_EAPP_ID
+      , GET_TOTAL_AMOUNT
+      , ATT_DESCRIPTION
+      , HOL_COMPANY_CODE
+      , HOL_SECTION_CODE
+      , HOL_SECTION_YEAR
+      , HOL_STAFF_CODE
+      , HOL_OFFICE_CODE
+      , HOL_OFFICE_FLOOR
+      , HOL_OFFICE_OUTSIDE_PC_ID
+      , HOL_OFFICE_DESCRIPTION
+      , COST_TYPE
+      , COST_DEP_PRJ_UNDECIDED_FLAG
+      , COST_DEP_PRJ_CODE
+      , DESCRIPTION_AP
+      , DESCRIPTION_ADMIN
+      , LINE_EDIT_APPROVE_FLAG
+      , STOP_REGIST_FLAG
+      , REGIST_COMPLETE_FLAG
+      , APPROVE_SUPERIOR_FLAG
+      , APPROVE_DATE
+      , COST_COMPANY_CODE
+      , COST_SECTION_CODE
+      , COST_SECTION_YEAR
+      , GET_LE_RE_MONTH_LESS_AMOUNT
+      , REO_RECEPT_NUMBER
+      , REO_ORDER_TYPE
+      , REO_AST_STAFF_CODE
+      , REO_AST_COMPANY_CODE
+      , REO_AST_SECTION_CODE
+      , REO_AST_SECTION_YEAR
+      , REO_AST_TEL
+      , REO_AST_FAX
+      , REO_AST_MAIL_ADDRESS
+      , REO_USE_HOPE_START_DATE
+      , REO_INV_ADDRESS
+      , REO_INV_TEL
+      , REO_INV_FAX
+      , REO_INV_MAIL_ADDRESS
+      , REO_DLV_STAFF_CODE
+      , REO_DLV_COMPANY_CODE
+      , REO_DLV_SECTION_CODE
+      , REO_DLV_SECTION_YEAR
+      , REO_DLV_ADDRESS
+      , REO_DLV_TEL
+      , REO_DLV_FAX
+      , REO_DLV_MAIL_ADDRESS
+      , REO_DESCRIPTION
+      , REO_ORDER_DATE
+      , REO_ORDER_FLAG
+      , REO_INV_STAFF_INPUT_TYPE
+      , REO_INV_STAFF_NAME
+      , REO_INV_COMPANY_NAME
+      , REO_INV_SECTION_NAME
+      , REO_INV_COMPANY_OFFICAIL_NAME
+      , REO_DISUSE_FLAG
+      , GET_LE_RE_DATE_COUNT
+      , REO_AST_OIR
+    ) VALUES (
+      #obj.applicationId:VARCHAR# /* APPLICATION_ID*/
+      , #obj.createDate:TIMESTAMP# /* CREATE_DATE*/
+      , #obj.createStaffCode:VARCHAR# /* CREATE_STAFF_CODE*/
+      , #obj.updateDate:TIMESTAMP# /* UPDATE_DATE*/
+      , #obj.updateStaffCode:VARCHAR# /* UPDATE_STAFF_CODE*/
+      , #obj.version:NUMERIC# /* VERSION*/
+      , #obj.displayVersion:NUMERIC# /* DISPLAY_VERSION*/
+      , #obj.updateComment:VARCHAR# /* UPDATE_COMMENT*/
+      , #obj.eappId:NUMERIC# /* EAPP_ID*/
+      , #obj.apStatus:CHAR# /* AP_STATUS*/
+      , #obj.apDate:DATE# /* AP_DATE*/
+      , #obj.apGetType:VARCHAR# /* AP_GET_TYPE*/
+      , #obj.apGetAmountRange:VARCHAR# /* AP_GET_AMOUNT_RANGE*/
+      , #obj.specialApproveFlag:CHAR# /* SPECIAL_APPROVE_FLAG*/
+      , #obj.specialApproveDate:DATE# /* SPECIAL_APPROVE_DATE*/
+      , #obj.apCreateStaffCode:VARCHAR# /* AP_CREATE_STAFF_CODE*/
+      , #obj.apCreateCompanyCode:VARCHAR# /* AP_CREATE_COMPANY_CODE*/
+      , #obj.apCreateSectionCode:VARCHAR# /* AP_CREATE_SECTION_CODE*/
+      , #obj.apCreateSectionYear:NUMERIC# /* AP_CREATE_SECTION_YEAR*/
+      , #obj.apStaffCode:VARCHAR# /* AP_STAFF_CODE*/
+      , #obj.apCompanyCode:VARCHAR# /* AP_COMPANY_CODE*/
+      , #obj.apSectionCode:VARCHAR# /* AP_SECTION_CODE*/
+      , #obj.apSectionYear:NUMERIC# /* AP_SECTION_YEAR*/
+      , #obj.apTel:VARCHAR# /* AP_TEL*/
+      , #obj.apSkipApproveFlag:CHAR# /* AP_SKIP_APPROVE_FLAG*/
+      , #obj.apRegistStaffCode:VARCHAR# /* AP_REGIST_STAFF_CODE*/
+      , #obj.apRegistCompanyCode:VARCHAR# /* AP_REGIST_COMPANY_CODE*/
+      , #obj.apRegistSectionCode:VARCHAR# /* AP_REGIST_SECTION_CODE*/
+      , #obj.apRegistSectionYear:NUMERIC# /* AP_REGIST_SECTION_YEAR*/
+      , #obj.getPurposeCode:VARCHAR# /* GET_PURPOSE_CODE*/
+      , #obj.getReason:VARCHAR# /* GET_REASON*/
+      , #obj.getItemName:VARCHAR# /* GET_ITEM_NAME*/
+      , #obj.getItemCloudType:VARCHAR# /* GET_ITEM_CLOUD_TYPE*/
+      , #obj.getItemGroupCode:VARCHAR# /* GET_ITEM_GROUP_CODE*/
+      , #obj.getDeliveryDate:DATE# /* GET_DELIVERY_DATE*/
+      , #obj.getReturnDate:DATE# /* GET_RETURN_DATE*/
+      , #obj.getNeedCioJudgeFlag:CHAR# /* GET_NEED_CIO_JUDGE_FLAG*/
+      , #obj.getSystemSectionDeployFlag:CHAR# /* GET_SYSTEM_SECTION_DEPLOY_FLAG*/
+      , #obj.getIntraInventoryFlag:CHAR# /* GET_INTRA_INVENTORY_FLAG*/
+      , #obj.getLeReCompanyCode:VARCHAR# /* GET_LE_RE_COMPANY_CODE*/
+      , #obj.getLeReEstimateNumber:VARCHAR# /* GET_LE_RE_ESTIMATE_NUMBER*/
+      , #obj.getLeReComment:VARCHAR# /* GET_LE_RE_COMMENT*/
+      , #obj.getLeReMonthAmount:NUMERIC# /* GET_LE_RE_MONTH_AMOUNT*/
+      , #obj.getLeReCount:NUMERIC# /* GET_LE_RE_COUNT*/
+      , #obj.getLeReTotalAmount:NUMERIC# /* GET_LE_RE_TOTAL_AMOUNT*/
+      , #obj.getLeEappId:VARCHAR# /* GET_LE_EAPP_ID*/
+      , #obj.getTotalAmount:NUMERIC# /* GET_TOTAL_AMOUNT*/
+      , #obj.attDescription:VARCHAR# /* ATT_DESCRIPTION*/
+      , #obj.holCompanyCode:VARCHAR# /* HOL_COMPANY_CODE*/
+      , #obj.holSectionCode:VARCHAR# /* HOL_SECTION_CODE*/
+      , #obj.holSectionYear:NUMERIC# /* HOL_SECTION_YEAR*/
+      , #obj.holStaffCode:VARCHAR# /* HOL_STAFF_CODE*/
+      , #obj.holOfficeCode:VARCHAR# /* HOL_OFFICE_CODE*/
+      , #obj.holOfficeFloor:NUMERIC# /* HOL_OFFICE_FLOOR*/
+      , #obj.holOfficeOutsidePcId:VARCHAR# /* HOL_OFFICE_OUTSIDE_PC_ID*/
+      , #obj.holOfficeDescription:VARCHAR# /* HOL_OFFICE_DESCRIPTION*/
+      , #obj.costType:CHAR# /* COST_TYPE*/
+      , #obj.costDepPrjUndecidedFlag:CHAR# /* COST_DEP_PRJ_UNDECIDED_FLAG*/
+      , #obj.costDepPrjCode:VARCHAR# /* COST_DEP_PRJ_CODE*/
+      , #obj.descriptionAp:VARCHAR# /* DESCRIPTION_AP*/
+      , #obj.descriptionAdmin:VARCHAR# /* DESCRIPTION_ADMIN*/
+      , #obj.lineEditApproveFlag:CHAR# /* LINE_EDIT_APPROVE_FLAG*/
+      , #obj.stopRegistFlag:CHAR# /* STOP_REGIST_FLAG*/
+      , #obj.registCompleteFlag:CHAR# /* REGIST_COMPLETE_FLAG*/
+      , #obj.approveSuperiorFlag:CHAR# /* APPROVE_SUPERIOR_FLAG*/
+      , #obj.approveDate:DATE# /* APPROVE_DATE*/
+      , #obj.costCompanyCode:VARCHAR# /* COST_COMPANY_CODE*/
+      , #obj.costSectionCode:VARCHAR# /* COST_SECTION_CODE*/
+      , #obj.costSectionYear:NUMERIC# /* COST_SECTION_YEAR*/
+      , #obj.getLeReMonthLessAmount:NUMERIC# /* GET_LE_RE_MONTH_LESS_AMOUNT*/
+      , #obj.reoReceptNumber:VARCHAR# /* REO_RECEPT_NUMBER*/
+      , #obj.reoOrderType:VARCHAR# /* REO_ORDER_TYPE*/
+      , #obj.reoAstStaffCode:VARCHAR# /* REO_AST_STAFF_CODE*/
+      , #obj.reoAstCompanyCode:VARCHAR# /* REO_AST_COMPANY_CODE*/
+      , #obj.reoAstSectionCode:VARCHAR# /* REO_AST_SECTION_CODE*/
+      , #obj.reoAstSectionYear:NUMERIC# /* REO_AST_SECTION_YEAR*/
+      , #obj.reoAstTel:VARCHAR# /* REO_AST_TEL*/
+      , #obj.reoAstFax:VARCHAR# /* REO_AST_FAX*/
+      , #obj.reoAstMailAddress:VARCHAR# /* REO_AST_MAIL_ADDRESS*/
+      , #obj.reoUseHopeStartDate:DATE# /* REO_USE_HOPE_START_DATE*/
+      , #obj.reoInvAddress:VARCHAR# /* REO_INV_ADDRESS*/
+      , #obj.reoInvTel:VARCHAR# /* REO_INV_TEL*/
+      , #obj.reoInvFax:VARCHAR# /* REO_INV_FAX*/
+      , #obj.reoInvMailAddress:VARCHAR# /* REO_INV_MAIL_ADDRESS*/
+      , #obj.reoDlvStaffCode:VARCHAR# /* REO_DLV_STAFF_CODE*/
+      , #obj.reoDlvCompanyCode:VARCHAR# /* REO_DLV_COMPANY_CODE*/
+      , #obj.reoDlvSectionCode:VARCHAR# /* REO_DLV_SECTION_CODE*/
+      , #obj.reoDlvSectionYear:NUMERIC# /* REO_DLV_SECTION_YEAR*/
+      , #obj.reoDlvAddress:VARCHAR# /* REO_DLV_ADDRESS*/
+      , #obj.reoDlvTel:VARCHAR# /* REO_DLV_TEL*/
+      , #obj.reoDlvFax:VARCHAR# /* REO_DLV_FAX*/
+      , #obj.reoDlvMailAddress:VARCHAR# /* REO_DLV_MAIL_ADDRESS*/
+      , #obj.reoDescription:VARCHAR# /* REO_DESCRIPTION*/
+      , #obj.reoOrderDate:DATE# /* REO_ORDER_DATE*/
+      , #obj.reoOrderFlag:CHAR# /* REO_ORDER_FLAG*/
+      , #obj.reoInvStaffInputType:CHAR# /* REO_INV_STAFF_INPUT_TYPE*/
+      , #obj.reoInvStaffName:VARCHAR# /* REO_INV_STAFF_NAME*/
+      , #obj.reoInvCompanyName:VARCHAR# /* REO_INV_COMPANY_NAME*/
+      , #obj.reoInvSectionName:VARCHAR# /* REO_INV_SECTION_NAME*/
+      , #obj.reoInvCompanyOfficailName:VARCHAR# /* REO_INV_COMPANY_OFFICAIL_NAME*/
+      , #obj.reoDisuseFlag:CHAR# /* REO_DISUSE_FLAG */
+      , #obj.getLeReDateCount:NUMERIC# /* GET_LE_RE_DATE_COUNT*/
+      , #obj.reoAstOir:VARCHAR# /* REO_AST_OIR*/
+    )
+  </insert>
+
+  <!--
+    取得申請購入明細作成
+  -->
+  <insert id="insertApGetTanLinePur_APGT" parameterClass="java.util.Map">
+    INSERT INTO NEA_AP_GET_TAN_LINE_PUR (
+      APPLICATION_ID
+      , LINE_SEQ
+      , CREATE_DATE
+      , CREATE_STAFF_CODE
+      , UPDATE_DATE
+      , UPDATE_STAFF_CODE
+      , GET_PUR_COMPANY_CODE
+      , GET_PUR_COMPANY_NAME
+      , GET_PUR_ESTIMATE_NUMBER
+      , GET_PUR_AMOUNT
+      , GET_PUR_COMMENT
+    ) VALUES (
+      #obj.applicationId:VARCHAR# /* APPLICATION_ID*/
+      , #obj.lineSeq:NUMERIC# /* LINE_SEQ*/
+      , #obj.createDate:TIMESTAMP# /* CREATE_DATE*/
+      , #obj.createStaffCode:VARCHAR# /* CREATE_STAFF_CODE*/
+      , #obj.updateDate:TIMESTAMP# /* UPDATE_DATE*/
+      , #obj.updateStaffCode:VARCHAR# /* UPDATE_STAFF_CODE*/
+      , #obj.getPurCompanyCode:VARCHAR# /* GET_PUR_COMPANY_CODE*/
+      , #obj.getPurCompanyName:VARCHAR# /* GET_PUR_COMPANY_NAME*/
+      , #obj.getPurEstimateNumber:VARCHAR# /* GET_PUR_ESTIMATE_NUMBER*/
+      , #obj.getPurAmount:NUMERIC# /* GET_PUR_AMOUNT*/
+      , #obj.getPurComment:VARCHAR# /* GET_PUR_COMMENT*/
+    )
+  </insert>
+
+  <!--
+    取得申請その他費用明細作成
+  -->
+  <insert id="insertApGetTanLineOtrCost_APGT" parameterClass="java.util.Map">
+    INSERT INTO NEA_AP_GET_TAN_LINE_OTR_COST (
+      APPLICATION_ID
+      , LINE_SEQ
+      , CREATE_DATE
+      , CREATE_STAFF_CODE
+      , UPDATE_DATE
+      , UPDATE_STAFF_CODE
+      , GET_OTR_AMOUNT
+      , GET_OTR_COMMENT
+    ) VALUES (
+      #obj.applicationId:VARCHAR# /* APPLICATION_ID*/
+      , #obj.lineSeq:NUMERIC# /* LINE_SEQ*/
+      , #obj.createDate:TIMESTAMP# /* CREATE_DATE*/
+      , #obj.createStaffCode:VARCHAR# /* CREATE_STAFF_CODE*/
+      , #obj.updateDate:TIMESTAMP# /* UPDATE_DATE*/
+      , #obj.updateStaffCode:VARCHAR# /* UPDATE_STAFF_CODE*/
+      , #obj.getOtrAmount:NUMERIC# /* GET_OTR_AMOUNT*/
+      , #obj.getOtrComment:VARCHAR# /* GET_OTR_COMMENT*/
+    )
+  </insert>
+
+  <!--
+    取得申請添付明細作成
+  -->
+  <insert id="insertApGetTanLineAtt_APGT" parameterClass="java.util.Map">
+    INSERT INTO NEA_AP_GET_TAN_LINE_ATT (
+      APPLICATION_ID
+      , LINE_SEQ
+      , CREATE_DATE
+      , CREATE_STAFF_CODE
+      , UPDATE_DATE
+      , UPDATE_STAFF_CODE
+      , ATT_FILE_NAME
+      , ATT_FILE_ID
+      , ATT_FILE_COMMENT
+    ) VALUES (
+      #obj.applicationId:VARCHAR# /* APPLICATION_ID*/
+      , #obj.lineSeq:NUMERIC# /* LINE_SEQ*/
+      , #obj.createDate:TIMESTAMP# /* CREATE_DATE*/
+      , #obj.createStaffCode:VARCHAR# /* CREATE_STAFF_CODE*/
+      , #obj.updateDate:TIMESTAMP# /* UPDATE_DATE*/
+      , #obj.updateStaffCode:VARCHAR# /* UPDATE_STAFF_CODE*/
+      , #obj.attFileName:VARCHAR# /* ATT_FILE_NAME*/
+      , #obj.attFileId:NUMERIC# /* ATT_FILE_ID*/
+      , #obj.attFileComment:VARCHAR# /* ATT_FILE_COMMENT*/
+    )
+  </insert>
+
+  <!--
+    取得申請経費負担明細作成
+  -->
+  <insert id="insertApGetTanLineCostSec_APGT" parameterClass="java.util.Map">
+    INSERT INTO NEA_AP_GET_TAN_LINE_COST_SEC (
+      APPLICATION_ID
+      , LINE_SEQ
+      , CREATE_DATE
+      , CREATE_STAFF_CODE
+      , UPDATE_DATE
+      , UPDATE_STAFF_CODE
+      , COST_COMPANY_CODE
+      , COST_SECTION_CODE
+      , COST_SECTION_YEAR
+      , COST_DIST
+    ) VALUES (
+      #obj.applicationId:VARCHAR# /* APPLICATION_ID*/
+      , #obj.lineSeq:NUMERIC# /* LINE_SEQ*/
+      , #obj.createDate:TIMESTAMP# /* CREATE_DATE*/
+      , #obj.createStaffCode:VARCHAR# /* CREATE_STAFF_CODE*/
+      , #obj.updateDate:TIMESTAMP# /* UPDATE_DATE*/
+      , #obj.updateStaffCode:VARCHAR# /* UPDATE_STAFF_CODE*/
+      , #obj.costCompanyCode:VARCHAR# /* COST_COMPANY_CODE*/
+      , #obj.costSectionCode:VARCHAR# /* COST_SECTION_CODE*/
+      , #obj.costSectionYear:NUMERIC# /* COST_SECTION_YEAR*/
+      , #obj.costDist:NUMERIC# /* COST_DIST*/
+    )
+  </insert>
+
+  <!--
+    取得申請資産(機器)明細作成
+  -->
+  <insert id="insertApGetTanLineAst_APGT" parameterClass="java.util.Map">
+    INSERT INTO NEA_AP_GET_TAN_LINE_AST (
+      AP_GET_TAN_LINE_AST_ID
+      , CREATE_DATE
+      , CREATE_STAFF_CODE
+      , UPDATE_DATE
+      , UPDATE_STAFF_CODE
+      , APPLICATION_ID
+      , LINE_SEQ
+      , AST_NAME
+      , AST_CATEGORY1_CODE
+      , AST_CATEGORY2_CODE
+      , QUANTITY
+      , REGIST_QUANTITY
+      , AST_MAKER_CODE
+      , AST_MAKER_NAME
+      , AST_MAKER_MODEL
+      , AST_SHAPE_CODE
+      , AST_PRJ_CODE
+      , FAILURE_ASSET_ID
+      , FAILURE_CONTRACT_NUM
+      , FAILURE_AST_OIR
+      , FAILURE_AST_SERIAL_CODE
+      , FAILURE_USE_STAFF_CODE
+      , AUTO_REGIST_FLAG
+      , NO_REGIST_FLAG
+      , SEAL_ISSUE_FLAG
+      , EQUIPMENT_FLAG
+      , AST_MODEL_CODE
+      , AST_GET_LE_MONTH_AMOUNT
+      , REO_AST_NAME
+      , REO_AGREEMENT
+      , REO_PRICE_LIST
+      , AST_GET_LE_CONTRACT_MONTH
+    ) VALUES (
+      #obj.apGetTanLineAstId:NUMERIC# /* AP_GET_TAN_LINE_AST_ID*/
+      , #obj.createDate:TIMESTAMP# /* CREATE_DATE*/
+      , #obj.createStaffCode:VARCHAR# /* CREATE_STAFF_CODE*/
+      , #obj.updateDate:TIMESTAMP# /* UPDATE_DATE*/
+      , #obj.updateStaffCode:VARCHAR# /* UPDATE_STAFF_CODE*/
+      , #obj.applicationId:VARCHAR# /* APPLICATION_ID*/
+      , #obj.lineSeq:NUMERIC# /* LINE_SEQ*/
+      , #obj.astName:VARCHAR# /* AST_NAME*/
+      , #obj.astCategory1Code:VARCHAR# /* AST_CATEGORY1_CODE*/
+      , #obj.astCategory2Code:VARCHAR# /* AST_CATEGORY2_CODE*/
+      , #obj.quantity:NUMERIC# /* QUANTITY*/
+      , #obj.registQuantity:NUMERIC# /* REGIST_QUANTITY*/
+      , #obj.astMakerCode:VARCHAR# /* AST_MAKER_CODE*/
+      , #obj.astMakerName:VARCHAR# /* AST_MAKER_NAME*/
+      , #obj.astMakerModel:VARCHAR# /* AST_MAKER_MODEL*/
+      , #obj.astShapeCode:VARCHAR# /* AST_SHAPE_CODE*/
+      , #obj.astPrjCode:VARCHAR# /* AST_PRJ_CODE*/
+      , #obj.failureAssetId:VARCHAR# /* FAILURE_ASSET_ID*/
+      , #obj.failureContractNum:VARCHAR# /* FAILURE_CONTRACT_NUM*/
+      , #obj.failureAstOir:VARCHAR# /* FAILURE_AST_OIR*/
+      , #obj.failureAstSerialCode:VARCHAR# /* FAILURE_AST_SERIAL_CODE*/
+      , #obj.failureUseStaffCode:VARCHAR# /* FAILURE_USE_STAFF_CODE*/
+      , #obj.autoRegistFlag:CHAR# /* AUTO_REGIST_FLAG*/
+      , #obj.noRegistFlag:CHAR# /* NO_REGIST_FLAG*/
+      , #obj.sealIssueFlag:CHAR# /* SEAL_ISSUE_FLAG*/
+      , #obj.equipmentFlag:CHAR# /* EQUIPMENT_FLAG*/
+      , #obj.astModelCode:VARCHAR# /* AST_MODEL_CODE*/
+      , #obj.astGetLeMonthAmount:NUMERIC# /* AST_GET_LE_MONTH_AMOUNT*/
+      , #obj.reoAstName:VARCHAR# /* REO_AST_NAME*/
+      , #obj.reoAgreement:VARCHAR# /* REO_AGREEMENT*/
+      , #obj.reoPriceList:VARCHAR# /* REO_PRICE_LIST*/
+      , #obj.astGetLeContractMonth:NUMERIC# /* AST_GET_LE_CONTRACT_MONTH */
+    )
+  </insert>
+
+  <!--
+    取得申請ライセンス明細作成
+  -->
+  <insert id="insertApGetTanLineLic_APGT" parameterClass="java.util.Map">
+    INSERT INTO NEA_AP_GET_TAN_LINE_LIC (
+      AP_GET_TAN_LINE_LIC_ID
+      , CREATE_DATE
+      , CREATE_STAFF_CODE
+      , UPDATE_DATE
+      , UPDATE_STAFF_CODE
+      , APPLICATION_ID
+      , LINE_SEQ
+      , SOFTWARE_MAKER_ID
+      , SOFTWARE_MAKER_NAME
+      , SOFTWARE_ID
+      , SOFTWARE_NAME
+      , QUANTITY
+      , REGIST_QUANTITY
+      , LIC_QUANTITY_TYPE
+      , LIC_QUANTITY
+    ) VALUES (
+      #obj.apGetTanLineLicId:NUMERIC# /* AP_GET_TAN_LINE_LIC_ID*/
+      , #obj.createDate:TIMESTAMP# /* CREATE_DATE*/
+      , #obj.createStaffCode:VARCHAR# /* CREATE_STAFF_CODE*/
+      , #obj.updateDate:TIMESTAMP# /* UPDATE_DATE*/
+      , #obj.updateStaffCode:VARCHAR# /* UPDATE_STAFF_CODE*/
+      , #obj.applicationId:VARCHAR# /* APPLICATION_ID*/
+      , #obj.lineSeq:NUMERIC# /* LINE_SEQ*/
+      , #obj.softwareMakerId:NUMERIC# /* SOFTWARE_MAKER_ID*/
+      , #obj.softwareMakerName:VARCHAR# /* SOFTWARE_MAKER_NAME*/
+      , #obj.softwareId:NUMERIC# /* SOFTWARE_ID*/
+      , #obj.softwareName:VARCHAR# /* SOFTWARE_NAME*/
+      , #obj.quantity:NUMERIC# /* QUANTITY*/
+      , #obj.registQuantity:NUMERIC# /* REGIST_QUANTITY*/
+      , #obj.licQuantityType:CHAR# /* LIC_QUANTITY_TYPE*/
+      , #obj.licQuantity:NUMERIC# /* LIC_QUANTITY*/
+    )
+  </insert>
+
+  <!--
+    取得申請ヘッダ更新
+  -->
+  <update id="updateApGetTan_APGT" parameterClass="java.util.Map">
+    UPDATE
+      NEA_AP_GET_TAN
+    SET
+      APPLICATION_ID = #obj.applicationId:VARCHAR#
+      , CREATE_DATE = #obj.createDate:TIMESTAMP#
+      , CREATE_STAFF_CODE = #obj.createStaffCode:VARCHAR#
+      , UPDATE_DATE = #obj.updateDate:TIMESTAMP#
+      , UPDATE_STAFF_CODE = #obj.updateStaffCode:VARCHAR#
+      , VERSION = #obj.version:NUMERIC#
+      , DISPLAY_VERSION = #obj.displayVersion:NUMERIC#
+      , UPDATE_COMMENT = #obj.updateComment:VARCHAR#
+      , EAPP_ID = #obj.eappId:NUMERIC#
+      , AP_STATUS = #obj.apStatus:CHAR#
+      , AP_DATE = #obj.apDate:DATE#
+      , AP_GET_TYPE = #obj.apGetType:VARCHAR#
+      , AP_GET_AMOUNT_RANGE = #obj.apGetAmountRange:VARCHAR#
+      , SPECIAL_APPROVE_FLAG = #obj.specialApproveFlag:CHAR#
+      , SPECIAL_APPROVE_DATE = #obj.specialApproveDate:DATE#
+      , AP_CREATE_STAFF_CODE = #obj.apCreateStaffCode:VARCHAR#
+      , AP_CREATE_COMPANY_CODE = #obj.apCreateCompanyCode:VARCHAR#
+      , AP_CREATE_SECTION_CODE = #obj.apCreateSectionCode:VARCHAR#
+      , AP_CREATE_SECTION_YEAR = #obj.apCreateSectionYear:NUMERIC#
+      , AP_STAFF_CODE = #obj.apStaffCode:VARCHAR#
+      , AP_COMPANY_CODE = #obj.apCompanyCode:VARCHAR#
+      , AP_SECTION_CODE = #obj.apSectionCode:VARCHAR#
+      , AP_SECTION_YEAR = #obj.apSectionYear:NUMERIC#
+      , AP_TEL = #obj.apTel:VARCHAR#
+      , AP_SKIP_APPROVE_FLAG = #obj.apSkipApproveFlag:CHAR#
+      , AP_REGIST_STAFF_CODE = #obj.apRegistStaffCode:VARCHAR#
+      , AP_REGIST_COMPANY_CODE = #obj.apRegistCompanyCode:VARCHAR#
+      , AP_REGIST_SECTION_CODE = #obj.apRegistSectionCode:VARCHAR#
+      , AP_REGIST_SECTION_YEAR = #obj.apRegistSectionYear:NUMERIC#
+      , GET_PURPOSE_CODE = #obj.getPurposeCode:VARCHAR#
+      , GET_REASON = #obj.getReason:VARCHAR#
+      , GET_ITEM_NAME = #obj.getItemName:VARCHAR#
+      , GET_ITEM_CLOUD_TYPE = #obj.getItemCloudType:VARCHAR#
+      , GET_ITEM_GROUP_CODE = #obj.getItemGroupCode:VARCHAR#
+      , GET_DELIVERY_DATE = #obj.getDeliveryDate:DATE#
+      , GET_RETURN_DATE = #obj.getReturnDate:DATE#
+      , GET_NEED_CIO_JUDGE_FLAG = #obj.getNeedCioJudgeFlag:CHAR#
+      , GET_SYSTEM_SECTION_DEPLOY_FLAG = #obj.getSystemSectionDeployFlag:CHAR#
+      , GET_INTRA_INVENTORY_FLAG = #obj.getIntraInventoryFlag:CHAR#
+      , GET_LE_RE_COMPANY_CODE = #obj.getLeReCompanyCode:VARCHAR#
+      , GET_LE_RE_ESTIMATE_NUMBER = #obj.getLeReEstimateNumber:VARCHAR#
+      , GET_LE_RE_COMMENT = #obj.getLeReComment:VARCHAR#
+      , GET_LE_RE_MONTH_AMOUNT = #obj.getLeReMonthAmount:NUMERIC#
+      , GET_LE_RE_COUNT = #obj.getLeReCount:NUMERIC#
+      , GET_LE_RE_TOTAL_AMOUNT = #obj.getLeReTotalAmount:NUMERIC#
+      , GET_LE_EAPP_ID = #obj.getLeEappId:VARCHAR#
+      , GET_TOTAL_AMOUNT = #obj.getTotalAmount:NUMERIC#
+      , ATT_DESCRIPTION = #obj.attDescription:VARCHAR#
+      , HOL_COMPANY_CODE = #obj.holCompanyCode:VARCHAR#
+      , HOL_SECTION_CODE = #obj.holSectionCode:VARCHAR#
+      , HOL_SECTION_YEAR = #obj.holSectionYear:NUMERIC#
+      , HOL_STAFF_CODE = #obj.holStaffCode:VARCHAR#
+      , HOL_OFFICE_CODE = #obj.holOfficeCode:VARCHAR#
+      , HOL_OFFICE_FLOOR = #obj.holOfficeFloor:NUMERIC#
+      , HOL_OFFICE_OUTSIDE_PC_ID = #obj.holOfficeOutsidePcId:VARCHAR#
+      , HOL_OFFICE_DESCRIPTION = #obj.holOfficeDescription:VARCHAR#
+      , COST_TYPE = #obj.costType:CHAR#
+      , COST_DEP_PRJ_UNDECIDED_FLAG = #obj.costDepPrjUndecidedFlag:CHAR#
+      , COST_DEP_PRJ_CODE = #obj.costDepPrjCode:VARCHAR#
+      , DESCRIPTION_AP = #obj.descriptionAp:VARCHAR#
+      , DESCRIPTION_ADMIN = #obj.descriptionAdmin:VARCHAR#
+      , LINE_EDIT_APPROVE_FLAG = #obj.lineEditApproveFlag:CHAR#
+      , STOP_REGIST_FLAG = #obj.stopRegistFlag:CHAR#
+      , REGIST_COMPLETE_FLAG = #obj.registCompleteFlag:CHAR#
+      , APPROVE_SUPERIOR_FLAG = #obj.approveSuperiorFlag:CHAR#
+      , APPROVE_DATE = #obj.approveDate:DATE#
+      , COST_COMPANY_CODE = #obj.costCompanyCode:VARCHAR#
+      , COST_SECTION_CODE = #obj.costSectionCode:VARCHAR#
+      , COST_SECTION_YEAR = #obj.costSectionYear:NUMERIC#
+      , GET_LE_RE_MONTH_LESS_AMOUNT = #obj.getLeReMonthLessAmount:NUMERIC#
+      , REO_RECEPT_NUMBER = #obj.reoReceptNumber:VARCHAR#
+      , REO_ORDER_TYPE = #obj.reoOrderType:VARCHAR#
+      , REO_AST_STAFF_CODE = #obj.reoAstStaffCode:VARCHAR#
+      , REO_AST_COMPANY_CODE = #obj.reoAstCompanyCode:VARCHAR#
+      , REO_AST_SECTION_CODE = #obj.reoAstSectionCode:VARCHAR#
+      , REO_AST_SECTION_YEAR = #obj.reoAstSectionYear:NUMERIC#
+      , REO_AST_TEL = #obj.reoAstTel:VARCHAR#
+      , REO_AST_FAX = #obj.reoAstFax:VARCHAR#
+      , REO_AST_MAIL_ADDRESS = #obj.reoAstMailAddress:VARCHAR#
+      , REO_USE_HOPE_START_DATE = #obj.reoUseHopeStartDate:DATE#
+      , REO_INV_ADDRESS = #obj.reoInvAddress:VARCHAR#
+      , REO_INV_TEL = #obj.reoInvTel:VARCHAR#
+      , REO_INV_FAX = #obj.reoInvFax:VARCHAR#
+      , REO_INV_MAIL_ADDRESS = #obj.reoInvMailAddress:VARCHAR#
+      , REO_DLV_STAFF_CODE = #obj.reoDlvStaffCode:VARCHAR#
+      , REO_DLV_COMPANY_CODE = #obj.reoDlvCompanyCode:VARCHAR#
+      , REO_DLV_SECTION_CODE = #obj.reoDlvSectionCode:VARCHAR#
+      , REO_DLV_SECTION_YEAR = #obj.reoDlvSectionYear:NUMERIC#
+      , REO_DLV_ADDRESS = #obj.reoDlvAddress:VARCHAR#
+      , REO_DLV_TEL = #obj.reoDlvTel:VARCHAR#
+      , REO_DLV_FAX = #obj.reoDlvFax:VARCHAR#
+      , REO_DLV_MAIL_ADDRESS = #obj.reoDlvMailAddress:VARCHAR#
+      , REO_DESCRIPTION = #obj.reoDescription:VARCHAR#
+      , REO_ORDER_DATE = #obj.reoOrderDate:TIMESTAMP#
+      , REO_ORDER_FLAG = #obj.reoOrderFlag:CHAR#
+      , REO_INV_STAFF_INPUT_TYPE = #obj.reoInvStaffInputType:CHAR#
+      , REO_INV_STAFF_NAME = #obj.reoInvStaffName:VARCHAR#
+      , REO_INV_COMPANY_NAME = #obj.reoInvCompanyName:VARCHAR#
+      , REO_INV_SECTION_NAME = #obj.reoInvSectionName:VARCHAR#
+      , REO_INV_COMPANY_OFFICAIL_NAME = #obj.reoInvCompanyOfficailName:VARCHAR#
+      , REO_DISUSE_FLAG = #obj.reoDisuseFlag:CHAR#
+      , GET_LE_RE_DATE_COUNT = #obj.getLeReDateCount:NUMERIC#
+      , REO_AST_OIR = #obj.reoAstOir:VARCHAR#
+    WHERE
+      APPLICATION_ID = #obj.applicationId#
+  </update>
+
+  <!--
+    取得申請ヘッダ削除
+  -->
+  <delete id="deleteApGetTan_APGT" parameterClass="java.util.Map">
+    DELETE FROM
+      NEA_AP_GET_TAN
+    WHERE
+      APPLICATION_ID = #applicationId#
+  </delete>
+
+  <!--
+    取得申請購入明細削除
+  -->
+  <delete id="deleteApGetTanLinePur_APGT" parameterClass="java.util.Map">
+    DELETE FROM
+      NEA_AP_GET_TAN_LINE_PUR
+    WHERE
+      APPLICATION_ID = #applicationId#
+  </delete>
+
+  <!--
+    取得申請その他費用明細削除
+  -->
+  <delete id="deleteApGetTanLineOtrCost_APGT" parameterClass="java.util.Map">
+    DELETE FROM
+      NEA_AP_GET_TAN_LINE_OTR_COST
+    WHERE
+      APPLICATION_ID = #applicationId#
+  </delete>
+
+  <!--
+    取得申請添付明細削除
+  -->
+  <delete id="deleteApGetTanLineAtt_APGT" parameterClass="java.util.Map">
+    DELETE FROM
+      NEA_AP_GET_TAN_LINE_ATT
+    WHERE
+      APPLICATION_ID = #applicationId#
+  </delete>
+
+  <!--
+    取得申請経費負担明細削除
+  -->
+  <delete id="deleteApGetTanLineCostSec_APGT" parameterClass="java.util.Map">
+    DELETE FROM
+      NEA_AP_GET_TAN_LINE_COST_SEC
+    WHERE
+      APPLICATION_ID = #applicationId#
+  </delete>
+
+  <!--
+    取得申請資産(機器)明細削除
+  -->
+  <delete id="deleteApGetTanLineAst_APGT" parameterClass="java.util.Map">
+    DELETE FROM
+      NEA_AP_GET_TAN_LINE_AST
+    WHERE
+      APPLICATION_ID = #applicationId#
+  </delete>
+
+  <!--
+    取得申請ライセンス明細削除
+  -->
+  <delete id="deleteApGetTanLineLic_APGT" parameterClass="java.util.Map">
+    DELETE FROM
+      NEA_AP_GET_TAN_LINE_LIC
+    WHERE
+      APPLICATION_ID = #applicationId#
+  </delete>
+
+  <!--
+    入力可能マスタ値取得
+  -->
+  <select id="selectPossibleInputMasterList_APGT" parameterClass="java.util.Map" resultClass="jp.co.ctcg.easset.dto.CodeName">
+    SELECT
+      1 sort1
+      , CP.SORT_NUMBER sort2
+      , CP.INTERNAL_CODE sort3
+      , CC.SORT_NUMBER sort4
+      , CC.INTERNAL_CODE sort5
+      , '資産(機器)分類' categoryCode
+      , CC.VALUE1 value1
+      , '大分類:' || CP.VALUE1 description
+    FROM
+      NEA_CODE_NAME CC
+      , NEA_CODE_NAME CP
+    WHERE
+      CC.PARENT_INTERNAL_CODE = CP.INTERNAL_CODE
+      AND CC.CATEGORY_CODE = 'ASSET_CATEGORY2'
+      AND CP.CATEGORY_CODE = 'ASSET_CATEGORY1'
+      AND CC.DELETE_FLAG = '0'
+      AND CP.DELETE_FLAG = '0'
+    UNION ALL
+    SELECT
+      2
+      , C.SORT_NUMBER
+      , C.INTERNAL_CODE
+      , C.SORT_NUMBER
+      , C.INTERNAL_CODE
+      , 'メーカー'
+      , C.VALUE1
+      , NULL
+    FROM
+      NEA_CODE_NAME C
+    WHERE
+      C.CATEGORY_CODE = 'ASSET_MAKER'
+      AND C.DELETE_FLAG = '0'
+    UNION ALL
+    SELECT
+      3
+      , C.SORT_NUMBER
+      , C.INTERNAL_CODE
+      , C.SORT_NUMBER
+      , C.INTERNAL_CODE
+      , '筐体/形状'
+      , C.VALUE1
+      , NULL
+    FROM
+      NEA_CODE_NAME C
+    WHERE
+      C.CATEGORY_CODE = 'ASSET_SHAPE'
+      AND C.DELETE_FLAG = '0'
+    UNION ALL
+    SELECT
+      4
+      , NULL
+      , SOFTWARE_MAKER_NAME
+      , NULL
+      , NULL
+      , 'ソフトウェアメーカー'
+      , SOFTWARE_MAKER_NAME
+      , NULL
+    FROM
+      NEA_SOFTWARE_MAKER
+    WHERE
+      DELETE_FLAG = '0'
+      AND SOFTWARE_MAKER_NAME IS NOT NULL
+    UNION ALL
+    SELECT
+      5
+      , NULL
+      , SM.SOFTWARE_MAKER_NAME
+      , NULL
+      , S.SOFTWARE_NAME
+      , 'ソフトウェア'
+      , S.SOFTWARE_NAME
+      , 'メーカー:' ||  SM.SOFTWARE_MAKER_NAME
+    FROM
+      NEA_SOFTWARE S
+      , NEA_SOFTWARE_MAKER SM
+    WHERE
+      SM.SOFTWARE_MAKER_ID = S.SOFTWARE_MAKER_ID
+      AND S.DELETE_FLAG = '0'
+      AND SM.DELETE_FLAG = '0'
+      AND S.SOFTWARE_NAME IS NOT NULL
+      AND SM.SOFTWARE_MAKER_NAME IS NOT NULL
+    UNION ALL
+    SELECT
+      6
+      , C.SORT_NUMBER
+      , C.INTERNAL_CODE
+      , C.SORT_NUMBER
+      , C.INTERNAL_CODE
+      , 'ライセンス数制限'
+      , C.VALUE1
+      , NULL
+    FROM
+      NEA_CODE_NAME C
+    WHERE
+      C.CATEGORY_CODE = 'LICENSE_QUANTITY_TYPE'
+      AND C.DELETE_FLAG = '0'
+    ORDER BY
+      1, 2, 3, 4, 5
+  </select>
+
+  <!--
+    取得申請資産(機器)明細登録数の更新
+  -->
+  <update id="updateApGetTanLineAstRegist_APGT" parameterClass="java.util.Map">
+    UPDATE
+      NEA_AP_GET_TAN_LINE_AST
+    SET
+      UPDATE_DATE = #sysdate:TIMESTAMP#
+      , UPDATE_STAFF_CODE = #loginStaffCode:VARCHAR#
+      , REGIST_QUANTITY = GREATEST(0, REGIST_QUANTITY + #addRegistQuantity:NUMERIC#)
+    WHERE
+      AP_GET_TAN_LINE_AST_ID = #apGetTanLineAstId#
+  </update>
+
+  <!--
+    取得申請ライセンス明細登録数の更新
+  -->
+  <update id="updateApGetTanLineLicRegist_APGT" parameterClass="java.util.Map">
+    UPDATE
+      NEA_AP_GET_TAN_LINE_LIC
+    SET
+      UPDATE_DATE = #sysdate:TIMESTAMP#
+      , UPDATE_STAFF_CODE = #loginStaffCode:VARCHAR#
+      , REGIST_QUANTITY = GREATEST(0, REGIST_QUANTITY + #addRegistQuantity:NUMERIC#)
+    WHERE
+      AP_GET_TAN_LINE_LIC_ID = #apGetTanLineLicId#
+  </update>
+</sqlMap>

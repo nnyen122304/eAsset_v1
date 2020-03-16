@@ -1,0 +1,94 @@
+<div class="form-os" *ngIf="visibleStatus">
+  <div>
+    <button *ngIf="btnAddLineCostSec" type="button" class="wm-btn wm-sm" (click)="addLineCostSec()">
+      行追加
+    </button>
+    <span class="pl-3">※ 行を選択すると値を編集できます。</span>
+  </div>
+  <div [ngClass]="btnAddLineCostSec ? 'collapse' : 'collapse show'">
+    <div class="block-frame-border">
+      <h2 class="frame-title horizontal-tb">明細入力</h2>
+      <div class="col p-0">
+        <form [formGroup]="lineCostSecForm">
+          <div class="col p-0">
+            <div class="form-group">
+              <label class="wm-combo">No:</label>
+              <wj-input-number class="input-display wm-combo col-1 bg-gray" id="lineSeq"
+                               formControlName="lineSeq"
+                               name="lineSeq"></wj-input-number>
+            </div>
+            <div class="form-group">
+              <label class="wm-combo">会社:</label>
+              <ea-input-mask class="input-display wm-combo wr-6 bg-gray"
+                             formControlName="costCompanyName"
+                             id="costCompanyName"
+                             name="costCompanyName"></ea-input-mask>
+            </div>
+            <div class="form-group">
+                <app-cost-section-selection [title]="'経費負担部課:'" [sectionForm]="costSectionForm" [isFocus]="true"
+                                  [staffCode]="this.sessionInfo.loginCompanyCode"
+                                  [costSectionCodeControlName]="'costSectionCode'"
+                                  (select)="changeCostSection($event)"
+                                  [searchDateFrom]="costSectionCodeLov" [searchDateTo]="costSectionCodeOldLov"
+                                  [costSectionNameControlName]="'costSectionName'" [extClass]="'required wr-6'">
+                </app-cost-section-selection>
+            </div>
+            <div class="form-group">
+              <label class="wm-combo">配分(%):</label>
+              <wj-input-number  formControlName="costDist" class="input-display wm-combo wm-50 required"
+                               id="costDist" name="costDist"></wj-input-number>
+            </div>
+          </div>
+        </form>
+        <hr class="e-line">
+        <div class="col p-0">
+          <div class="form-group e-group-btn">
+            <div class="form-group e-group-btn">
+              <button type="button" class="wm-btn wm-sm" (click)="saveLineCostSec()">
+                OK
+              </button>
+              <button type="button" class="wm-btn wm-sm" (click)="goToNextLineCostSec()">
+                次行入力
+              </button>
+              <button type="button" class="wm-btn wm-sm" (click)="cancelLineCostSec()">
+                キャンセル
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="grid-common-wrap u-top" >
+  <div class="grid-common-count" [ngClass]="visibleStatus ? 'pt-0' : 'pt-4'">
+                    <span>【件数：{{gridApChangeLineCostSec && gridApChangeLineCostSec.rows ? (gridApChangeLineCostSec.rows.length | number) : 0}}
+                      件】</span>
+  </div>
+  <div class="wm-grid-list" id="wp-grid-data-list">
+    <ea-flex-grid #gridApChangeLineCostSec
+                  [itemsSource]="apChangeLineCostSecList"
+                  (initialized)="initGridLineCostSec()"
+                  class="grid-common-list grid-list ">
+      <ea-flex-grid-column [width]="30" header="">
+        <ng-template wjFlexGridCellTemplate [cellType]="'Cell'" let-cell="cell">
+          <a *ngIf="btnAddLineCostSec && visibleStatus" name="btnDel" id="btnDel" class="btn-del"></a>
+        </ng-template>
+      </ea-flex-grid-column>
+      <ea-flex-grid-column [width]="30" binding="lineSeq" header="No"></ea-flex-grid-column>
+      <ea-flex-grid-column [width]="80" binding="costCompanyName"
+                           header="会社"></ea-flex-grid-column>
+      <ea-flex-grid-column [width]="100" binding="costSectionCode"
+                           header="部課コード"></ea-flex-grid-column>
+      <ea-flex-grid-column [width]="250" binding="costSectionName"
+                           header="部課名"></ea-flex-grid-column>
+      <ea-flex-grid-column [width]="60" binding="costDist" [dataType]="'Number'" format="n1"
+                           [aggregate]="'Sum'" header="配分(%)">
+        <ng-template wjFlexGridCellTemplate [cellType]="'Cell'" let-cell="cell">
+          {{cell?.item.costDist.toFixed(1)}}
+        </ng-template>
+      </ea-flex-grid-column>
+    </ea-flex-grid>
+  </div>
+
+</div>

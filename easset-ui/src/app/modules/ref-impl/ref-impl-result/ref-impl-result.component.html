@@ -1,0 +1,56 @@
+<div [fxLayout]="'column'">
+  <div [fxLayout]="'column'">
+    <div>
+      <a href="javascript: void(0)" (click)="this.goBack()">
+        <img src="assets/images/button/to_search.gif">
+        <span>検索条件画面に戻る</span>
+      </a>
+      <hr>
+    </div>
+  </div>
+  <div>
+    <div *ngIf="apGetTanSRList">{{apGetTanSRList.length | number}} 件</div>
+    <div [fxLayout]="'row'">
+      <div>
+        <ea-flex-grid #apGetTanSRGrid [itemsSource]="apGetTanSRList" [allowSorting]="false" [frozenColumns]="1" (initialized)="initializeGrid(apGetTanSRGrid)" style="width:97vw; height:82vh;">
+          <ea-flex-grid-column [binding]="'applicationId'" [header]="'申請書番号'" [width]="150"></ea-flex-grid-column>
+          <ea-flex-grid-column [binding]="'apStatusName'" [header]="'ステータス'" [width]="150"></ea-flex-grid-column>
+          <ea-flex-grid-column [binding]="'getTotalAmount'" [format]="'c'" [header]="'取得金額'" [width]="200" [aggregate]="'Sum'"></ea-flex-grid-column>
+          <ea-flex-grid-column [binding]="'getCompanyName'" [header]="'取得先'" [width]="300"></ea-flex-grid-column>
+          <ea-flex-grid-column [binding]="'apDate'" [header]="'申請日'" [width]="150" [format]="'yyyy/MM/dd'"></ea-flex-grid-column>ng
+          <ea-flex-grid-column [binding]="'apStaffCode'" [header]="'申請者:社員番号'" [width]="150"></ea-flex-grid-column>
+          <ea-flex-grid-column [binding]="'apStaffName'" [header]="'申請者:社員名'" [width]="150"></ea-flex-grid-column>
+          <ea-flex-grid-column [binding]="'apSectionName'" [header]="'申請部署'" [width]="300"></ea-flex-grid-column>
+          <ea-flex-grid-column [binding]="'holCompanyName'" [header]="'保有会社'" [width]="100"></ea-flex-grid-column>
+          <ea-flex-grid-column [binding]="'holSectionName'" [header]="'保有部署'" [width]="300"></ea-flex-grid-column>
+          <ea-flex-grid-column [binding]="'holStaffCode'" [header]="'資担:社員番号'" [width]="150"></ea-flex-grid-column>
+          <ea-flex-grid-column [binding]="'holStaffName'" [header]="'資担:社員名'" [width]="150"></ea-flex-grid-column>
+          <ea-flex-grid-column [binding]="'holOfficeName'" [header]="'設置場所'" [width]="300"></ea-flex-grid-column>
+          <ea-flex-grid-column [binding]="'holOfficeFloor'" [header]="'設置階'" [width]="50"></ea-flex-grid-column>
+          <ea-flex-grid-column [binding]="'costTypeName'" [header]="'経費:販管/原価'" [width]="100"></ea-flex-grid-column>
+          <ea-flex-grid-column [binding]="'costDepPrjName'" [header]="'経費:減価償却PRJ'" [width]="200"></ea-flex-grid-column>
+          <ea-flex-grid-column [binding]="'costSectionDistName'" [header]="'経費:経費負担部課'" [width]="300"></ea-flex-grid-column>
+        </ea-flex-grid>
+      </div>
+<!--
+      <wj-popup #detailPopup>
+        <div>
+          <form name="detailForm">
+            <fieldset>
+              <legend>詳細</legend>
+              <div [fxLayout]="'column'">
+                <label for="applicationIdDt">取得申請書番号</label>
+                <wj-input-mask #applicationIdDt name="applicationIdDt" [(ngModel)]="detailData.applicationId" [isReadOnly]="true"></wj-input-mask>
+                <label for="apGetAmountRangeNameDt">金額範囲</label>
+                <wj-input-mask #amountRangeNameDt name="apGetAmountRangeNameDt" [(ngModel)]="detailData.apGetAmountRangeName" [isReadOnly]="true"></wj-input-mask>
+                <label for="apDateDt">申請日</label>
+                <wj-input-date #apDateFrom name="apDateDt" [(ngModel)]="detailData.apDate" [isRequired]="false"  [isReadOnly]="true"></wj-input-date>
+              </div>
+            </fieldset>
+          </form>
+        </div>
+      </wj-popup>
+-->
+    </div>
+  </div>
+</div>

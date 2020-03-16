@@ -1,0 +1,382 @@
+<form [formGroup]="searchForm">
+  <div class="block-top">
+    <div class="col row">
+      <div class="col-6">
+        <div class="form-group">
+          <label class="wr-8" for="applicationId">取得申請書番号:</label>
+          <div>
+            <div class="col row m-0 p-0" [hidden]="!applicationIdLike">
+              <ea-input-mask
+                class="input-display wm-combo wr-4"
+                id="applicationId" formControlName="applicationId"
+                name="applicationId"></ea-input-mask>
+              <label class="text-inline pl-3 pr-3"> (あいまい) </label>
+              <span class="e-link">
+                        <a class="link" (click)="applicationIdLike = !applicationIdLike">複数指定</a>
+                    </span>
+            </div>
+            <div [hidden]="applicationIdLike">
+              <ea-input-mask id="applicationIdPlural" class="wm-combo wm-tab-element wm-300"
+                             formControlName="applicationIdPlural">
+              </ea-input-mask>
+              <div class="col row m-0 p-0 pt-1">
+                <label class="text-inline pr-3"> (スペース区切で複数指定可) </label>
+                <span class="e-link">
+                            <a class="link" (click)="applicationIdLike = !applicationIdLike">あいまい検索</a>
+                        </span>
+              </div>
+            </div>
+            <div class="pt-2">
+              <div class="form-check form-check-inline">
+                <input class="form-check-input wm-checkbox" type="checkbox" id="oldVerFlag"
+                       formControlName="oldVerFlag">
+                <label class="form-check-label" for="oldVerFlag">旧Verも含めて検索</label>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <div class="form-group">
+          <label class="wr-8" for="applicationId">e申請書類ID:</label>
+          <div>
+            <div class="col row m-0 p-0" [hidden]="!eappIdLike">
+              <ea-input-mask id="eappId" class="wm-combo wm-tab-element wm-100" formControlName="eappId">
+              </ea-input-mask>
+              <label class="text-inline pl-3 pr-3"> (あいまい) </label>
+              <span class="e-link">
+                        <a class="link" (click)="eappIdLike = !eappIdLike">複数指定</a>
+                    </span>
+            </div>
+            <div [hidden]="eappIdLike">
+              <ea-input-mask id="eappIdPlural" class="wm-combo wm-tab-element wm-300"
+                             formControlName="eappIdPlural">
+              </ea-input-mask>
+              <div class="col row m-0 p-0 pt-1">
+                <label class="text-inline pr-3"> (スペース区切で複数指定可) </label>
+                <span class="e-link">
+                            <a class="link" (click)="eappIdLike = !eappIdLike">あいまい検索</a>
+                        </span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="wr-8">ステータス:</label>
+          <div class="form-check form-check-inline mb-2" *ngFor="let item of apStatus; let i = index"
+               [ngClass]="{'d-block': i === 6}" formArrayName="apStatus">
+            <input *ngIf="i !== 3" type="checkbox" class="form-check-input wm-checkbox"
+                   [id]="'item-list-scr-implementation-' + i" [formControlName]="i">
+            <label *ngIf="i !== 3" class="form-check-label mr-3"
+                   [for]="'item-list-scr-implementation-' + i">{{item}}</label>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="wr-8">申請日:</label>
+          <div>
+            <wj-input-date class="ap-date wm-combo" id="apDateFrom" name="apDateFrom"
+                           formControlName="apDateFrom"
+                           [isRequired]="false">
+            </wj-input-date>
+            ～
+            <wj-input-date class="ap-date wm-combo" id="apDateTo" name="apDateTo"
+                           formControlName="apDateTo"
+                           [isRequired]="false">
+            </wj-input-date>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="wr-8">起票/申請者:</label>
+          <div>
+            <app-staff-selection [staffForm]="searchForm" [staffCodeControlName]="'apStaffCode'"
+                                 [staffNameControlName]="'apStaffName'" [companyOnly]="true"
+                                 [title]="'社員番号'"
+                                 [visibleStatus]="true" (select)="updateApStaff($event)"
+                                 [readOnly]="readOnlyStaffCode"
+                                 [extNameClass]="'wm-150'">
+            </app-staff-selection>
+          </div>
+        </div>
+      </div>
+      <div class="col-6">
+        <div class="form-group">
+          <label class="wr-11">取得形態:</label>
+          <div class="col-6 p-0">
+            <div class="form-check form-check-inline mb-2" *ngFor="let item of apGetType; let i = index"
+                 formArrayName="apGetType">
+              <input type="checkbox" class="form-check-input wm-checkbox" [id]="'item-list-gettype-' + i"
+                     [formControlName]="i">
+              <label class="form-check-label" [for]="'item-list-gettype-' + i"
+                     style="margin-right: 10px;">{{item}}</label>
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="wr-11">ｻｰﾋﾞｽ提供開始報告:</label>
+          <div class="col-6 p-0">
+            <div class="form-check form-check-inline mb-2"
+                 *ngFor="let item of reportCompleteFlag; let i = index"
+                 formArrayName="reportCompleteFlag">
+              <input type="checkbox" class="form-check-input wm-checkbox"
+                     [id]="'item-list-reportCompleteFlag-' + i"
+                     [formControlName]="i">
+              <label class="form-check-label" [for]="'item-list-reportCompleteFlag-' + i"
+                     style="margin-right: 10px;">{{item}}</label>
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="wr-11">計上区分:</label>
+          <div class="col-6 p-0">
+            <div class="form-check form-check-inline mb-2" *ngFor="let item of addUpType; let i = index"
+                 formArrayName="addUpType">
+              <input type="checkbox" class="form-check-input wm-checkbox"
+                     [id]="'item-list-adduptype-' + i"
+                     [formControlName]="i">
+              <label class="form-check-label" [for]="'item-list-adduptype-' + i"
+                     style="margin-right: 10px;">{{item}}</label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="block-border">
+    <div class="col row">
+      <div class="col-6">
+        <div class="block-frame-border">
+          <h2 class="frame-title">取得</h2>
+          <div class="frame-content">
+            <div class="form-group">
+              <label class="wr-11" for="astName">資産名:</label>
+              <ea-input-mask id="astName" name="astName" class="wm-combo wm-tab-element wm-250"
+                             formControlName="astName">
+              </ea-input-mask>
+              <span>(あいまい)</span>
+            </div>
+            <div class="form-group">
+              <label class="wr-11">クラウド区分:</label>
+              <wj-combo-box class="wm-combo wm-dropdown wm-tab-element wm-120" [isRequired]="false"
+                            [itemsSource]="astCloudTypeAC" [displayMemberPath]="'label'"
+                            [selectedValuePath]="'data'"
+                            [formControlName]="'astCloudType'"></wj-combo-box>
+            </div>
+            <div class="form-group">
+              <label class="wr-11">案件グループ:</label>
+              <div class="col">
+                <app-ppfs-group-selection [ppfsGroupCodeControlName]="'astGroupCode'"
+                                          [ppfsGroupNameControlName]="'astGroupName'"
+                                          [ppfsGroupForm]="searchForm"
+                                          [sqlName]="'selectPpfs_Group_LOV'"
+                                          [ppfsGroupNameStyle]="'wm-150'"
+                                          [paramMap]="{companyCode: sessionInfo.loginCompanyCode}"
+                                          (select)="updateAstGroup($event)"></app-ppfs-group-selection>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="wr-11">ﾘﾘｰｽ/検収(納品)予定日:</label>
+              <div class="col p-0">
+                <wj-input-date class="ap-date wm-combo" id="astCompletePlanDateFrom"
+                               name="astCompletePlanDateFrom"
+                               formControlName="astCompletePlanDateFrom" [isRequired]="false">
+                </wj-input-date>
+                <label class="pl-2 pr-2"> ～ </label>
+                <wj-input-date class="ap-date wm-combo" id="astCompletePlanDateTo"
+                               name="astCompletePlanDateTo"
+                               formControlName="astCompletePlanDateTo" [isRequired]="false">
+                </wj-input-date>
+              </div>
+            </div>
+            <div class="form-group"
+                 *ngIf="this.sessionInfo.currentAccessLevel == accessLevelSection.ACCESS_LEVEL_ADMIN_SYSTEM">
+              <label class="wr-11">リリース督促メール:</label>
+              <div>
+                <div class="form-check form-check-inline mb-2"
+                     *ngFor="let item of reminderFlag; let i = index"
+                     formArrayName="reminderFlag">
+                  <input type="checkbox" class="form-check-input wm-checkbox"
+                         [id]="'item-list-reminderFlag-' + i"
+                         [formControlName]="i">
+                  <label class="form-check-label" [for]="'item-list-reminderFlag-' + i"
+                         style="
+                  margin-right: 10px;">{{item}}</label>
+                </div>
+              </div>
+            </div>
+            <div class="form-group" [hidden]='!this.searchForm.controls.reminderFlag.value[1]'>
+              <label class="wr-11"></label>
+              <div class="col">
+                <wj-input-date class="ap-date wm-combo" id="reminderDateFrom"
+                               name="reminderDateFrom"
+                               formControlName="reminderDateFrom" [isRequired]="false">
+                </wj-input-date>
+                <label class="pl-2 pr-2"> ～ </label>
+                <wj-input-date class="ap-date wm-combo" id="reminderDateTo" name="reminderDateTo"
+                               formControlName="reminderDateTo" [isRequired]="false">
+                </wj-input-date>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="wr-11">取得金額:</label>
+              <wj-input-number id="getTotalAmountFrom" class="wm-combo wm-tab-element wm-100"
+                               formControlName="getTotalAmountFrom">
+              </wj-input-number>
+              <label class="pl-2 pr-2"> ～ </label>
+              <wj-input-number id="getTotalAmountTo" class="wm-combo wm-tab-element wm-100"
+                               formControlName="getTotalAmountTo">
+              </wj-input-number>
+            </div>
+            <div class="form-group">
+              <label class="wr-11">稟議書･経営会議等承認:</label>
+              <div class="form-group form-checkbox">
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input wm-checkbox" type="checkbox" id="specialApproveFlag"
+                         formControlName="specialApproveFlag">
+                  <label class="form-check-label" for="specialApproveFlag">承認済</label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="block-frame-border">
+          <h2 class="frame-title">経費負担</h2>
+          <div class="frame-content">
+            <div class="form-group">
+              <label class="wr-15">販売管理費/原価区分:</label>
+              <wj-combo-box class="wm-combo wm-dropdown wm-tab-element wm-120"
+                            [itemsSource]="costTypeAC"
+                            [displayMemberPath]="'label'" [selectedValuePath]="'data'"
+                            [formControlName]="'costType'"
+                            [isRequired]="false"></wj-combo-box>
+            </div>
+            <div class="form-group">
+              <label class="wr-15">減価償却(費用化)ﾌﾟﾛｼﾞｪｸﾄｺｰﾄﾞ:</label>
+              <div class="col">
+                <app-project-selection [projectForm]="searchForm" [title]="''"
+                                       [paramMap]="{companyCode: sessionInfo.loginCompanyCode, prjCategory: '1'}"
+                                       [projectCodeControlName]="'costDepPrjCode'"
+                                       [projectNameControlName]="'costDepPrjName'"
+                                       [sqlName]="'selectProject_LOV'" (select)="updateProject($event)">
+                </app-project-selection>
+              </div>
+
+            </div>
+            <div class="form-group">
+              <label class="wr-15">資産計上部課:</label>
+              <app-cost-section-selection [modalTitle]="'資産計上部課選択'" [sectionForm]="searchForm"
+                                          [searchDateFrom]="searchDateFrom" [searchDateTo]="searchDateTo"
+                                          [staffCode]="sessionInfo.loginUser.companyCode"
+                                          [costSectionCodeControlName]="'costSectionCode'"
+                                          (select)="updateCostSection($event)"
+                                          [costSectionNameControlName]="'costSectionName'"></app-cost-section-selection>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-6">
+        <div class="block-frame-border">
+          <h2 class="frame-title">保有・設置</h2>
+          <div class="frame-content">
+            <div class="form-group">
+              <label class="wr-9">保有会社:</label>
+              <ea-input-mask id="holCompanyName" class="wm-combo wm-tab-element wm-100 bg-gray"
+                             formControlName="holCompanyName" readonly></ea-input-mask>
+            </div>
+            <div class="form-group">
+              <label class="wr-9">保有部署:</label>
+              <div class="">
+                <app-section-selection class="wm-combo wm-300" [sectionForm]="searchForm"
+                                       [sectionCodeControlName]="'holSectionCode'"
+                                       [sectionNameControlName]="'holSectionName'"
+                                       (select)="updateHolSection($event)"
+                                       [sectionYearControlName]="'holSectionYear'"></app-section-selection>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input wm-checkbox" type="checkbox"
+                         id="includeSectionHierarchyFlag"
+                         formControlName="includeSectionHierarchyFlag">
+                  <label class="form-check-label"
+                         for="includeSectionHierarchyFlag">
+                    指定{{this.sessionInfo.currentAccessLevel === accessLevelSection.ACCESS_LEVEL_SECTION_MANAGER ? '/管轄' : ''}}
+                    部署の配下部署も検索に含める</label>
+                </div>
+              </div>
+
+            </div>
+            <div class="form-group">
+              <div class="form-group">
+                <label class="wr-9">代表設置場所:</label>
+                <app-ppfs-setchi-selection [ppfsForm]="searchForm"
+                                           [required]="false"
+                                           [nameControlName]="'holRepOfficeName'"
+                                           [sqlName]="'selectSetchi_LOV'"
+                                           (select)="updateHolRepOffice($event)"
+                                           [paramMap]="{companyCode: sessionInfo.loginCompanyCode}"
+                                           [codeControlName]="'holRepOfficeCode'"></app-ppfs-setchi-selection>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="block-frame-border">
+          <h2 class="frame-title">資産明細</h2>
+          <div class="frame-content">
+            <div class="form-group">
+              <label class="wr-11">分類:</label>
+              <div class="">
+                <app-ap-get-int-ast-category [astCategoryForm]="searchForm"
+                                             [categoryCodeControlName]="'astCategoryCodeFld'"
+                                             [paramMap]="{'categoryCode':'AP_GET_INT_AST_CATEGORY'}"
+                                             [headerGrid]="'分類'"
+                                             [sqlName]="'selectCodeName_LOV'"
+                                             (select)="updateAstCategoryCode($event)"
+                                             [binding]="'value1'"
+                                             [categoryNameControlName]="'astCategoryNameFld'"></app-ap-get-int-ast-category>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="wr-11">名称:</label>
+              <ea-input-mask id="astNameFld" class="wm-combo wm-tab-element wm-200"
+                             formControlName="astNameFld">
+              </ea-input-mask>
+              <span>(あいまい)</span>
+            </div>
+            <div class="form-group">
+              <label class="wr-11">資産ﾌﾟﾛｼﾞｪｸﾄｺｰﾄﾞ:</label>
+              <div class="col">
+                <app-project-selection [title]="''"
+                                       [projectForm]="searchForm"
+                                       [paramMap]="{prjCategory:'2'}"
+                                       [projectCodeControlName]="'astPrjCodeFld'"
+                                       [projectNameControlName]="'astPrjNameFld'"
+                                       (select)="updateAstPrj($event)"
+                                       [sqlName]="'selectProject_LOV'"></app-project-selection>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="wr-11">コメント:</label>
+              <div>
+                <ea-input-mask id="astCommentFld" class="wm-combo wm-tab-element wm-200"
+                               formControlName="astCommentFld">
+                </ea-input-mask>
+                <span>(あいまい)</span>
+                <div>
+                  <label>(スペース区切りで複数指定可)</label>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="block-frame-border">
+          <h2 class="frame-title">備考</h2>
+          <div class="frame-content">
+            <ea-input-mask id="description" class="wm-combo wm-tab-element wm-350"
+                           formControlName="description">
+            </ea-input-mask>
+            <span class="text-inline"> (あいまい) </span>
+            <span class="text-inline d-block">(スペース区切りで複数指定可)</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>

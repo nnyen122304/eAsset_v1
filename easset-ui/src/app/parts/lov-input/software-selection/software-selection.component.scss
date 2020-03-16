@@ -1,0 +1,38 @@
+.col-label-toggle {
+    a {
+      cursor: pointer;
+      color: blue;
+      font-weight: bold;
+      text-decoration: underline;
+      padding: 3px;
+      margin-bottom: 0px;
+    }
+    a:hover {
+      border-radius: 4px;
+      background: #add8e6;
+      color: black !important;
+    }
+  }
+  .popup-common-sel {
+    width: 900px;
+    &.section-selection {
+      left: 50% !important;
+      top: 50% !important;
+      transform: translate(-50%, -50%);
+      width: 800px;
+      .grid-parent-list {
+        overflow-x: hidden;
+        height: 300px !important;
+      }
+      .col-label {
+          width: 200px;
+          text-align: right;
+        }
+    }
+  }
+  .e-link {
+    white-space: nowrap;
+    font-weight: bold;
+    text-decoration: underline;
+  }
+  

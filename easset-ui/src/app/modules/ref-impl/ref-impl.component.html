@@ -1,0 +1,26 @@
+<wj-tab-panel #viewStack class="view-stack" (selectedIndexChange)="this.selectedIndexChangeHandler($event)">
+  <ea-view-stack-tab [keepViewState]="true"> <!-- 画面切替後も状態を維持する画面：true、維持しない画面:false-->
+    <a>検索</a>
+    <div>
+      <app-ref-impl-search [parent]="this" #childViewSearch *ngIf="this.isLoaded.get(this.viewIndexSearch)">
+        {{this.changeChildSubject.set(this.viewIndexSearch, childViewSearch.changeChildSubject)}}
+      </app-ref-impl-search>
+    </div>
+  </ea-view-stack-tab>
+  <ea-view-stack-tab [keepViewState]="true"> <!-- 画面切替後も状態を維持する画面：true、維持しない画面:false-->
+    <a>検索結果</a>
+    <div>
+      <app-ref-impl-result [parent]="this" #childViewResult *ngIf="this.isLoaded.get(this.viewIndexResult)">
+        {{this.changeChildSubject.set(this.viewIndexResult, childViewResult.changeChildSubject)}}
+      </app-ref-impl-result>
+    </div>
+  </ea-view-stack-tab>
+  <ea-view-stack-tab [keepViewState]="false"> <!-- 画面切替後も状態を維持する画面：true、維持しない画面:false-->
+    <a>登録</a>
+    <div>
+      <app-ref-impl-entry [parent]="this" #childViewEntry *ngIf="this.isLoaded.get(this.viewIndexEntry)">
+        {{this.changeChildSubject.set(this.viewIndexEntry, childViewEntry.changeChildSubject)}}
+      </app-ref-impl-entry>
+    </div>
+  </ea-view-stack-tab>
+</wj-tab-panel>

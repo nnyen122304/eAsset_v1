@@ -1,0 +1,62 @@
+.section-proplus-form {
+  padding-bottom: 15px;
+  margin-bottom: 15px;
+  border-bottom: 1px solid #fff;
+  .block-frame {
+    .frame-body {
+      padding: 10px 15px 5px;
+    }
+  }
+  .form-search {
+    .col-label {
+      flex: 0 0 80px;
+      padding-right: 5px;
+      text-align: right;
+    }
+    .col-content {
+      padding-left: 0;
+      padding-right: 0;
+    }
+    .form-group {
+      margin: 0;
+    }
+    .text-inline {
+      margin-left: 5px;
+    }
+    .text-imp {
+      margin: 5px 0 0;
+      color: #ff0000;
+    }
+  }
+}
+
+.section-proplus-list {
+  padding-bottom: 15px;
+  border-bottom: 1px solid #fff;
+  .block-buttons {
+    margin-bottom: 8px;
+    position: relative;
+    z-index: 1;
+    .wm-btn {
+      margin-right: 10px;
+    }
+    .text-desc {
+      display: inline-block;
+      margin: 0 0 0 15px;
+      vertical-align: middle;
+    }
+  }
+  .grid-common-count {
+    margin-top: -25px;
+    position: relative;
+    z-index: 0;
+  }
+  .grid-operations-list {
+    height: calc(100vh - 390px);
+  }
+}
+
+.section-proplus-buttons {
+  padding: 15px 0 0;
+  text-align: center;
+}

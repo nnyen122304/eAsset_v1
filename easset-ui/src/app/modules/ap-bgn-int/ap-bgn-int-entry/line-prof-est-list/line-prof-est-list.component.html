@@ -1,0 +1,104 @@
+<div class="form-os">
+  <div *ngIf="btnAddProfProfEst">
+    <button type="button" class="wm-btn wm-sm" (click)="addLineProfEst()">
+      行追加
+    </button>
+    <span class="pl-3">※ 行を選択すると値を編集できます。</span>
+  </div>
+  <div [ngClass]="btnAddProfProfEst ? 'collapse' : 'collapse show'">
+    <div class="block-frame-border">
+      <h2 class="frame-title horizontal-tb">明細入力</h2>
+      <div class="col p-0">
+        <form [formGroup]="lineProfEstForm">
+          <div class="col p-0">
+            <div class="form-group">
+              <label class="wm-combo col-3 pr-1">年:</label>
+              <wj-input-number class="input-display col-2 wm-combo bg-gray" id="lineSeq"
+                               formControlName="lineSeq"
+                               name="lineSeq"></wj-input-number>
+              <span>年目</span>
+            </div>
+            <div class="form-group">
+              <label class="wm-combo col-3 pr-1">販売本数:</label>
+              <wj-input-number class="input-display wm-combo wm-100 required"
+                               formControlName="profSalesQuantity" id="profSalesQuantity"
+                               autofocus="true"
+                               [isRequired]="true"
+                               name="profSalesQuantity"></wj-input-number>
+            </div>
+            <div class="form-group">
+              <label class="wm-combo col-3 pr-1">売上:</label>
+              <wj-input-number class="input-display wm-combo wm-100 required" id="profSalesAmount"
+                               (focusout)="setProfGrossAmount()"
+                               formControlName="profSalesAmount"
+                               name="profSalesAmount"></wj-input-number>
+            </div>
+            <div class="form-group">
+              <label class="wm-combo col-3 pr-1">売上原価:</label>
+              <wj-input-number class="input-display wm-combo wm-100 required" id="profCostAmount"
+                               formControlName="profCostAmount"
+                               (focusout)="setProfGrossAmount()"
+                               name="profCostAmount"></wj-input-number>
+            </div>
+            <div class="form-group">
+              <label class="wm-combo col-3 pr-1">粗利益:</label>
+              <wj-input-number class="input-display wm-combo wm-100 bg-gray" id="profGrossAmount"
+                               [attr.disabled]="true"
+                               formControlName="profGrossAmount"
+                               name="profGrossAmount"></wj-input-number>
+            </div>
+          </div>
+        </form>
+        <hr class="e-line">
+        <div class="col p-0">
+          <div class="form-group e-group-btn">
+            <button type="button" class="wm-btn wm-sm" (click)="saveLineProfEst()">
+              OK
+            </button>
+            <button type="button" class="wm-btn wm-sm" (click)="goToNextLineProfEst()">
+              次行入力
+            </button>
+            <button type="button" class="wm-btn wm-sm" (click)="cancelLineProfEst()">
+              キャンセル
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="grid-common-wrap u-top">
+  <div class="grid-common-count">
+                    <span>【件数：{{gridApBgnIntLineProfEst && gridApBgnIntLineProfEst.rows ? (gridApBgnIntLineProfEst.rows.length | number) : 0}}
+                      件】</span>
+  </div>
+  <div class="wm-grid-list" id="wp-grid-data-list">
+    <ea-flex-grid #gridApBgnIntLineProfEst class="grid-common-list grid-list"
+                  (initialized)="initGridLineProfEst()"
+                  [allowAddNew]="true"
+                  [itemsSource]="apBgnIntLineProfEstList">
+      <ea-flex-grid-column [width]="25" header="">
+        <ng-template wjFlexGridCellTemplate [cellType]="'Cell'" let-cell="cell" let-row="row">
+          <a *ngIf="this.btnAddProfProfEst" name="btnDel" id="btnDel" class="btn-del"></a>
+        </ng-template>
+      </ea-flex-grid-column>
+      <ea-flex-grid-column [width]="75" binding="lineSeq" header=" ">
+        <ng-template wjFlexGridCellTemplate [cellType]="'Cell'" let-cell="cell">
+          {{cell.item?.lineSeq + '年目'}}
+        </ng-template>
+      </ea-flex-grid-column>
+      <ea-flex-grid-column binding="profSalesQuantity" [width]="75" [dataType]="'Number'"
+                           [aggregate]="'Sum'"
+                           header="販売本数"></ea-flex-grid-column>
+      <ea-flex-grid-column binding="profSalesAmount" [width]="100" [dataType]="'Number'"
+                           [aggregate]="'Sum'"
+                           header="売上"></ea-flex-grid-column>
+      <ea-flex-grid-column binding="profCostAmount" [width]="100" [dataType]="'Number'"
+                           [aggregate]="'Sum'"
+                           header="売上原価"></ea-flex-grid-column>
+      <ea-flex-grid-column binding="profGrossAmount" [width]="100" [dataType]="'Number'"
+                           [aggregate]="'Sum'"
+                           header="粗利益"></ea-flex-grid-column>
+    </ea-flex-grid>
+  </div>
+</div>

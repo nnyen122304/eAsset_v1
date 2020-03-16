@@ -1,0 +1,136 @@
+.page-admin-master-setting {
+  padding-top: 10px;
+}
+
+.section-info {
+  border-bottom: 1px solid #fff;
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+  .block-frame-border {
+    width: 470px;
+    padding: 10px 25px;
+    .frame-title {
+      font-size: 12px;
+      top: -7px;
+    }
+  }
+  .col {
+    padding: 0;
+  }
+  .col-label {
+    flex: 0 0 65px;
+    white-space: nowrap;
+  }
+  .col-input {
+    flex: 0 0 270px;
+    .ip-master-name {
+      width: 100%;
+    }
+  }
+  .col-button {
+    margin-left: 10px;
+    .wm-btn {
+      margin-top: -1px;
+    }
+  }
+
+}
+
+.section-detail {
+  margin-bottom: 10px;
+  position: relative;
+  .grid-count {
+    position: absolute;
+    bottom: 0;
+    left: 860px;
+  }
+}
+
+.section-list {
+  .grid-common-wrap {
+    position: relative;
+  }
+  .list-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    padding: 3px 0 10px;
+    .grid-group-filter {
+      display: flex;
+      align-items: flex-end;
+    }
+  }
+  .grid-buttons {
+    p {
+      display: inline-block;
+      margin: 0;
+    }
+  }
+  .grid-count {
+    margin-left: 10px;
+  }
+  .grid-filter {
+    width: 380px;
+    padding: 7px 5px;
+    .frame-title {
+      font-size: 12px;
+      top: -7px;
+    }
+    .col-form {
+      padding: 0 10px;
+      flex: 0 0 305px;
+      @media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+        flex: 0 0 280px;
+      }
+      > .row + .row {
+        margin-top: 3px;
+      }
+      .col-label {
+        padding: 0;
+        flex: 0 0 95px;
+        text-align: right;
+        white-space: nowrap;
+      }
+      .col-input {
+        padding: 0;
+        .wm-combo {
+          width: 100%;
+        }
+      }
+    }
+    .col-button {
+      display: flex;
+      margin-left: 15px;
+      padding: 0 0 0 10px;
+      border-left: 1px solid #fff;
+      align-items: center;
+    }
+    app-parent-master-selection {
+      width: 207px;
+      display: block;
+    }
+  }
+
+  .grid-admin-master-setting {
+    height: calc(100vh - 260px);
+    .has-parent-master & {
+      height: calc(100vh - 285px);
+    }
+    .button-delete {
+      display: inline-block;
+      width: 18px;
+      height: 18px;
+      margin-right: 5px;
+      background: url(/assets/images/button/line_delete.png) 50% 50% no-repeat;
+      background-size: 18px auto;
+      vertical-align: middle;
+      cursor: pointer;
+    }
+  }
+}
+
+.section-buttons {
+  padding: 8px 0 0;
+  border-top: 1px solid #fff;
+  text-align: center;
+}

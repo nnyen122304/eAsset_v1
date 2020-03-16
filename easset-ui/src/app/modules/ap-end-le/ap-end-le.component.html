@@ -1,0 +1,11 @@
+<wj-tab-panel #viewStack class="view-stack" (selectedIndexChange)="this.selectedIndexChangeHandler($event)">
+  <ea-view-stack-tab [keepViewState]="false"> <!-- 画面切替後も状態を維持する画面：true、維持しない画面:false-->
+    <a>照会/修正</a>
+    <div>
+      <app-ap-end-le-hist [parent]="this" #childViewHist *ngIf="this.isLoaded.get(this.viewIndexHist)">
+        {{this.changeChildSubject.set(this.viewIndexHist, childViewHist.changeChildSubject)}}
+      </app-ap-end-le-hist>
+    </div>
+  </ea-view-stack-tab>
+</wj-tab-panel>
+<app-confirm-popup #confirmPopup (confirm)="onConfirm()"></app-confirm-popup>

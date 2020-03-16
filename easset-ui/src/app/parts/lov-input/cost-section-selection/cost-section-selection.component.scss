@@ -1,0 +1,50 @@
+.popup-cost-selection {
+  width: auto;
+  .grid-staff-selection-list {
+    display: inline-block;
+    width: auto;
+    height: 300px;
+  }
+  .section-search {
+    margin-bottom: 10px;
+  }
+
+  .row-search + .row-search {
+   margin-top: 5px;
+  }
+  .col-buttons {
+    padding-top: 12px;
+  }
+
+  .section-data {
+    width: auto;
+  }
+  .row-search {
+    margin-left: 26px;
+  }
+  .col-left {
+    left: -44px;
+  }
+  .col-center {
+    left: -35px;
+  }
+  .col-right {
+    left: -41px;
+  }
+}
+
+.form-staff {
+  .ip-code {
+    width: 80px;
+  }
+  .ip-name {
+    width: 100px;
+  }
+  .wm-btn {
+    margin: 0 5px;
+  }
+}
+.wm-130{
+  width: 128px;
+}
+

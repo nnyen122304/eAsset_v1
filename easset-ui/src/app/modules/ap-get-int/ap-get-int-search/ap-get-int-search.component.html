@@ -1,0 +1,22 @@
+<div class="page-container asset-search-page">
+  <div class="asset-search-container">
+    <div class="asset-search-header">
+      <label style="color: #0000FF;" *ngIf="menuId === sysMenu.menuIdApGetIntCopy">コピー元の申請書を検索してください。</label>
+    </div>
+    <div class="asset-search-main">
+      <app-ap-get-int-search-condition [currentState]="currentState"></app-ap-get-int-search-condition>
+    </div>
+  </div>
+  <hr class="asset-search-footer-line">
+  <div fxLayout="row" fxLayoutGap="6px" fxLayoutAlign="center center" class="asset-search-footerr">
+    <button type="button" class="wm-btn wm-tab-element ml-3" (click)="search()">検索</button>
+    <!-- 表示制御：照会/修正のみ表示 -->
+    <button type="button" class="wm-btn wm-tab-element ml-3" *ngIf=" menuId === sysMenu.menuIdApGetIntSearch"
+            (click)="downloadOption.open($event.currentTarget)">ダウンロード
+    </button>
+    <button type="button" class="wm-btn wm-tab-element ml-3" (click)="clear()">クリア</button>
+  </div>
+</div>
+
+<!-- ダウンロードオプションポップアップ -->
+<app-download-option [optText1]="'申請書単位'" [optText2]="'明細単位'" (select)="download($event)"></app-download-option>

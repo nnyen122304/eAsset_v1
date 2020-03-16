@@ -1,0 +1,23 @@
+<div class="grid-common-wrap grid-common-wrap-result">
+  <div class="grid-common-count">
+    【件数:{{gridApGetTanLineAstList && gridApGetTanLineAstList.rows ? (gridApGetTanLineAstList.rows.length | number) : 0}}
+    件】
+  </div>
+  <div class="grid-inventory-list wp-grid-ap-get-tan-result" id="wp-grid-ap-get-tan-result-list">
+    <ea-flex-grid #gridApGetTanLineAstList class="grid-common-list grid-asset-list grid-inventory-list"
+                  [allowSorting]="true" [isReadOnly]="false" [itemsSource]="apGetTanLineAstList"
+                  (initialized)="initializeGrid(gridApGetTanLineAstList)">
+      <ea-flex-grid-column header="No" binding="lineSeq" [width]="30"></ea-flex-grid-column>
+      <ea-flex-grid-column header="資産(機器)名" binding="astName" [width]="340"></ea-flex-grid-column>
+      <ea-flex-grid-column header="取得数" binding="quantity" [width]="50"></ea-flex-grid-column>
+      <ea-flex-grid-column header="登録数" binding="registQuantity" [width]="50"></ea-flex-grid-column>
+      <ea-flex-grid-column header="資産(機器)分類" binding="astCategory2Name" [width]="260"></ea-flex-grid-column>
+      <ea-flex-grid-column header="メーカー" binding="astMakerName" [width]="200"></ea-flex-grid-column>
+      <ea-flex-grid-column header="メーカー型番" binding="apStaffCode" [width]="200"></ea-flex-grid-column>
+      <ea-flex-grid-column header="筐体/形状" binding="astShapeName" [width]="150"></ea-flex-grid-column>
+      <ea-flex-grid-column header="資産PRJコード" binding="astPrjCode" [width]="100"></ea-flex-grid-column>
+      <ea-flex-grid-column header="資産PRJ名" binding="astPrjName" [width]="160"></ea-flex-grid-column>
+      <ea-flex-grid-column header="資産PRJタイプ" binding="astPrjType" [width]="100"></ea-flex-grid-column>
+    </ea-flex-grid>
+  </div>
+</div>

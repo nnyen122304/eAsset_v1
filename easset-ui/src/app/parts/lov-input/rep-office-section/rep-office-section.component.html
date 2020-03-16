@@ -1,0 +1,57 @@
+<form [formGroup]="repOfficeForm">
+  <ea-input-mask #repOfficeCode class="ip-code wm-combo is-rounded wm-200 input-display" [ngClass]="exTract"
+    formControlName="{{repOfficeNameControlName}}" [required]="required" [maxLength]="10" [pattern]="'a-zA-Z0-9'"
+    [capitalize]="true"></ea-input-mask>
+  <button type="button" class="wm-btn wm-sm btn-icon btn-tooltip" (click)="clear()" *ngIf="!selectOnly"><span
+      class="ico"><img src="assets/images/button/clear.gif"></span><span class="tooltip-text">クリア</span></button>
+  <button [hidden]="!isShowStatus" type="button" class="wm-btn wm-sm" (click)="open($event.currentTarget)"><span
+      class="ico"><img src="assets/images/button/popup.png"></span></button>
+</form>
+
+<ea-popup #repOfficeSelectionPopup class="popup-staff-selection popup-master-group-selection" [hideTrigger]="'None'"
+  (hidden)="close()">
+  <div class="form-select-staff">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">代表設置場所</h5>
+        <button type="button" tabindex="-1" class="close bt-close wj-hide">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="section-search">
+          <form class="row" [formGroup]="searchForm">
+            <div class="col">
+              <div class="row row-search">
+                <div class="col-3 m-0 col-left">
+                  <span class="text-nowrap">代表設置場所名(あいまい):</span>
+                </div>
+                <div class="col-5 ml-4 col-center">
+                  <ea-input-mask formControlName="repOfficeName" class="w-100"></ea-input-mask>
+                </div>
+                <div class="col-2 m-0 p-0 col-right">
+                  <button type="button" class="wm-btn" (click)="init()">検索</button>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="section-data">
+            <ea-flex-grid
+              #gridStaffSelectionList
+              class="grid-common-list grid-staff-selection-list"
+              [itemsSource]="repOfficeList"
+              [allowResizing]="'None'"
+              [headersVisibility]="'Column'"
+              (dblclick)="submit()"
+            >
+              <ea-flex-grid-column header="代表設置場所コード" binding="code" [allowResizing]="false" [allowMerging]=true [width]="200"></ea-flex-grid-column>
+              <ea-flex-grid-column header="代表設置場所名" binding="name" [allowResizing]="false" [allowMerging]=true [width]="250"></ea-flex-grid-column>
+            </ea-flex-grid>
+          </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="wm-btn" (click)="submit()">選択</button>
+        <button type="button" class="wm-btn wj-hide">閉じる</button>
+      </div>
+    </div>
+  </div>
+</ea-popup>

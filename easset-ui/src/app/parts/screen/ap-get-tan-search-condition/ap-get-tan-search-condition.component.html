@@ -1,0 +1,436 @@
+<div class="section-create-form">
+  <form [formGroup]="searchForm">
+    <div class="row">
+      <div class="col-5">
+        <div class="row">
+          <label class="col-label text-right">移動申請書番号:</label>
+          <div class="bt" [hidden]="!checkApplicationId">
+            <ea-input-mask id="applicationId" class="wm-combo wm-tab-element wm-100" formControlName="applicationId">
+            </ea-input-mask>
+            <span class="text-inline"> (あいまい) </span>
+            <span class="e-link">
+              <a class="link" (click)="linkBtnClickEvent('applicationId')">複数指定</a>
+            </span>
+          </div>
+          <div class="bt" [hidden]="checkApplicationId">
+            <ea-input-mask id="applicationIdPlural" class="wm-combo wm-tab-element wm-300"
+              formControlName="applicationIdPlural">
+            </ea-input-mask>
+          </div>
+        </div>
+        <div class="row" [hidden]="checkApplicationId">
+          <label class="col-label text-right"></label>
+          <span class="text-inline">(スペース区切で複数指定可)</span>
+          <span class="e-link">
+            <a class="link" (click)="linkBtnClickEvent('applicationId')">あいまい検索</a>
+          </span>
+        </div>
+        <div class="row">
+          <label class="col-label text-right">e申請書類ID:</label>
+          <div class="bt" [hidden]="!checkEappId">
+            <ea-input-mask id="eappId" class="wm-combo wm-tab-element wm-100" formControlName="eappId">
+            </ea-input-mask>
+            <span class="text-inline"> (あいまい) </span>
+            <span class="e-link">
+              <a class="link" (click)="linkBtnClickEvent('eappId')">複数指定</a>
+            </span>
+          </div>
+          <div class="bt" [hidden]="checkEappId">
+            <ea-input-mask id="eappIdPlural" class="wm-combo wm-tab-element wm-300" formControlName="eappIdPlural">
+            </ea-input-mask>
+          </div>
+        </div>
+        <div class="row" [hidden]="checkEappId">
+          <label class="col-label text-right"></label>
+          <span class="text-inline">(スペース区切で複数指定可)</span>
+          <span class="e-link">
+            <a class="link" (click)="linkBtnClickEvent('eappId')">あいまい検索</a>
+          </span>
+        </div>
+        <div class="row">
+          <label class="col-label text-right">ステータス:</label>
+          <div class="col p-0">
+            <div class="form-check form-check-inline mb-2" *ngFor="let item of apStatus; let i = index"
+              [ngClass]="{'d-block': i === 6}" formArrayName="apStatus">
+              <input *ngIf="i !== 3" type="checkbox" class="form-check-input wm-checkbox"
+                [id]="'item-list-scr-implementation-' + i" [formControlName]="i">
+              <label *ngIf="i !== 3" class="form-check-label mr-3"
+                [for]="'item-list-scr-implementation-' + i">{{item}}</label>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <label class="col-label text-right">申請日:</label>
+          <div class="col p-0">
+            <div class="col-content">
+              <wj-input-date class="ap-date wm-combo" id="apDateFrom" name="apDateFrom" formControlName="apDateFrom"
+                [isRequired]="false">
+              </wj-input-date>
+              ～
+              <wj-input-date class="ap-date wm-combo" id="apDateTo" name="apDateTo" formControlName="apDateTo"
+                [isRequired]="false">
+              </wj-input-date>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <label class="col-label text-right">起票/申請者:</label>
+          <app-staff-selection [staffForm]="searchForm" [staffCodeControlName]="'apStaffCode'"
+            [staffNameControlName]="'apStaffName'" [companyOnly]="true"
+            [visibleStatus]="accessLevel === 'C' ? false : true" [readOnly]="readOnlyStaffCode"
+            [extNameClass]="'wm-150'">
+          </app-staff-selection>
+        </div>
+      </div>
+      <div class="col-5">
+        <div class="row">
+          <label class="wm-120 text-right">取得形態:</label>
+          <div class="col p-0">
+            <div class="form-check form-check-inline mb-2" *ngFor="let item of apGetType; let i = index"
+              [ngClass]="{'d-block': i == 0, 'mr-130': i === 3}" formArrayName="apGetType">
+              <input type="checkbox" class="form-check-input wm-checkbox" [id]="'item-list-gettype-' + i"
+                [formControlName]="i">
+              <label class="form-check-label" [for]="'item-list-gettype-' + i"
+                style="margin-right: 10px;">{{item}}</label>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <label class="wm-120 text-right">登録オプション:</label>
+          <div class="form-group form-checkbox">
+            <div class="form-check form-check-inline">
+              <input class="form-check-input wm-checkbox" type="checkbox" id="excludeCompleteFlag"
+                formControlName="excludeCompleteFlag">
+              <label class="form-check-label" for="excludeCompleteFlag">登録申請書作成が完了している申請書を除外</label>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <label class="wm-120 text-right">eAssetレンタル発注:</label>
+          <div>
+            <div class="form-check form-check-inline mb-2" *ngFor="let item of reoOrderFlag; let i = index"
+              formArrayName="reoOrderFlag">
+              <input type="checkbox" class="form-check-input wm-checkbox" [id]="'item-list-orderflag-' + i"
+                [formControlName]="i">
+              <label class="form-check-label" [for]="'item-list-orderflag-' + i"
+                style="margin-right: 10px;">{{item}}</label>
+            </div>
+          </div>
+          <div class="form-group form-checkbox">
+            <div class="form-check form-check-inline">
+              <input class="form-check-input wm-checkbox" type="checkbox" id="reoDisuseFlag"
+                formControlName="reoDisuseFlag">
+              <label class="form-check-label" for="reoDisuseFlag">発注不要</label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+  <div class="row">
+    <div class="col-5">
+      <div class="block-frame-border">
+        <h2 class="frame-title">取得</h2>
+        <form [formGroup]="getForm">
+          <div class="row">
+            <label class="col-label text-right">案件名:</label>
+            <ea-input-mask id="getItemName" class="wm-combo wm-tab-element wm-250" formControlName="getItemName">
+            </ea-input-mask>
+            <span>(あいまい)</span>
+          </div>
+          <div class="row">
+            <label class="col-label text-right mr-8">クラウド区分:</label>
+            <div class="bt">
+              <wj-combo-box class="wm-combo wm-dropdown wm-tab-element wm-120" [isRequired]="false"
+                [itemsSource]="getItemCloudTypeAC" [displayMemberPath]="'label'" [selectedValuePath]="'data'"
+                [formControlName]="'getItemCloudType'"></wj-combo-box>
+            </div>
+          </div>
+          <div class="row">
+            <label class="col-label text-right mr-12">案件グループ:</label>
+            <app-ppfs-group-selection [ppfsGroupCodeControlName]="'getItemGroupCode'"
+              [ppfsGroupNameControlName]="'getItemGroupName'" [ppfsGroupForm]="getForm"
+              [sqlName]="'selectPpfs_Group_LOV'" [ppfsGroupNameStyle]="'wm-200'"
+              [paramMap]="{companyCode: sessionInfo.loginCompanyCode, groupName: '', searchDateFrom: null, searchDateTo: null}">
+            </app-ppfs-group-selection>
+          </div>
+          <div class="row">
+            <label class="col-label text-right mr-8">納入予定日:</label>
+            <div class="col p-0">
+              <div class="col-content">
+                <wj-input-date class="ap-date wm-combo" id="getDeliveryDateFrom" name="getDeliveryDateFrom"
+                  formControlName="getDeliveryDateFrom" [isRequired]="false">
+                </wj-input-date>
+                ～
+                <wj-input-date class="ap-date wm-combo" id="getDeliveryDateTo" name="getDeliveryDateTo"
+                  formControlName="getDeliveryDateTo" [isRequired]="false">
+                </wj-input-date>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <label class="col-label text-right mr-8">情報システム部配備:</label>
+            <div class="bt">
+              <wj-combo-box class="wm-combo wm-dropdown wm-tab-element" [isRequired]="false"
+                [itemsSource]="getSystemSectionDeployFlagAC" [displayMemberPath]="'label'" [selectedValuePath]="'data'"
+                [isEditable]="false" [formControlName]="'getSystemSectionDeployFlag'"></wj-combo-box>
+            </div>
+          </div>
+          <div class="row">
+            <label class="col-label text-right mr-8">購入先:</label>
+            <app-code-name-selection [formExportSearch]="getForm" [modalTitle]="'購入先選択'"
+              [modalLabelTitle]="'会社名(あいまい)：'" [headerGrid]="'会社'" [sqlName]="'selectPurCompany_LOV'"
+              [paramMap]="{companyCode: sessionInfo.loginCompanyCode}" [extClass]="'wm-250 non-rounded'"
+              [isShowButtonClear]="false" [statusCodeControlName]="'getPurCompanyCode'"
+              [statusNameControlName]="'getPurCompanyName'" [value]="'name'" (select)="selectPurCompanyName($event)">
+            </app-code-name-selection>
+            <span>(あいまい)</span>
+          </div>
+          <div class="row">
+            <label class="col-label text-right mr-8">購入先見積番号:</label>
+            <div class="bt" [hidden]="!checkPurEstimateNumber">
+              <ea-input-mask id="getPurEstimateNumber" class="wm-combo wm-tab-element wm-100"
+                formControlName="getPurEstimateNumber">
+              </ea-input-mask>
+              <span class="text-inline"> (あいまい) </span>
+              <span class="e-link">
+                <a class="link" (click)="linkBtnClickEvent('getPurEstimateNumber')">複数指定</a>
+              </span>
+            </div>
+            <div class="bt" [hidden]="checkPurEstimateNumber">
+              <ea-input-mask id="getPurEstimateNumberPlural" class="wm-combo wm-tab-element wm-300"
+                formControlName="getPurEstimateNumberPlural">
+              </ea-input-mask>
+            </div>
+            <div class="row" [hidden]="checkPurEstimateNumber">
+              <label class="col-label text-right mr-15"></label>
+              <span class="text-inline">(スペース区切で複数指定可)</span>
+              <span class="e-link">
+                <a class="link" (click)="linkBtnClickEvent('getPurEstimateNumber')">あいまい検索</a>
+              </span>
+            </div>
+          </div>
+          <div class="row">
+            <label class="col-label text-right mr-8">リース/レンタル先:</label>
+            <app-code-name-selection [formExportSearch]="getForm" [modalTitle]="'リース/レンタル会社選択'"
+              [modalLabelTitle]="'会社名(あいまい)：'" [headerGrid]="'会社'" [sqlName]="'selectCodeName_LOV'"
+              [paramMap]="{companyCode: sessionInfo.loginCompanyCode, categoryCode: 'LEASE_RENTAL_CUSTOMER', whereClause: 'VALUE9 = 1'}"
+              [extClass]="'wm-200'" [statusCodeControlName]="'getLeReCompanyCode'"
+              [statusNameControlName]="'getLeReCompanyName'">
+            </app-code-name-selection>
+          </div>
+          <div class="row">
+            <label class="col-label text-right mr-8">ﾘｰｽ/ﾚﾝﾀﾙ先見積番号:</label>
+            <div class="bt" [hidden]="!checkLeReEstimateNumber">
+              <ea-input-mask id="getLeReEstimateNumber" class="wm-combo wm-tab-element wm-100"
+                formControlName="getLeReEstimateNumber">
+              </ea-input-mask>
+              <span class="text-inline"> (あいまい) </span>
+              <span class="e-link">
+                <a class="link" (click)="linkBtnClickEvent('getLeReEstimateNumber')">複数指定</a>
+              </span>
+            </div>
+            <div class="bt" [hidden]="checkLeReEstimateNumber">
+              <ea-input-mask id="getLeReEstimateNumberPlural" class="wm-combo wm-tab-element wm-300"
+                formControlName="getLeReEstimateNumberPlural">
+              </ea-input-mask>
+            </div>
+            <div class="row" [hidden]="checkLeReEstimateNumber">
+              <label class="col-label text-right mr-15"></label>
+              <span class="text-inline">(スペース区切で複数指定可)</span>
+              <span class="e-link">
+                <a class="link" (click)="linkBtnClickEvent('getLeReEstimateNumber')">あいまい検索</a>
+              </span>
+            </div>
+          </div>
+          <div class="row">
+            <label class="col-label text-right mr-8">ﾘｰｽ見積依頼書類ID:</label>
+            <div class="bt">
+              <ea-input-mask id="getLeEappId" class="wm-combo wm-tab-element wm-100" formControlName="getLeEappId">
+              </ea-input-mask>
+              <span class="text-inline">(あいまい) </span>
+              <span class="text-inline">※　e申請の書類ID</span>
+            </div>
+          </div>
+          <div class="row">
+            <label class="col-label text-right mr-8">取得金額:</label>
+            <wj-input-number id="getTotalAmountFrom" class="wm-combo wm-tab-element wm-100"
+              formControlName="getTotalAmountFrom">
+            </wj-input-number>
+            ～
+            <wj-input-number id="getTotalAmountTo" class="wm-combo wm-tab-element wm-100"
+              formControlName="getTotalAmountTo">
+            </wj-input-number>
+          </div>
+        </form>
+      </div>
+      <div class="block-frame-border">
+        <h2 class="frame-title">経費負担</h2>
+        <form [formGroup]="expenseForm">
+          <div class="row">
+            <label class="col2-label text-right mr-8">販売管理費/原価区分:</label>
+            <div class="bt">
+              <wj-combo-box class="wm-combo wm-dropdown wm-tab-element wm-120" [itemsSource]="costTypeAC"
+                [displayMemberPath]="'label'" [selectedValuePath]="'data'" [formControlName]="'costType'"
+                [isRequired]="false"></wj-combo-box>
+            </div>
+          </div>
+          <div class="row">
+            <label class="col2-label text-right mr-15">減価償却プロジェクトコード:</label>
+            <app-project-selection [projectForm]="expenseForm"
+              [paramMap]="{companyCode: sessionInfo.loginCompanyCode, prjCategory: '2'}"
+              [projectCodeControlName]="'costDepPrjCode'" [projectNameControlName]="'costDepPrjName'"
+              [sqlName]="'selectProject_LOV'">
+            </app-project-selection>
+          </div>
+          <div class="row">
+            <label class="col2-label text-right mr-8"></label>
+            <div class="form-group form-checkbox">
+              <div class="form-check form-check-inline">
+                <input class="form-check-input wm-checkbox" type="checkbox" id="costDepPrjUndecidedFlag">
+                <label class="form-check-label" for="costDepPrjUndecidedFlag">プロジェクトコード未定のみ検索する</label>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="block-frame-border">
+        <h2 class="frame-title">備考</h2>
+        <form [formGroup]="remarkForm">
+          <ea-input-mask id="description" class="wm-combo wm-tab-element wm-400" formControlName="description">
+          </ea-input-mask>
+          <span class="text-inline"> (あいまい) </span>
+          <span class="text-inline d-block">(スペース区切で複数指定可)</span>
+        </form>
+      </div>
+    </div>
+    <div class="col-5 ml">
+      <div class="block-frame-border">
+        <h2 class="frame-title">保有・設置</h2>
+        <form [formGroup]="possessionForm">
+          <div class="row">
+            <label class="col-label text-right mr-8">保有会社:</label>
+            <ea-input-mask id="holCompanyName" class="wm-combo wm-tab-element wm-100 bg-gray"
+              formControlName="holCompanyName" readonly></ea-input-mask>
+          </div>
+          <div class="row">
+            <label class="col-label text-right mr-8">保有部署:</label>
+            <app-section-selection class="wm-combo wm-300" [sectionForm]="possessionForm"
+              [sectionCodeControlName]="'holSectionCode'" [sectionNameControlName]="'holSectionName'"
+              [sectionYearControlName]="'holSectionYear'"></app-section-selection>
+          </div>
+          <div class="row">
+            <label class="col-label text-right mr-8"></label>
+            <div class="form-group form-checkbox">
+              <div class="form-check form-check-inline">
+                <input class="form-check-input wm-checkbox" type="checkbox" id="includeSectionHierarchyFlag" formControlName="includeSectionHierarchyFlag">
+                <label class="form-check-label"
+                  for="includeSectionHierarchyFlag">指定{{accessLevel === 'B' ? '/管轄' : ''}}部署の配下部署も検索に含める</label>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <label class="col-label text-right mr-8">資産管理担当者:</label>
+            <app-hol-staff-selection [holStaffForm]="possessionForm" [staffCodeControlName]="'holStaffCode'"
+              [staffNameControlName]="'holStaffName'" [sqlName]="'selectHolStaff_LOV'"
+              [paramMap]="{companyCode: sessionInfo.loginCompanyCode}">
+            </app-hol-staff-selection>
+          </div>
+          <div class="row">
+            <label class="col-label text-right mr-8">設置場所:</label>
+            <app-code-name-selection [formExportSearch]="possessionForm" [statusCodeControlName]="'holOfficeCode'"
+              [statusNameControlName]="'holOfficeName'" [sqlName]="'selectCodeName_LOV'"
+              [paramMap]="{companyCode: sessionInfo.loginCompanyCode, categoryCode: 'OFFICE'}" [modalTitle]="'設置場所選択'"
+              [modalLabelTitle]="'設置場所名(あいまい)：'" [headerGrid]="'設置場所'" [extClass]="'wm-250'">
+            </app-code-name-selection>
+            <ea-input-number class="wm-25" formControlName="holOfficeFloor"></ea-input-number>
+            <label>F</label>
+          </div>
+        </form>
+      </div>
+      <div class="block-frame-border">
+        <h2 class="frame-title">資産(機器)明細</h2>
+        <form [formGroup]="assetStatementForm">
+          <div class="row">
+            <label class="col2-label text-right mr-8">資産(機器)名:</label>
+            <ea-input-mask id="astName" class="wm-combo wm-tab-element wm-200" formControlName="astName">
+            </ea-input-mask>
+            <span>(あいまい)</span>
+          </div>
+          <div class="row">
+            <label class="col2-label text-right mr-8">メーカー:</label>
+            <app-code-name-selection [formExportSearch]="assetStatementForm" [statusCodeControlName]="'astMakerCode'"
+              [statusNameControlName]="'astMakerName'" [modalTitle]="'メーカー選択'" [modalLabelTitle]="'メーカー名(あいまい)：'"
+              [headerGrid]="'メーカー'" [sqlName]="'selectCodeName_LOV'" [paramMap]="{categoryCode: 'ASSET_MAKER'}"
+              [extClass]="'wm-200'" [isShowButtonClear]="isShow" (select)="selectCodeName($event)">
+            </app-code-name-selection>
+            <span class="e-link">
+              <a class="link" (click)="isShow = !isShow" [hidden]="!isShow">手入力</a>
+            </span>
+          </div>
+          <div class="row">
+            <label class="col2-label text-right mr-8">メーカー型番:</label>
+            <ea-input-mask id="astMakerModel" class="wm-combo wm-tab-element wm-200" formControlName="astMakerModel">
+            </ea-input-mask>
+            <span>(あいまい)</span>
+          </div>
+          <div class="row">
+            <label class="col2-label text-right mr-15">資産プロジェクトコード:</label>
+            <app-project-selection [projectForm]="assetStatementForm"
+              [paramMap]="{companyCode: sessionInfo.loginCompanyCode, prjCategory: '2'}"
+              [projectCodeControlName]="'astPrjCode'" [projectNameControlName]="'astPrjName'"
+              [sqlName]="'selectProject_LOV'">
+            </app-project-selection>
+          </div>
+        </form>
+      </div>
+      <div class="block-frame-border">
+        <h2 class="frame-title">ライセンス明細</h2>
+        <form [formGroup]="licenseForm">
+          <div class="row">
+            <label class="col-label text-right mr-8">メーカー:</label>
+            <app-software-maker-selection [softwareForm]="licenseForm" [softwareCodeControlName]="'softwareMakerId'"
+              [softwareNameControlName]="'softwareMakerName'" [sqlName]="'selectSoftwareMaker_LOV'"
+              [paramMap]="{name: ''}" (select)="selectSoftwareMakerData($event)"></app-software-maker-selection>
+          </div>
+          <div class="row">
+            <label class="col-label text-right mr-8">ソフトウェア:</label>
+            <app-software-selection [softwareForm]="licenseForm" [softwareCodeControlName]="'softwareId'"
+              [softwareNameControlName]="'softwareName'" [sqlName]="'selectSoftware_LOV'"
+              [paramMap]="{makerId: licenseForm.get('softwareMakerId').value ? licenseForm.get('softwareMakerId').value : ''}"
+              (select)="selectSoftwareData($event)"></app-software-selection>
+          </div>
+        </form>
+      </div>
+      <div class="block-frame-border">
+        <h2 class="frame-title">故障交換対象の資産(機器)明細</h2>
+        <form [formGroup]="assetReplacedForm">
+          <div class="row">
+            <label class="col3-label text-right mr-8">故障交換対象の情報機器管理番号:</label>
+            <div class="bt" [hidden]="!checkFailureAssetId">
+              <ea-input-mask id="failureAssetId" class="wm-combo wm-tab-element wm-100"
+                formControlName="failureAssetId">
+              </ea-input-mask>
+              <span class="text-inline"> (あいまい) </span>
+              <span class="e-link">
+                <a class="link" (click)="linkBtnClickEvent('failureAssetId')">複数指定</a>
+              </span>
+            </div>
+            <div class="bt" [hidden]="checkFailureAssetId">
+              <ea-input-mask id="failureAssetIdPlural" class="wm-combo wm-tab-element wm-200"
+                formControlName="failureAssetIdPlural">
+              </ea-input-mask>
+            </div>
+            <div class="row" [hidden]="checkFailureAssetId">
+              <label class="col3-label text-right mr-15"></label>
+              <span class="text-inline">(スペース区切で複数指定可)</span>
+              <span class="e-link">
+                <a class="link" (click)="linkBtnClickEvent('failureAssetId')">あいまい検索</a>
+              </span>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

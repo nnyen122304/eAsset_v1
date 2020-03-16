@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE web-app PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN" "http://java.sun.com/dtd/web-app_2_3.dtd">
+<web-app>
+
+    <display-name>easset</display-name>
+    <description>easset</description>
+    
+    <servlet>
+        <servlet-name>FileUploadServlet</servlet-name>
+        <display-name>FileUploadServlet</display-name>
+        <servlet-class>jp.co.ctcg.easset.servlet.FileUploadServlet</servlet-class>
+        <init-param>
+            <param-name>requestCharacterEncoding</param-name>
+            <param-value>UTF-8</param-value>
+        </init-param>
+        <init-param>
+            <param-name>fileNameCharacterEncoding</param-name>
+            <param-value>Shift_JIS</param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet>
+        <servlet-name>FileDownloadServlet</servlet-name>
+        <display-name>FileDownloadServlet</display-name>
+        <servlet-class>jp.co.ctcg.easset.servlet.FileDownloadServlet</servlet-class>
+        <init-param>
+            <param-name>requestCharacterEncoding</param-name>
+            <param-value>UTF-8</param-value>
+        </init-param>
+        <init-param>
+            <param-name>fileNameCharacterEncoding</param-name>
+            <param-value>Shift_JIS</param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet>
+        <servlet-name>RedirectJsp</servlet-name>
+        <jsp-file>/redirect.jsp</jsp-file>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>FileUploadServlet</servlet-name>
+        <url-pattern>/upload/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>FileDownloadServlet</servlet-name>
+        <url-pattern>/download/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <!-- easset-uiと一緒にアーカイブして実行する際、Angularルーティングでlocationが下記のパスに切り替わるが、
+        その状態でブラウザ再読み込みをすると404エラーになってしまう事象の対策
+        (redirect.jspが実行されてindex.htmlが実行されるようにする) -->
+        <servlet-name>RedirectJsp</servlet-name>
+        <url-pattern>ap-asset</url-pattern>
+        <url-pattern>ap-bgn-int</url-pattern>
+        <url-pattern>ap-change</url-pattern>
+        <url-pattern>ap-end-le</url-pattern>
+        <url-pattern>ap-end-re</url-pattern>
+        <url-pattern>ap-end-tan</url-pattern>
+        <url-pattern>ap-get-int</url-pattern>
+        <url-pattern>ap-get-tan</url-pattern>
+        <url-pattern>ap-license</url-pattern>
+        <url-pattern>asset</url-pattern>
+        <url-pattern>code-name-setting</url-pattern>
+        <url-pattern>cost-scr</url-pattern>
+        <url-pattern>fld</url-pattern>
+        <url-pattern>inv</url-pattern>
+        <url-pattern>license</url-pattern>
+        <url-pattern>license-alloc</url-pattern>
+        <url-pattern>license-report</url-pattern>
+        <url-pattern>lld</url-pattern>
+        <url-pattern>ppfs-import</url-pattern>
+        <url-pattern>ref-impl</url-pattern>
+        <url-pattern>role-setting</url-pattern>
+        <url-pattern>section-role-profile</url-pattern>
+        <url-pattern>site-map</url-pattern>
+        <url-pattern>software-setting</url-pattern>
+    </servlet-mapping>
+
+    <!-- Webサービスリクエスト用フィルタ -->
+    <filter>
+        <filter-name>WebServiceFilter</filter-name>
+        <filter-class>jp.co.ctcg.easset.servlet.WebServiceFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>WebServiceFilter</filter-name>
+        <url-pattern>/services/ApService</url-pattern>
+    </filter-mapping>
+
+    <security-constraint><!-- 認証対象外 -->
+        <web-resource-collection><!-- Webサービス -->
+            <web-resource-name>eAsset</web-resource-name>
+            <url-pattern>/services/ApService</url-pattern>
+        </web-resource-collection>
+        <web-resource-collection><!-- Batch -->
+            <web-resource-name>eAsset</web-resource-name>
+            <url-pattern>/api/v1/batch/batchMain</url-pattern>
+        </web-resource-collection>
+        <web-resource-collection><!-- アップロード -->
+            <web-resource-name>eAsset</web-resource-name>
+            <url-pattern>/upload</url-pattern>
+        </web-resource-collection>
+    </security-constraint>
+    <security-constraint><!-- 認証対象 -->
+        <web-resource-collection>
+            <web-resource-name>eAsset</web-resource-name>
+            <url-pattern>/*</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+        <role-name>eAssetUsers</role-name>
+        </auth-constraint>
+    </security-constraint>
+    <login-config>
+        <auth-method>BASIC</auth-method>
+        <realm-name>eAsset-AUTH</realm-name>
+    </login-config>
+    <security-role>
+        <role-name>eAssetUsers</role-name>
+    </security-role>
+
+</web-app>

@@ -1,0 +1,31 @@
+hr {
+  padding: 0px;
+  margin: 5px 0px;
+  border-bottom: solid #ffffff 1px;
+}
+
+.search-container {
+  height: calc(100vh - 130px);
+
+  .search-header {
+    .lb-search {
+      color: #0000ff;
+    }
+  }
+
+  .search-main {
+    width: 100%;
+    height: calc(100vh - 140px);
+    overflow: auto;
+  }
+}
+
+.footer-line {
+  background-color: white;
+  width: 100%;
+  margin-bottom: 3px;
+}
+
+.search-footer {
+  width: 100%;
+}

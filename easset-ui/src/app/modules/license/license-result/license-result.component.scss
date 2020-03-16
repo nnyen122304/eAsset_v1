@@ -1,0 +1,18 @@
+.block-frame-border {
+  padding: 12px 28px 6px;
+  z-index: 10;
+  width: fit-content;
+
+  .input-display {
+    width: 100px;
+  }
+}
+.display {
+  display: flex;
+  .label-btn {
+    padding-top: 28px;
+  }
+}
+.download {
+  margin-top: 31px;
+}

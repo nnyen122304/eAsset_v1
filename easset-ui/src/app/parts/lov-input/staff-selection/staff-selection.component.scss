@@ -1,0 +1,35 @@
+.popup-staff-selection {
+  width: auto;
+}
+
+.form-staff {
+  .ip-code {
+    width: 70px;
+  }
+  .ip-name {
+    width: 100px;
+  }
+  .wm-btn {
+    margin: 0 5px;
+  }
+}
+
+.grid-staff-selection-list {
+  display: inline-block;
+  height: 300px;
+}
+
+.section-search {
+  margin-bottom: 10px;
+}
+
+.row-search + .row-search {
+ margin-top: 5px;
+}
+.col-buttons {
+  padding-top: 12px;
+}
+
+.wm-150{
+  width: 150px !important;
+}

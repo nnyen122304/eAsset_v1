@@ -1,0 +1,15 @@
+<div class="page-container asset-search-page">
+  <div class="asset-search-container">
+    <div class="asset-search-header">
+      <label class="asset-search-label">ライセンスの割当/割当解除を行う情報機器を検索してください。</label>
+    </div>
+    <div class="asset-search-main">
+      <app-asset-search-condition [currentState]="'LICENSE_ALLOC'"></app-asset-search-condition>
+    </div>
+  </div>
+  <hr class="asset-search-footer-line">
+  <div fxLayout="row" fxLayoutGap="6px" fxLayoutAlign="center center" class="asset-search-footer">
+    <button type="button" class="wm-btn" id="search" (click)="search()">検索</button>
+    <button type="button" class="wm-btn" (click)="clear()">クリア</button>
+  </div>
+</div>

@@ -1,0 +1,24 @@
+.print-option {
+  width: 300px;
+
+  .opt-label {
+    width: 9rem;
+    text-align: right;
+  }
+
+  .modal-content {
+    .modal-body {
+      padding: 20px 20px 5px 20px !important;
+    }
+
+    .modal-footer {
+      padding: 5px 0 25px !important;
+
+      .wm-btn {
+        min-width: 3.5rem;
+        padding: 0px 10px;
+      }
+    }
+  }
+}
+

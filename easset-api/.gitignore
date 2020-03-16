@@ -1,0 +1,11 @@
+# compiled output
+target
+
+# auto generate
+.settings
+.classpath
+.factorypath
+.project
+
+# for Code Runner Extension
+**/tempCodeFileName*

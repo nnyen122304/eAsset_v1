@@ -1,0 +1,50 @@
+<div class="parent-master-selection-input row">
+  <div class="col col-tree-form pr-2">
+    <form [formGroup]="parentMasterForm">
+      <ea-input-mask #inputDisplay class="input-display is-rounded wm-combo" formControlName="{{masterNameControlName}}" [isReadOnly]="true" [required]="required"></ea-input-mask>
+    </form>
+  </div>
+  <div class="col col-tree-buttons p-0 wm-buttons" [ngClass]="{'has-delete': !selectOnly}" >
+    <button type="button" class="wm-btn wm-sm btn-icon btn-tooltip" (click)="clear()" *ngIf="!selectOnly"><span class="ico"><img src="assets/images/button/clear.gif"></span><span class="tooltip-text">クリア</span></button>
+    <button type="button" class="wm-btn wm-sm" (click)="open($event.currentTarget)"><span class="ico"><img src="assets/images/button/popup.png"></span></button>
+  </div>
+</div>
+
+<ea-popup #parentMasterSelectionPopup class="popup-status-selection" [hideTrigger]="'None'" (hidden)="close()">
+  <div class="form-select-status">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">親値選択</h5>
+        <button type="button" tabindex="-1" class="close bt-close wj-hide">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="row row-filter">
+          <div class="col col-4 col-label">名称で絞込：</div>
+          <div class="col col-4">
+            <ea-input-mask #filterText class="wm-combo field-filter-text" [(ngModel)]="filter"></ea-input-mask>
+          </div>
+          <div class="col col-4 col-button">
+            <button type="button" class="wm-btn wm-sm" (click)="init()">検索</button>
+          </div>
+        </div>
+        <div class="section-parent-list" *ngIf="parentList">
+          <ea-flex-grid
+            #gridParentList
+            class="grid-common-list grid-parent-list"
+            [itemsSource]="parentList"
+            [allowSorting]="true"
+            (initialized)="onGridInitialized()"
+            (dblclick)="submit()"
+          >
+            <ea-flex-grid-column header="コード" binding="internalCode" [allowResizing]="false" [width]="100"></ea-flex-grid-column>
+            <ea-flex-grid-column header="名称" binding="value1" [allowResizing]="false" [width]="240"></ea-flex-grid-column>
+          </ea-flex-grid>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="wm-btn" (click)="submit()">選択</button>
+        <button type="button" class="wm-btn" (click)="close()">閉じる</button>
+      </div>
+    </div>
+  </div>
+</ea-popup>

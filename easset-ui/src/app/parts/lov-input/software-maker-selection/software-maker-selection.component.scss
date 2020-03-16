@@ -1,0 +1,28 @@
+.col-label-toggle {
+  a {
+    cursor: pointer;
+    color: blue;
+    font-weight: bold;
+    text-decoration: underline;
+    padding: 3px;
+    margin-bottom: 0px;
+  }
+  a:hover {
+    border-radius: 4px;
+    background: #add8e6;
+    color: black !important;
+  }
+}
+.popup-common-sel {
+  &.section-selection{
+    top: 120px !important;
+    .grid-parent-list{
+      height: 300px !important;
+    }
+  }
+}
+.e-link {
+  white-space: nowrap;
+  font-weight: bold;
+  text-decoration: underline;
+}

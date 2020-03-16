@@ -1,0 +1,948 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<!--
+ *===================================================================
+ * ファイル名 : CostScrDAO_SqlMap.xml
+ * 概要説明   : 経費負担部課精査用SQL文
+ * バージョン : 1.0
+ *===================================================================
+ * 修正履歴
+ * 日付       Ver. 担当者       修正内容
+ * －－－－－ －－ －－－－－－ －－－－－－－－－－－－－－－－－－
+ * 2015-01-28 1.0  李            新規
+ *===================================================================
+ -->
+<sqlMap namespace="CostScrDAO" >
+
+  <!--
+    経費負担部課精査状況検索
+  -->
+  <select id="selectCostScrStat_SCR" parameterClass="java.util.Map" resultClass="jp.co.ctcg.easset.dto.costScr.CostScrStat">
+    SELECT
+      ncss.PERIOD period
+    , ncss.COMPANY_CODE companyCode
+    , ncss.CREATE_DATE createDate
+    , ncss.CREATE_STAFF_CODE createStaffCode
+    , ncss.UPDATE_DATE updateDate
+    , ncss.UPDATE_STAFF_CODE updateStaffCode
+    , ncss.CREATE_STATUS createStatus
+    , ncss.CREATE_START_DATE createStartDate
+    , ncss.CREATE_END_DATE createEndDate
+    , ncss.CREATE_EXEC_STAFF_CODE createExecStaffCode
+    , ncss.SCR_SECTION_UPDATE_STAFF_CODE scrSectionUpdateStaffCode
+    , ncss.SCR_SECTION_UPDATE_DATE scrSectionUpdateDate
+    , ncss.OPEN_DATE openDate
+    , ncss.OPEN_STAFF_CODE openStaffCode
+    , ncss.CLOSE_DATE closeDate
+    , ncss.CLOSE_STAFF_CODE closeStaffCode
+    , ncss.SEND_STAFF_CODE sendStaffCode
+    , ncss.SEND_STATUS sendStatus
+    , ncss.SEND_START_DATE sendStartDate
+    , ncss.SEND_END_DATE sendEndDate
+    , ncss.LAST_SUCCESS_CREATE_START_DATE lastSuccessCreateStartDate
+    , ncss.LAST_SUCCESS_CREATE_END_DATE lastSuccessCreateEndDate
+    , ncss.LAST_SUCCESS_EXEC_STAFF_CODE lastSuccessExecStaffCode
+
+    , NEA_UTIL_PKG.GET_CN_VALUE1_F('COST_SCR_CREATE_STATUS', ncss.CREATE_STATUS) createStatusName
+    , NEA_UTIL_PKG.GET_CN_VALUE1_F('COST_SCR_SEND_STATUS', ncss.SEND_STATUS) sendStatusName
+
+    , NEA_UTIL_PKG.GET_STAFF_NAME_F(ncss.CREATE_EXEC_STAFF_CODE) createExecStaffName
+    , NEA_UTIL_PKG.GET_STAFF_NAME_F(ncss.SCR_SECTION_UPDATE_STAFF_CODE) scrSectionUpdateStaffName
+    , NEA_UTIL_PKG.GET_STAFF_NAME_F(ncss.OPEN_STAFF_CODE) openStaffName
+    , NEA_UTIL_PKG.GET_STAFF_NAME_F(ncss.CLOSE_STAFF_CODE) closeStaffName
+    , NEA_UTIL_PKG.GET_STAFF_NAME_F(ncss.SEND_STAFF_CODE) sendStaffName
+
+    FROM
+      NEA_COST_SCR_STAT ncss
+    WHERE
+      COMPANY_CODE = #companyCode#
+    <isNotEmpty property="period">
+      AND PERIOD = #period#
+    </isNotEmpty>
+    ORDER BY PERIOD DESC
+    <isNotEmpty property="lockFlag">
+      FOR UPDATE
+    </isNotEmpty>
+  </select>
+
+  <!--
+    経費負担部課精査状況検索
+  -->
+  <select id="selectCostScr_SCR" parameterClass="java.util.Map" resultClass="jp.co.ctcg.easset.dto.costScr.CostScrSR">
+    SELECT
+      costScrSum.*
+    , costScrCountUndecided + costScrCountOK + costScrCountNG costScrCountTotal
+    , apChangeCountUnApply + apChangeCountApply + apChangeCountApprove apChangeCountTotal
+    FROM
+      (
+      SELECT
+      ncs.PERIOD period
+      , ncs.COMPANY_CODE companyCode
+      , ncs.COST_SECTION_CODE costSectionCode
+      , ncs.COST_SECTION_NAME costSectionName
+      , ncs.COST_SECTION_CODE_OLD costSectionCodeOld
+      , ncs.SCR_TYPE scrType
+      , ncs.CREATE_DATE createDate
+      , ncs.CREATE_STAFF_CODE createStaffCode
+      , ncs.UPDATE_DATE updateDate
+      , ncs.UPDATE_STAFF_CODE updateStaffCode
+      , ncs.SCR_SECTION_CODE scrSectionCode
+      , ncs.SCR_SECTION_YEAR scrSectionYear
+      , ncs.COMP_FLAG compFlag
+      , ncs.COMP_EXEC_DATE compExecDate
+      , ncs.COMP_EXEC_STAFF_CODE compExecStaffCode
+      , ncs.SCR_DATE scrDate
+      , ncs.SCR_STAFF_CODE scrStaffCode
+      , ncs.SCR_SECTION_UPDATE_STAFF_CODE scrSectionUpdateStaffCode
+      , ncs.SCR_SECTION_UPDATE_DATE scrSectionUpdateDate
+      , ncs.REMINDER_DATE reminderDate
+
+      , NEA_UTIL_PKG.get_cn_value1_f('SCR_TYPE', ncs.SCR_TYPE) scrTypeName
+
+      , ncs.COST_SECTION_NAME_OLD costSectionNameOld
+
+      , NEA_UTIL_PKG.get_section_name_f(ncs.COMPANY_CODE, ncs.SCR_SECTION_CODE, ncs.SCR_SECTION_YEAR) scrSectionName
+
+      , NEA_UTIL_PKG.get_staff_name_f(ncs.COMP_EXEC_STAFF_CODE) compExecStaffName
+
+      , DECODE(ncs.COMP_FLAG, '0', '-', '○') compFlagName
+
+       <!-- 精査状況：未 -->
+      , (SELECT
+           COUNT(DISTINCT ncsl.AST_NUM)
+         FROM NEA_COST_SCR_LINE ncsl
+         WHERE ncsl.PERIOD = ncs.PERIOD
+         AND ncsl.COMPANY_CODE = ncs.COMPANY_CODE
+         AND ncsl.SCR_TYPE = ncs.SCR_TYPE
+         AND ncsl.COST_SECTION_CODE = ncs.COST_SECTION_CODE
+         AND ncsl.COST_SECTION_CODE_OLD = ncs.COST_SECTION_CODE_OLD
+         AND ncsl.SCR_STATUS = '1'
+        ) costScrCountUndecided
+
+       <!-- 精査状況：OK -->
+      , (SELECT
+          COUNT(DISTINCT ncsl.AST_NUM)
+         FROM NEA_COST_SCR_LINE ncsl
+         WHERE ncsl.PERIOD = ncs.PERIOD
+         AND ncsl.COMPANY_CODE = ncs.COMPANY_CODE
+         AND ncsl.SCR_TYPE = ncs.SCR_TYPE
+         AND ncsl.COST_SECTION_CODE = ncs.COST_SECTION_CODE
+         AND ncsl.COST_SECTION_CODE_OLD = ncs.COST_SECTION_CODE_OLD
+         AND ncsl.SCR_STATUS = '2'
+        ) costScrCountOK
+
+       <!-- 精査状況：NG -->
+      , (SELECT
+          COUNT(DISTINCT ncsl.AST_NUM)
+         FROM NEA_COST_SCR_LINE ncsl
+         WHERE ncsl.PERIOD = ncs.PERIOD
+         AND ncsl.COMPANY_CODE = ncs.COMPANY_CODE
+         AND ncsl.SCR_TYPE = ncs.SCR_TYPE
+         AND ncsl.COST_SECTION_CODE = ncs.COST_SECTION_CODE
+         AND ncsl.COST_SECTION_CODE_OLD = ncs.COST_SECTION_CODE_OLD
+         AND ncsl.SCR_STATUS = '3'
+        ) costScrCountNG
+
+       <!-- 移動申請：未 -->
+       ,(SELECT
+           COUNT(DISTINCT ncsl.AST_NUM)
+         FROM
+           NEA_COST_SCR_LINE ncsl
+         , (SELECT * FROM NEA_AP_CHANGE WHERE CHG_SCHEDULE_PERIOD = #searchParam.period#) nac
+         , (SELECT /*+ USE_NL(naclf1,nac1) */ naclf1.* FROM NEA_AP_CHANGE_LINE_FLD naclf1, NEA_AP_CHANGE nac1 WHERE nac1.APPLICATION_ID = naclf1.APPLICATION_ID AND nac1.CHG_SCHEDULE_PERIOD = #searchParam.period#) naclf
+         WHERE
+         <!-- 経費負担部課精査状況と経費負担部課精査明細の結合 -->
+             ncsl.SCR_TYPE = ncs.SCR_TYPE
+         AND ncsl.PERIOD = ncs.PERIOD
+         AND ncsl.COMPANY_CODE = ncs.COMPANY_CODE
+         AND ncsl.COST_SECTION_CODE = ncs.COST_SECTION_CODE
+         AND ncsl.COST_SECTION_CODE_OLD = ncs.COST_SECTION_CODE_OLD
+         <!-- 移動申請と移動申請：資産明細の結合 -->
+         AND nac.APPLICATION_ID = naclf.APPLICATION_ID
+         <!-- 移動申請：資産明細と経費負担部課精査明細の結合 -->
+         AND ncsl.AST_NUM = naclf.AST_NUM
+         <!-- 移動申請の条件 -->
+         AND nac.CHG_SCHEDULE_PERIOD = ncs.PERIOD
+         AND nac.AP_STATUS IN ('1', '4', '5')
+         AND naclf.AP_CHANGE_LINE_FLD_TYPE = DECODE(SCR_TYPE, '1', '3', '2', '4', '')
+         <!-- 同一資産の同月申請で最新以外は除外 -->
+         AND NOT EXISTS (
+           SELECT
+             'X'
+           FROM
+             NEA_AP_CHANGE nac1
+             , NEA_AP_CHANGE_LINE_FLD naclf1
+           WHERE
+             nac1.APPLICATION_ID = naclf1.APPLICATION_ID
+             AND naclf1.AST_NUM = naclf.AST_NUM
+             AND naclf1.AP_CHANGE_LINE_FLD_TYPE = DECODE(ncsl.SCR_TYPE, '1', '3', '2', '4', '')
+             AND nac1.CHG_SCHEDULE_PERIOD = nac.CHG_SCHEDULE_PERIOD
+             AND nac1.APPLICATION_ID > nac.APPLICATION_ID
+         )
+         <!-- 経費負担部課精査の条件 -->
+         AND ncsl.SCR_TYPE IN ('1', '2')
+         AND ncsl.SCR_STATUS = '3' <!-- 要対応のみ -->
+        )
+        +
+        (SELECT
+           COUNT(DISTINCT ncsl.AST_NUM)
+         FROM
+           NEA_COST_SCR_LINE ncsl
+         , (SELECT * FROM NEA_AP_CHANGE WHERE CHG_SCHEDULE_PERIOD = #searchParam.period#) nac
+         , (SELECT /*+ USE_NL(naclc1,nac1) */ naclc1.* FROM NEA_AP_CHANGE_LINE_CONTRACT naclc1, NEA_AP_CHANGE nac1 WHERE nac1.APPLICATION_ID = naclc1.APPLICATION_ID AND nac1.CHG_SCHEDULE_PERIOD = #searchParam.period#) naclc
+         WHERE
+         <!-- 経費負担部課精査状況と経費負担部課精査明細の結合 -->
+             ncsl.SCR_TYPE = ncs.SCR_TYPE
+         AND ncsl.PERIOD = ncs.PERIOD
+         AND ncsl.COMPANY_CODE = ncs.COMPANY_CODE
+         AND ncsl.COST_SECTION_CODE = ncs.COST_SECTION_CODE
+         AND ncsl.COST_SECTION_CODE_OLD = ncs.COST_SECTION_CODE_OLD
+         <!-- 移動申請と移動申請：契約明細の結合 -->
+         AND nac.APPLICATION_ID = naclc.APPLICATION_ID
+         <!-- 移動申請：契約明細と経費負担部課精査明細の結合 -->
+         AND ncsl.AST_NUM = naclc.AST_NUM
+         <!-- 移動申請の条件 -->
+         AND nac.CHG_SCHEDULE_PERIOD = ncs.PERIOD
+         AND nac.AP_STATUS IN ('1', '4', '5')
+         AND naclc.AP_CHANGE_LINE_CONTRACT_TYPE = DECODE(SCR_TYPE, '3', '1', '4', '2', '')
+         <!-- 同一資産の同月申請で最新以外は除外 -->
+         AND NOT EXISTS (
+           SELECT
+             'X'
+           FROM
+             NEA_AP_CHANGE nac1
+             , NEA_AP_CHANGE_LINE_CONTRACT naclc1
+           WHERE
+             nac1.APPLICATION_ID = naclc1.APPLICATION_ID
+             AND naclc1.AST_NUM = naclc.AST_NUM
+             AND naclc1.AP_CHANGE_LINE_CONTRACT_TYPE = DECODE(ncsl.SCR_TYPE, '3', '1', '4', '2', '')
+             AND nac1.CHG_SCHEDULE_PERIOD = nac.CHG_SCHEDULE_PERIOD
+             AND nac1.APPLICATION_ID > nac.APPLICATION_ID
+         )
+         <!-- 経費負担部課精査の条件 -->
+         AND ncsl.SCR_TYPE IN ('3', '4')
+         AND ncsl.SCR_STATUS = '3' <!-- 要対応のみ -->
+        )
+        +
+        (SELECT
+           COUNT(DISTINCT ncsl.AST_NUM)
+         FROM
+           NEA_COST_SCR_LINE ncsl
+         WHERE
+         <!-- 経費負担部課精査状況と経費負担部課精査明細の結合 -->
+             ncsl.SCR_TYPE = ncs.SCR_TYPE
+         AND ncsl.PERIOD = ncs.PERIOD
+         AND ncsl.COMPANY_CODE = ncs.COMPANY_CODE
+         AND ncsl.COST_SECTION_CODE = ncs.COST_SECTION_CODE
+         AND ncsl.COST_SECTION_CODE_OLD = ncs.COST_SECTION_CODE_OLD
+         <!-- 移動申請されていない -->
+         AND
+           NOT EXISTS (SELECT /*+ use_nl(nac, naclf ) */'X' FROM NEA_AP_CHANGE nac, NEA_AP_CHANGE_LINE_FLD naclf WHERE nac.APPLICATION_ID = naclf.APPLICATION_ID AND nac.CHG_SCHEDULE_PERIOD = ncs.PERIOD AND ncsl.AST_NUM = naclf.AST_NUM)
+         AND
+           NOT EXISTS (SELECT /*+ use_nl(nac, naclc ) */'X' FROM NEA_AP_CHANGE nac, NEA_AP_CHANGE_LINE_CONTRACT naclc WHERE nac.APPLICATION_ID = naclc.APPLICATION_ID AND nac.CHG_SCHEDULE_PERIOD = ncs.PERIOD AND ncsl.AST_NUM = naclc.AST_NUM)
+         AND ncsl.SCR_STATUS = '3' <!-- 要対応のみ -->
+         ) apChangeCountUnApply
+
+       <!-- 移動申請：申請中 -->
+       ,(SELECT
+           COUNT(DISTINCT ncsl.AST_NUM)
+         FROM
+           NEA_COST_SCR_LINE ncsl
+         , (SELECT * FROM NEA_AP_CHANGE WHERE CHG_SCHEDULE_PERIOD = #searchParam.period#) nac
+         , (SELECT /*+ USE_NL(naclf1,nac1) */ naclf1.* FROM NEA_AP_CHANGE_LINE_FLD naclf1, NEA_AP_CHANGE nac1 WHERE nac1.APPLICATION_ID = naclf1.APPLICATION_ID AND nac1.CHG_SCHEDULE_PERIOD = #searchParam.period#) naclf
+         WHERE
+         <!-- 経費負担部課精査状況と経費負担部課精査明細の結合 -->
+             ncsl.SCR_TYPE = ncs.SCR_TYPE
+         AND ncsl.PERIOD = ncs.PERIOD
+         AND ncsl.COMPANY_CODE = ncs.COMPANY_CODE
+         AND ncsl.COST_SECTION_CODE = ncs.COST_SECTION_CODE
+         AND ncsl.COST_SECTION_CODE_OLD = ncs.COST_SECTION_CODE_OLD
+         <!-- 移動申請と移動申請：資産明細の結合 -->
+         AND nac.APPLICATION_ID = naclf.APPLICATION_ID
+         <!-- 移動申請：資産明細と経費負担部課精査明細の結合 -->
+         AND ncsl.AST_NUM = naclf.AST_NUM
+         <!-- 移動申請の条件 -->
+         AND nac.CHG_SCHEDULE_PERIOD = ncs.PERIOD
+         AND nac.AP_STATUS = '2'
+         AND naclf.AP_CHANGE_LINE_FLD_TYPE = DECODE(SCR_TYPE, '1', '3', '2', '4', '')
+         <!-- 同一資産の同月申請で最新以外は除外 -->
+         AND NOT EXISTS (
+           SELECT
+             'X'
+           FROM
+             NEA_AP_CHANGE nac1
+             , NEA_AP_CHANGE_LINE_FLD naclf1
+           WHERE
+             nac1.APPLICATION_ID = naclf1.APPLICATION_ID
+             AND naclf1.AST_NUM = naclf.AST_NUM
+             AND naclf1.AP_CHANGE_LINE_FLD_TYPE = DECODE(ncsl.SCR_TYPE, '1', '3', '2', '4', '')
+             AND nac1.CHG_SCHEDULE_PERIOD = nac.CHG_SCHEDULE_PERIOD
+             AND nac1.APPLICATION_ID > nac.APPLICATION_ID
+         )
+         <!-- 経費負担部課精査の条件 -->
+         AND ncsl.SCR_TYPE IN ('1', '2')
+         AND ncsl.SCR_STATUS = '3' <!-- 要対応のみ -->
+        )
+        +
+        (SELECT
+           COUNT(DISTINCT ncsl.AST_NUM)
+         FROM
+           NEA_COST_SCR_LINE ncsl
+         , (SELECT * FROM NEA_AP_CHANGE WHERE CHG_SCHEDULE_PERIOD = #searchParam.period#) nac
+         , (SELECT /*+ USE_NL(naclc1,nac1) */ naclc1.* FROM NEA_AP_CHANGE_LINE_CONTRACT naclc1, NEA_AP_CHANGE nac1 WHERE nac1.APPLICATION_ID = naclc1.APPLICATION_ID AND nac1.CHG_SCHEDULE_PERIOD = #searchParam.period#) naclc
+         WHERE
+         <!-- 経費負担部課精査状況と経費負担部課精査明細の結合 -->
+             ncsl.SCR_TYPE = ncs.SCR_TYPE
+         AND ncsl.PERIOD = ncs.PERIOD
+         AND ncsl.COMPANY_CODE = ncs.COMPANY_CODE
+         AND ncsl.COST_SECTION_CODE = ncs.COST_SECTION_CODE
+         AND ncsl.COST_SECTION_CODE_OLD = ncs.COST_SECTION_CODE_OLD
+         <!-- 移動申請と移動申請：契約明細の結合 -->
+         AND nac.APPLICATION_ID = naclc.APPLICATION_ID
+         <!-- 移動申請：契約明細と経費負担部課精査明細の結合 -->
+         AND ncsl.AST_NUM = naclc.AST_NUM
+         <!-- 移動申請の条件 -->
+         AND nac.CHG_SCHEDULE_PERIOD = ncs.PERIOD
+         AND nac.AP_STATUS = '2'
+         AND naclc.AP_CHANGE_LINE_CONTRACT_TYPE = DECODE(SCR_TYPE, '3', '1', '4', '2', '')
+         <!-- 同一資産の同月申請で最新以外は除外 -->
+         AND NOT EXISTS (
+           SELECT
+             'X'
+           FROM
+             NEA_AP_CHANGE nac1
+             , NEA_AP_CHANGE_LINE_CONTRACT naclc1
+           WHERE
+             nac1.APPLICATION_ID = naclc1.APPLICATION_ID
+             AND naclc1.AST_NUM = naclc.AST_NUM
+             AND naclc1.AP_CHANGE_LINE_CONTRACT_TYPE = DECODE(ncsl.SCR_TYPE, '3', '1', '4', '2', '')
+             AND nac1.CHG_SCHEDULE_PERIOD = nac.CHG_SCHEDULE_PERIOD
+             AND nac1.APPLICATION_ID > nac.APPLICATION_ID
+         )
+         <!-- 経費負担部課精査の条件 -->
+         AND ncsl.SCR_TYPE IN ('3', '4')
+         AND ncsl.SCR_STATUS = '3' <!-- 要対応のみ -->
+        ) apChangeCountApply
+
+       <!-- 移動申請：承認済 -->
+       ,(SELECT
+           COUNT(DISTINCT ncsl.AST_NUM)
+         FROM
+           NEA_COST_SCR_LINE ncsl
+         , (SELECT * FROM NEA_AP_CHANGE WHERE CHG_SCHEDULE_PERIOD = #searchParam.period#) nac
+         , (SELECT /*+ USE_NL(naclf1,nac1) */ naclf1.* FROM NEA_AP_CHANGE_LINE_FLD naclf1, NEA_AP_CHANGE nac1 WHERE nac1.APPLICATION_ID = naclf1.APPLICATION_ID AND nac1.CHG_SCHEDULE_PERIOD = #searchParam.period#) naclf
+         WHERE
+         <!-- 経費負担部課精査状況と経費負担部課精査明細の結合 -->
+             ncsl.SCR_TYPE = ncs.SCR_TYPE
+         AND ncsl.PERIOD = ncs.PERIOD
+         AND ncsl.COMPANY_CODE = ncs.COMPANY_CODE
+         AND ncsl.COST_SECTION_CODE = ncs.COST_SECTION_CODE
+         AND ncsl.COST_SECTION_CODE_OLD = ncs.COST_SECTION_CODE_OLD
+         <!-- 移動申請と移動申請：資産明細の結合 -->
+         AND nac.APPLICATION_ID = naclf.APPLICATION_ID
+         <!-- 移動申請：資産明細と経費負担部課精査明細の結合 -->
+         AND ncsl.AST_NUM = naclf.AST_NUM
+         <!-- 移動申請の条件 -->
+         AND nac.CHG_SCHEDULE_PERIOD = ncs.PERIOD
+         AND nac.AP_STATUS = '3'
+         AND naclf.AP_CHANGE_LINE_FLD_TYPE = DECODE(SCR_TYPE, '1', '3', '2', '4', '')
+         <!-- 同一資産の同月申請で最新以外は除外 -->
+         AND NOT EXISTS (
+           SELECT
+             'X'
+           FROM
+             NEA_AP_CHANGE nac1
+             , NEA_AP_CHANGE_LINE_FLD naclf1
+           WHERE
+             nac1.APPLICATION_ID = naclf1.APPLICATION_ID
+             AND naclf1.AST_NUM = naclf.AST_NUM
+             AND naclf1.AP_CHANGE_LINE_FLD_TYPE = DECODE(ncsl.SCR_TYPE, '1', '3', '2', '4', '')
+             AND nac1.CHG_SCHEDULE_PERIOD = nac.CHG_SCHEDULE_PERIOD
+             AND nac1.APPLICATION_ID > nac.APPLICATION_ID
+         )
+         <!-- 経費負担部課精査の条件 -->
+         AND ncsl.SCR_TYPE IN ('1', '2')
+         AND ncsl.SCR_STATUS = '3' <!-- 要対応のみ -->
+        )
+        +
+        (SELECT
+           COUNT(DISTINCT ncsl.AST_NUM)
+         FROM
+           NEA_COST_SCR_LINE ncsl
+         , (SELECT * FROM NEA_AP_CHANGE WHERE CHG_SCHEDULE_PERIOD = #searchParam.period#) nac
+         , (SELECT /*+ USE_NL(naclc1,nac1) */ naclc1.* FROM NEA_AP_CHANGE_LINE_CONTRACT naclc1, NEA_AP_CHANGE nac1 WHERE nac1.APPLICATION_ID = naclc1.APPLICATION_ID AND nac1.CHG_SCHEDULE_PERIOD = #searchParam.period#) naclc
+         WHERE
+         <!-- 経費負担部課精査状況と経費負担部課精査明細の結合 -->
+             ncsl.SCR_TYPE = ncs.SCR_TYPE
+         AND ncsl.PERIOD = ncs.PERIOD
+         AND ncsl.COMPANY_CODE = ncs.COMPANY_CODE
+         AND ncsl.COST_SECTION_CODE = ncs.COST_SECTION_CODE
+         AND ncsl.COST_SECTION_CODE_OLD = ncs.COST_SECTION_CODE_OLD
+         <!-- 移動申請と移動申請：契約明細の結合 -->
+         AND nac.APPLICATION_ID = naclc.APPLICATION_ID
+         <!-- 移動申請：契約明細と経費負担部課精査明細の結合 -->
+         AND ncsl.AST_NUM = naclc.AST_NUM
+         <!-- 移動申請の条件 -->
+         AND nac.CHG_SCHEDULE_PERIOD = ncs.PERIOD
+         AND nac.AP_STATUS = '3'
+         AND naclc.AP_CHANGE_LINE_CONTRACT_TYPE = DECODE(SCR_TYPE, '3', '1', '4', '2', '')
+         <!-- 同一資産の同月申請で最新以外は除外 -->
+         AND NOT EXISTS (
+           SELECT
+             'X'
+           FROM
+             NEA_AP_CHANGE nac1
+             , NEA_AP_CHANGE_LINE_CONTRACT naclc1
+           WHERE
+             nac1.APPLICATION_ID = naclc1.APPLICATION_ID
+             AND naclc1.AST_NUM = naclc.AST_NUM
+             AND naclc1.AP_CHANGE_LINE_CONTRACT_TYPE = DECODE(ncsl.SCR_TYPE, '3', '1', '4', '2', '')
+             AND nac1.CHG_SCHEDULE_PERIOD = nac.CHG_SCHEDULE_PERIOD
+             AND nac1.APPLICATION_ID > nac.APPLICATION_ID
+         )
+         <!-- 経費負担部課精査の条件 -->
+         AND ncsl.SCR_TYPE IN ('3', '4')
+         AND ncsl.SCR_STATUS = '3' <!-- 要対応のみ -->
+        ) apChangeCountApprove
+
+      FROM
+        NEA_COST_SCR ncs
+      WHERE
+        ncs.COMPANY_CODE = #companyCode#
+      AND
+        ncs.PERIOD = #searchParam.period#
+
+      <isNotEmpty property="section">
+        AND $section$
+      </isNotEmpty>
+
+      <isNotEmpty property="searchParam.costSectionCode">
+        AND ncs.COST_SECTION_CODE = #searchParam.costSectionCode#
+      </isNotEmpty>
+
+      <isNotEmpty property="searchParam.costSectionCodeOld">
+        AND ncs.COST_SECTION_CODE_OLD = #searchParam.costSectionCodeOld#
+      </isNotEmpty>
+
+      <isNotEmpty property="scrTypeList">
+        AND $scrTypeList$
+      </isNotEmpty>
+    ) costScrSum
+    WHERE
+      1 = 1
+      <!-- 精査状況 -->
+      <isNotEmpty property="scrImplementationPluralList">
+        AND $scrImplementationPluralList$
+      </isNotEmpty>
+
+      <!-- 移動申請状況 -->
+      <isNotEmpty property="apStatusPluralList">
+        AND $apStatusPluralList$
+      </isNotEmpty>
+      <!-- 各部公開状況チェック -->
+      <isNotEmpty property="scrAccessLevel">
+        AND
+          EXISTS (
+            SELECT 'X'
+            FROM NEA_CODE_NAME n
+            WHERE n.CATEGORY_CODE = 'COST_SCR_CONTROL'
+            AND n.VALUE1 LIKE '%' || costScrSum.scrtype || '%'
+            AND n.COMPANY_CODE = costScrSum.companycode
+            AND n.VALUE4 = '1'
+            )
+      </isNotEmpty>
+    ORDER BY scrSectionCode, costSectionCode, costSectionCodeOld, scrType
+  </select>
+
+  <!--
+    経費負担部課精査明細共通項目
+  -->
+  <sql id="selectCostScrLineColumn_SCR">
+        ncsl.SCR_LINE_SEQ scrLineSeq
+      , ncsl.CREATE_DATE createDate
+      , ncsl.CREATE_STAFF_CODE createStaffCode
+      , ncsl.UPDATE_DATE updateDate
+      , ncsl.UPDATE_STAFF_CODE updateStaffCode
+      , ncsl.PERIOD period
+      , ncsl.COMPANY_CODE companyCode
+      , ncsl.SCR_TYPE scrType
+      , ncsl.SCR_STATUS scrStatus
+      , ncsl.SCR_COMMENT scrComment
+      , ncsl.AST_NUM astNum
+      , ncsl.CONTRACT_NUM contractNum
+      , ncsl.CONTRACT_SUB_NUM contractSubNum
+      , ncsl.APPLICATION_ID applicationId
+      , ncsl.COST_COMPANY_CODE costCompanyCode
+      , ncsl.COST_SECTION_CODE costSectionCode
+      , ncsl.COST_DIST_CODE costDistCode
+      , ncsl.COST_TYPE costType
+      , ncsl.COST_DEP_PRJ_CODE costDepPrjCode
+      , ncsl.COST_COMPANY_CODE_OLD costCompanyCodeOld
+      , DECODE(ncsl.COST_SECTION_CODE_OLD, '-', '', ncsl.COST_SECTION_CODE_OLD) costSectionCodeOld
+      , ncsl.COST_DIST_CODE_OLD costDistCodeOld
+      , ncsl.ORIX_TYPE orixType
+      , ncsl.LLD_PP_ID_CONTRACT lldPpIdContract
+      , ncsl.LLD_PP_ID_AST lldPpIdAst
+      , ncsl.LLD_CONTRACT_STATUS_TYPE lldContractStatusType
+      , ncsl.LLD_AST_STATUS_TYPE lldAstStatusType
+      , ncsl.LLD_LE_RE_COMPANY_CODE lldLeReCompanyCode
+      , ncsl.LLD_LE_RE_COMPANY_NAME lldLeReCompanyName
+      , ncsl.LLD_AST_NAME lldAstName
+      , ncsl.LLD_CONTRACT_TYPE lldContractType
+      , ncsl.LLD_CONTRACT_START_DATE lldContractStartDate
+      , ncsl.LLD_CONTRACT_END_DATE lldContractEndDate
+      , ncsl.LLD_PERIOD_MONTH lldPeriodMonth
+      , ncsl.LLD_CONTRACT_AMOUNT lldContractAmount
+      , ncsl.LLD_MONTH_AMOUNT lldMonthAmount
+      , ncsl.FLD_PP_ID fldPpId
+      , ncsl.FLD_AST_MANAGE_TYPE fldAstManageType
+      , ncsl.FLD_AST_STATUS_TYPE fldAstStatusType
+      , ncsl.FLD_PUR_COMPANY_CODE fldPurCompanyCode
+      , ncsl.FLD_PUR_COMPANY_NAME fldPurCompanyName
+      , ncsl.FLD_AST_NAME fldAstName
+      , ncsl.FLD_OLD_TYPE fldOldType
+      , ncsl.FLD_START_DATE fldStartDate
+      , ncsl.FLD_END_DATE fldEndDate
+      , ncsl.FLD_USEFUL_YEAR fldUsefulYear
+      , ncsl.FLD_AST_GET_AMOUNT fldAstGetAmount
+      , ncsl.FLD_AST_BOOK_AMOUNT fldAstBookAmount
+      , ncsl.ASSET_ID assetId
+      , ncsl.AST_NAME astName
+      , ncsl.AST_MAKER_MODEL astMakerModel
+      , ncsl.AST_SERIAL_CODE astSerialCode
+      , ncsl.AST_OIR astOir
+      , ncsl.AST_MANAGE_TYPE astManageType
+      , ncsl.USE_STAFF_CODE useStaffCode
+      , ncsl.USE_STAFF_COMPANY_CODE useStaffCompanyCode
+      , ncsl.USE_STAFF_SECTION_CODE useStaffSectionCode
+      , ncsl.USE_STAFF_SECTION_YEAR useStaffSectionYear
+      , ncsl.USE_STAFF_CODE_OLD useStaffCodeOld
+      , ncsl.USE_STAFF_COMPANY_CODE_OLD useStaffCompanyCodeOld
+      , ncsl.USE_STAFF_SECTION_CODE_OLD useStaffSectionCodeOld
+      , ncsl.USE_STAFF_SECTION_YEAR_OLD useStaffSectionYearOld
+      , ncsl.HOL_STAFF_CODE holStaffCode
+      , ncsl.HOL_STAFF_COMPANY_CODE holStaffCompanyCode
+      , ncsl.HOL_STAFF_SECTION_CODE holStaffSectionCode
+      , ncsl.HOL_STAFF_SECTION_YEAR holStaffSectionYear
+      , ncsl.HOL_STAFF_CODE_OLD holStaffCodeOld
+      , ncsl.HOL_STAFF_COMPANY_CODE_OLD holStaffCompanyCodeOld
+      , ncsl.HOL_STAFF_SECTION_CODE_OLD holStaffSectionCodeOld
+      , ncsl.HOL_STAFF_SECTION_YEAR_OLD holStaffSectionYearOld
+      , ncsl.SCR_DATE scrDate
+      , ncsl.SCR_STAFF_CODE scrStaffCode
+
+      , DECODE(ncsl.SCR_STATUS, '2', '1', '0') scrStatus1
+      , DECODE(ncsl.SCR_STATUS, '3', '1', '0') scrStatus2
+      , DECODE(ncsl.SCR_STATUS, '2', 'OK', '3', '要対応', '') scrStatusName
+
+      , NVL(TO_CHAR(ncsl.LLD_CONTRACT_AMOUNT), '-') lldContractAmountStr
+
+      , NEA_TERM_PKG.get_h_hifu_dist_f(#companyCode#, ncsl.COST_DIST_CODE, #searchParam.period#) as costDistSet
+      , NEA_TERM_PKG.get_h_hifu_dist_f(#companyCode#, ncsl.COST_DIST_CODE_OLD, SUBSTR(#searchParam.period#, 1, 4) || '03') as costDistSetOld
+
+      , NEA_UTIL_PKG.get_cn_value1_f('PPFS_COST_TYPE', ncsl.COST_TYPE) costTypeName
+
+      , NEA_UTIL_PKG.get_company_name_f(ncsl.COST_COMPANY_CODE) costCompanyName
+      , NEA_UTIL_PKG.get_company_name_f(ncsl.COST_COMPANY_CODE_OLD) costCompanyNameOld
+      , NEA_UTIL_PKG.get_company_name_f(ncsl.USE_STAFF_COMPANY_CODE) useStaffCompanyName
+      , NEA_UTIL_PKG.get_company_name_f(ncsl.USE_STAFF_COMPANY_CODE_OLD) useStaffCompanyNameOld
+      , NEA_UTIL_PKG.get_company_name_f(ncsl.HOL_STAFF_COMPANY_CODE) holStaffCompanyName
+      , NEA_UTIL_PKG.get_company_name_f(ncsl.HOL_STAFF_COMPANY_CODE_OLD) holStaffCompanyNameOld
+
+      , NEA_UTIL_PKG.get_project_name_f(ncsl.COMPANY_CODE, ncsl.COST_DEP_PRJ_CODE) costDepPrjName
+
+      , NEA_UTIL_PKG.format_date_char_f(ncsl.LLD_CONTRACT_START_DATE) lldContractStartDateF
+      , NEA_UTIL_PKG.format_date_char_f(ncsl.LLD_CONTRACT_END_DATE) lldContractEndDateF
+      , NEA_UTIL_PKG.format_date_char_f(ncsl.FLD_START_DATE) fldStartDateF
+      , NEA_UTIL_PKG.format_date_char_f(ncsl.FLD_END_DATE) fldEndDateF
+
+      , ncsl.COST_SECTION_NAME costSectionName
+      , DECODE(ncsl.COST_SECTION_CODE_OLD, '-', '', ncsl.COST_SECTION_NAME_OLD) costSectionNameOld
+
+      , NEA_UTIL_PKG.GET_STAFF_NAME_F(ncsl.USE_STAFF_CODE) useStaffName
+      , NEA_UTIL_PKG.GET_STAFF_NAME_F(ncsl.USE_STAFF_CODE_OLD) useStaffNameOld
+      , NEA_UTIL_PKG.GET_STAFF_NAME_F(ncsl.HOL_STAFF_CODE) holStaffName
+      , NEA_UTIL_PKG.GET_STAFF_NAME_F(ncsl.HOL_STAFF_CODE_OLD) holStaffNameOld
+
+      , NEA_UTIL_PKG.get_section_name_f(ncsl.USE_STAFF_COMPANY_CODE, ncsl.USE_STAFF_SECTION_CODE, ncsl.USE_STAFF_SECTION_YEAR) useStaffSectionName
+      , NEA_UTIL_PKG.get_section_name_f(ncsl.USE_STAFF_COMPANY_CODE_OLD, ncsl.USE_STAFF_SECTION_CODE_OLD, ncsl.USE_STAFF_SECTION_YEAR_OLD) useStaffSectionNameOld
+      , NEA_UTIL_PKG.get_section_name_f(ncsl.HOL_STAFF_COMPANY_CODE, ncsl.HOL_STAFF_SECTION_CODE, ncsl.HOL_STAFF_SECTION_YEAR) holStaffSectionName
+      , NEA_UTIL_PKG.get_section_name_f(ncsl.HOL_STAFF_COMPANY_CODE_OLD, ncsl.HOL_STAFF_SECTION_CODE_OLD, ncsl.HOL_STAFF_SECTION_YEAR_OLD) holStaffSectionNameOld
+
+      , NEA_UTIL_PKG.get_cn_value1_f('PPFS_LLD_KYKJOTAIKBN', ncsl.LLD_CONTRACT_STATUS_TYPE) lldContractStatusTypeName
+      , NEA_UTIL_PKG.get_cn_value1_f('PPFS_LLD_SHISANJOTAIKBN', ncsl.LLD_AST_STATUS_TYPE) lldAstStatusTypeName
+      , NEA_UTIL_PKG.get_cn_value1_f('PPFS_LLD_KYKKBN', ncsl.LLD_CONTRACT_TYPE) lldContractTypeName
+
+      , NEA_UTIL_PKG.get_cn_value1_f('PPFS_FLD_CHUKOKBN', ncsl.FLD_OLD_TYPE) fldOldTypeName
+      , NEA_UTIL_PKG.get_cn_value1_f('PPFS_FLD_SHISANKNRKBN', ncsl.FLD_AST_MANAGE_TYPE) fldAstManageTypeName
+      , NEA_UTIL_PKG.get_cn_value1_f('PPFS_FLD_SHISANJOTAIKBN', ncsl.FLD_AST_STATUS_TYPE) fldAstStatusTypeName
+
+     , NEA_UTIL_PKG.get_cn_value1_f('ASSET_MANAGE_TYPE', ncsl.AST_MANAGE_TYPE) astManageTypeName
+
+      <!-- 移動申請項目 -->
+      , DECODE(ncsl.SCR_STATUS, '3', nac.APPLICATION_ID, '') as apChangeApplicationId
+      , DECODE(ncsl.SCR_STATUS, '3', nac.AP_STATUS, '') as apChangeApStatus
+      , DECODE(ncsl.SCR_STATUS, '3', nac.AP_DATE, '') as apChangeApDate
+      , DECODE(ncsl.SCR_STATUS, '3', nac.AP_STAFF_CODE, '') as apChangeApStaffCode
+      , DECODE(ncsl.SCR_STATUS, '3', nac.COST_TYPE, '') as apChangeCostType
+      , DECODE(ncsl.SCR_STATUS, '3', nac.COST_DEP_PRJ_CODE, '') as apChangeCostDepPrjCode
+      , DECODE(ncsl.SCR_STATUS, '3', nac.COST_COMPANY_CODE, '') as apChangeCostCompanyCode
+      , DECODE(ncsl.SCR_STATUS, '3', nac.COST_SECTION_CODE, '') as apChangeCostSectionCode
+
+      , DECODE(ncsl.SCR_STATUS, '3', NEA_UTIL_PKG.get_cn_value1_f('AP_STATUS_CHANGE', nac.AP_STATUS), '') apChangeApStatusName
+      , DECODE(ncsl.SCR_STATUS, '3', NEA_UTIL_PKG.get_staff_name_f(nac.AP_STAFF_CODE), '') apChangeApStaffName
+      , DECODE(ncsl.SCR_STATUS, '3', NEA_UTIL_PKG.get_cn_value1_f('COST_TYPE', nac.COST_TYPE), '') apChangeCostTypeName
+      , DECODE(ncsl.SCR_STATUS, '3', NEA_UTIL_PKG.get_project_name_f(ncs.COMPANY_CODE, nac.COST_DEP_PRJ_CODE), '') apChangeCostDepPrjName
+      , DECODE(ncsl.SCR_STATUS, '3', NEA_UTIL_PKG.get_cost_section_name_f(nac.COST_SECTION_CODE, nac.COST_SECTION_YEAR), '') apChangeCostSectionName
+      , DECODE(ncsl.SCR_STATUS, '3', NEA_UTIL_PKG.get_ap_chg_cost_sec_dist_f(nac.APPLICATION_ID, 'B'), '') apChangeCostSectionNameDist
+
+      <!-- 精査部署 -->
+      , ncs.SCR_SECTION_CODE scrSectionCode
+      , NEA_UTIL_PKG.get_section_name_f(ncs.COMPANY_CODE, ncs.SCR_SECTION_CODE, ncs.SCR_SECTION_YEAR) scrSectionName
+
+  </sql>
+  <!--
+    経費負担部課精査明細共通条件
+  -->
+  <sql id="whereCostScrLine_SCR">
+    AND
+      ncsl.PERIOD = #searchParam.period#
+    AND
+      ncsl.COMPANY_CODE = #companyCode#
+    AND
+      ncsl.SCR_TYPE = #searchParam.scrType#
+    <isNotEmpty property="searchParam.costSectionCode">
+      AND
+        ncsl.COST_SECTION_CODE = #searchParam.costSectionCode#
+    </isNotEmpty>
+    <isNotEmpty property="searchParam.costSectionCodeOld">
+      AND
+        ncsl.COST_SECTION_CODE_OLD = #searchParam.costSectionCodeOld#
+    </isNotEmpty>
+    <!-- 経費負担部課複数検索 -->
+    <isNotEmpty property="costSection">
+      AND $costSection$
+    </isNotEmpty>
+
+  </sql>
+
+  <!--
+    経費負担部課精査明細検索(有形・無形)
+  -->
+  <select id="selectCostScrLineFld_SCR" parameterClass="java.util.Map" resultClass="jp.co.ctcg.easset.dto.costScr.CostScrLine">
+    SELECT
+      <include refid="selectCostScrLineColumn_SCR" />
+    FROM
+      NEA_COST_SCR_LINE ncsl
+    , NEA_COST_SCR ncs
+    , (SELECT * FROM NEA_AP_CHANGE WHERE CHG_SCHEDULE_PERIOD = #searchParam.period#) nac
+    , (SELECT /*+ USE_NL(naclf1,nac1) */ naclf1.* FROM NEA_AP_CHANGE_LINE_FLD naclf1, NEA_AP_CHANGE nac1 WHERE nac1.APPLICATION_ID = naclf1.APPLICATION_ID AND nac1.CHG_SCHEDULE_PERIOD = #searchParam.period#) naclf
+    WHERE
+      1 = 1
+    <!-- 経費負担部課精査状況と経費負担精査明細結合 -->
+    AND
+      ncsl.COMPANY_CODE = ncs.COMPANY_CODE
+    AND
+      ncsl.PERIOD = ncs.PERIOD
+    AND
+      ncsl.COST_SECTION_CODE = ncs.COST_SECTION_CODE
+    AND
+      ncsl.COST_SECTION_CODE_OLD = ncs.COST_SECTION_CODE_OLD
+    AND
+      ncsl.SCR_TYPE = ncs.SCR_TYPE
+    <!-- 移動申請結合 -->
+    AND
+      naclf.APPLICATION_ID = nac.APPLICATION_ID(+)
+    AND
+      nac.CHG_SCHEDULE_PERIOD(+) = #searchParam.period#
+
+    <!-- 同一資産の同月申請で最新以外は除外 -->
+    AND NOT EXISTS (
+      SELECT
+        'X'
+      FROM
+        NEA_AP_CHANGE nac1
+        , NEA_AP_CHANGE_LINE_FLD naclf1
+      WHERE
+        nac1.APPLICATION_ID = naclf1.APPLICATION_ID
+        AND naclf1.AST_NUM = naclf.AST_NUM
+        AND naclf1.AP_CHANGE_LINE_FLD_TYPE = DECODE(ncsl.SCR_TYPE, '1', '3', '2', '4', '')
+        AND nac1.CHG_SCHEDULE_PERIOD = nac.CHG_SCHEDULE_PERIOD
+        AND nac1.APPLICATION_ID > nac.APPLICATION_ID
+    )
+
+    <!-- 移動申請と経費負担部課精査明細結合 -->
+    AND
+      ncsl.AST_NUM = naclf.AST_NUM(+)
+    <include refid="whereCostScrLine_SCR" />
+
+    <isEqual property="searchParam.scrType" compareValue="1">
+      ORDER BY scrSectionCode, ncsl.COST_SECTION_CODE, ncsl.COST_SECTION_CODE_OLD, ncsl.AST_NUM, ncsl.ASSET_ID
+    </isEqual>
+    <isEqual property="searchParam.scrType" compareValue="2">
+      ORDER BY scrSectionCode, ncsl.COST_SECTION_CODE, ncsl.COST_SECTION_CODE_OLD, ncsl.APPLICATION_ID, ncsl.AST_NUM
+    </isEqual>
+
+  </select>
+
+  <!--
+    経費負担部課精査明細検索(リース・レンタル)
+  -->
+  <select id="selectCostScrLineLld_SCR" parameterClass="java.util.Map" resultClass="jp.co.ctcg.easset.dto.costScr.CostScrLine">
+    SELECT
+      <include refid="selectCostScrLineColumn_SCR" />
+    FROM
+      NEA_COST_SCR_LINE ncsl
+    , NEA_COST_SCR ncs
+    , (SELECT * FROM NEA_AP_CHANGE WHERE CHG_SCHEDULE_PERIOD = #searchParam.period#) nac
+    , (SELECT /*+ USE_NL(naclc1,nac1) */ naclc1.* FROM NEA_AP_CHANGE_LINE_CONTRACT naclc1, NEA_AP_CHANGE nac1 WHERE nac1.APPLICATION_ID = naclc1.APPLICATION_ID AND nac1.CHG_SCHEDULE_PERIOD = #searchParam.period#) naclc
+    WHERE
+      1 = 1
+    <!-- 経費負担部課精査状況と経費負担精査明細結合 -->
+    AND
+      ncsl.COMPANY_CODE = ncs.COMPANY_CODE
+    AND
+      ncsl.PERIOD = ncs.PERIOD
+    AND
+      ncsl.COST_SECTION_CODE = ncs.COST_SECTION_CODE
+    AND
+      ncsl.COST_SECTION_CODE_OLD = ncs.COST_SECTION_CODE_OLD
+    AND
+      ncsl.SCR_TYPE = ncs.SCR_TYPE
+    <!-- 移動申請結合 -->
+    AND
+      naclc.APPLICATION_ID = nac.APPLICATION_ID(+)
+    AND
+      nac.CHG_SCHEDULE_PERIOD(+) = #searchParam.period#
+    <!-- 同一資産の同月申請で最新以外は除外 -->
+    AND NOT EXISTS (
+      SELECT
+        'X'
+      FROM
+        NEA_AP_CHANGE nac1
+        , NEA_AP_CHANGE_LINE_CONTRACT naclc1
+      WHERE
+        nac1.APPLICATION_ID = naclc1.APPLICATION_ID
+        AND naclc1.AST_NUM = naclc.AST_NUM
+        AND naclc1.AP_CHANGE_LINE_CONTRACT_TYPE = DECODE(ncsl.SCR_TYPE, '3', '1', '4', '2', '')
+        AND nac1.CHG_SCHEDULE_PERIOD = nac.CHG_SCHEDULE_PERIOD
+        AND nac1.APPLICATION_ID > nac.APPLICATION_ID
+    )
+
+    <!-- 移動申請と経費負担部課精査結合 -->
+    AND
+      ncsl.AST_NUM = naclc.AST_NUM(+)
+
+    <include refid="whereCostScrLine_SCR" />
+
+    ORDER BY scrSectionCode, ncsl.COST_SECTION_CODE, ncsl.COST_SECTION_CODE_OLD, ncsl.CONTRACT_NUM, ncsl.CONTRACT_SUB_NUM, ncsl.ASSET_ID
+
+  </select>
+
+  <!--
+    経費負担部課精査データ作成ステータス更新
+  -->
+  <update id="updateCostScrStat_SCR" parameterClass="java.util.Map">
+    UPDATE
+      NEA_COST_SCR_STAT
+    SET
+      PERIOD = #obj.period:CHAR#
+    , COMPANY_CODE = #obj.companyCode:VARCHAR#
+    , CREATE_DATE = #obj.createDate:TIMESTAMP#
+    , CREATE_STAFF_CODE = #obj.createStaffCode:VARCHAR#
+    , UPDATE_DATE = #obj.updateDate:TIMESTAMP#
+    , UPDATE_STAFF_CODE = #obj.updateStaffCode:VARCHAR#
+    , CREATE_STATUS = #obj.createStatus:CHAR#
+    , CREATE_START_DATE = #obj.createStartDate:TIMESTAMP#
+    , CREATE_END_DATE = #obj.createEndDate:TIMESTAMP#
+    , CREATE_EXEC_STAFF_CODE = #obj.createExecStaffCode:VARCHAR#
+    , SCR_SECTION_UPDATE_STAFF_CODE = #obj.scrSectionUpdateStaffCode:VARCHAR#
+    , SCR_SECTION_UPDATE_DATE = #obj.scrSectionUpdateDate:TIMESTAMP#
+    , OPEN_DATE = #obj.openDate:TIMESTAMP#
+    , OPEN_STAFF_CODE = #obj.openStaffCode:VARCHAR#
+    , CLOSE_DATE = #obj.closeDate:TIMESTAMP#
+    , CLOSE_STAFF_CODE = #obj.closeStaffCode:VARCHAR#
+    , SEND_STAFF_CODE = #obj.sendStaffCode:VARCHAR#
+    , SEND_STATUS = #obj.sendStatus:CHAR#
+    , SEND_START_DATE = #obj.sendStartDate:TIMESTAMP#
+    , SEND_END_DATE = #obj.sendEndDate:TIMESTAMP#
+    , LAST_SUCCESS_CREATE_START_DATE = #obj.lastSuccessCreateStartDate:TIMESTAMP#
+    , LAST_SUCCESS_CREATE_END_DATE = #obj.lastSuccessCreateEndDate:TIMESTAMP#
+    , LAST_SUCCESS_EXEC_STAFF_CODE = #obj.lastSuccessExecStaffCode:VARCHAR#
+    WHERE
+      PERIOD = #obj.period:CHAR#
+    AND
+      COMPANY_CODE = #obj.companyCode:VARCHAR#
+  </update>
+
+  <!--
+    経費負担部課精査状況更新
+  -->
+  <update id="updateCostScr_SCR" parameterClass="java.util.Map" >
+    UPDATE
+      NEA_COST_SCR
+    SET
+      UPDATE_DATE = #obj.updateDate:TIMESTAMP#
+    , UPDATE_STAFF_CODE = #obj.updateStaffCode:VARCHAR#
+    <isNotEmpty property="updateScrSectionOnly">
+      , SCR_SECTION_CODE = #obj.scrSectionCode:VARCHAR#
+      , SCR_SECTION_YEAR = #obj.scrSectionYear:NUMERIC#
+      , SCR_SECTION_UPDATE_STAFF_CODE = #obj.scrSectionUpdateStaffCode:VARCHAR#
+      , SCR_SECTION_UPDATE_DATE = #obj.scrSectionUpdateDate:TIMESTAMP#
+    </isNotEmpty>
+    <isEmpty property="updateScrSectionOnly">
+      , COMP_FLAG = #obj.compFlag:CHAR#
+      , COMP_EXEC_DATE = #obj.compExecDate:TIMESTAMP#
+      , COMP_EXEC_STAFF_CODE = #obj.compExecStaffCode:VARCHAR#
+      , SCR_DATE = #obj.scrDate:TIMESTAMP#
+      , SCR_STAFF_CODE = #obj.scrStaffCode:VARCHAR#
+      , REMINDER_DATE = #obj.reminderDate:TIMESTAMP#
+    </isEmpty>
+    WHERE
+      PERIOD = #obj.period:VARCHAR2#
+    AND
+      COMPANY_CODE = #obj.companyCode:VARCHAR#
+    AND
+      COST_SECTION_CODE = #obj.costSectionCode:VARCHAR#
+    AND
+      COST_SECTION_CODE_OLD = #obj.costSectionCodeOld:VARCHAR#
+    AND
+      SCR_TYPE = #obj.scrType:CHAR#
+  </update>
+
+  <!--
+    経費負担部課精査状況履歴作成
+  -->
+  <insert id="insertCostScr_SCR_HISTORY" parameterClass="java.util.Map" >
+    INSERT INTO NEA_H_COST_SCR (
+           PERIOD
+         , COMPANY_CODE
+         , COST_SECTION_CODE
+         , COST_SECTION_CODE_OLD
+         , SCR_TYPE
+         , CREATE_DATE
+         , CREATE_STAFF_CODE
+         , UPDATE_DATE
+         , UPDATE_STAFF_CODE
+         , SCR_SECTION_CODE
+         , SCR_SECTION_YEAR
+         , COMP_FLAG
+         , COMP_EXEC_DATE
+         , COMP_EXEC_STAFF_CODE
+         , SCR_DATE
+         , SCR_STAFF_CODE
+         , SCR_SECTION_UPDATE_STAFF_CODE
+         , SCR_SECTION_UPDATE_DATE
+         , REMINDER_DATE
+         , COST_SECTION_NAME
+         , COST_SECTION_NAME_OLD
+    )
+    SELECT PERIOD
+         , COMPANY_CODE
+         , COST_SECTION_CODE
+         , COST_SECTION_CODE_OLD
+         , SCR_TYPE
+         , CREATE_DATE
+         , CREATE_STAFF_CODE
+         , UPDATE_DATE
+         , UPDATE_STAFF_CODE
+         , SCR_SECTION_CODE
+         , SCR_SECTION_YEAR
+         , COMP_FLAG
+         , COMP_EXEC_DATE
+         , COMP_EXEC_STAFF_CODE
+         , SCR_DATE
+         , SCR_STAFF_CODE
+         , SCR_SECTION_UPDATE_STAFF_CODE
+         , SCR_SECTION_UPDATE_DATE
+         , REMINDER_DATE
+         , COST_SECTION_NAME
+         , COST_SECTION_NAME_OLD
+      FROM NEA_COST_SCR
+     WHERE
+       PERIOD = #obj.period:VARCHAR2#
+     AND
+       COMPANY_CODE = #obj.companyCode:VARCHAR#
+     AND
+       COST_SECTION_CODE = #obj.costSectionCode:VARCHAR#
+     AND
+       COST_SECTION_CODE_OLD = #obj.costSectionCodeOld:VARCHAR#
+     AND
+       SCR_TYPE = #obj.scrType:CHAR#
+  </insert>
+
+  <!--
+    経費負担部課精査集約更新
+  -->
+  <update id="updateCostScrLine_SCR" parameterClass="java.util.Map" >
+    UPDATE
+      NEA_COST_SCR_LINE
+    SET
+        UPDATE_DATE = #obj.updateDate:TIMESTAMP#
+      , UPDATE_STAFF_CODE = #obj.updateStaffCode:VARCHAR#
+      , SCR_STATUS = #obj.scrStatus:CHAR#
+      , SCR_COMMENT = #obj.scrComment:VARCHAR#
+    WHERE
+      AST_NUM = #obj.astNum:VARCHAR#
+  </update>
+
+  <!--
+    経費負担部課精査明細データ作成実行
+  -->
+  <parameterMap id="param_callCreateCostScrData_SCR" class="java.util.Map">
+    <parameter property="companyCode" jdbcType="VARCHAR" javaType="String" mode="IN"/>
+    <parameter property="period" jdbcType="CHAR" javaType="String" mode="IN"/>
+    <parameter property="execStaffCode" jdbcType="VARCHAR" javaType="String" mode="IN"/>
+  </parameterMap>
+  <procedure id="callCreateCostScrData_SCR" parameterMap="param_callCreateCostScrData_SCR" timeout="7200">
+    { call NEA_COST_SCR_PKG.CREATE_COST_SCR_DATA(?, ?, ?) }
+  </procedure>
+
+  <!--
+    経費負担部課精査状況ステータス更新
+  -->
+  <parameterMap id="param_callUpdateCostScrStatus_SCR" class="java.util.Map">
+    <parameter property="companyCode" jdbcType="VARCHAR" javaType="String" mode="IN"/>
+    <parameter property="period" jdbcType="CHAR" javaType="String" mode="IN"/>
+    <parameter property="execStaffCode" jdbcType="VARCHAR" javaType="String" mode="IN"/>
+    <parameter property="execStatus" jdbcType="CHAR" javaType="String" mode="IN"/>
+  </parameterMap>
+  <procedure id="callUpdateCostScrStatus_SCR" parameterMap="param_callUpdateCostScrStatus_SCR" timeout="7200">
+    { call NEA_COST_SCR_PKG.UPDATE_STATUS(?, ?, ?, ?) }
+  </procedure>
+
+  <select id="selectScrPossibleInputMasterList_SCR" parameterClass="java.util.Map" resultClass="jp.co.ctcg.easset.dto.CodeName">
+    SELECT
+      *
+    FROM
+      (
+      SELECT
+        1 sort1
+      , NULL sort2
+      , ND.DIVISIONCODE sort3
+      , NULL sort4
+      , ND.DIVISIONCODE sort5
+      , '精査担当部署' categoryCode
+      , ND.DIVISIONCODE value1
+      , NEA_UTIL_PKG.GET_SECTION_NAME_F(ND.COMPANYCODE, ND.DIVISIONKANJI) description
+      , 'scrSectionName' property
+      FROM
+        NEA_NEWDIVISIONMASTERTABLE_V ND
+      WHERE
+        ND.COMPANYCODE = #companyCode#
+      AND ND.NENDO = (SELECT VALUE1 FROM NEA_CODE_NAME CN WHERE CN.CATEGORY_CODE = 'CURRENT_YEAR' AND CN.DELETE_FLAG = '0')
+      )
+      <dynamic open=" WHERE " close="" >
+        <isNotEmpty property="propertyList">
+          <iterate property="propertyList" open=" property IN(" close=")" conjunction=",">
+            #propertyList[]#
+          </iterate>
+        </isNotEmpty>
+      </dynamic>
+
+    ORDER BY
+      1, 2, 3, 4, 5
+  </select>
+
+
+</sqlMap>

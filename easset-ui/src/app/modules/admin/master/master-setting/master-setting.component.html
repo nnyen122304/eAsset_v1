@@ -1,0 +1,124 @@
+<div class="page-container page-admin-master-setting" [ngClass]="{'has-parent-master': hasParentMaster, 'has-input-detail': isInputDetailShown}">
+
+  <div class="section-info">
+    <div class="block-frame-border">
+      <h2 class="frame-title">検索</h2>
+      <div class="frame-body row">
+        <div class="col col-label">マスタ名：</div>
+        <div class="col col-input">
+          <ea-input-mask class="ip-master-name wm-tab-element wm-combo bg-gray" [isReadOnly]="true" *ngIf="item" [value]="item.description"></ea-input-mask>
+        </div>
+        <div class="col col-button">
+          <button type="button" class="wm-btn wm-tab-element" (click)="getCSV()">ダウンロード</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-detail" id="section-detail" *ngIf="defList && companyList">
+    <app-input-detail [defList]="defList" [masterList]="masterList" [hasParent]="hasParentMaster" [categoryCode]="item.categoryCode" [paramItem]="item" [lineAddEnableFlag]="item?.lineAddEnableFlag" [lineDelEnableFlag]="item?.lineDelEnableFlag" [sessionInfo]="sessionInfo" [companyList]="companyList" (update)="onDataUpdated($event['data'], $event['id'])" (cancel)="closeInputDetail($event)"></app-input-detail>
+    <div class="grid-count" *ngIf="isInputDetailShown">【件数：{{gridAdminMasterSetting && gridAdminMasterSetting.rows ? (gridAdminMasterSetting.rows.length | number) : 0}} 件】</div>
+  </div>
+
+  <div class="section-list">
+    <div class="grid-common-wrap">
+      <div class="list-controls" [hidden]="isInputDetailShown">
+        <div class="grid-buttons wm-buttons">
+          <button type="button" class="wm-btn" (click)="showInputDetails()" *ngIf="item && item.lineAddEnableFlag==='1'">行追加</button>
+          <button type="button" class="wm-btn" (click)="sort()" *ngIf="item && item.lineAddEnableFlag==='1'">ソート順で並び替え</button>
+          <p>※行をクリックすると値を編集できます。</p>
+        </div>
+        <div class="grid-group-filter">
+          <div class="grid-filter block-frame-border">
+            <div class="frame-title">絞込検索</div>
+            <form class="frame-body row" [formGroup]="filterForm">
+              <div class="col col-form">
+                <div class="row" *ngIf="hasParentMaster">
+                  <div class="col col-label">親値：</div>
+                  <div class="col col-input">
+                    <app-parent-master-selection
+                      [parentMasterForm]="filterForm"
+                      [masterCodeControlName]="'parentMasterCode'"
+                      [masterNameControlName]="'parentMasterName'"
+                      [masterCategoryControlName]="'parentCategoryCode'"
+                      [sqlName]="'selectCodeNameItemList_MST'"
+                      [paramMap]="{parentCompanyCode: sessionInfo.loginCompanyCode, categoryCode: item.parentCategoryCode, deleteFlag: '0'}"
+                      (select)="onParentSelected($event)"
+                      ></app-parent-master-selection>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col col-label">項目：</div>
+                  <div class="col col-input">
+                    <wj-combo-box
+                      class="wm-combo wm-dropdown ip-item"
+                      [itemsSource]="filterList"
+                      [displayMemberPath]="'name'"
+                      [selectedValuePath]="'id'"
+                      [dropDownCssClass]="'wm-master-filter'"
+                      formControlName="filterId"
+                    >
+                    </wj-combo-box>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col col-label">キーワード：</div>
+                  <div class="col col-input">
+                    <ea-input-mask class="wm-combo ip-keyword" formControlName="filterValue"></ea-input-mask>
+                  </div>
+                </div>
+              </div>
+              <div class="col col-button">
+                <button type="button" class="wm-btn" (click)="filter()">絞込</button>
+              </div>
+            </form>
+          </div>
+          <div class="grid-count">【件数：{{gridAdminMasterSetting && gridAdminMasterSetting.rows ? (gridAdminMasterSetting.rows.length | number) : 0}} 件】</div>
+        </div>
+      </div>
+      <ea-flex-grid
+        #gridAdminMasterSetting
+        id="grid-admin-master-setting"
+        class="grid-common-list grid-admin-master-setting"
+        [itemsSource]="masterList"
+        [isReadOnly]="false"
+        (initialized)="onGridInitialized()"
+        (click)="onMasterSelect($event)"
+      >
+        <ea-flex-grid-column name="columnDelete" *ngIf="item && item.lineDelEnableFlag==='1'" [allowDragging]="'None'" [allowSorting]="false" [width]="30">
+          <ng-template wjFlexGridCellTemplate [cellType]="'Cell'" let-cell="cell">
+            <a class="button-delete" (click)="removeMasterData(cell.row.index)"></a>
+          </ng-template>
+        </ea-flex-grid-column>
+        <ea-flex-grid-column header="ソート順" binding="sortNumber" [width]="100">
+          <ng-template wjFlexGridCellTemplate [cellType]="'Cell'" let-cell="cell">
+            <ea-input-number class="wj-grid-editor wj-grid-editor-input wj-form-control cell-input-text" [(ngModel)]="cell.item.sortNumber" [format]="'f0'" (keypress)="sessionService.setDataChange(true)" (paste)="sessionService.setDataChange(true)" [isReadOnly]="item && item.lineAddEnableFlag!=='1'"></ea-input-number>
+          </ng-template>
+        </ea-flex-grid-column>
+        <ea-flex-grid-column *ngIf="hasParentMaster" header="親値" binding="parentInternalName" [width]="130"></ea-flex-grid-column>
+        <ea-flex-grid-column header="コード" binding="internalCode" [width]="130"></ea-flex-grid-column>
+        <ea-flex-grid-column header="停止" binding="deleteFlagName" [width]="50"></ea-flex-grid-column>
+        <ea-flex-grid-column header="会社" binding="companyName" [width]="100" *ngIf="item && item.setCompanyCode !== '000'"></ea-flex-grid-column>
+
+        <ea-flex-grid-column *ngFor="let column of defList" [header]="column.itemName" [binding]="'value' + column.itemSeq" [width]="column.width ? column.width : 150">
+          <ng-container *ngIf="column.itemInputType === 'CMB'">
+            <ng-template wjFlexGridCellTemplate [cellType]="'Cell'" let-cell="cell">
+              {{ getCmbValue(column, cell.item['value' + column.itemSeq]) }}
+            </ng-template>
+          </ng-container>
+          <ng-container *ngIf="column.itemInputType === 'NUM'">
+            <ng-template wjFlexGridCellTemplate [cellType]="'Cell'" let-cell="cell">
+              {{cell.item['value' + column.itemSeq]}}
+            </ng-template>
+          </ng-container>
+        </ea-flex-grid-column>
+      </ea-flex-grid>
+    </div>
+  </div>
+
+  <div class="section-buttons wm-buttons">
+    <button type="button" class="wm-btn" (click)="update()"><span class="ico"><img src="assets/images/button/save.png" alt="更新"></span><span class="txt">更新</span></button>
+    <button type="button" class="wm-btn" (click)="close()">戻る</button>
+  </div>
+
+</div>

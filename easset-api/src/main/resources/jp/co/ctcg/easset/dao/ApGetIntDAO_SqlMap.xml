@@ -1,0 +1,1256 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<!--
+ *===================================================================
+ * ファイル名 : ApGetIntDAO_SqlMap.xml
+ * 概要説明   : 取得申請(無形)用SQL文
+ * バージョン : 1.0
+ *===================================================================
+ * 修正履歴
+ * 日付       Ver. 担当者       修正内容
+ * －－－－－ －－ －－－－－－ －－－－－－－－－－－－－－－－－－
+ * 2012-09-11 1.0  申           新規
+ *===================================================================
+ -->
+<sqlMap namespace="ApGetIntDAO" >
+  <sql id="selectApGetIntComColumn_APGI">
+    nagi.APPLICATION_ID applicationId
+    , nagi.APPLICATION_VERSION applicationVersion
+    , nagi.CREATE_DATE createDate
+    , nagi.CREATE_STAFF_CODE createStaffCode
+    , nagi.UPDATE_DATE updateDate
+    , nagi.UPDATE_STAFF_CODE updateStaffCode
+    , nagi.VERSION version
+    , nagi.DISPLAY_VERSION displayVersion
+    , nagi.UPDATE_COMMENT updateComment
+    , nagi.EAPP_ID eappId
+    , nagi.AP_STATUS apStatus
+    , NEA_UTIL_PKG.get_cn_value1_f('AP_STATUS_GET_INT', nagi.AP_STATUS) apStatusName
+    , nagi.AP_DATE apDate
+    , nagi.AP_GET_TYPE apGetType
+    , NEA_UTIL_PKG.get_cn_value1_f('AP_GET_INT_TYPE', nagi.AP_GET_TYPE) apGetTypeName
+    , nagi.AP_GET_AMOUNT_RANGE apGetAmountRange
+    , NEA_UTIL_PKG.get_cn_value1_f('AP_GET_INT_AMOUNT_RANGE', nagi.AP_GET_AMOUNT_RANGE, nagi.AP_COMPANY_CODE) apGetAmountRangeName
+    , NEA_UTIL_PKG.get_cn_value_f('AP_GET_INT_AMOUNT_RANGE', nagi.AP_GET_AMOUNT_RANGE, 7, nagi.AP_COMPANY_CODE) apGetAmountRangeUseCostSecType
+    , NEA_UTIL_PKG.get_cn_value_f('AP_GET_INT_AMOUNT_RANGE', nagi.AP_GET_AMOUNT_RANGE, 10, nagi.AP_COMPANY_CODE) apGetAmountRangeUseLineType
+    , NEA_UTIL_PKG.get_cn_value_f('AP_GET_INT_AMOUNT_RANGE', nagi.AP_GET_AMOUNT_RANGE, 12, nagi.AP_COMPANY_CODE) apGetAmountRangeUseCostType
+    , nagi.SPECIAL_APPROVE_FLAG specialApproveFlag
+    , nagi.SPECIAL_APPROVE_DATE specialApproveDate
+    , nagi.AP_CREATE_STAFF_CODE apCreateStaffCode
+    , NEA_UTIL_PKG.get_staff_name_f(nagi.AP_CREATE_STAFF_CODE) apCreateStaffName
+    , nagi.AP_CREATE_COMPANY_CODE apCreateCompanyCode
+    , NEA_UTIL_PKG.get_company_name_f(nagi.AP_CREATE_COMPANY_CODE) apCreateCompanyName
+    , nagi.AP_CREATE_SECTION_CODE apCreateSectionCode
+    , NEA_UTIL_PKG.get_section_name_f(nagi.AP_CREATE_COMPANY_CODE, nagi.AP_CREATE_SECTION_CODE, nagi.AP_CREATE_SECTION_YEAR) apCreateSectionName
+    , nagi.AP_CREATE_SECTION_YEAR apCreateSectionYear
+    , nagi.AP_STAFF_CODE apStaffCode
+    , NEA_UTIL_PKG.get_staff_name_f(nagi.AP_STAFF_CODE) apStaffName
+    , nagi.AP_COMPANY_CODE apCompanyCode
+    , NEA_UTIL_PKG.get_company_name_f(nagi.AP_COMPANY_CODE) apCompanyName
+    , nagi.AP_SECTION_CODE apSectionCode
+    , NEA_UTIL_PKG.get_section_name_f(nagi.AP_COMPANY_CODE, nagi.AP_SECTION_CODE, nagi.AP_SECTION_YEAR) apSectionName
+    , nagi.AP_SECTION_YEAR apSectionYear
+    , nagi.AP_TEL apTel
+    , nagi.AP_SKIP_APPROVE_FLAG apSkipApproveFlag
+    , nagi.AP_NEED_CIO_JUDGE_FLAG apNeedCioJudgeFlag
+    , nagi.AST_GET_TIME_FLAG astGetTimeFlag
+    , nagi.AST_NAME astName
+    , nagi.AST_CLOUD_TYPE astCloudType
+    , nagi.AST_GROUP_CODE astGroupCode
+    , NEA_UTIL_PKG.get_item_group_name_f(nagi.AP_COMPANY_CODE, nagi.AST_GROUP_CODE) astGroupName
+    , NEA_UTIL_PKG.replace_enter_f(nagi.AST_GET_REASON, #enterChar#) astGetReason
+    , nagi.AST_COMPLETE_PLAN_DATE astCompletePlanDate
+    , nagi.AST_EFFECT_TYPE astEffectType
+    , nagi.AST_EFFECT_AMOUNT astEffectAmount
+    , NEA_UTIL_PKG.replace_enter_f(nagi.AST_EFFECT_DESCRIPTION, #enterChar#) astEffectDescription
+    , nagi.AST_RENT_FLAG astRentFlag
+    , nagi.AST_RENT_APPLICATION_ID astRentApplicationId
+    , nagi.AST_RENT_MONTH astRentMonth
+    , nagi.AST_RENT_DATE_FROM astRentDateFrom
+    , nagi.AST_RENT_DATE_TO astRentDateTo
+    , NEA_UTIL_PKG.replace_enter_f(nagi.AST_RENT_DESCRIPTION, #enterChar#) astRentDescription
+    , nagi.AST_TOTAL_AMOUNT astTotalAmount
+    , nagi.GET_TOTAL_AMOUNT getTotalAmount
+    , nagi.MKT_CAT_CATEGORY_CODE mktCatCategoryCode
+    , NEA_UTIL_PKG.get_cn_value1_f('AP_GET_INT_MKT_CATEGORY', nagi.MKT_CAT_CATEGORY_CODE) mktCatCategoryName
+    , nagi.MKT_CAT_TASK_CODE mktCatTaskCode
+    , NEA_UTIL_PKG.get_cn_value1_f('AP_GET_INT_MKT_TASK', nagi.MKT_CAT_TASK_CODE) mktCatTaskName
+    , NEA_UTIL_PKG.get_cn_value_f('AP_GET_INT_MKT_TASK', nagi.MKT_CAT_TASK_CODE, 2) mktProfEstFlag
+    , NEA_UTIL_PKG.get_cn_value_f('AP_GET_INT_MKT_CATEGORY', nagi.MKT_CAT_CATEGORY_CODE, 3) mktDevNextPlanDateFlag
+    , NEA_UTIL_PKG.get_cn_value_f('AP_GET_INT_MKT_CATEGORY', nagi.MKT_CAT_CATEGORY_CODE, 4) mktDevSchLineEditFlag1
+    , NEA_UTIL_PKG.get_cn_value_f('AP_GET_INT_MKT_CATEGORY', nagi.MKT_CAT_CATEGORY_CODE, 5) mktDevSchLineEditFlag2
+    , NEA_UTIL_PKG.get_cn_value_f('AP_GET_INT_MKT_CATEGORY', nagi.MKT_CAT_CATEGORY_CODE, 6) mktDevSchLineEditFlag3
+    , NEA_UTIL_PKG.get_cn_value_f('AP_GET_INT_MKT_CATEGORY', nagi.MKT_CAT_CATEGORY_CODE, 7) mktDevSchLineEditFlag4
+    , NEA_UTIL_PKG.get_cn_value_f('AP_GET_INT_MKT_CATEGORY', nagi.MKT_CAT_CATEGORY_CODE, 8) mktDevSchLineEditFlag5
+    , NEA_UTIL_PKG.get_cn_value_f('AP_GET_INT_MKT_CATEGORY', nagi.MKT_CAT_CATEGORY_CODE, 9) mktDevSchLineEditFlag6
+    , NEA_UTIL_PKG.get_cn_value_f('AP_GET_INT_MKT_CATEGORY', nagi.MKT_CAT_CATEGORY_CODE, 10) mktDevSchLineEditFlag7
+    , NEA_UTIL_PKG.get_cn_value_f('AP_GET_INT_MKT_CATEGORY', nagi.MKT_CAT_CATEGORY_CODE, 11) mktDevSchLineEditFlag8
+    , NEA_UTIL_PKG.get_cn_value_f('AP_GET_INT_MKT_CATEGORY', nagi.MKT_CAT_CATEGORY_CODE, 12) mktDevSchLineEditFlag9
+    , NEA_UTIL_PKG.get_cn_value_f('AP_GET_INT_MKT_CATEGORY', nagi.MKT_CAT_CATEGORY_CODE, 13) mktDevSchLineEditFlag10
+    , nagi.MKT_AST_PROJECT_CODE mktAstProjectCode
+    , NEA_UTIL_PKG.get_project_name_f(nagi.AP_COMPANY_CODE, nagi.MKT_AST_PROJECT_CODE) mktAstProjectName
+    , NEA_UTIL_PKG.get_project_type_f(nagi.AP_COMPANY_CODE, nagi.MKT_AST_PROJECT_CODE) mktAstProjectType
+    , NEA_UTIL_PKG.replace_enter_f(nagi.MKT_AST_PRODUCT_OUTLINE, #enterChar#) mktAstProductOutline
+    , NEA_UTIL_PKG.replace_enter_f(nagi.MKT_AST_MARKET, #enterChar#) mktAstMarket
+    , NEA_UTIL_PKG.replace_enter_f(nagi.MKT_AST_POLICY, #enterChar#) mktAstPolicy
+    , nagi.MKT_DEV_NEXT_PLAN_DATE mktDevNextPlanDate
+    , NEA_UTIL_PKG.replace_enter_f(nagi.ATT_DESCRIPTION, #enterChar#) attDescription
+    , nagi.HOL_COMPANY_CODE holCompanyCode
+    , NEA_UTIL_PKG.get_company_name_f(nagi.HOL_COMPANY_CODE) holCompanyName
+    , nagi.HOL_SECTION_CODE holSectionCode
+    , NEA_UTIL_PKG.get_section_name_f(nagi.HOL_COMPANY_CODE, nagi.HOL_SECTION_CODE, nagi.HOL_SECTION_YEAR) holSectionName
+    , nagi.HOL_SECTION_YEAR holSectionYear
+    , nagi.HOL_STAFF_CODE holStaffCode
+    , NEA_UTIL_PKG.get_staff_name_f(nagi.HOL_STAFF_CODE) holStaffName
+    , nagi.HOL_STAFF_COMPANY_CODE holStaffCompanyCode
+    , NEA_UTIL_PKG.get_company_name_f(nagi.HOL_STAFF_COMPANY_CODE) holStaffCompanyName
+    , nagi.HOL_STAFF_SECTION_CODE holStaffSectionCode
+    , NEA_UTIL_PKG.get_section_name_f(nagi.HOL_STAFF_COMPANY_CODE, nagi.HOL_STAFF_SECTION_CODE, nagi.HOL_STAFF_SECTION_YEAR) holStaffSectionName
+    , nagi.HOL_STAFF_SECTION_YEAR holStaffSectionYear
+    , nagi.HOL_REP_OFFICE_CODE holRepOfficeCode
+    , NEA_UTIL_PKG.get_rep_office_name_f(nagi.AP_COMPANY_CODE, nagi.HOL_REP_OFFICE_CODE) holRepOfficeName
+    , nagi.COST_TYPE costType
+    , nagi.COST_DEP_PRJ_CODE costDepPrjCode
+    , NEA_UTIL_PKG.get_project_name_f(nagi.AP_COMPANY_CODE, nagi.COST_DEP_PRJ_CODE) costDepPrjName
+    , NEA_UTIL_PKG.get_project_type_f(nagi.AP_COMPANY_CODE, nagi.COST_DEP_PRJ_CODE) costDepPrjType
+    , nagi.COST_COMPANY_CODE costCompanyCode
+    , NEA_UTIL_PKG.get_company_name_f(nagi.COST_COMPANY_CODE) costCompanyName
+    , nagi.COST_SECTION_CODE costSectionCode
+    , nagi.COST_SECTION_YEAR costSectionYear
+    , NEA_UTIL_PKG.get_cost_section_name_f(nagi.COST_SECTION_CODE, nagi.COST_SECTION_YEAR) costSectionName
+    , NEA_UTIL_PKG.replace_enter_f(nagi.DESCRIPTION_AP, #enterChar#) descriptionAp
+    , NEA_UTIL_PKG.replace_enter_f(nagi.DESCRIPTION_ADMIN, #enterChar#) descriptionAdmin
+    , nagi.REPORT_COMPLETE_FLAG reportCompleteFlag
+    , nagi.REMINDER_DATE reminderDate
+    , nagi.APPROVE_DATE approveDate
+    , nagi.ACTIVE_FLAG activeFlag
+    , nagi.VER_UP_COLUMN_NAME verUpColumnName
+    , nagi.VER_UP_TYPE verUpType
+  </sql>
+
+  <!--
+    取得申請(無形)：取得
+  -->
+  <select id="selectApGetInt_APGI" parameterClass="java.util.Map" resultClass="jp.co.ctcg.easset.dto.ap_get_int.ApGetInt">
+    SELECT
+      <include refid="selectApGetIntComColumn_APGI" />
+      , NEA_UTIL_PKG.get_tel_f(nagi.AP_CREATE_COMPANY_CODE, nagi.AP_CREATE_STAFF_CODE, nagi.AP_CREATE_SECTION_YEAR) apCreateTel
+    FROM
+      NEA_AP_GET_INT nagi
+    WHERE
+      <isNotEmpty property="applicationId">
+        nagi.APPLICATION_ID = #applicationId#
+      </isNotEmpty>
+      <isNotEmpty property="applicationVersion">
+        AND nagi.APPLICATION_VERSION = #applicationVersion#
+      </isNotEmpty>
+      <isNotEmpty property="activeFlag">
+        AND nagi.ACTIVE_FLAG = '1'
+      </isNotEmpty>
+      <isNotEmpty property="eappId">
+        nagi.EAPP_ID = #eappId#
+      </isNotEmpty>
+    <isNotEmpty property="lockFlag">
+      FOR UPDATE
+    </isNotEmpty>
+  </select>
+
+  <!--
+    取得申請(無形)：資産明細取得
+  -->
+  <select id="selectApGetIntLineFld_APGI" parameterClass="java.util.Map" resultClass="jp.co.ctcg.easset.dto.ap_get_int.ApGetIntLineFld">
+    SELECT
+      fld.APPLICATION_ID applicationId
+      , fld.APPLICATION_VERSION applicationVersion
+      , fld.LINE_SEQ lineSeq
+      , fld.CREATE_DATE createDate
+      , fld.CREATE_STAFF_CODE createStaffCode
+      , fld.UPDATE_DATE updateDate
+      , fld.UPDATE_STAFF_CODE updateStaffCode
+      , fld.AST_CATEGORY_CODE astCategoryCode
+      , NEA_UTIL_PKG.get_cn_value1_f('AP_GET_INT_AST_CATEGORY', fld.AST_CATEGORY_CODE) astCategoryName
+      , NEA_UTIL_PKG.get_cn_value_f('AP_GET_INT_AST_CATEGORY', fld.AST_CATEGORY_CODE, 2) astCategoryType
+      , fld.AST_TERM_FLAG astTermFlag
+      , fld.AST_TERM_YEAR astTermYear
+      , fld.AST_NAME astName
+      , fld.AST_PRJ_CODE astPrjCode
+      , NEA_UTIL_PKG.get_project_name_f(nagi.AP_COMPANY_CODE, fld.AST_PRJ_CODE) astPrjName
+      , NEA_UTIL_PKG.get_project_type_f(nagi.AP_COMPANY_CODE, fld.AST_PRJ_CODE) astPrjType
+      , fld.AST_PUR_COMPANY_CODE astPurCompanyCode
+      , fld.AST_PUR_COMPANY_NAME astPurCompanyName
+      , fld.AST_ESTIMATE_NUMBER astEstimateNumber
+      , fld.AST_UNIT_AMOUNT astUnitAmount
+      , fld.AST_QUANTITY astQuantity
+      , fld.AST_GET_AMOUNT astGetAmount
+      , fld.AST_ADD_UP_TYPE astAddUpType
+      , DECODE(fld.AST_ADD_UP_TYPE, '1', '1', '0') astAddUpType1Flag
+      , DECODE(fld.AST_ADD_UP_TYPE, '2', '1', '0') astAddUpType2Flag
+      , fld.AST_COMMENT astComment
+      , fld.AST_ACCOUNT_CODE astAccountCode
+      , NVL(NEA_UTIL_PKG.get_cn_value1_f('AP_GET_INT_AST_ACCOUNT', fld.AST_ACCOUNT_CODE, nagi.AP_COMPANY_CODE), '') astAccountName
+    FROM
+      NEA_AP_GET_INT_LINE_FLD fld
+      , NEA_AP_GET_INT nagi
+    WHERE
+      fld.APPLICATION_ID = #applicationId#
+      AND fld.APPLICATION_VERSION = #applicationVersion#
+      AND fld.APPLICATION_ID = nagi.APPLICATION_ID
+      AND fld.APPLICATION_VERSION = nagi.APPLICATION_VERSION
+    ORDER BY
+      LINE_SEQ
+  </select>
+
+  <!--
+    取得申請(無形)：開発スケジュール明細取得
+  -->
+  <select id="selectApGetIntLineDevSch_APGI" parameterClass="java.util.Map" resultClass="jp.co.ctcg.easset.dto.ap_get_int.ApGetIntLineDevSch">
+    SELECT
+      APPLICATION_ID applicationId
+      , APPLICATION_VERSION applicationVersion
+      , LINE_SEQ lineSeq
+      , CREATE_DATE createDate
+      , CREATE_STAFF_CODE createStaffCode
+      , UPDATE_DATE updateDate
+      , UPDATE_STAFF_CODE updateStaffCode
+      , DEV_PERIOD_FROM devPeriodFrom
+      , DEV_PERIOD_TO devPeriodTo
+      , (DEV_PROPER_COUNT + DEV_ENTRUST_COUNT) totalPeopleCount
+      , DEV_PROPER_COUNT devProperCount
+      , DEV_ENTRUST_COUNT devEntrustCount
+      , DEV_AMOUNT devAmount
+      , DEV_SCH_CODE devSchCode
+      , NEA_UTIL_PKG.get_cn_value1_f('AP_GET_INT_MKT_DEV_SCH', DEV_SCH_CODE) devSchName
+    FROM
+      NEA_AP_GET_INT_LINE_DEV_SCH
+    WHERE
+      APPLICATION_ID = #applicationId#
+      AND APPLICATION_VERSION = #applicationVersion#
+    ORDER BY
+      LINE_SEQ
+  </select>
+
+  <!--
+    取得申請(無形)：その他費用明細取得
+  -->
+  <select id="selectApGetIntLineOtrCost_APGI" parameterClass="java.util.Map" resultClass="jp.co.ctcg.easset.dto.ap_get_int.ApGetIntLineOtrCost">
+    SELECT
+      APPLICATION_ID applicationId
+      , APPLICATION_VERSION applicationVersion
+      , LINE_SEQ lineSeq
+      , CREATE_DATE createDate
+      , CREATE_STAFF_CODE createStaffCode
+      , UPDATE_DATE updateDate
+      , UPDATE_STAFF_CODE updateStaffCode
+      , OTR_COMMENT otrComment
+      , OTR_AMOUNT otrAmount
+    FROM
+      NEA_AP_GET_INT_LINE_OTR_COST
+    WHERE
+      APPLICATION_ID = #applicationId#
+      AND APPLICATION_VERSION = #applicationVersion#
+    ORDER BY
+      LINE_SEQ
+  </select>
+
+  <!--
+    取得申請(無形)：利益予測明細取得
+  -->
+  <select id="selectApGetIntLineProfEst_APGI" parameterClass="java.util.Map" resultClass="jp.co.ctcg.easset.dto.ap_get_int.ApGetIntLineProfEst">
+    SELECT
+      APPLICATION_ID applicationId
+      , APPLICATION_VERSION applicationVersion
+      , LINE_SEQ lineSeq
+      , CREATE_DATE createDate
+      , CREATE_STAFF_CODE createStaffCode
+      , UPDATE_DATE updateDate
+      , UPDATE_STAFF_CODE updateStaffCode
+      , PROF_SALES_QUANTITY profSalesQuantity
+      , PROF_SALES_AMOUNT profSalesAmount
+      , PROF_COST_AMOUNT profCostAmount
+      , (PROF_SALES_AMOUNT - PROF_COST_AMOUNT) profGrossAmount
+    FROM
+      NEA_AP_GET_INT_LINE_PROF_EST
+    WHERE
+      APPLICATION_ID = #applicationId#
+      AND APPLICATION_VERSION = #applicationVersion#
+    ORDER BY
+      LINE_SEQ
+  </select>
+
+  <!--
+    取得申請(無形)：添付ファイル明細取得
+  -->
+  <select id="selectApGetIntLineAtt_APGI" parameterClass="java.util.Map" resultClass="jp.co.ctcg.easset.dto.ap_get_int.ApGetIntLineAtt">
+    SELECT
+      APPLICATION_ID applicationId
+      , APPLICATION_VERSION applicationVersion
+      , LINE_SEQ lineSeq
+      , CREATE_DATE createDate
+      , CREATE_STAFF_CODE createStaffCode
+      , NEA_UTIL_PKG.GET_STAFF_NAME_F(CREATE_STAFF_CODE) createStaffName
+      , UPDATE_DATE updateDate
+      , UPDATE_STAFF_CODE updateStaffCode
+      , ATT_FILE_NAME attFileName
+      , ATT_FILE_ID attFileId
+      , ATT_COMMENT attComment
+    FROM
+      NEA_AP_GET_INT_LINE_ATT
+    WHERE
+      APPLICATION_ID = #applicationId#
+      AND APPLICATION_VERSION = #applicationVersion#
+    ORDER BY
+      LINE_SEQ
+  </select>
+
+  <!--
+    取得申請(無形)：経費負担明細取得
+  -->
+  <select id="selectApGetIntLineCostSec_APGI" parameterClass="java.util.Map" resultClass="jp.co.ctcg.easset.dto.ap_get_int.ApGetIntLineCostSec">
+    SELECT
+      APPLICATION_ID applicationId
+      , APPLICATION_VERSION applicationVersion
+      , LINE_SEQ lineSeq
+      , CREATE_DATE createDate
+      , CREATE_STAFF_CODE createStaffCode
+      , UPDATE_DATE updateDate
+      , UPDATE_STAFF_CODE updateStaffCode
+      , COST_COMPANY_CODE costCompanyCode
+      , NEA_UTIL_PKG.get_company_name_f(COST_COMPANY_CODE) costCompanyName
+      , COST_SECTION_CODE costSectionCode
+      , COST_SECTION_YEAR costSectionYear
+      , NEA_UTIL_PKG.get_cost_section_name_f(COST_SECTION_CODE, COST_SECTION_YEAR) costSectionName
+      , COST_DIST costDist
+    FROM
+      NEA_AP_GET_INT_LINE_COST_SEC
+    WHERE
+      APPLICATION_ID = #applicationId#
+      AND APPLICATION_VERSION = #applicationVersion#
+    ORDER BY
+      LINE_SEQ
+  </select>
+
+  <!--
+    取得申請(無形)：検索(共通)
+  -->
+  <sql id="selectApGetIntComList_APGI">
+    SELECT
+      <include refid="selectApGetIntComColumn_APGI" />
+      , nabi.AST_RELEASE_DATE releaseDate
+      , NEA_UTIL_PKG.get_cn_value1_f('FLAG_YN', nagi.SPECIAL_APPROVE_FLAG) specialApproveFlagName
+      , NEA_UTIL_PKG.get_cn_value1_f('FLAG_YN', nagi.AP_SKIP_APPROVE_FLAG) apSkipApproveFlagName
+      , NEA_UTIL_PKG.get_cn_value1_f('FLAG_YN', nagi.AP_NEED_CIO_JUDGE_FLAG) apNeedCioJudgeFlagName
+      , NEA_UTIL_PKG.get_cn_value1_f('AP_GET_INT_AST_GET_TIME', nagi.AST_GET_TIME_FLAG) astGetTimeFlagName
+      , NEA_UTIL_PKG.get_cn_value1_f('ITEM_CLOUD_TYPE', nagi.AST_CLOUD_TYPE) astCloudTypeName
+      , NEA_UTIL_PKG.get_cn_value1_f('AP_GET_INT_AST_EFFECT_TYPE', nagi.AST_EFFECT_TYPE) astEffectTypeName
+      , NEA_UTIL_PKG.get_cn_value1_f('FLAG_YN', nagi.AST_RENT_FLAG) astRentFlagName
+      , NEA_UTIL_PKG.get_cn_value1_f('COST_TYPE', nagi.COST_TYPE) costTypeName
+      , NEA_UTIL_PKG.get_cn_value1_f('FLAG_REPORT', nagi.REPORT_COMPLETE_FLAG) reportCompleteFlagName
+      , NEA_UTIL_PKG.get_cn_value1_f('AP_GET_INT_AST_ADD_UP_TYPE',
+                                                 (CASE (SELECT max(LINE_SEQ)
+                                                          FROM NEA_AP_GET_INT_LINE_FLD
+                                                         WHERE APPLICATION_ID = nagi.APPLICATION_ID
+                                                           AND APPLICATION_VERSION = nagi.APPLICATION_VERSION)
+                                                  WHEN (SELECT count(*)
+                                                          FROM NEA_AP_GET_INT_LINE_FLD
+                                                         WHERE APPLICATION_ID = nagi.APPLICATION_ID
+                                                           AND APPLICATION_VERSION = nagi.APPLICATION_VERSION
+                                                           AND AST_ADD_UP_TYPE = '1') THEN
+                                                     '1'
+                                                  WHEN (SELECT count(*)
+                                                          FROM NEA_AP_GET_INT_LINE_FLD
+                                                         WHERE APPLICATION_ID = nagi.APPLICATION_ID
+                                                           AND APPLICATION_VERSION = nagi.APPLICATION_VERSION
+                                                           AND AST_ADD_UP_TYPE = '2') THEN
+                                                     '2'
+                                                  ELSE
+                                                     '3'
+                                                  END) ) addUpTypeName
+      , (SELECT count(*)
+           FROM NEA_LICENSE
+           WHERE GET_APPLICATION_ID = nagi.APPLICATION_ID) licenseRegistCount
+      , NEA_UTIL_PKG.get_ap_get_int_cost_sec_dist_f(nagi.APPLICATION_ID, nagi.APPLICATION_VERSION) costSectionDistName
+    FROM
+      NEA_AP_GET_INT nagi
+    , NEA_AP_BGN_INT nabi
+    WHERE
+      nagi.APPLICATION_ID = nabi.APPLICATION_ID(+)
+
+      <isEmpty property="isDownload">
+        AND ROWNUM <![CDATA[<]]>= (SELECT TO_NUMBER(VALUE1) FROM NEA_CODE_NAME WHERE CATEGORY_CODE = 'MAX_SEARCH_ROW_COUNT' AND DELETE_FLAG = '0')
+      </isEmpty>
+
+      <isEqual property="searchParam.oldVerFlag" compareValue="1">
+        AND nagi.APPLICATION_ID IN ( SELECT nagi.APPLICATION_ID
+                                       FROM NEA_AP_GET_INT nagi
+                                      WHERE 1 = 1
+      </isEqual>
+
+        AND nagi.ACTIVE_FLAG = '1'
+
+      <!-- 申請会社 -->
+      <isNotEmpty property="searchParam.apCompanyCode">
+        AND nagi.AP_COMPANY_CODE = #searchParam.apCompanyCode#
+      </isNotEmpty>
+
+      <!-- 基本 -->
+      <isNotEmpty property="searchParam.applicationId">
+        AND nagi.APPLICATION_ID LIKE '%' || #searchParam.applicationId# || '%'
+      </isNotEmpty>
+      <isNotEmpty property="applicationIdPluralList">
+        AND $applicationIdPluralList$
+      </isNotEmpty>
+      <isNotEmpty property="applicationVersion">
+        AND nagi.APPLICATION_VERSION = #applicationVersion#
+      </isNotEmpty>
+      <isNotEmpty property="apStatusPluralList">
+        AND $apStatusPluralList$
+      </isNotEmpty>
+      <isNotEmpty property="searchParam.apDateFrom">
+        AND nagi.AP_DATE <![CDATA[>]]>= #searchParam.apDateFrom#
+      </isNotEmpty>
+      <isNotEmpty property="searchParam.apDateTo">
+        AND nagi.AP_DATE <![CDATA[<]]>= #searchParam.apDateTo#
+      </isNotEmpty>
+      <isNotEmpty property="searchParam.apStaffCode">
+        AND (nagi.AP_STAFF_CODE = #searchParam.apStaffCode# OR nagi.AP_CREATE_STAFF_CODE = #searchParam.apStaffCode# OR nagi.HOL_STAFF_CODE = #searchParam.apStaffCode#)
+      </isNotEmpty>
+      <isNotEmpty property="apGetTypePluralList">
+        AND $apGetTypePluralList$
+      </isNotEmpty>
+      <isNotEmpty property="searchParam.eappId">
+        AND nagi.EAPP_ID LIKE '%' || #searchParam.eappId# || '%'
+      </isNotEmpty>
+      <isNotEmpty property="eappIdPluralList">
+        AND $eappIdPluralList$
+      </isNotEmpty>
+      <isNotEmpty property="reportCompleteFlagPluralList">
+        AND $reportCompleteFlagPluralList$
+      </isNotEmpty>
+      <isNotEmpty property="addUpTypePluralList">
+        AND $addUpTypePluralList$
+      </isNotEmpty>
+
+      <!-- 取得 -->
+      <isNotEmpty property="searchParam.astName">
+        AND NEA_UTIL_PKG.to_fuzzy_f(nagi.AST_NAME) LIKE '%' || NEA_UTIL_PKG.to_fuzzy_f(#searchParam.astName#) || '%'
+      </isNotEmpty>
+      <isNotEmpty property="searchParam.astCloudType">
+        AND nagi.AST_CLOUD_TYPE = #searchParam.astCloudType#
+      </isNotEmpty>
+      <isNotEmpty property="searchParam.astGroupCode">
+        AND nagi.AST_GROUP_CODE = #searchParam.astGroupCode#
+      </isNotEmpty>
+      <isNotEmpty property="searchParam.astCompletePlanDateFrom">
+        AND nagi.AST_COMPLETE_PLAN_DATE <![CDATA[>]]>= #searchParam.astCompletePlanDateFrom#
+      </isNotEmpty>
+      <isNotEmpty property="searchParam.astCompletePlanDateTo">
+        AND nagi.AST_COMPLETE_PLAN_DATE <![CDATA[<]]>= #searchParam.astCompletePlanDateTo#
+      </isNotEmpty>
+
+      <isEqual property="reminderOffFlag" compareValue="1">
+        AND
+        <isEqual property="reminderOnFlag" compareValue="1">
+          ((
+        </isEqual>
+        nagi.REMINDER_DATE IS NULL
+        <isEqual property="reminderOnFlag" compareValue="1">
+          ) OR
+        </isEqual>
+      </isEqual>
+
+      <isEqual property="reminderOnFlag" compareValue="1">
+        <isEqual property="reminderOffFlag" compareValue="0">
+          AND
+        </isEqual>
+        <isEqual property="reminderOffFlag" compareValue="1">
+          (
+        </isEqual>
+        nagi.REMINDER_DATE IS NOT NULL
+        <isNotEmpty property="searchParam.reminderDateFrom">
+          AND nagi.REMINDER_DATE <![CDATA[>]]>= #searchParam.reminderDateFrom#
+        </isNotEmpty>
+        <isNotEmpty property="searchParam.reminderDateTo">
+          AND nagi.REMINDER_DATE <![CDATA[<]]>= #searchParam.reminderDateTo#
+        </isNotEmpty>
+        <isEqual property="reminderOffFlag" compareValue="1">
+          ))
+        </isEqual>
+      </isEqual>
+      <isNotEmpty property="searchParam.getTotalAmountFrom">
+        AND nagi.GET_TOTAL_AMOUNT <![CDATA[>]]>= #searchParam.getTotalAmountFrom#
+      </isNotEmpty>
+      <isNotEmpty property="searchParam.getTotalAmountTo">
+        AND nagi.GET_TOTAL_AMOUNT <![CDATA[<]]>= #searchParam.getTotalAmountTo#
+      </isNotEmpty>
+      <isEqual property="searchParam.specialApproveFlag" compareValue="1">
+        AND nagi.SPECIAL_APPROVE_FLAG = '1'
+      </isEqual>
+
+      <!-- 経費負担 -->
+      <isNotEmpty property="searchParam.costType">
+        AND nagi.COST_TYPE = #searchParam.costType#
+      </isNotEmpty>
+      <isNotEmpty property="searchParam.costDepPrjCode">
+        AND nagi.COST_DEP_PRJ_CODE = #searchParam.costDepPrjCode#
+      </isNotEmpty>
+      <isNotEmpty property="searchParam.costCompanyCode">
+        AND nagi.COST_COMPANY_CODE = #searchParam.costCompanyCode#
+      </isNotEmpty>
+      <isNotEmpty property="searchParam.costSectionCode">
+        AND nagi.COST_SECTION_CODE = #searchParam.costSectionCode#
+      </isNotEmpty>
+      <isNotEmpty property="searchParam.costSectionYear">
+        AND nagi.COST_SECTION_YEAR = #searchParam.costSectionYear#
+      </isNotEmpty>
+
+      <!-- 保有・設置 -->
+      <isNotEmpty property="searchParam.holCompanyCode">
+        AND nagi.HOL_COMPANY_CODE = #searchParam.holCompanyCode#
+      </isNotEmpty>
+      <isNotEmpty property="sectionYear">
+        AND nagi.HOL_SECTION_YEAR = #sectionYear#
+      </isNotEmpty>
+      <isNotEmpty property="accessLevelSection">
+        AND $accessLevelSection$
+      </isNotEmpty>
+      <isNotEmpty property="section">
+        AND $section$
+      </isNotEmpty>
+      <isNotEmpty property="searchParam.holRepOfficeCode">
+        AND nagi.HOL_REP_OFFICE_CODE = #searchParam.holRepOfficeCode#
+      </isNotEmpty>
+
+      <!-- 資産明細 -->
+      <dynamic open=" AND EXISTS(SELECT 'X' FROM NEA_AP_GET_INT_LINE_FLD lf WHERE lf.APPLICATION_ID = nagi.APPLICATION_ID AND lf.APPLICATION_VERSION = nagi.APPLICATION_VERSION " close=")" >
+        <isNotEmpty property="searchParam.astCategoryCodeFld">
+          AND lf.AST_CATEGORY_CODE = #searchParam.astCategoryCodeFld#
+        </isNotEmpty>
+        <isNotEmpty property="searchParam.astNameFld">
+          AND NEA_UTIL_PKG.to_fuzzy_f(lf.AST_NAME) LIKE '%' || NEA_UTIL_PKG.to_fuzzy_f(#searchParam.astNameFld#) || '%'
+        </isNotEmpty>
+        <isNotEmpty property="searchParam.astPrjCodeFld">
+          AND lf.AST_PRJ_CODE = #searchParam.astPrjCodeFld#
+        </isNotEmpty>
+        <isNotEmpty property="searchParam.astCommentFld">
+          AND lf.AST_COMMENT LIKE '%' || #searchParam.astCommentFld# || '%'
+        </isNotEmpty>
+      </dynamic>
+
+      <!-- 備考 -->
+      <isNotEmpty property="descriptionPluralListAp">
+        AND (($descriptionPluralListAp$) OR ($descriptionPluralListAdmin$))
+      </isNotEmpty>
+
+      <isEqual property="searchParam.oldVerFlag" compareValue="1">
+        )
+      </isEqual>
+  </sql>
+
+  <!--
+    取得申請(無形)：検索(共通)
+  -->
+  <sql id="selectApGetIntComLineColumn_APGI">
+    applicationId
+    , applicationVersion
+    , createDate
+    , createStaffCode
+    , updateDate
+    , updateStaffCode
+    , version
+    , displayVersion
+    , updateComment
+    , eappId
+    , apStatus
+    , apStatusName
+    , apDate
+    , apGetType
+    , apGetTypeName
+    , apGetAmountRange
+    , apGetAmountRangeName
+    , apGetAmountRangeUseCostSecType
+    , apGetAmountRangeUseLineType
+    , apGetAmountRangeUseCostType
+    , specialApproveFlag
+    , specialApproveDate
+    , apCreateStaffCode
+    , apCreateStaffName
+    , apCreateCompanyCode
+    , apCreateCompanyName
+    , apCreateSectionCode
+    , apCreateSectionName
+    , apCreateSectionYear
+    , apStaffCode
+    , apStaffName
+    , apCompanyCode
+    , apCompanyName
+    , apSectionCode
+    , apSectionName
+    , apSectionYear
+    , apTel
+    , apSkipApproveFlag
+    , apNeedCioJudgeFlag
+    , astGetTimeFlag
+    , astName
+    , astCloudType
+    , astGroupCode
+    , astGroupName
+    , astGetReason
+    , astCompletePlanDate
+    , astEffectType
+    , astEffectAmount
+    , astEffectDescription
+    , astRentFlag
+    , astRentApplicationId
+    , astRentMonth
+    , astRentDateFrom
+    , astRentDateTo
+    , astRentDescription
+    , astTotalAmount
+    , getTotalAmount
+    , mktCatCategoryCode
+    , mktCatCategoryName
+    , mktCatTaskCode
+    , mktCatTaskName
+    , mktProfEstFlag
+    , mktDevNextPlanDateFlag
+    , mktDevSchLineEditFlag1
+    , mktDevSchLineEditFlag2
+    , mktDevSchLineEditFlag3
+    , mktDevSchLineEditFlag4
+    , mktDevSchLineEditFlag5
+    , mktDevSchLineEditFlag6
+    , mktDevSchLineEditFlag7
+    , mktDevSchLineEditFlag8
+    , mktDevSchLineEditFlag9
+    , mktDevSchLineEditFlag10
+    , mktAstProjectCode
+    , mktAstProjectName
+    , mktAstProjectType
+    , mktAstProductOutline
+    , mktAstMarket
+    , mktAstPolicy
+    , mktDevNextPlanDate
+    , attDescription
+    , holCompanyCode
+    , holCompanyName
+    , holSectionCode
+    , holSectionName
+    , holSectionYear
+    , holStaffCode
+    , holStaffName
+    , holStaffCompanyCode
+    , holStaffCompanyName
+    , holStaffSectionCode
+    , holStaffSectionName
+    , holStaffSectionYear
+    , holRepOfficeCode
+    , holRepOfficeName
+    , costType
+    , costDepPrjCode
+    , costDepPrjName
+    , costDepPrjType
+    , costCompanyCode
+    , costCompanyName
+    , costSectionCode
+    , costSectionName
+    , descriptionAp
+    , descriptionAdmin
+    , reportCompleteFlag
+    , reminderDate
+    , approveDate
+    , activeFlag
+    , verUpColumnName
+    , verUpType
+    , releaseDate
+    , specialApproveFlagName
+    , apSkipApproveFlagName
+    , apNeedCioJudgeFlagName
+    , astGetTimeFlagName
+    , astCloudTypeName
+    , astEffectTypeName
+    , astRentFlagName
+    , costTypeName
+    , reportCompleteFlagName
+    , addUpTypeName
+    , licenseRegistCount
+  </sql>
+
+  <!--
+    取得申請(無形)：検索
+  -->
+  <select id="selectApGetIntList_APGI" parameterClass="java.util.Map" resultClass="jp.co.ctcg.easset.dto.ap_get_int.ApGetIntSR">
+    <include refid="selectApGetIntComList_APGI" />
+    ORDER BY
+      nagi.APPLICATION_ID
+     ,nagi.APPLICATION_VERSION
+  </select>
+
+  <!--
+    取得申請(無形)：明細単位
+  -->
+  <select id="selectApGetIntLineList_APGI" parameterClass="java.util.Map" resultClass="jp.co.ctcg.easset.dto.ap_get_int.ApGetIntSR">
+      SELECT
+        <include refid="selectApGetIntComLineColumn_APGI" />
+        , fld.LINE_SEQ fldLineSeq
+        , fld.AST_CATEGORY_CODE fldAstCategoryCode
+        , NEA_UTIL_PKG.get_cn_value1_f('AP_GET_INT_AST_CATEGORY', fld.AST_CATEGORY_CODE) fldAstCategoryName
+        , NEA_UTIL_PKG.get_cn_value_f('AP_GET_INT_AST_CATEGORY', fld.AST_CATEGORY_CODE, 2) fldAstCategoryType
+        , fld.AST_TERM_FLAG fldAstTermFlag
+        , NEA_UTIL_PKG.get_cn_value1_f('FLAG_YN', fld.AST_TERM_FLAG) fldAstTermFlagName
+        , fld.AST_TERM_YEAR fldAstTermYear
+        , fld.AST_NAME fldAstName
+        , fld.AST_PRJ_CODE fldAstPrjCode
+        , NEA_UTIL_PKG.get_project_name_f(a.apCompanyCode, fld.AST_PRJ_CODE) fldAstPrjName
+        , NEA_UTIL_PKG.get_project_type_f(a.apCompanyCode, fld.AST_PRJ_CODE) fldAstPrjType
+        , fld.AST_PUR_COMPANY_CODE fldAstPurCompanyCode
+        , fld.AST_PUR_COMPANY_NAME fldAstPurCompanyName
+        , fld.AST_ESTIMATE_NUMBER fldAstEstimateNumber
+        , fld.AST_UNIT_AMOUNT fldAstUnitAmount
+        , fld.AST_QUANTITY fldAstQuantity
+        , fld.AST_GET_AMOUNT fldAstGetAmount
+        , fld.AST_ADD_UP_TYPE fldAstAddUpType
+        , NEA_UTIL_PKG.get_cn_value1_f('AP_GET_INT_AST_ADD_UP_TYPE', fld.AST_ADD_UP_TYPE) fldAstAddUpTypeName
+        , DECODE(fld.AST_ADD_UP_TYPE, '1', '1', '0') fldAstAddUpType1Flag
+        , DECODE(fld.AST_ADD_UP_TYPE, '2', '1', '0') fldAstAddUpType2Flag
+        , fld.AST_COMMENT fldAstComment
+        , fld.AST_ACCOUNT_CODE fldAstAccountCode
+        , NVL(NEA_UTIL_PKG.get_cn_value1_f('AP_GET_INT_AST_ACCOUNT', fld.AST_ACCOUNT_CODE, apCompanyCode), ' ') fldAstAccountName
+      FROM
+        (<include refid="selectApGetIntComList_APGI" />) a
+        , NEA_AP_GET_INT_LINE_FLD fld
+      WHERE
+        applicationId = fld.APPLICATION_ID(+)
+        AND applicationVersion = fld.APPLICATION_VERSION(+)
+       ORDER BY
+         applicationId, applicationVersion, fldLineSeq
+  </select>
+
+  <!--
+    取得申請(無形)：ヘッダ作成
+  -->
+  <insert id="insertApGetInt_APGI" parameterClass="java.util.Map">
+    INSERT INTO NEA_AP_GET_INT (
+      APPLICATION_ID
+      , APPLICATION_VERSION
+      , CREATE_DATE
+      , CREATE_STAFF_CODE
+      , UPDATE_DATE
+      , UPDATE_STAFF_CODE
+      , VERSION
+      , DISPLAY_VERSION
+      , UPDATE_COMMENT
+      , EAPP_ID
+      , AP_STATUS
+      , AP_DATE
+      , AP_GET_TYPE
+      , AP_GET_AMOUNT_RANGE
+      , SPECIAL_APPROVE_FLAG
+      , SPECIAL_APPROVE_DATE
+      , AP_CREATE_STAFF_CODE
+      , AP_CREATE_COMPANY_CODE
+      , AP_CREATE_SECTION_CODE
+      , AP_CREATE_SECTION_YEAR
+      , AP_STAFF_CODE
+      , AP_COMPANY_CODE
+      , AP_SECTION_CODE
+      , AP_SECTION_YEAR
+      , AP_TEL
+      , AP_SKIP_APPROVE_FLAG
+      , AP_NEED_CIO_JUDGE_FLAG
+      , AST_GET_TIME_FLAG
+      , AST_NAME
+      , AST_CLOUD_TYPE
+      , AST_GROUP_CODE
+      , AST_GET_REASON
+      , AST_COMPLETE_PLAN_DATE
+      , AST_EFFECT_TYPE
+      , AST_EFFECT_AMOUNT
+      , AST_EFFECT_DESCRIPTION
+      , AST_RENT_FLAG
+      , AST_RENT_APPLICATION_ID
+      , AST_RENT_MONTH
+      , AST_RENT_DATE_FROM
+      , AST_RENT_DATE_TO
+      , AST_RENT_DESCRIPTION
+      , AST_TOTAL_AMOUNT
+      , GET_TOTAL_AMOUNT
+      , MKT_CAT_CATEGORY_CODE
+      , MKT_CAT_TASK_CODE
+      , MKT_AST_PROJECT_CODE
+      , MKT_AST_PRODUCT_OUTLINE
+      , MKT_AST_MARKET
+      , MKT_AST_POLICY
+      , MKT_DEV_NEXT_PLAN_DATE
+      , ATT_DESCRIPTION
+      , HOL_COMPANY_CODE
+      , HOL_SECTION_CODE
+      , HOL_SECTION_YEAR
+      , HOL_STAFF_CODE
+      , HOL_STAFF_COMPANY_CODE
+      , HOL_STAFF_SECTION_CODE
+      , HOL_STAFF_SECTION_YEAR
+      , HOL_REP_OFFICE_CODE
+      , COST_TYPE
+      , COST_DEP_PRJ_CODE
+      , COST_COMPANY_CODE
+      , COST_SECTION_CODE
+      , COST_SECTION_YEAR
+      , DESCRIPTION_AP
+      , DESCRIPTION_ADMIN
+      , REPORT_COMPLETE_FLAG
+      , REMINDER_DATE
+      , APPROVE_DATE
+      , ACTIVE_FLAG
+      , VER_UP_COLUMN_NAME
+      , VER_UP_TYPE
+    ) VALUES (
+      #obj.applicationId:VARCHAR# /* APPLICATION_ID*/
+      , #obj.applicationVersion:VARCHAR# /* APPLICATION_VERSION*/
+      , #obj.createDate:TIMESTAMP# /* CREATE_DATE*/
+      , #obj.createStaffCode:VARCHAR# /* CREATE_STAFF_CODE*/
+      , #obj.updateDate:TIMESTAMP# /* UPDATE_DATE*/
+      , #obj.updateStaffCode:VARCHAR# /* UPDATE_STAFF_CODE*/
+      , #obj.version:NUMERIC# /* VERSION*/
+      , #obj.displayVersion:NUMERIC# /* DISPLAY_VERSION*/
+      , #obj.updateComment:VARCHAR# /* UPDATE_COMMENT*/
+      , #obj.eappId:NUMERIC# /* EAPP_ID*/
+      , #obj.apStatus:CHAR# /* AP_STATUS*/
+      , #obj.apDate:DATE# /* AP_DATE*/
+      , #obj.apGetType:VARCHAR# /* AP_GET_TYPE*/
+      , #obj.apGetAmountRange:VARCHAR# /* AP_GET_AMOUNT_RANGE*/
+      , #obj.specialApproveFlag:CHAR# /* SPECIAL_APPROVE_FLAG*/
+      , #obj.specialApproveDate:DATE# /* SPECIAL_APPROVE_DATE*/
+      , #obj.apCreateStaffCode:VARCHAR# /* AP_CREATE_STAFF_CODE*/
+      , #obj.apCreateCompanyCode:VARCHAR# /* AP_CREATE_COMPANY_CODE*/
+      , #obj.apCreateSectionCode:VARCHAR# /* AP_CREATE_SECTION_CODE*/
+      , #obj.apCreateSectionYear:NUMERIC# /* AP_CREATE_SECTION_YEAR*/
+      , #obj.apStaffCode:VARCHAR# /* AP_STAFF_CODE*/
+      , #obj.apCompanyCode:VARCHAR# /* AP_COMPANY_CODE*/
+      , #obj.apSectionCode:VARCHAR# /* AP_SECTION_CODE*/
+      , #obj.apSectionYear:NUMERIC# /* AP_SECTION_YEAR*/
+      , #obj.apTel:VARCHAR# /* AP_TEL*/
+      , #obj.apSkipApproveFlag:CHAR# /* AP_SKIP_APPROVE_FLAG*/
+      , #obj.apNeedCioJudgeFlag:CHAR# /* AP_NEED_CIO_JUDGE_FLAG*/
+      , #obj.astGetTimeFlag:CHAR# /* AST_GET_TIME_FLAG*/
+      , #obj.astName:VARCHAR# /* AST_NAME*/
+      , #obj.astCloudType:CHAR# /* AST_CLOUD_TYPE*/
+      , #obj.astGroupCode:VARCHAR# /* AST_GROUP_CODE*/
+      , #obj.astGetReason:VARCHAR# /* AST_GET_REASON*/
+      , #obj.astCompletePlanDate:DATE# /* AST_COMPLETE_PLAN_DATE*/
+      , #obj.astEffectType:CHAR# /* AST_EFFECT_TYPE*/
+      , #obj.astEffectAmount:NUMERIC# /* AST_EFFECT_AMOUNT*/
+      , #obj.astEffectDescription:VARCHAR# /* AST_EFFECT_DESCRIPTION*/
+      , #obj.astRentFlag:CHAR# /* AST_RENT_FLAG*/
+      , #obj.astRentApplicationId:VARCHAR# /* AST_RENT_APPLICATION_ID*/
+      , #obj.astRentMonth:NUMERIC# /* AST_RENT_MONTH*/
+      , #obj.astRentDateFrom:DATE# /* AST_RENT_DATE_FROM*/
+      , #obj.astRentDateTo:DATE# /* AST_RENT_DATE_TO*/
+      , #obj.astRentDescription:VARCHAR# /* AST_RENT_DESCRIPTION*/
+      , #obj.astTotalAmount:NUMERIC# /* AST_TOTAL_AMOUNT*/
+      , #obj.getTotalAmount:NUMERIC# /* GET_TOTAL_AMOUNT*/
+      , #obj.mktCatCategoryCode:VARCHAR# /* MKT_CAT_CATEGORY_CODE*/
+      , #obj.mktCatTaskCode:VARCHAR# /* MKT_CAT_TASK_CODE*/
+      , #obj.mktAstProjectCode:VARCHAR# /* MKT_AST_PROJECT_CODE*/
+      , #obj.mktAstProductOutline:VARCHAR# /* MKT_AST_PRODUCT_OUTLINE*/
+      , #obj.mktAstMarket:VARCHAR# /* MKT_AST_MARKET*/
+      , #obj.mktAstPolicy:VARCHAR# /* MKT_AST_POLICY*/
+      , #obj.mktDevNextPlanDate:DATE# /* MKT_DEV_NEXT_PLAN_DATE*/
+      , #obj.attDescription:VARCHAR# /* ATT_DESCRIPTION*/
+      , #obj.holCompanyCode:VARCHAR# /* HOL_COMPANY_CODE*/
+      , #obj.holSectionCode:VARCHAR# /* HOL_SECTION_CODE*/
+      , #obj.holSectionYear:NUMERIC# /* HOL_SECTION_YEAR*/
+      , #obj.holStaffCode:VARCHAR# /* HOL_STAFF_CODE*/
+      , #obj.holStaffCompanyCode:VARCHAR# /* HOL_STAFF_COMPANY_CODE*/
+      , #obj.holStaffSectionCode:VARCHAR# /* HOL_STAFF_SECTION_CODE*/
+      , #obj.holStaffSectionYear:NUMERIC# /* HOL_STAFF_SECTION_YEAR*/
+      , #obj.holRepOfficeCode:VARCHAR# /* HOL_REP_OFFICE_CODE*/
+      , #obj.costType:CHAR# /* COST_TYPE*/
+      , #obj.costDepPrjCode:VARCHAR# /* COST_DEP_PRJ_CODE*/
+      , #obj.costCompanyCode:VARCHAR# /* COST_COMPANY_CODE*/
+      , #obj.costSectionCode:VARCHAR# /* COST_SECTION_CODE*/
+      , #obj.costSectionYear:NUMERIC# /* COST_SECTION_YEAR*/
+      , #obj.descriptionAp:VARCHAR# /* DESCRIPTION_AP*/
+      , #obj.descriptionAdmin:VARCHAR# /* DESCRIPTION_ADMIN*/
+      , #obj.reportCompleteFlag:CHAR# /* REPORT_COMPLETE_FLAG*/
+      , #obj.reminderDate:DATE# /* REMINDER_DATE*/
+      , #obj.approveDate:DATE# /* APPROVE_DATE*/
+      , #obj.activeFlag:CHAR# /* ACTIVE_FLAG*/
+      , #obj.verUpColumnName:VARCHAR# /* VER_UP_COLUMN_NAME*/
+      , #obj.verUpType:CHAR# /* VER_UP_TYPE*/
+    )
+  </insert>
+
+  <!--
+    取得申請(無形)：資産明細作成
+  -->
+  <insert id="insertApGetIntLineFld_APGI" parameterClass="java.util.Map">
+    INSERT INTO NEA_AP_GET_INT_LINE_FLD (
+      APPLICATION_ID
+      , APPLICATION_VERSION
+      , LINE_SEQ
+      , CREATE_DATE
+      , CREATE_STAFF_CODE
+      , UPDATE_DATE
+      , UPDATE_STAFF_CODE
+      , AST_CATEGORY_CODE
+      , AST_TERM_FLAG
+      , AST_TERM_YEAR
+      , AST_NAME
+      , AST_PRJ_CODE
+      , AST_PUR_COMPANY_CODE
+      , AST_PUR_COMPANY_NAME
+      , AST_ESTIMATE_NUMBER
+      , AST_UNIT_AMOUNT
+      , AST_QUANTITY
+      , AST_GET_AMOUNT
+      , AST_ADD_UP_TYPE
+      , AST_COMMENT
+      , AST_ACCOUNT_CODE
+    ) VALUES (
+      #obj.applicationId:VARCHAR# /* APPLICATION_ID*/
+      , #obj.applicationVersion:VARCHAR# /* APPLICATION_VERSION*/
+      , #obj.lineSeq:NUMERIC# /* LINE_SEQ*/
+      , #obj.createDate:TIMESTAMP# /* CREATE_DATE*/
+      , #obj.createStaffCode:VARCHAR# /* CREATE_STAFF_CODE*/
+      , #obj.updateDate:TIMESTAMP# /* UPDATE_DATE*/
+      , #obj.updateStaffCode:VARCHAR# /* UPDATE_STAFF_CODE*/
+      , #obj.astCategoryCode:VARCHAR# /* AST_CATEGORY_CODE*/
+      , #obj.astTermFlag:CHAR# /* AST_TERM_FLAG*/
+      , #obj.astTermYear:NUMERIC# /* AST_TERM_YEAR*/
+      , #obj.astName:VARCHAR# /* AST_NAME*/
+      , #obj.astPrjCode:VARCHAR# /* AST_PRJ_CODE*/
+      , #obj.astPurCompanyCode:VARCHAR# /* AST_PUR_COMPANY_CODE*/
+      , #obj.astPurCompanyName:VARCHAR# /* AST_PUR_COMPANY_NAME*/
+      , #obj.astEstimateNumber:VARCHAR# /* AST_ESTIMATE_NUMBER*/
+      , #obj.astUnitAmount:NUMERIC# /* AST_UNIT_AMOUNT*/
+      , #obj.astQuantity:NUMERIC# /* AST_QUANTITY*/
+      , #obj.astGetAmount:NUMERIC# /* AST_GET_AMOUNT*/
+      , #obj.astAddUpType:CHAR# /* AST_ADD_UP_TYPE*/
+      , #obj.astComment:VARCHAR# /* AST_COMMENT*/
+      , #obj.astAccountCode:VARCHAR# /* AST_ACCOUNT_CODE*/
+    )
+  </insert>
+
+  <!--
+    取得申請(無形)：開発スケジュール明細作成
+  -->
+  <insert id="insertApGetIntLineDevSch_APGI" parameterClass="java.util.Map">
+    INSERT INTO NEA_AP_GET_INT_LINE_DEV_SCH (
+      APPLICATION_ID
+      , APPLICATION_VERSION
+      , LINE_SEQ
+      , CREATE_DATE
+      , CREATE_STAFF_CODE
+      , UPDATE_DATE
+      , UPDATE_STAFF_CODE
+      , DEV_PERIOD_FROM
+      , DEV_PERIOD_TO
+      , DEV_PROPER_COUNT
+      , DEV_ENTRUST_COUNT
+      , DEV_AMOUNT
+      , DEV_SCH_CODE
+    ) VALUES (
+      #obj.applicationId:VARCHAR# /* APPLICATION_ID*/
+      , #obj.applicationVersion:VARCHAR# /* APPLICATION_VERSION*/
+      , #obj.lineSeq:NUMERIC# /* LINE_SEQ*/
+      , #obj.createDate:TIMESTAMP# /* CREATE_DATE*/
+      , #obj.createStaffCode:VARCHAR# /* CREATE_STAFF_CODE*/
+      , #obj.updateDate:TIMESTAMP# /* UPDATE_DATE*/
+      , #obj.updateStaffCode:VARCHAR# /* UPDATE_STAFF_CODE*/
+      , #obj.devPeriodFrom:DATE# /* DEV_PERIOD_FROM*/
+      , #obj.devPeriodTo:DATE# /* DEV_PERIOD_TO*/
+      , #obj.devProperCount:NUMERIC# /* DEV_PROPER_COUNT*/
+      , #obj.devEntrustCount:NUMERIC# /* DEV_ENTRUST_COUNT*/
+      , #obj.devAmount:NUMERIC# /* DEV_AMOUNT*/
+      , #obj.devSchCode:VARCHAR# /* DEV_SCH_CODE*/
+    )
+  </insert>
+
+  <!--
+    取得申請(無形)：その他費用明細作成
+  -->
+  <insert id="insertApGetIntLineOtrCost_APGI" parameterClass="java.util.Map">
+    INSERT INTO NEA_AP_GET_INT_LINE_OTR_COST (
+      APPLICATION_ID
+      , APPLICATION_VERSION
+      , LINE_SEQ
+      , CREATE_DATE
+      , CREATE_STAFF_CODE
+      , UPDATE_DATE
+      , UPDATE_STAFF_CODE
+      , OTR_COMMENT
+      , OTR_AMOUNT
+    ) VALUES (
+      #obj.applicationId:VARCHAR# /* APPLICATION_ID*/
+      , #obj.applicationVersion:VARCHAR# /* APPLICATION_VERSION*/
+      , #obj.lineSeq:NUMERIC# /* LINE_SEQ*/
+      , #obj.createDate:TIMESTAMP# /* CREATE_DATE*/
+      , #obj.createStaffCode:VARCHAR# /* CREATE_STAFF_CODE*/
+      , #obj.updateDate:TIMESTAMP# /* UPDATE_DATE*/
+      , #obj.updateStaffCode:VARCHAR# /* UPDATE_STAFF_CODE*/
+      , #obj.otrComment:VARCHAR# /* OTR_COMMENT*/
+      , #obj.otrAmount:NUMERIC# /* OTR_AMOUNT*/
+    )
+  </insert>
+
+  <!--
+    取得申請(無形)：利益予測明細作成
+  -->
+  <insert id="insertApGetIntLineProfEst_APGI" parameterClass="java.util.Map">
+    INSERT INTO NEA_AP_GET_INT_LINE_PROF_EST (
+      APPLICATION_ID
+      , APPLICATION_VERSION
+      , LINE_SEQ
+      , CREATE_DATE
+      , CREATE_STAFF_CODE
+      , UPDATE_DATE
+      , UPDATE_STAFF_CODE
+      , PROF_SALES_QUANTITY
+      , PROF_SALES_AMOUNT
+      , PROF_COST_AMOUNT
+    ) VALUES (
+      #obj.applicationId:VARCHAR# /* APPLICATION_ID*/
+      , #obj.applicationVersion:VARCHAR# /* APPLICATION_VERSION*/
+      , #obj.lineSeq:NUMERIC# /* LINE_SEQ*/
+      , #obj.createDate:TIMESTAMP# /* CREATE_DATE*/
+      , #obj.createStaffCode:VARCHAR# /* CREATE_STAFF_CODE*/
+      , #obj.updateDate:TIMESTAMP# /* UPDATE_DATE*/
+      , #obj.updateStaffCode:VARCHAR# /* UPDATE_STAFF_CODE*/
+      , #obj.profSalesQuantity:NUMERIC# /* PROF_SALES_QUANTITY*/
+      , #obj.profSalesAmount:NUMERIC# /* PROF_SALES_AMOUNT*/
+      , #obj.profCostAmount:NUMERIC# /* PROF_COST_AMOUNT*/
+    )
+  </insert>
+
+  <!--
+    取得申請(無形)：添付明細作成
+  -->
+  <insert id="insertApGetIntLineAtt_APGI" parameterClass="java.util.Map">
+    INSERT INTO NEA_AP_GET_INT_LINE_ATT (
+      APPLICATION_ID
+      , APPLICATION_VERSION
+      , LINE_SEQ
+      , CREATE_DATE
+      , CREATE_STAFF_CODE
+      , UPDATE_DATE
+      , UPDATE_STAFF_CODE
+      , ATT_FILE_NAME
+      , ATT_FILE_ID
+      , ATT_COMMENT
+    ) VALUES (
+      #obj.applicationId:VARCHAR# /* APPLICATION_ID*/
+      , #obj.applicationVersion:VARCHAR# /* APPLICATION_VERSION*/
+      , #obj.lineSeq:NUMERIC# /* LINE_SEQ*/
+      , #obj.createDate:TIMESTAMP# /* CREATE_DATE*/
+      , #obj.createStaffCode:VARCHAR# /* CREATE_STAFF_CODE*/
+      , #obj.updateDate:TIMESTAMP# /* UPDATE_DATE*/
+      , #obj.updateStaffCode:VARCHAR# /* UPDATE_STAFF_CODE*/
+      , #obj.attFileName:VARCHAR# /* ATT_FILE_NAME*/
+      , #obj.attFileId:VARCHAR# /* ATT_FILE_ID*/
+      , #obj.attComment:VARCHAR# /* ATT_COMMENT*/
+    )
+  </insert>
+
+  <!--
+    取得申請(無形)：経費負担明細作成
+  -->
+  <insert id="insertApGetIntLineCostSec_APGI" parameterClass="java.util.Map">
+    INSERT INTO NEA_AP_GET_INT_LINE_COST_SEC (
+      APPLICATION_ID
+      , APPLICATION_VERSION
+      , LINE_SEQ
+      , CREATE_DATE
+      , CREATE_STAFF_CODE
+      , UPDATE_DATE
+      , UPDATE_STAFF_CODE
+      , COST_COMPANY_CODE
+      , COST_SECTION_CODE
+      , COST_SECTION_YEAR
+      , COST_DIST
+    ) VALUES (
+      #obj.applicationId:VARCHAR# /* APPLICATION_ID*/
+      , #obj.applicationVersion:VARCHAR# /* APPLICATION_VERSION*/
+      , #obj.lineSeq:NUMERIC# /* LINE_SEQ*/
+      , #obj.createDate:TIMESTAMP# /* CREATE_DATE*/
+      , #obj.createStaffCode:VARCHAR# /* CREATE_STAFF_CODE*/
+      , #obj.updateDate:TIMESTAMP# /* UPDATE_DATE*/
+      , #obj.updateStaffCode:VARCHAR# /* UPDATE_STAFF_CODE*/
+      , #obj.costCompanyCode:VARCHAR# /* COST_COMPANY_CODE*/
+      , #obj.costSectionCode:VARCHAR# /* COST_SECTION_CODE*/
+      , #obj.costSectionYear:NUMERIC# /* COST_SECTION_YEAR*/
+      , #obj.costDist:NUMERIC# /* COST_DIST*/
+    )
+  </insert>
+
+  <!--
+    取得申請(無形)：ヘッダ更新
+  -->
+  <update id="updateApGetInt_APGI" parameterClass="java.util.Map">
+    UPDATE
+      NEA_AP_GET_INT
+    SET
+      APPLICATION_ID = #obj.applicationId:VARCHAR#
+      , APPLICATION_VERSION = #obj.applicationVersion:VARCHAR#
+      , CREATE_DATE = #obj.createDate:TIMESTAMP#
+      , CREATE_STAFF_CODE = #obj.createStaffCode:VARCHAR#
+      , UPDATE_DATE = #obj.updateDate:TIMESTAMP#
+      , UPDATE_STAFF_CODE = #obj.updateStaffCode:VARCHAR#
+      , VERSION = #obj.version:NUMERIC#
+      , DISPLAY_VERSION = #obj.displayVersion:NUMERIC#
+      , UPDATE_COMMENT = #obj.updateComment:VARCHAR#
+      , EAPP_ID = #obj.eappId:NUMERIC#
+      , AP_STATUS = #obj.apStatus:CHAR#
+      , AP_DATE = #obj.apDate:DATE#
+      , AP_GET_TYPE = #obj.apGetType:VARCHAR#
+      , AP_GET_AMOUNT_RANGE = #obj.apGetAmountRange:VARCHAR#
+      , SPECIAL_APPROVE_FLAG = #obj.specialApproveFlag:CHAR#
+      , SPECIAL_APPROVE_DATE = #obj.specialApproveDate:DATE#
+      , AP_CREATE_STAFF_CODE = #obj.apCreateStaffCode:VARCHAR#
+      , AP_CREATE_COMPANY_CODE = #obj.apCreateCompanyCode:VARCHAR#
+      , AP_CREATE_SECTION_CODE = #obj.apCreateSectionCode:VARCHAR#
+      , AP_CREATE_SECTION_YEAR = #obj.apCreateSectionYear:NUMERIC#
+      , AP_STAFF_CODE = #obj.apStaffCode:VARCHAR#
+      , AP_COMPANY_CODE = #obj.apCompanyCode:VARCHAR#
+      , AP_SECTION_CODE = #obj.apSectionCode:VARCHAR#
+      , AP_SECTION_YEAR = #obj.apSectionYear:NUMERIC#
+      , AP_TEL = #obj.apTel:VARCHAR#
+      , AP_SKIP_APPROVE_FLAG = #obj.apSkipApproveFlag:CHAR#
+      , AP_NEED_CIO_JUDGE_FLAG = #obj.apNeedCioJudgeFlag:CHAR#
+      , AST_GET_TIME_FLAG = #obj.astGetTimeFlag:CHAR#
+      , AST_NAME = #obj.astName:VARCHAR#
+      , AST_CLOUD_TYPE = #obj.astCloudType:CHAR#
+      , AST_GROUP_CODE = #obj.astGroupCode:VARCHAR#
+      , AST_GET_REASON = #obj.astGetReason:VARCHAR#
+      , AST_COMPLETE_PLAN_DATE = #obj.astCompletePlanDate:DATE#
+      , AST_EFFECT_TYPE = #obj.astEffectType:CHAR#
+      , AST_EFFECT_AMOUNT = #obj.astEffectAmount:NUMERIC#
+      , AST_EFFECT_DESCRIPTION = #obj.astEffectDescription:VARCHAR#
+      , AST_RENT_FLAG = #obj.astRentFlag:CHAR#
+      , AST_RENT_APPLICATION_ID = #obj.astRentApplicationId:VARCHAR#
+      , AST_RENT_MONTH = #obj.astRentMonth:NUMERIC#
+      , AST_RENT_DATE_FROM = #obj.astRentDateFrom:DATE#
+      , AST_RENT_DATE_TO = #obj.astRentDateTo:DATE#
+      , AST_RENT_DESCRIPTION = #obj.astRentDescription:VARCHAR#
+      , AST_TOTAL_AMOUNT = #obj.astTotalAmount:NUMERIC#
+      , GET_TOTAL_AMOUNT = #obj.getTotalAmount:NUMERIC#
+      , MKT_CAT_CATEGORY_CODE = #obj.mktCatCategoryCode:VARCHAR#
+      , MKT_CAT_TASK_CODE = #obj.mktCatTaskCode:VARCHAR#
+      , MKT_AST_PROJECT_CODE = #obj.mktAstProjectCode:VARCHAR#
+      , MKT_AST_PRODUCT_OUTLINE = #obj.mktAstProductOutline:VARCHAR#
+      , MKT_AST_MARKET = #obj.mktAstMarket:VARCHAR#
+      , MKT_AST_POLICY = #obj.mktAstPolicy:VARCHAR#
+      , MKT_DEV_NEXT_PLAN_DATE = #obj.mktDevNextPlanDate:DATE#
+      , ATT_DESCRIPTION = #obj.attDescription:VARCHAR#
+      , HOL_COMPANY_CODE = #obj.holCompanyCode:VARCHAR#
+      , HOL_SECTION_CODE = #obj.holSectionCode:VARCHAR#
+      , HOL_SECTION_YEAR = #obj.holSectionYear:NUMERIC#
+      , HOL_STAFF_CODE = #obj.holStaffCode:VARCHAR#
+      , HOL_STAFF_COMPANY_CODE = #obj.holStaffCompanyCode:VARCHAR#
+      , HOL_STAFF_SECTION_CODE = #obj.holStaffSectionCode:VARCHAR#
+      , HOL_STAFF_SECTION_YEAR = #obj.holStaffSectionYear:NUMERIC#
+      , HOL_REP_OFFICE_CODE = #obj.holRepOfficeCode:VARCHAR#
+      , COST_TYPE = #obj.costType:CHAR#
+      , COST_DEP_PRJ_CODE = #obj.costDepPrjCode:VARCHAR#
+      , COST_COMPANY_CODE = #obj.costCompanyCode:VARCHAR#
+      , COST_SECTION_CODE = #obj.costSectionCode:VARCHAR#
+      , COST_SECTION_YEAR = #obj.costSectionYear:NUMERIC#
+      , DESCRIPTION_AP = #obj.descriptionAp:VARCHAR#
+      , DESCRIPTION_ADMIN = #obj.descriptionAdmin:VARCHAR#
+      , REPORT_COMPLETE_FLAG = #obj.reportCompleteFlag:CHAR#
+      , REMINDER_DATE = #obj.reminderDate:DATE#
+      , APPROVE_DATE = #obj.approveDate:DATE#
+      , ACTIVE_FLAG = #obj.activeFlag:CHAR#
+      , VER_UP_COLUMN_NAME = #obj.verUpColumnName:VARCHAR#
+      , VER_UP_TYPE = #obj.verUpType:CHAR#
+    WHERE
+      APPLICATION_ID = #obj.applicationId#
+      AND APPLICATION_VERSION = #obj.applicationVersion#
+  </update>
+
+  <!--
+    取得申請(無形)：ヘッダ削除
+  -->
+  <delete id="deleteApGetInt_APGI" parameterClass="java.util.Map">
+    DELETE FROM
+      NEA_AP_GET_INT
+    WHERE
+      APPLICATION_ID = #applicationId#
+      AND APPLICATION_VERSION = #applicationVersion#
+  </delete>
+
+  <!--
+    取得申請(無形)：資産明細削除
+  -->
+  <delete id="deleteApGetIntLineFld_APGI" parameterClass="java.util.Map">
+    DELETE FROM
+      NEA_AP_GET_INT_LINE_FLD
+    WHERE
+      APPLICATION_ID = #applicationId#
+      AND APPLICATION_VERSION = #applicationVersion#
+  </delete>
+
+  <!--
+    取得申請(無形)：開発スケジュール明細削除
+  -->
+  <delete id="deleteApGetIntLineDevSch_APGI" parameterClass="java.util.Map">
+    DELETE FROM
+      NEA_AP_GET_INT_LINE_DEV_SCH
+    WHERE
+      APPLICATION_ID = #applicationId#
+      AND APPLICATION_VERSION = #applicationVersion#
+  </delete>
+
+  <!--
+    取得申請(無形)：その他費用明細削除
+  -->
+  <delete id="deleteApGetIntLineOtrCost_APGI" parameterClass="java.util.Map">
+    DELETE FROM
+      NEA_AP_GET_INT_LINE_OTR_COST
+    WHERE
+      APPLICATION_ID = #applicationId#
+      AND APPLICATION_VERSION = #applicationVersion#
+  </delete>
+
+  <!--
+    取得申請(無形)：利益予測明細削除
+  -->
+  <delete id="deleteApGetIntLineProfEst_APGI" parameterClass="java.util.Map">
+    DELETE FROM
+      NEA_AP_GET_INT_LINE_PROF_EST
+    WHERE
+      APPLICATION_ID = #applicationId#
+      AND APPLICATION_VERSION = #applicationVersion#
+  </delete>
+
+  <!--
+    取得申請(無形)：添付明細削除
+  -->
+  <delete id="deleteApGetIntLineAtt_APGI" parameterClass="java.util.Map">
+    DELETE FROM
+      NEA_AP_GET_INT_LINE_ATT
+    WHERE
+      APPLICATION_ID = #applicationId#
+      AND APPLICATION_VERSION = #applicationVersion#
+  </delete>
+
+  <!--
+    取得申請(無形)：経費負担明細削除
+  -->
+  <delete id="deleteApGetIntLineCostSec_APGI" parameterClass="java.util.Map">
+    DELETE FROM
+      NEA_AP_GET_INT_LINE_COST_SEC
+    WHERE
+      APPLICATION_ID = #applicationId#
+      AND APPLICATION_VERSION = #applicationVersion#
+  </delete>
+
+  <!--
+    取得申請(無形)：検索
+  -->
+  <select id="selectVerUpColumnName_APGI" parameterClass="java.util.Map" resultClass="java.lang.String">
+    SELECT
+      NEA_UTIL_PKG.GET_VER_UP_COLUMN_NAME_F(#entityName#, #applicationId#, #oldApplicationVersion#, #newApplicationVersion#, #itemDefName#)
+    FROM
+      DUAL
+  </select>
+</sqlMap>

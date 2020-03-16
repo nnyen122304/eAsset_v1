@@ -1,0 +1,126 @@
+<span id="focusChildInit" tabindex="0"></span>
+<form class="input-detail block-frame-border" *ngIf="isFormShown" [formGroup]="detailForm">
+  <h2 class="frame-title">明細入力</h2>
+  <div class="frame-body">
+    <div class="group-base">
+      <div class="row">
+        <div class="col col-label">ソート順：</div>
+        <div class="col col-form">
+          <div class="form-group-inline">
+            <ea-input-number class="ip-sort-number wm-combo wm-100" formControlName="sortNumber" [isReadOnly]="!(lineAddEnableFlag==='1')" [required]="true" [format]="'f0'"></ea-input-number>
+            <span [hidden]="!hasParent">
+              <span class="inline-label">親値：</span>
+              <app-parent-master-selection
+                [parentMasterForm]="detailForm"
+                [masterCodeControlName]="'parentInternalCode'"
+                [masterNameControlName]="'parentInternalName'"
+                [masterCategoryControlName]="'parentCategoryCode'"
+                [default]="masterData ? masterData.parentInternalName : null"
+                [sqlName]="'selectCodeNameItemList_MST'"
+                [paramMap]="{parentCompanyCode: sessionInfo.loginCompanyCode, categoryCode: paramItem.parentCategoryCode, deleteFlag: '0'}"
+                [selectOnly]="true"
+                [required]="true"
+                (select)="onParentSelected($event)"
+              ></app-parent-master-selection>
+            </span>
+            <span class="inline-label">コード：</span>
+            <ea-input-mask class="ip-premask wm-combo wm-50" [ngClass]="{'premask-disabled': codePremask && !codeEditable}" *ngIf="codePremask" [(ngModel)]="codePremask" [ngModelOptions]="{standalone: true}" [isReadOnly]="true"></ea-input-mask><ea-input-mask class="ip-internal-code wm-combo wm-100" formControlName="internalCodeNoPrefix" [isReadOnly]="!codeEditable" [required]="true" [pattern]="'a-zA-Z0-9\_'"></ea-input-mask>
+            <div class="form-checkbox">
+              <div class="form-check form-check-inline">
+                <input class="form-check-input wm-checkbox" type="checkbox" id="ip-suspension" formControlName="deleteFlagFormat">
+                <label class="form-check-label" for="ip-suspension">使用停止</label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row" *ngIf="paramItem.setCompanyCode !== '000'">
+        <div class="col col-label">会社：</div>
+        <div class="col col-form">
+          <div class="form-checkbox" *ngIf="paramItem.useCompanyCode === '000'">
+            <div class="form-check form-check-inline">
+              <input class="form-check-input wm-checkbox" type="checkbox" [id]="'company-' + companyList[0].internalCode" [value]="companyList[0].companyName" [checked]="true" disabled>
+              <label class="form-check-label" [for]="'company-' + companyList[0].internalCode">{{companyList[0].companyName}}</label>
+            </div>
+          </div>
+          <div class="form-checkbox" *ngIf="paramItem.useCompanyCode !== '000'">
+            <div class="form-check form-check-inline" *ngFor="let company of detailForm.controls.checkboxCompanies.controls; let i = index;">
+              <input class="form-check-input wm-checkbox" type="checkbox" [id]="'company-' + checkboxCompanies[i].id" [formControl]="company">
+              <label class="form-check-label" [for]="'company-' + checkboxCompanies[i].id">{{checkboxCompanies[i].name}}</label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="group-additional" *ngIf="defListData">
+      <div class="row" *ngFor="let row of defListData">
+        <div class="col col-label">{{row.itemName}}：</div>
+        <div class="col col-form">
+          <ng-container *ngIf="row.itemInputType === 'TXT'">
+            <ea-input-mask
+              class="wm-combo"
+              [isReadOnly]="row.readOnly==='true' || row.editLock==='1'"
+              [required]="row.required==='true'"
+              [isRequired]="row.required==='true'"
+              [isDisabled]="row.editLock==='true'"
+              [style.width.px]="row.width ? row.width : 150"
+              [maxLength]="row.maxChars"
+              [pattern]="row.restrict"
+              [formControlName]="'value' + row.itemSeq"
+              [formControl]="detailForm.controls['value' + row.itemSeq]"
+            >
+            </ea-input-mask>
+            <div class="item-comment" *ngIf="row.itemComment" [innerHTML]="row.itemComment"></div>
+          </ng-container>
+          <ng-container *ngIf="row.itemInputType === 'TXTA'">
+            <textarea
+              class="wm-textarea"
+              [id]="'txta-' + row.itemSeq"
+              [readonly]="row.readOnly==='true' || row.editLock==='1'"
+              [required]="row.required==='true'"
+              [disabled]="row.editLock==='true'"
+              [style.width.px]="row.width ? row.width : 200"
+              [style.height.px]="row.height ? row.height : 80"
+              [formControlName]="'value' + row.itemSeq"
+            ></textarea>
+            <div class="item-comment" *ngIf="row.itemComment" [innerHTML]="row.itemComment"></div>
+          </ng-container>
+          <ng-container *ngIf="row.itemInputType === 'NUM'">
+            <ea-input-number
+              class="wm-combo"
+              [isReadOnly]="row.readOnly==='true' || row.editLock==='1'"
+              [isRequired]="false"
+              [required]="row.required==='true'"
+              [isDisabled]="row.editLock==='true'"
+              [style.width.px]="row.width ? row.width : 200"
+              [formControlName]="'value' + row.itemSeq"
+              [format]="'f0'"
+            >
+            </ea-input-number>
+            <div class="item-comment" *ngIf="row.itemComment" [innerHTML]="row.itemComment"></div>
+          </ng-container>
+          <ng-container *ngIf="row.itemInputType === 'CMB'">
+            <wj-combo-box
+              class="wm-combo wm-dropdown"
+              [itemsSource]="row.cmbDataFormated"
+              [displayMemberPath]="'label'"
+              [selectedValuePath]="'data'"
+              [isReadOnly]="row.readOnly==='true' || row.editLock==='1'"
+              [isRequired]="row.required==='true'"
+              [required]="row.required==='true'"
+              [isDisabled]="row.editLock==='true'"
+              [style.width.px]="row.width ? row.width : 200"
+              [formControlName]="'value' + row.itemSeq"
+              >
+            </wj-combo-box>
+            <div class="item-comment" *ngIf="row.itemComment" [innerHTML]="row.itemComment"></div>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+    <div class="group-buttons wm-buttons">
+      <button type="button" class="wm-btn" (click)="submit()" [disabled]="!isFormEnabled">OK</button>
+      <button type="button" class="wm-btn" (click)="close()">キャンセル</button>
+    </div>
+  </div>
+</form>

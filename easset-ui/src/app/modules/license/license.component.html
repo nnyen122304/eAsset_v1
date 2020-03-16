@@ -1,0 +1,70 @@
+<wj-tab-panel #viewStack class="view-stack" (selectedIndexChange)="this.selectedIndexChangeHandler($event)">
+  <ea-view-stack-tab [keepViewState]="true">
+    <!-- 画面切替後も状態を維持する画面：true、維持しない画面:false-->
+    <a>照会/修正</a>
+    <div>
+      <app-license-search [parent]="this" #childViewSearch *ngIf="this.isLoaded.get(this.viewIndexSearch)">
+        {{this.changeChildSubject.set(this.viewIndexSearch, childViewSearch.changeChildSubject)}}
+      </app-license-search>
+    </div>
+  </ea-view-stack-tab>
+  <ea-view-stack-tab [keepViewState]="false">
+      <!-- 画面切替後も状態を維持する画面：true、維持しない画面:false-->
+      <a>照会/修正</a>
+      <div>
+        <app-license-result [parent]="this" #childViewResult *ngIf="this.isLoaded.get(this.viewIndexResult)">
+          {{this.changeChildSubject.set(this.viewIndexResult, childViewResult.changeChildSubject)}}
+        </app-license-result>
+      </div>
+    </ea-view-stack-tab>
+  <ea-view-stack-tab [keepViewState]="false">
+    <!-- 画面切替後も状態を維持する画面：true、維持しない画面:false-->
+    <a>照会/修正</a>
+    <div>
+      <app-term-license-search [parent]="this" #childViewTermSearch *ngIf="this.isLoaded.get(this.viewIndexTermSearch)">
+        {{this.changeChildSubject.set(this.viewIndexTermSearch, childViewTermSearch.changeChildSubject)}}
+      </app-term-license-search>
+    </div>
+  </ea-view-stack-tab>
+  <ea-view-stack-tab [keepViewState]="false">
+    <!-- 画面切替後も状態を維持する画面：true、維持しない画面:false-->
+    <a>照会/修正</a>
+    <div>
+      <app-license-hist [parent]="this" #childViewHist *ngIf="this.isLoaded.get(this.viewIndexHist)">
+        {{this.changeChildSubject.set(this.viewIndexHist, childViewHist.changeChildSubject)}}
+      </app-license-hist>
+    </div>
+  </ea-view-stack-tab>
+  <ea-view-stack-tab [keepViewState]="true">
+    <!-- 画面切替後も状態を維持する画面：true、維持しない画面:false-->
+    <a>取得申請検索</a>
+    <div>
+      <app-license-ap-get-tan-search [parent]="this" #childViewLicenseApGetTanSearch
+        *ngIf="this.isLoaded.get(this.viewIndexLicenseApGetTanSearch)">
+        {{this.changeChildSubject.set(this.viewIndexLicenseApGetTanSearch, childViewLicenseApGetTanSearch.changeChildSubject)}}
+      </app-license-ap-get-tan-search>
+    </div>
+  </ea-view-stack-tab>
+  <ea-view-stack-tab [keepViewState]="false">
+    <!-- 画面切替後も状態を維持する画面：true、維持しない画面:false-->
+    <a>取得申請検索</a>
+    <div>
+      <app-license-ap-get-tan-result [parent]="this" #childViewLicenseApGetTanResult
+        *ngIf="this.isLoaded.get(this.viewIndexLicenseApGetTanResult)">
+        {{this.changeChildSubject.set(this.viewIndexLicenseApGetTanResult, childViewLicenseApGetTanResult.changeChildSubject)}}
+      </app-license-ap-get-tan-result>
+    </div>
+  </ea-view-stack-tab>
+
+  <ea-view-stack-tab [keepViewState]="true">
+    <!-- 画面切替後も状態を維持する画面：true、維持しない画面:false-->
+    <a>取得申請検索</a>
+    <div>
+      <app-license-ap-get-int-result [parent]="this" #childViewLicenseApGetIntResult
+        *ngIf="this.isLoaded.get(this.viewIndexApGetIntResult)">
+        {{this.changeChildSubject.set(this.viewIndexApGetIntResult, childViewLicenseApGetIntResult.changeChildSubject)}}
+      </app-license-ap-get-int-result>
+    </div>
+  </ea-view-stack-tab>
+</wj-tab-panel>
+<app-confirm-popup #confirmPopup (confirm)="onConfirm()"></app-confirm-popup>

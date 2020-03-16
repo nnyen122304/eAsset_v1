@@ -1,0 +1,29 @@
+<wj-tab-panel #viewStack class="view-stack" (selectedIndexChange)="this.selectedIndexChangeHandler($event)">
+    <ea-view-stack-tab [keepViewState]="false"> <!-- 画面切替後も状態を維持する画面：true、維持しない画面:false-->
+        <a>取得申請(無形)検索</a>
+        <div>
+            <app-ap-bgn-int-ap-get-int-search [parent]="this" #childViewApGetIntSearch
+                                              *ngIf="this.isLoaded.get(this.viewIndexApGetIntSearch)">
+                {{this.changeChildSubject.set(this.viewIndexApGetIntSearch, childViewApGetIntSearch.changeChildSubject)}}
+            </app-ap-bgn-int-ap-get-int-search>
+        </div>
+    </ea-view-stack-tab>
+    <ea-view-stack-tab [keepViewState]="true"> <!-- 画面切替後も状態を維持する画面：true、維持しない画面:false-->
+        <a>取得申請(無形)検索結果</a>
+        <div>
+            <app-ap-bgn-int-ap-get-int-result [parent]="this" #childViewApGetIntResult
+                                              *ngIf="this.isLoaded.get(this.viewIndexApGetIntResult)">
+                {{this.changeChildSubject.set(this.viewIndexApGetIntResult, childViewApGetIntResult.changeChildSubject)}}
+            </app-ap-bgn-int-ap-get-int-result>
+        </div>
+    </ea-view-stack-tab>
+    <ea-view-stack-tab [keepViewState]="false"> <!-- 画面切替後も状態を維持する画面：true、維持しない画面:false-->
+        <a>サービス提供開始報告登録</a>
+        <div>
+            <app-ap-bgn-int-entry [parent]="this" #childViewBgnIntEntry *ngIf="this.isLoaded.get(this.viewIndexEntry)">
+                {{this.changeChildSubject.set(this.viewIndexEntry, childViewBgnIntEntry.changeChildSubject)}}
+            </app-ap-bgn-int-entry>
+        </div>
+    </ea-view-stack-tab>
+    <app-confirm-popup #confirmPopup (confirm)="onConfirm()"></app-confirm-popup>
+</wj-tab-panel>

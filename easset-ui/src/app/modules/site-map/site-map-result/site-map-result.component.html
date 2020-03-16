@@ -1,0 +1,127 @@
+<div class="page-container">
+  <div class="section-header">
+    <div class="row col">
+      <label>リンククリック時に </label>
+      <div class="e-link">
+        <a class="link" (click)="changeType()"> {{labelType}} </a>
+      </div>
+      <label> で画面を開く。</label>
+    </div>
+  </div>
+  <div class="row col">
+    <div class="box1">
+      <div class="form-tree-selection" *ngIf="menuItems?.tree1 && menuItems?.tree1.items.length > 0">
+        <div class="frame-title"><span class="text">{{menuItems?.tree1.label}}</span></div>
+        <div class="modal-content">
+          <div class="modal-body">
+            <div class="tree-wrapper site-map">
+              <wj-tree-view #treeView1 class="wm-tree-view" [itemsSource]="menuItems?.tree1.items" [displayMemberPath]="'name'"
+                [childItemsPath]="'items'" [autoCollapse]="false" (loadedItems)="onTreeInitialized(treeView1)" [imageMemberPath]="'img'"
+                (itemClicked)="submit(treeView1)">
+              </wj-tree-view>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="form-tree-selection" *ngIf="menuItems?.tree2 && menuItems?.tree2.items.length > 0">
+        <div class="frame-title"><span class="text">{{menuItems?.tree2.label}}</span></div>
+        <div class="modal-content">
+          <div class="modal-body">
+            <div class="tree-wrapper site-map height-2">
+              <wj-tree-view #treeView2 class="wm-tree-view" [itemsSource]="menuItems?.tree2.items" [displayMemberPath]="'name'"
+                [childItemsPath]="'items'" [autoCollapse]="false" (loadedItems)="onTreeInitialized(treeView2)"
+                (itemClicked)="submit(treeView2)">
+              </wj-tree-view>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="form-tree-selection" *ngIf="menuItems?.tree3 && menuItems?.tree3.items.length > 0">
+        <div class="frame-title"><span class="text">{{menuItems?.tree3.label}}</span></div>
+        <div class="modal-content">
+          <div class="modal-body">
+            <div class="tree-wrapper site-map">
+              <wj-tree-view #treeView3 class="wm-tree-view" [itemsSource]="menuItems?.tree3.items" [displayMemberPath]="'name'"
+                [childItemsPath]="'items'" [autoCollapse]="false" (loadedItems)="onTreeInitialized(treeView3)"
+                (itemClicked)="submit(treeView3)">
+              </wj-tree-view>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="box1">
+      <div class="form-tree-selection" *ngIf="menuItems?.tree4 && menuItems?.tree4.items.length > 0">
+        <div class="frame-title"><span class="text">{{menuItems?.tree4.label}}</span></div>
+        <div class="modal-content">
+          <div class="modal-body">
+            <div class="tree-wrapper site-map height-4">
+              <wj-tree-view #treeView4 class="wm-tree-view" [itemsSource]="menuItems?.tree4.items" [displayMemberPath]="'name'"
+                [childItemsPath]="'items'" [autoCollapse]="false" (loadedItems)="onTreeInitialized(treeView4)"
+                (itemClicked)="submit(treeView4)">
+              </wj-tree-view>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-tree-selection" *ngIf="menuItems?.tree5 && menuItems?.tree5.items.length > 0">
+        <div class="frame-title"><span class="text">{{menuItems?.tree5.label}}</span></div>
+        <div class="modal-content">
+          <div class=" modal-body">
+            <div class="tree-wrapper site-map">
+              <wj-tree-view #treeView5 class="wm-tree-view" [itemsSource]="menuItems?.tree5.items" [displayMemberPath]="'name'"
+                [childItemsPath]="'items'" [autoCollapse]="false" (loadedItems)="onTreeInitialized(treeView5)"
+                (itemClicked)="submit(treeView5)">
+              </wj-tree-view>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-tree-selection" *ngIf="menuItems?.tree6 && menuItems?.tree6.items.length > 0">
+        <div class="frame-title"><span class="text">{{menuItems?.tree6.label}}</span></div>
+        <div class="modal-content">
+          <div class="modal-body">
+            <div class="tree-wrapper site-map">
+              <wj-tree-view #treeView6 class="wm-tree-view" [itemsSource]="menuItems?.tree6.items" [displayMemberPath]="'name'"
+                [childItemsPath]="'items'" [autoCollapse]="false" (loadedItems)="onTreeInitialized(treeView6)"
+                (itemClicked)="submit(treeView6)">
+              </wj-tree-view>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-tree-selection" *ngIf="menuItems?.tree7 && menuItems?.tree7.items.length > 0">
+        <div class="frame-title"><span class="text">{{menuItems?.tree7.label}}</span></div>
+        <div class="modal-content">
+          <div class="modal-body">
+            <div class="tree-wrapper site-map">
+              <wj-tree-view #treeView7 class="wm-tree-view" [itemsSource]="menuItems?.tree7.items" [displayMemberPath]="'name'"
+                [childItemsPath]="'items'" [autoCollapse]="false" (loadedItems)="onTreeInitialized(treeView7)"
+                (itemClicked)="submit(treeView7)">
+              </wj-tree-view>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="box2">
+      <div class="form-tree-selection" *ngIf="menuItems?.tree8 && menuItems?.tree8.items.length > 0">
+        <div class="frame-title"><span class="text">{{menuItems?.tree8.label}}</span></div>
+        <div class="modal-content">
+          <div class="modal-body ">
+            <div class="tree-wrapper site-map height-8">
+              <wj-tree-view #treeView8 class="wm-tree-view" [itemsSource]="menuItems?.tree8.items" [displayMemberPath]="'name'"
+                [childItemsPath]="'items'" [autoCollapse]="false" (loadedItems)="onTreeInitialized(treeView8)"
+                (itemClicked)="submit(treeView8)">
+              </wj-tree-view>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

@@ -1,0 +1,472 @@
+<div class="page-container page-asset">
+
+  <div class="section-form block-frame-border">
+    <form class="container-fluid" [formGroup]="itemForm">
+      <div class="row">
+        <div class="col-period text-nowrap">
+          <span class="label">会計年月：</span>
+          <ea-input-mask class="wm-combo bg-gray" formControlName="period" mask="0000-00" [isReadOnly]="true"></ea-input-mask>
+        </div>
+        <div class="col-name text-nowrap">
+          <span class="label">保有部署：</span>
+          <ea-input-mask class="wm-combo bg-gray" formControlName="holSectionName" [isReadOnly]="true"></ea-input-mask>
+        </div>
+        <div class="col-type text-nowrap">
+          <span class="label">資産区分：</span>
+          <ea-input-mask class="wm-combo bg-gray" formControlName="invAssetTypeName" [isReadOnly]="true"></ea-input-mask>
+        </div>
+        <div class="col-status text-nowrap">
+          <span class="label">ステータス：</span>
+          <ea-input-mask class="wm-combo bg-gray" formControlName="apStatusName" [isReadOnly]="true"></ea-input-mask>
+          <button type="button" class="wm-btn wm-sm btn-status-popup" (click)="popupStatus.open($event.currentTarget)" *ngIf="allowStatus"><span class="ico"><img src="assets/images/button/popup.png"></span></button>
+        </div>
+        <div class="col-eapp text-nowrap" *ngIf="itemForm.controls.eappId.value !== 'undefined' && itemForm.controls.eappId.value !== null && itemForm.controls.apStatusName.value !== '未申請' && itemForm.controls.apStatusName.value !== '未申請(再)'">
+          <span class="label">e申請書類ID：<a class="link" (click)="openEApplication()">{{itemForm.controls.eappId.value}}</a></span>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="section-description block-frame-border no-radius" *ngIf="descriptionText">
+    <p [innerHTML]="descriptionText"></p>
+  </div>
+
+  <div class="section-list" [ngClass]="{fld_tan: categoryCode === 'AP_ATTENTION_INV_FLD_TAN', fld_ro: categoryCode === 'AP_ATTENTION_INV_FLD_RO', fld_int: categoryCode === 'AP_ATTENTION_INV_FLD_INT', fld_int_s: categoryCode === 'AP_ATTENTION_INV_FLD_INT_S', le: categoryCode === 'AP_ATTENTION_INV_LE', re: categoryCode === 'AP_ATTENTION_INV_RE', equip: categoryCode === 'AP_ATTENTION_INV_EQUIP'}">
+    <div class="list-filter block-frame-border">
+      <h2 class="frame-title">紋込</h2>
+      <form class="form-filter row container-fluid" [formGroup]="filterForm">
+        <div class="col text-nowrap">
+          <span class="label">棚卸状況：</span>
+          <div class="wrap-checkbox">
+            <div class="form-check form-check-inline" *ngFor="let item of filterStatus; let i = index" formArrayName="filterStatus">
+              <input type="checkbox" class="form-check-input" [id]="'asset-filter-status-' + i" [formControlName]="i">
+              <label class="form-check-label" [for]="'asset-filter-status-' + i">{{item}}</label>
+            </div>
+          </div>
+        </div>
+        <div class="col text-nowrap" *ngIf="categoryCode === 'AP_ATTENTION_INV_FLD_TAN' || categoryCode === 'AP_ATTENTION_INV_FLD_RO'">
+          <span class="label">資産番号：</span>
+          <ea-input-mask class="wm-combo wm-100" formControlName="filterAstNum" [maxLength]="18" [pattern]="'A-Z0-9\-'"></ea-input-mask>
+          <span class="inline-text">（あいまい）</span>
+        </div>
+        <div class="col text-nowrap" *ngIf="categoryCode === 'AP_ATTENTION_INV_LE' || categoryCode === 'AP_ATTENTION_INV_RE'">
+          <span class="label">契約番号：</span>
+          <ea-input-mask class="wm-combo wm-100" formControlName="filterContractNum" [maxLength]="40"></ea-input-mask>
+          <span class="inline-text">（あいまい）</span>
+        </div>
+        <div class="col text-nowrap" *ngIf="categoryCode === 'AP_ATTENTION_INV_FLD_TAN' || categoryCode === 'AP_ATTENTION_INV_FLD_RO' || categoryCode === 'AP_ATTENTION_INV_LE' || categoryCode === 'AP_ATTENTION_INV_RE' || categoryCode === 'AP_ATTENTION_INV_EQUIP'">
+          <span class="label">管理番号：</span>
+          <ea-input-mask class="wm-combo wm-100" formControlName="filterAstLicId" [maxLength]="8" [pattern]="'A-Z0-9'"></ea-input-mask>
+          <span class="inline-text">（あいまい）</span>
+        </div>
+        <div class="col text-nowrap" *ngIf="categoryCode === 'AP_ATTENTION_INV_FLD_INT' || categoryCode === 'AP_ATTENTION_INV_FLD_INT_S'">
+          <span class="label">取得申請書番号：</span>
+          <ea-input-mask class="wm-combo wm-100" formControlName="filterApplicationId" [maxLength]="9" [pattern]="'A-Z0-9'"></ea-input-mask>
+          <span class="inline-text">（あいまい）</span>
+        </div>
+        <div class="col-filter-buttons d-flex align-items-center justify-content-center">
+          <button type="button" class="wm-btn" (click)="filterAssets()">紋込検索</button>
+        </div>
+      </form>
+    </div>
+
+    <div class="list-status">
+      <div class="status-desc">※リンクをクリックすると現時点の詳細が表示されます。</div>
+      <div class="status-count">【件数：{{gridAssetList && gridAssetList.rows ? (gridAssetList.rows.length | number) : 0}} 件】</div>
+    </div>
+    <div class="list-table">
+
+      <div class="wp-grid-asset-list" id="wp-grid-asset-list">
+        <ea-flex-grid
+          #gridAssetList
+          class="grid-common-list grid-asset-list"
+          [ngClass]="{'is-readonly': !allowEdit}"
+          [itemsSource]="searchInvLineList"
+          [isReadOnly]="!allowEdit"
+          (initialized)="onGridInitialized()"
+        >
+          <ea-flex-grid-column header="有" binding="selInvStatus1" [allowSorting]="false" [allowDragging]="'None'" [width]="50" [isReadOnly]="!allowEdit">
+            <ng-template wjFlexGridCellTemplate cellType="ColumnHeader" [autoSizeRows]="false">
+              <div class="hd-asset">
+                <div class="block-text">有</div>
+                <div class="block-checkbox" *ngIf="allowEdit">
+                  <input type="checkbox" [(ngModel)]="checkboxSelectAll1" id="toggle-1" tabindex="-1" (change)="toggleSelect($event)">
+                </div>
+              </div>
+            </ng-template>
+          </ea-flex-grid-column>
+          <ea-flex-grid-column header="無" binding="selInvStatus2" [allowSorting]="false" [allowDragging]="'None'" [width]="50" [isReadOnly]="!allowEdit">
+            <ng-template wjFlexGridCellTemplate cellType="ColumnHeader" [autoSizeRows]="false">
+              <div class="hd-asset">
+                <div class="block-text">無</div>
+                <div class="block-checkbox" *ngIf="allowEdit">
+                  <input type="checkbox" [(ngModel)]="checkboxSelectAll2" id="toggle-2" tabindex="-1" (change)="toggleSelect($event)">
+                </div>
+              </div>
+            </ng-template>
+          </ea-flex-grid-column>
+          <ea-flex-grid-column header="コメント" binding="invComment" [width]="200">
+            <ng-template wjFlexGridCellTemplate [cellType]="'Cell'" let-cell="cell">
+              <ea-input-mask class="wj-grid-editor wj-grid-editor-input wj-form-control cell-input-text" [ngClass]="{'is-required': cell.item.selInvStatus2}" (keypress)="sessionService.setDataChange(true)" (paste)="sessionService.setDataChange(true)" [(ngModel)]="cell.item.invComment" [isReadOnly]="!allowEdit"></ea-input-mask>
+            </ng-template>
+          </ea-flex-grid-column>
+
+          <ea-flex-grid-column header="保有部署" binding="holSectionName" [width]="200" *ngIf="item && item.holSectionName === '(資産情報不明)'"></ea-flex-grid-column>
+
+          <!-- 有形固定資産 & 資産除去費用 -->
+          <ng-container *ngIf="categoryCode === 'AP_ATTENTION_INV_FLD_TAN' || categoryCode === 'AP_ATTENTION_INV_FLD_RO'">
+            <ea-flex-grid-column header="資産番号" binding="astNum" [width]="150">
+              <ng-template wjFlexGridCellTemplate [cellType]="'Cell'" let-cell="cell">
+                <a class="cell-link" *ngIf="cell.item.astNum">{{cell.item.astNum}}</a>
+              </ng-template>
+            </ea-flex-grid-column>
+            <ea-flex-grid-column header="管理番号" binding="astLicId" [width]="80">
+              <ng-template wjFlexGridCellTemplate [cellType]="'Cell'" let-cell="cell">
+                <a class="cell-link" *ngIf="cell.item.astLicId">{{cell.item.astLicId}}</a>
+              </ng-template>
+            </ea-flex-grid-column>
+            <ea-flex-grid-column header="資産名" binding="astName" [width]="200"></ea-flex-grid-column>
+            <ea-flex-grid-column header="資産管理担当者" binding="holStaffCode" [width]="150">
+              <ng-template wjFlexGridCellTemplate [cellType]="'Cell'" let-cell="cell">
+                {{cell.item.holStaffCode}}　{{cell.item.holStaffName}}
+              </ng-template>
+            </ea-flex-grid-column>
+            <ea-flex-grid-column header="使用者" binding="useStaffCode" [width]="150">
+              <ng-template wjFlexGridCellTemplate [cellType]="'Cell'" let-cell="cell">
+                {{cell.item.useStaffCode}}　{{cell.item.useStaffName}}
+              </ng-template>
+            </ea-flex-grid-column>
+            <ea-flex-grid-column header="設置場所" binding="holOfficeName" [width]="200">
+              <ng-template wjFlexGridCellTemplate [cellType]="'Cell'" let-cell="cell">
+                <ng-container *ngIf="cell.item.holOfficeFloor; else holData">
+                  {{cell.item.holOfficeName}}　{{cell.item.holOfficeFloor}}F
+                </ng-container>
+                <ng-template #holData>
+                  {{cell.item.holOfficeName}}
+                </ng-template>
+              </ng-template>
+            </ea-flex-grid-column>
+            <ea-flex-grid-column header="現物備考" binding="dscDescription" [width]="200"></ea-flex-grid-column>
+            <ea-flex-grid-column header="資産管理区分" binding="shisanknrkbnName" [width]="100"></ea-flex-grid-column>
+            <ea-flex-grid-column header="取得日" binding="stkymdF" [width]="80"></ea-flex-grid-column>
+            <ea-flex-grid-column header="取得価額" binding="stkgkk" [width]="100"></ea-flex-grid-column>
+            <ea-flex-grid-column header="帳簿価額" binding="toBokak" [width]="100"></ea-flex-grid-column>
+            <ea-flex-grid-column header="償却ステータス" binding="skkStatusName" [width]="100"></ea-flex-grid-column>
+            <ea-flex-grid-column header="種類" binding="shuruicd" [width]="200">
+              <ng-template wjFlexGridCellTemplate [cellType]="'Cell'" let-cell="cell">
+                {{cell.item.shuruicd}}　{{cell.item.shuruinm}}
+              </ng-template>
+            </ea-flex-grid-column>
+            <ea-flex-grid-column header="分類" binding="bunruicd" [width]="200">
+              <ng-template wjFlexGridCellTemplate [cellType]="'Cell'" let-cell="cell">
+                {{cell.item.bunruicd}}　{{cell.item.bunruinm}}
+              </ng-template>
+            </ea-flex-grid-column>
+            <ea-flex-grid-column header="償却方法" binding="skkhokName" [width]="80"></ea-flex-grid-column>
+            <ea-flex-grid-column header="耐用年数" binding="tainenk" [width]="80"></ea-flex-grid-column>
+            <ea-flex-grid-column header="減価償却プロジェクト" binding="depPrjCode" [width]="200">
+              <ng-template wjFlexGridCellTemplate [cellType]="'Cell'" let-cell="cell">
+                {{cell.item.depPrjCode}}　{{cell.item.depPrjName}}
+              </ng-template>
+            </ea-flex-grid-column>
+            <ea-flex-grid-column header="資産計上部課" binding="soshiki2cd" [width]="170">
+              <ng-template wjFlexGridCellTemplate [cellType]="'Cell'" let-cell="cell">
+                {{cell.item.soshiki2cd}}　{{cell.item.soshiki2nm}}
+              </ng-template>
+            </ea-flex-grid-column>
+            <ea-flex-grid-column header="案件グループ" binding="itemGroupCode" [width]="200">
+              <ng-template wjFlexGridCellTemplate [cellType]="'Cell'" let-cell="cell">
+                {{cell.item.itemGroupCode}}　{{cell.item.itemGroupName}}
+              </ng-template>
+            </ea-flex-grid-column>
+            <ea-flex-grid-column header="代表設置場所" binding="setchinm" [width]="200"></ea-flex-grid-column>
+            <ea-flex-grid-column header="備考１" binding="biko1" [width]="200"></ea-flex-grid-column>
+            <ea-flex-grid-column header="備考２" binding="biko2" [width]="200"></ea-flex-grid-column>
+            <ea-flex-grid-column header="抹消" binding="deleteFlagName" [width]="50"></ea-flex-grid-column>
+          </ng-container>
+
+          <!-- 無形固定資産(本勘定) -->
+          <ng-container *ngIf="categoryCode === 'AP_ATTENTION_INV_FLD_INT'">
+            <ea-flex-grid-column header="取得申請書番号" binding="applicationId" [width]="100">
+              <ng-template wjFlexGridCellTemplate [cellType]="'Cell'" let-cell="cell">
+                <a class="cell-link" *ngIf="cell.item.applicationId">{{cell.item.applicationId}}</a>
+              </ng-template>
+            </ea-flex-grid-column>
+            <ea-flex-grid-column header="資産番号" binding="astNum" [width]="150"></ea-flex-grid-column>
+            <ea-flex-grid-column header="資産名" binding="astName" [width]="200"></ea-flex-grid-column>
+            <ea-flex-grid-column header="無形管理担当者" binding="holStaffCode" [width]="150">
+              <ng-template wjFlexGridCellTemplate [cellType]="'Cell'" let-cell="cell">
+                {{cell.item.holStaffCode}}　{{cell.item.holStaffName}}
+              </ng-template>
+            </ea-flex-grid-column>
+            <ea-flex-grid-column header="資産管理区分" binding="shisanknrkbnName" [width]="100"></ea-flex-grid-column>
+            <ea-flex-grid-column header="取得日" binding="stkymdF" [width]="100"></ea-flex-grid-column>
+            <ea-flex-grid-column header="取得価額" binding="stkgkk" [width]="100"></ea-flex-grid-column>
+            <ea-flex-grid-column header="帳簿価額" binding="toBokak" [width]="100"></ea-flex-grid-column>
+            <ea-flex-grid-column header="償却ステータス" binding="skkStatusName" [width]="100"></ea-flex-grid-column>
+            <ea-flex-grid-column header="種類" binding="shuruicd" [width]="200">
+              <ng-template wjFlexGridCellTemplate [cellType]="'Cell'" let-cell="cell">
+                {{cell.item.shuruicd}}　{{cell.item.shuruinm}}
+              </ng-template>
+            </ea-flex-grid-column>
+            <ea-flex-grid-column header="分類" binding="bunruicd" [width]="200">
+              <ng-template wjFlexGridCellTemplate [cellType]="'Cell'" let-cell="cell">
+                {{cell.item.bunruicd}}　{{cell.item.bunruinm}}
+              </ng-template>
+            </ea-flex-grid-column>
+            <ea-flex-grid-column header="償却方法" binding="skkhokName" [width]="80"></ea-flex-grid-column>
+            <ea-flex-grid-column header="耐用年数" binding="tainenk" [width]="80"></ea-flex-grid-column>
+            <ea-flex-grid-column header="販管/原価区分" binding="costTypeName" [width]="100"></ea-flex-grid-column>
+            <ea-flex-grid-column header="減価償却プロジェクト" binding="depPrjCode" [width]="200">
+              <ng-template wjFlexGridCellTemplate [cellType]="'Cell'" let-cell="cell">
+                {{cell.item.depPrjCode}}　{{cell.item.depPrjName}}
+              </ng-template>
+            </ea-flex-grid-column>
+            <ea-flex-grid-column header="資産計上部課" binding="soshiki2cd" [width]="170">
+              <ng-template wjFlexGridCellTemplate [cellType]="'Cell'" let-cell="cell">
+                {{cell.item.soshiki2cd}}　{{cell.item.soshiki2nm}}
+              </ng-template>
+            </ea-flex-grid-column>
+            <ea-flex-grid-column header="案件グループ" binding="itemGroupCode" [width]="200">
+              <ng-template wjFlexGridCellTemplate [cellType]="'Cell'" let-cell="cell">
+                {{cell.item.itemGroupCode}}　{{cell.item.itemGroupName}}
+              </ng-template>
+            </ea-flex-grid-column>
+            <ea-flex-grid-column header="代表設置場所" binding="setchinm" [width]="200"></ea-flex-grid-column>
+            <ea-flex-grid-column header="備考１" binding="biko1" [width]="200"></ea-flex-grid-column>
+            <ea-flex-grid-column header="備考２" binding="biko2" [width]="200"></ea-flex-grid-column>
+            <ea-flex-grid-column header="管理項目１" binding="dscAttribute1" [width]="200"></ea-flex-grid-column>
+            <ea-flex-grid-column header="管理項目２" binding="dscAttribute2" [width]="200"></ea-flex-grid-column>
+          </ng-container>
+
+          <!-- 無形固定資産(仮勘定) -->
+          <ng-container *ngIf="categoryCode === 'AP_ATTENTION_INV_FLD_INT_S'">
+            <ea-flex-grid-column header="取得申請書番号" binding="applicationId" [width]="100">
+              <ng-template wjFlexGridCellTemplate [cellType]="'Cell'" let-cell="cell">
+                <a class="cell-link" *ngIf="cell.item.applicationId">{{cell.item.applicationId}}</a>
+              </ng-template>
+            </ea-flex-grid-column>
+            <ea-flex-grid-column header="資産名(最新)" binding="astName" [width]="200"></ea-flex-grid-column>
+            <ea-flex-grid-column header="資産管理担当者" binding="holStaffCode" [width]="150">
+              <ng-template wjFlexGridCellTemplate [cellType]="'Cell'" let-cell="cell">
+                {{cell.item.holStaffCode}}　{{cell.item.holStaffName}}
+              </ng-template>
+            </ea-flex-grid-column>
+            <ea-flex-grid-column header="資産管理区分" binding="shisanknrkbnName" [width]="100"></ea-flex-grid-column>
+            <ea-flex-grid-column header="取得日(最古)" binding="oldKeijoymdF" [width]="100"></ea-flex-grid-column>
+            <ea-flex-grid-column header="取得日(最新)" binding="newKeijoymdF" [width]="100"></ea-flex-grid-column>
+            <ea-flex-grid-column header="取得価額" binding="stkgkk" [width]="100"></ea-flex-grid-column>
+            <ea-flex-grid-column header="種類(最新)" binding="shuruicd" [width]="200">
+              <ng-template wjFlexGridCellTemplate [cellType]="'Cell'" let-cell="cell">
+                {{cell.item.shuruicd}}　{{cell.item.shuruinm}}
+              </ng-template>
+            </ea-flex-grid-column>
+            <ea-flex-grid-column header="分類(最新)" binding="bunruicd" [width]="200">
+              <ng-template wjFlexGridCellTemplate [cellType]="'Cell'" let-cell="cell">
+                {{cell.item.bunruicd}}　{{cell.item.bunruinm}}
+              </ng-template>
+            </ea-flex-grid-column>
+            <ea-flex-grid-column header="資産計上部課(最新)" binding="soshiki2cd" [width]="200">
+              <ng-template wjFlexGridCellTemplate [cellType]="'Cell'" let-cell="cell">
+                {{cell.item.soshiki2cd}}　{{cell.item.soshiki2nm}}
+              </ng-template>
+            </ea-flex-grid-column>
+            <ea-flex-grid-column header="仕入先(最新)" binding="purCompanyCode" [width]="200">
+              <ng-template wjFlexGridCellTemplate [cellType]="'Cell'" let-cell="cell">
+                {{cell.item.purCompanyCode}}　{{cell.item.purCompanyName}}
+              </ng-template>
+            </ea-flex-grid-column>
+            <ea-flex-grid-column header="伝票番号(最新)" binding="slipNum" [width]="150"></ea-flex-grid-column>
+            <ea-flex-grid-column header="管理項目１" binding="dscAttribute1" [width]="200"></ea-flex-grid-column>
+            <ea-flex-grid-column header="管理項目２" binding="dscAttribute2" [width]="200"></ea-flex-grid-column>
+          </ng-container>
+
+          <!-- リース資産 -->
+          <ng-container *ngIf="categoryCode === 'AP_ATTENTION_INV_LE'">
+            <!-- <ea-flex-grid-column header="保有部署" binding="holSectionName" [width]="150"></ea-flex-grid-column> -->
+            <ea-flex-grid-column header="契約番号" binding="contractNum" [width]="150">
+              <ng-template wjFlexGridCellTemplate [cellType]="'Cell'" let-cell="cell">
+                <ng-container *ngIf="!cell.item.contractSubNum && cell.item.ppId; else contractNumText">
+                  <a class="cell-link" *ngIf="cell.item.contractNum">{{cell.item.contractNum}}</a>
+                </ng-container>
+                <ng-template #contractNumText>
+                  {{cell.item.contractNum}}
+                </ng-template>
+              </ng-template>
+            </ea-flex-grid-column>
+            <ea-flex-grid-column header="契約枝番" binding="contractSubNum" [width]="150">
+              <ng-template wjFlexGridCellTemplate [cellType]="'Cell'" let-cell="cell">
+                <a class="cell-link" *ngIf="cell.item.contractSubNum">{{cell.item.contractSubNum}}</a>
+              </ng-template>
+            </ea-flex-grid-column>
+            <ea-flex-grid-column header="管理番号" binding="astLicId" [width]="80">
+              <ng-template wjFlexGridCellTemplate [cellType]="'Cell'" let-cell="cell">
+                <a class="cell-link" *ngIf="cell.item.astLicId">{{cell.item.astLicId}}</a>
+              </ng-template>
+            </ea-flex-grid-column>
+            <ea-flex-grid-column header="資産名" binding="astName" [width]="200"></ea-flex-grid-column>
+            <ea-flex-grid-column header="資産管理担当者" binding="dscDescription" [width]="150">
+              <ng-template wjFlexGridCellTemplate [cellType]="'Cell'" let-cell="cell">
+                {{cell.item.holStaffCode}}　{{cell.item.holStaffName}}
+              </ng-template>
+            </ea-flex-grid-column>
+            <ea-flex-grid-column header="使用者" binding="dscDescription" [width]="150">
+              <ng-template wjFlexGridCellTemplate [cellType]="'Cell'" let-cell="cell">
+                {{cell.item.useStaffCode}}　{{cell.item.useStaffName}}
+              </ng-template>
+            </ea-flex-grid-column>
+            <ea-flex-grid-column header="設置場所" binding="dscDescription" [width]="200">
+              <ng-template wjFlexGridCellTemplate [cellType]="'Cell'" let-cell="cell">
+                <ng-container *ngIf="cell.item.holOfficeFloor; else noHolOfficeFloor">
+                  {{cell.item.holOfficeName}}　{{cell.item.holOfficeFloor}}　F
+                </ng-container>
+                <ng-template #noHolOfficeFloor>
+                  {{cell.item.holOfficeName}}
+                </ng-template>
+              </ng-template>
+            </ea-flex-grid-column>
+            <ea-flex-grid-column header="現物備考" binding="dscDescription" [width]="200"></ea-flex-grid-column>
+            <ea-flex-grid-column header="物件名" binding="shisannmA" [width]="200"></ea-flex-grid-column>
+            <ea-flex-grid-column header="開始日" binding="stymdLF" [width]="100"></ea-flex-grid-column>
+            <ea-flex-grid-column header="満了日" binding="manryoymdLF" [width]="100"></ea-flex-grid-column>
+            <ea-flex-grid-column header="期間" binding="kikanL" [width]="80"></ea-flex-grid-column>
+            <ea-flex-grid-column header="契約金額" binding="laryoTotalA" [width]="200"></ea-flex-grid-column>
+            <ea-flex-grid-column header="均等金額" binding="ikkailaryoA" [width]="100"></ea-flex-grid-column>
+            <ea-flex-grid-column header="リース・レンタル会社" binding="lakaishacdCName" [width]="200"></ea-flex-grid-column>
+            <ea-flex-grid-column header="契約区分" binding="kykkbnCName" [width]="100"></ea-flex-grid-column>
+            <ea-flex-grid-column header="取引判定" binding="latorihikikbnCName" [width]="100"></ea-flex-grid-column>
+            <ea-flex-grid-column header="B/S計上区分" binding="bskeijokbnCName" [width]="100"></ea-flex-grid-column>
+            <ea-flex-grid-column header="資産計上額" binding="stkgkkA" [width]="100"></ea-flex-grid-column>
+            <ea-flex-grid-column header="帳簿価額" binding="toBokakA" [width]="100"></ea-flex-grid-column>
+            <ea-flex-grid-column header="種類" [width]="200">
+              <ng-template wjFlexGridCellTemplate [cellType]="'Cell'" let-cell="cell">
+                {{cell.item.shuruicdA}}　{{cell.item.shuruinmA}}
+              </ng-template>
+            </ea-flex-grid-column>
+            <ea-flex-grid-column header="分類" binding="bunruicdA" [width]="200">
+              <ng-template wjFlexGridCellTemplate [cellType]="'Cell'" let-cell="cell">
+                {{cell.item.bunruicdA}}　{{cell.item.bunruinmA}}
+              </ng-template>
+            </ea-flex-grid-column>
+            <ea-flex-grid-column header="販管/原価区分" binding="niniLd_7nmA" [width]="100"></ea-flex-grid-column>
+            <ea-flex-grid-column header="減価償却プロジェクト" binding="niniLd_6cdA" [width]="200">
+              <ng-template wjFlexGridCellTemplate [cellType]="'Cell'" let-cell="cell">
+                {{cell.item.niniLd_6cdA}}　{{cell.item.niniLd_6nmA}}
+              </ng-template>
+            </ea-flex-grid-column>
+            <ea-flex-grid-column header="資産計上部課" binding="soshiki2cdA" [width]="170">
+              <ng-template wjFlexGridCellTemplate [cellType]="'Cell'" let-cell="cell">
+                {{cell.item.soshiki2cdA}}　{{cell.item.soshiki2nmA}}
+              </ng-template>
+            </ea-flex-grid-column>
+            <ea-flex-grid-column header="案件グループ" binding="niniLd_3cdA" [width]="200">
+              <ng-template wjFlexGridCellTemplate [cellType]="'Cell'" let-cell="cell">
+                {{cell.item.niniLd_3cdA}}　{{cell.item.niniLd_3nmA}}
+              </ng-template>
+            </ea-flex-grid-column>
+            <ea-flex-grid-column header="代表設置場所" binding="setchinmA" [width]="200"></ea-flex-grid-column>
+            <ea-flex-grid-column header="備考１" binding="biko1A" [width]="200"></ea-flex-grid-column>
+            <ea-flex-grid-column header="備考２" binding="biko2A" [width]="200"></ea-flex-grid-column>
+            <ea-flex-grid-column header="抹消" binding="deleteFlagName" [width]="50"></ea-flex-grid-column>
+          </ng-container>
+
+          <!-- レンタル資産 -->
+          <ng-container *ngIf="categoryCode === 'AP_ATTENTION_INV_RE'">
+            <ea-flex-grid-column header="契約番号" binding="contractNum" [width]="150">
+              <ng-template wjFlexGridCellTemplate [cellType]="'Cell'" let-cell="cell">
+                <ng-container *ngIf="!cell.item.contractSubNum && cell.item.ppId; else contractNumText">
+                  <a class="cell-link" *ngIf="cell.item.contractNum">{{cell.item.contractNum}}</a>
+                </ng-container>
+                <ng-template #contractNumText>
+                  {{cell.item.contractNum}}
+                </ng-template>
+              </ng-template>
+            </ea-flex-grid-column>
+            <ea-flex-grid-column header="契約枝番" binding="contractSubNum" [width]="150">
+              <ng-template wjFlexGridCellTemplate [cellType]="'Cell'" let-cell="cell">
+                <a class="cell-link" *ngIf="cell.item.contractSubNum">{{cell.item.contractSubNum}}</a>
+              </ng-template>
+            </ea-flex-grid-column>
+            <ea-flex-grid-column header="管理番号" binding="astLicId" [width]="80">
+              <ng-template wjFlexGridCellTemplate [cellType]="'Cell'" let-cell="cell">
+                <a class="cell-link" *ngIf="cell.item.astLicId">{{cell.item.astLicId}}</a>
+              </ng-template>
+            </ea-flex-grid-column>
+            <ea-flex-grid-column header="資産名" binding="astName" [width]="200"></ea-flex-grid-column>
+            <ea-flex-grid-column header="資産管理担当者" binding="holStaffCode" [width]="150">
+              <ng-template wjFlexGridCellTemplate [cellType]="'Cell'" let-cell="cell">
+                {{cell.item.holStaffCode}}　{{cell.item.holStaffName}}
+              </ng-template>
+            </ea-flex-grid-column>
+            <ea-flex-grid-column header="使用者" binding="useStaffCode" [width]="150">
+              <ng-template wjFlexGridCellTemplate [cellType]="'Cell'" let-cell="cell">
+                {{cell.item.useStaffCode}}　{{cell.item.useStaffName}}
+              </ng-template>
+            </ea-flex-grid-column>
+            <ea-flex-grid-column header="設置場所" binding="holOfficeName" [width]="200">
+              <ng-template wjFlexGridCellTemplate [cellType]="'Cell'" let-cell="cell">
+                <ng-container *ngIf="cell.item.holOfficeFloor; else holData">
+                  {{cell.item.holOfficeName}}　{{cell.item.holOfficeFloor}}F
+                </ng-container>
+                <ng-template #holData>
+                  {{cell.item.holOfficeName}}
+                </ng-template>
+              </ng-template>
+            </ea-flex-grid-column>
+            <ea-flex-grid-column header="現物備考" binding="dscDescription" [width]="200"></ea-flex-grid-column>
+            <ea-flex-grid-column header="物件名" binding="shisannmA" [width]="200"></ea-flex-grid-column>
+            <ea-flex-grid-column header="開始日" binding="stymdLF" [width]="100"></ea-flex-grid-column>
+            <ea-flex-grid-column header="満了日" binding="manryoymdLF" [width]="100"></ea-flex-grid-column>
+            <ea-flex-grid-column header="期間（ヶ月）" binding="kikanL" [width]="80"></ea-flex-grid-column>
+            <ea-flex-grid-column header="リース・レンタル会社" binding="lakaishacdCName" [width]="200"></ea-flex-grid-column>
+            <ea-flex-grid-column header="備考１" binding="biko1A" [width]="200"></ea-flex-grid-column>
+            <ea-flex-grid-column header="備考２" binding="biko2A" [width]="200"></ea-flex-grid-column>
+            <ea-flex-grid-column header="抹消" binding="deleteFlagName" [width]="50"></ea-flex-grid-column>
+          </ng-container>
+
+          <!-- 備品等 -->
+          <ng-container *ngIf="categoryCode === 'AP_ATTENTION_INV_EQUIP'">
+            <ea-flex-grid-column header="管理番号" binding="astLicId" [width]="80">
+              <ng-template wjFlexGridCellTemplate [cellType]="'Cell'" let-cell="cell">
+                <a class="cell-link" *ngIf="cell.item.astLicId">{{cell.item.astLicId}}</a>
+              </ng-template>
+            </ea-flex-grid-column>
+            <ea-flex-grid-column header="資産名" binding="astName" [width]="200"></ea-flex-grid-column>
+            <ea-flex-grid-column header="資産管理担当者" binding="holStaffCode" [width]="150">
+              <ng-template wjFlexGridCellTemplate [cellType]="'Cell'" let-cell="cell">
+                {{cell.item.holStaffCode}}　{{cell.item.holStaffName}}
+              </ng-template>
+            </ea-flex-grid-column>
+            <ea-flex-grid-column header="使用者" binding="useStaffCode" [width]="150">
+              <ng-template wjFlexGridCellTemplate [cellType]="'Cell'" let-cell="cell">
+                {{cell.item.useStaffCode}}　{{cell.item.useStaffName}}
+              </ng-template>
+            </ea-flex-grid-column>
+            <ea-flex-grid-column header="設置場所" binding="holOfficeName" [width]="200">
+              <ng-template wjFlexGridCellTemplate [cellType]="'Cell'" let-cell="cell">
+                <ng-container *ngIf="cell.item.holOfficeFloor; else holData">
+                  {{cell.item.holOfficeName}}　{{cell.item.holOfficeFloor}}F
+                </ng-container>
+                <ng-template #holData>
+                  {{cell.item.holOfficeName}}
+                </ng-template>
+              </ng-template>
+            </ea-flex-grid-column>
+            <ea-flex-grid-column header="現物備考" binding="dscDescription" [width]="200"></ea-flex-grid-column>
+          </ng-container>
+
+        </ea-flex-grid>
+      </div>
+
+    </div>
+    <div class="list-buttons wm-buttons">
+      <button type="button" class="wm-btn" (click)="saveAssets()" *ngIf="allowSave" [disabled]="isLoading"><span class="ico"><img src="assets/images/button/save.png" alt="督促メール送信"></span><span class="txt">保存</span></button>
+      <button type="button" class="wm-btn" (click)="exportAssets()">エクスポート</button>
+      <button type="button" class="wm-btn" (click)="file.click()" *ngIf="allowImport">インポート</button>
+      <input [hidden]="true" #file type="file" multiple (click)="$event.target.value=null" (change)="importAssets($event.target.files)">
+      <button type="button" class="wm-btn" (click)="close()" *ngIf="allowBack">戻る</button>
+    </div>
+  </div>
+</div>
+
+<app-status-selection [sqlName]="'selectCodeName_LOV'" [paramMap]="{categoryCode: 'AP_STATUS_INV'}" (select)="selectStatus($event)" ></app-status-selection>
+<app-confirm-popup #confirmPopupExport (confirm)="exportAssets(true)"></app-confirm-popup>

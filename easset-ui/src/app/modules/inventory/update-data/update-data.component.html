@@ -1,0 +1,160 @@
+<div class="page-container page-update" [ngClass]="{'has-file': fileId, 'has-file-submitted': fileId && isHistoryShown}">
+  <p class="page-message">一括更新用の定型CSVに、管理番号、棚卸状況、コメントを入力することで、入力内容を棚卸データに一括で反映できます。</p>
+  <div class="section-update-form">
+    <div class="block-frame">
+      <h2 class="frame-title">一括入力</h2>
+      <div class="frame-body">
+        <form class="update-form" [formGroup]="updateForm">
+          <div class="row">
+            <div class="col-label text-right">会計年月：</div>
+            <div class="col">
+              <div class="period-text text-important">一括更新対象の会計年月を指定してください。</div>
+              <wj-combo-box
+                [hidden]="!(accountingDates && accountingDates.length)"
+                #fieldPeriod
+                class="input-period wm-combo wm-dropdown"
+                [itemsSource]="accountingDates"
+                [displayMemberPath]="'periodName'"
+                [selectedValuePath]="'period'"
+                [isEditable]="false"
+                formControlName="period"
+              ></wj-combo-box>
+              <wj-combo-box
+               [hidden]="accountingDates && accountingDates.length"
+                class="input-period wm-combo wm-dropdown wm-input-empty"
+                [itemsSource]="['　']"
+                [isEditable]="false"
+                [dropDownCssClass]="'wm-input-empty'"
+              ></wj-combo-box>
+              <ng-container *ngIf="fieldPeriod.selectedItem as item">
+                <span class="period-desc">(集計日:<ng-container *ngIf="item.lastSuccessCreateEndDate"> {{item.lastSuccessCreateEndDate | date:'yyyy/MM/dd HH:mm'}}</ng-container>)</span>
+              </ng-container>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-label text-right">処理対象資産区分：</div>
+            <div class="col">有形固定資産、資産除去費用、リース資産、レンタル資産、備品等</div>
+          </div>
+          <div class="row">
+            <div class="col-label text-right">一括入力CSVファイル：</div>
+            <div class="col">
+              <div class="file-row">
+                <ea-input-mask class="wm-combo bg-gray input-filename" formControlName="fileName" [isReadOnly]="true"></ea-input-mask>
+                <button type="button" class="wm-btn wm-sm btn-upload" (click)="fileSelectCSV.click()">ファイル選択</button>
+                <input [hidden]="true" #fileSelectCSV type="file" (change)="fileSelected($event.target.files)">
+              </div>
+              <div class="file-row has-indent has-indent-top">
+                一括更新用の定型CSVファイルは　<a class="link" (click)="getFormatCSV()">こちら</a>
+              </div>
+              <div class="file-row has-indent text-important">
+                定型CSVファイルには指定会計年月の全データが含まれますが、<br>
+                一括入力CSVファイルに指定する際には更新対象外のテータは含めないでください。
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div class="section-update-history-buttons" *ngIf="!isHistoryShown && !fileId">
+    <a class="link" (click)="showHistory()">実行履歴を表示する</a>
+  </div>
+  <div class="section-update-message" *ngIf="!isHistoryShown && fileId">
+    <p>CSVファイルのアップロード処理が終了しました。一括更新ボタンをクリックしてください。</p>
+  </div>
+  <div class="section-update-history-list">
+    <ng-container *ngIf="isHistoryShown">
+      <div class="block-frame">
+        <h2 class="frame-title bg-blue">実行履歴</h2>
+        <div class="frame-body">
+          <div class="row row-list-heading">
+            <div class="col-label d-flex align-items-center">
+              <button type="button" class="wm-btn wm-120" (click)="updateHistory()">最新の情報に更新</button>
+            </div>
+            <div class="col">
+              <ul class="list-desc">
+                <li>※画面を閉じても実行中の処理は停止しません。</li>
+                <li>※リンク付きのステータスをクリックするとエラーメッセージをダウンロードできます。</li>
+                <li>※件数、成功、失敗をクリックすると該当データをダウンロードできます。</li>
+                <li>※最大100件までの履歴が表示されます。</li>
+              </ul>
+            </div>
+          </div>
+          <div class="grid-common-wrap">
+            <div class="grid-common-count">【件数：{{gridHistoryList && gridHistoryList.rows ? (gridHistoryList.rows.length | number) : 0}} 件】</div>
+            <div class="row row-history-list">
+              <div class="wp-grid-history-list" id="wp-grid-history-list">
+                <ea-flex-grid
+                  class="grid-common-list grid-history-list"
+                  #gridHistoryList
+                  [(itemsSource)]="historyList"
+                  (initialized)="onGridInitialized(gridHistoryList)"
+                >
+                  <ea-flex-grid-column header="処理開始日" binding="createDate" [allowMerging]=true [width]="140" [format]="'yyyy/MM/dd HH:mm'">
+                  </ea-flex-grid-column>
+                  <ea-flex-grid-column header="処理終了日" binding="updateDate" [allowMerging]=true [width]="140">
+                    <ng-template wjFlexGridCellTemplate [cellType]="'Cell'" let-cell="cell">
+                      <ng-container *ngIf="cell.item.execStatus === '終了' || cell.item.execStatus === '強制終了'">
+                        {{cell.item.updateDate | date:'yyyy/MM/dd HH:mm'}}
+                      </ng-container>
+                    </ng-template>
+                  </ea-flex-grid-column>
+                  <ea-flex-grid-column header="実行者" binding="createStaffCode" [allowMerging]=true [width]="140">
+                    <ng-template wjFlexGridCellTemplate [cellType]="'Cell'" let-cell="cell">
+                      {{cell.item.createStaffCode}}　{{cell.item.createStaffName}}
+                    </ng-template>
+                  </ea-flex-grid-column>
+                  <ea-flex-grid-column header="ステータス" binding="execStatus" [allowMerging]=true [width]="140">
+                    <ng-template wjFlexGridCellTemplate [cellType]="'Cell'" let-cell="cell">
+                      <ng-container *ngIf="cell.item.failureCount === 0; else otherExecStatus">
+                        <a class="button-delete" *ngIf="cell.item.execStatus==='更新中' || cell.item.execStatus==='ファイル読込中'" (click)="cancelUpdate(cell.row.index)"></a> {{cell.item.execStatus}}
+                      </ng-container>
+                      <ng-template #otherExecStatus>
+                        <ng-container *ngIf="cell.item.execStatus">
+                          <a class="button-delete" *ngIf="cell.item.execStatus==='更新中' || cell.item.execStatus==='ファイル読込中'" (click)="cancelUpdate(cell.row.index)"></a> <a class="cell-link" (click)="downloadMessageFile(cell.row.index)">{{cell.item.execStatus}}</a><span *ngIf="cell.item.execStatus === '終了'">（エラー有り）</span>
+                        </ng-container>
+                      </ng-template>
+                    </ng-template>
+                  </ea-flex-grid-column>
+                  <ea-flex-grid-column header="件数" binding="execCount" [allowMerging]=true [width]="80">
+                    <ng-template wjFlexGridCellTemplate [cellType]="'Cell'" let-cell="cell">
+                      <ng-container *ngIf="cell.item.execCount !== null && cell.item.execCount !== undefined; else noExecCount">
+                        <a class="cell-link" (click)="getData('all', cell.row.index)">{{cell.item.execCount}}</a>
+                      </ng-container>
+                      <ng-template #noExecCount>
+                        <a class="cell-link" (click)="getData('all', cell.row.index)">?</a>
+                      </ng-template>
+                    </ng-template>
+                  </ea-flex-grid-column>
+                  <ea-flex-grid-column header="成功" binding="successCount" [allowMerging]=true [width]="80">
+                    <ng-template wjFlexGridCellTemplate [cellType]="'Cell'" let-cell="cell">
+                      <ng-container *ngIf="cell.item.successCount !== null && cell.item.successCount !== undefined">
+                        <a class="cell-link" (click)="getData('success', cell.row.index)">{{cell.item.successCount}}</a>
+                      </ng-container>
+                    </ng-template>
+                  </ea-flex-grid-column>
+                  <ea-flex-grid-column header="失敗" binding="failureCount" [allowMerging]=true [width]="80">
+                    <ng-template wjFlexGridCellTemplate [cellType]="'Cell'" let-cell="cell">
+                      <ng-container *ngIf="cell.item.failureCount !== null && cell.item.failureCount !== undefined">
+                        <a class="cell-link" (click)="getData('fail', cell.row.index)">{{cell.item.failureCount}}</a>
+                      </ng-container>
+                    </ng-template>
+                  </ea-flex-grid-column>
+                  <ea-flex-grid-column header="会計年月" binding="updateColumnName" [allowMerging]=true [width]="100"></ea-flex-grid-column>
+                </ea-flex-grid>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+
+  <div class="section-update-buttons wm-buttons" *ngIf="fileId">
+    <button type="button" class="wm-btn" (click)="accountingDates && accountingDates.length ? massiveUpdate() : showNoPeriodError();"><span class="ico"><img src="assets/images/button/save.png" alt="一括更新"></span><span class="txt">一括更新</span></button>
+    <button type="button" class="wm-btn" (click)="cancel()">キャンセル</button>
+  </div>
+
+</div>
+
+<app-confirm-popup #confirmCancelPopup (confirm)="cancelUpdate(null, true)"></app-confirm-popup>

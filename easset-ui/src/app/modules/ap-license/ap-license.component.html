@@ -1,0 +1,48 @@
+<wj-tab-panel #viewStack class="view-stack" (selectedIndexChange)="this.selectedIndexChangeHandler($event)">
+
+  <ea-view-stack-tab [keepViewState]="false">
+    <!-- 画面切替後も状態を維持する画面：true、維持しない画面:false-->
+    <a>ライセンス登録申請検索</a>
+    <div>
+      <app-ap-license-search [parent]="this" #childViewApLicenseSearch
+        *ngIf="this.isLoaded.get(this.viewIndexApLicenseSearch)">
+        {{this.changeChildSubject.set(this.viewIndexApLicenseSearch, childViewApLicenseSearch.changeChildSubject)}}
+      </app-ap-license-search>
+    </div>
+  </ea-view-stack-tab>
+
+  <ea-view-stack-tab [keepViewState]="false">
+    <!-- 画面切替後も状態を維持する画面：true、維持しない画面:false-->
+    <a>ライセンス登録申請履歴</a>
+    <div>
+      <app-ap-license-ap-get-int-search [parent]="this" #childViewApLicenseApGetIntSearch
+        *ngIf="this.isLoaded.get(this.viewIndexApLicenseApGetIntSearch)">
+        {{this.changeChildSubject.set(this.viewIndexApLicenseApGetIntSearch, childViewApLicenseApGetIntSearch.changeChildSubject)}}
+      </app-ap-license-ap-get-int-search>
+    </div>
+  </ea-view-stack-tab>
+  <ea-view-stack-tab [keepViewState]="true">
+    <!-- 画面切替後も状態を維持する画面：true、維持しない画面:false-->
+    <a>ライセンス登録申請履歴</a>
+    <div>
+      <app-ap-license-ap-get-int-result [parent]="this" #childViewApLicenseApGetIntResult
+        *ngIf="this.isLoaded.get(this.viewIndexApLicenseApGetIntResult)">
+        {{this.changeChildSubject.set(this.viewIndexApLicenseApGetIntResult, childViewApLicenseApGetIntResult.changeChildSubject)}}
+      </app-ap-license-ap-get-int-result>
+    </div>
+  </ea-view-stack-tab>
+
+
+
+
+  <ea-view-stack-tab [keepViewState]="false">
+    <!-- 画面切替後も状態を維持する画面：true、維持しない画面:false-->
+    <a>ライセンス登録申請履歴</a>
+    <div>
+      <app-ap-license-hist [parent]="this" #childViewHist *ngIf="this.isLoaded.get(this.viewIndexHist)">
+        {{this.changeChildSubject.set(this.viewIndexHist, childViewHist.changeChildSubject)}}
+      </app-ap-license-hist>
+    </div>
+  </ea-view-stack-tab>
+</wj-tab-panel>
+<app-confirm-popup #confirmPopup (confirm)="onConfirm()"></app-confirm-popup>

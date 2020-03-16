@@ -1,0 +1,19 @@
+<div class="asset-result">
+  <div class="asset-head">
+    <div>
+      <a class="head-search" href="javascript: void(0)" (click)="goBack()">
+        <img src="assets/images/button/to_search.gif">
+        <span>検索条件画面へ戻る</span>
+      </a>
+    </div>
+    <hr>
+    <div class="row">
+      <button class="index" type="button" (click)="selectedAssetItem()">移動対象として選択</button>
+      <label>※　行をダブルクリックすると詳細が表示されます。</label>
+    </div>
+  </div>
+  <div class="asset-list">
+    <app-asset-result-list (select)="clickRow($event)" [dataList]="assetSRList" [checkBoxVisible]='true'>
+    </app-asset-result-list>
+  </div>
+</div>

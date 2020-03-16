@@ -1,0 +1,68 @@
+<wj-tab-panel #viewStack class="view-stack" (selectedIndexChange)="this.selectedIndexChangeHandler($event)">
+  <ea-view-stack-tab [keepViewState]="true">
+    <!-- 画面切替後も状態を維持する画面：true、維持しない画面:false-->
+    <a>検索画面呼び出し</a>
+    <div>
+      <app-ap-get-int-entry [parent]="this" #childViewCreate1 *ngIf="this.isLoaded.get(this.viewIndexCreate1)">
+        {{this.changeChildSubject.set(this.viewIndexCreate1, childViewCreate1.changeChildSubject)}}
+      </app-ap-get-int-entry>
+    </div>
+  </ea-view-stack-tab>
+  <ea-view-stack-tab [keepViewState]="true">
+    <!-- 画面切替後も状態を維持する画面：true、維持しない画面:false-->
+    <a>検索画面呼び出し</a>
+    <div>
+      <app-ap-get-int-entry [parent]="this" #childViewCreate2 *ngIf="this.isLoaded.get(this.viewIndexCreate2)">
+        {{this.changeChildSubject.set(this.viewIndexCreate2, childViewCreate2.changeChildSubject)}}
+      </app-ap-get-int-entry>
+    </div>
+  </ea-view-stack-tab>
+  <ea-view-stack-tab [keepViewState]="true">
+    <!-- 画面切替後も状態を維持する画面：true、維持しない画面:false-->
+    <a>検索画面呼び出し</a>
+    <div>
+      <app-ap-get-int-entry [parent]="this" #childViewCreate3 *ngIf="this.isLoaded.get(this.viewIndexCreate3)">
+        {{this.changeChildSubject.set(this.viewIndexCreate3, childViewCreate3.changeChildSubject)}}
+      </app-ap-get-int-entry>
+    </div>
+  </ea-view-stack-tab>
+  <ea-view-stack-tab [keepViewState]="true">
+    <!-- 画面切替後も状態を維持する画面：true、維持しない画面:false-->
+    <a>検索画面呼び出し</a>
+    <div>
+      <app-ap-get-int-search [parent]="this" #childViewSearch *ngIf="this.isLoaded.get(this.viewIndexSearch)">
+        {{this.changeChildSubject.set(this.viewIndexSearch, childViewSearch.changeChildSubject)}}
+      </app-ap-get-int-search>
+    </div>
+  </ea-view-stack-tab>
+  <ea-view-stack-tab [keepViewState]="true">
+    <!-- 画面切替後も状態を維持する画面：true、維持しない画面:false-->
+    <a>検索結果画面呼び出し</a>
+    <div>
+      <app-ap-get-int-result [parent]="this" #childViewResult *ngIf="this.isLoaded.get(this.viewIndexResult)">
+        {{this.changeChildSubject.set(this.viewIndexResult, childViewResult.changeChildSubject)}}
+      </app-ap-get-int-result>
+    </div>
+  </ea-view-stack-tab>
+  <ea-view-stack-tab [keepViewState]="true">
+    <!-- 画面切替後も状態を維持する画面：true、維持しない画面:false-->
+    <a>取得申請(無形)履歴</a>
+    <div>
+      <app-ap-get-int-hist [parent]="this" #childViewHist *ngIf="this.isLoaded.get(this.viewIndexHist)">
+        {{this.changeChildSubject.set(this.viewIndexHist, childViewHist.changeChildSubject)}}
+      </app-ap-get-int-hist>
+    </div>
+  </ea-view-stack-tab>
+
+  <ea-view-stack-tab [keepViewState]="true">
+    <!-- 画面切替後も状態を維持する画面：true、維持しない画面:false-->
+    <a>取得申請(無形)履歴</a>
+    <div>
+      <app-ap-get-int-ap-get-tan-result [parent]="this" #childViewIndexApGetIntApGetTanResult
+                                        *ngIf="this.isLoaded.get(this.viewIndexApGetIntApGetTanResult)">
+        {{this.changeChildSubject.set(this.viewIndexApGetIntApGetTanResult, childViewIndexApGetIntApGetTanResult.changeChildSubject)}}
+      </app-ap-get-int-ap-get-tan-result>
+    </div>
+  </ea-view-stack-tab>
+
+</wj-tab-panel>

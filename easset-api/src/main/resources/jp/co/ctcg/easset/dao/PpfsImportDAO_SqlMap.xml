@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<!--
+ *===================================================================
+ * ファイル名 : PpfsImportDAO_SqlMap.xml
+ * 概要説明   : ProPlus取込用SQL文
+ * バージョン : 1.0
+ *===================================================================
+ * 修正履歴
+ * 日付       Ver. 担当者       修正内容
+ * －－－－－ －－ －－－－－－ －－－－－－－－－－－－－－－－－－
+ * 2012-09-24 1.0  リヨン       新規
+ *===================================================================
+ -->
+<sqlMap namespace="PpfsImportDAO" >
+
+  <!--
+    会計年月取得(ProPlus参照)
+  -->
+  <select id="selectPpfsCurrentPeriodRT_PPI" parameterClass="java.util.Map" resultClass="java.lang.String">
+    SELECT
+      NEA_UTIL_PKG.GET_PPFS_CURRENT_PERIOD_F(#companyCode#)
+    FROM
+      DUAL
+  </select>
+
+  <!--
+    取込ステータス一覧取得
+  -->
+  <select id="selectPpfsStatList_PPI" parameterClass="java.util.Map" resultClass="jp.co.ctcg.easset.dto.ppfs_import.PpfsStat">
+    SELECT
+      PERIOD period
+      , COMPANY_CODE companyCode
+      , DATA_TYPE dataType
+      , NEA_UTIL_PKG.GET_CN_VALUE1_F('PPFS_IMPORT_DATA_TYPE', DATA_TYPE) dataTypeName
+      , CREATE_DATE createDate
+      , CREATE_STAFF_CODE createStaffCode
+      , NEA_UTIL_PKG.GET_STAFF_NAME_F(CREATE_STAFF_CODE) createStaffName
+      , UPDATE_DATE updateDate
+      , UPDATE_STAFF_CODE updateStaffCode
+      , EXEC_STATUS execStatus
+      , NEA_UTIL_PKG.GET_CN_VALUE1_F('PPFS_IMPORT_EXEC_STATUS', EXEC_STATUS) execStatusName
+      , SCH_CALC_BASE_PERIOD schCalcBasePeriod
+      , SCH_CALC_YEAR schCalcYear
+      , LAST_SUCCESS_CREATE_DATE lastSuccessCreateDate
+      , NEA_UTIL_PKG.format_date_char_f(PERIOD) periodName
+    FROM
+      NEA_PPFS_STAT
+    WHERE
+      COMPANY_CODE = #companyCode#
+      <isNotEmpty property="dataType">
+        AND DATA_TYPE = #dataType#
+      </isNotEmpty>
+    ORDER BY
+      PERIOD DESC
+      , COMPANY_CODE
+      , DATA_TYPE
+  </select>
+
+  <!--
+    ステータス更新
+  -->
+  <parameterMap id="param_callUpdatePpfsStatus_PPI" class="java.util.Map">
+    <parameter property="companyCode" jdbcType="VARCHAR" javaType="String" mode="IN"/>
+    <parameter property="dataType" jdbcType="CHAR" javaType="String" mode="IN"/>
+    <parameter property="execStaffCode" jdbcType="VARCHAR" javaType="String" mode="IN"/>
+    <parameter property="execStatus" jdbcType="CHAR" javaType="String" mode="IN"/>
+  </parameterMap>
+  <procedure id="callUpdatePpfsStatus_PPI" parameterMap="param_callUpdatePpfsStatus_PPI">
+    { call NEA_PPFS_IMPORT_PKG.UPDATE_STATUS(?, ?, ?, ?) }
+  </procedure>
+
+  <!--
+    取込実行(台帳・実績)
+  -->
+  <parameterMap id="param_callPpfsImport_PPI" class="java.util.Map">
+    <parameter property="companyCode" jdbcType="VARCHAR" javaType="String" mode="IN"/>
+    <parameter property="dataType" jdbcType="CHAR" javaType="String" mode="IN"/>
+    <parameter property="execStaffCode" jdbcType="VARCHAR" javaType="String" mode="IN"/>
+  </parameterMap>
+  <procedure id="callPpfsImport_PPI" parameterMap="param_callPpfsImport_PPI" timeout="7200">
+    { call NEA_PPFS_IMPORT_PKG.IMPORT(?, ?, ?) }
+  </procedure>
+
+  <!--
+    取込実行(予測)
+  -->
+  <parameterMap id="param_callPpfsImportSch_PPI" class="java.util.Map">
+    <parameter property="companyCode" jdbcType="VARCHAR" javaType="String" mode="IN"/>
+    <parameter property="dataType" jdbcType="CHAR" javaType="String" mode="IN"/>
+    <parameter property="execStaffCode" jdbcType="VARCHAR" javaType="String" mode="IN"/>
+  </parameterMap>
+  <procedure id="callPpfsImportSch_PPI" parameterMap="param_callPpfsImportSch_PPI" timeout="7200">
+    { call NEA_PPFS_IMPORT_PKG.IMPORT_SCH(?, ?, ?) }
+  </procedure>
+
+</sqlMap>

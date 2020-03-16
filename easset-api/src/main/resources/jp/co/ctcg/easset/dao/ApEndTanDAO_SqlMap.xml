@@ -1,0 +1,1334 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<!--
+ *===================================================================
+ * ファイル名 : ApEndTan_SqlMap.xml
+ * 概要説明   : 固定資産除売却申請用SQL文
+ * バージョン : 1.0
+ *===================================================================
+ * 修正履歴
+ * 日付       Ver. 担当者       修正内容
+ * －－－－－ －－ －－－－－－ －－－－－－－－－－－－－－－－－－
+ * 2012-09-26 1.0  李            新規
+ *===================================================================
+ -->
+<sqlMap namespace="ApEndTan" >
+  <sql id="selectApEndTanComColumn_APET">
+       naet.APPLICATION_ID applicationId
+     , naet.CREATE_DATE createDate
+     , naet.CREATE_STAFF_CODE createStaffCode
+     , naet.UPDATE_DATE updateDate
+     , naet.UPDATE_STAFF_CODE updateStaffCode
+     , naet.VERSION version
+     , naet.DISPLAY_VERSION displayVersion
+     , naet.UPDATE_COMMENT updateComment
+     , naet.EAPP_ID eappId
+     , naet.AP_STATUS apStatus
+     , naet.AP_DATE apDate
+     , naet.AP_FLD_TYPE apFldType
+     , naet.AP_END_TAN_TYPE apEndTanType
+     , naet.AP_END_TAN_AMOUNT_RANGE apEndTanAmountRange
+     , naet.SPECIAL_APPROVE_FLAG specialApproveFlag
+     , naet.SPECIAL_APPROVE_DATE specialApproveDate
+     , naet.AP_CREATE_STAFF_CODE apCreateStaffCode
+     , naet.AP_CREATE_COMPANY_CODE apCreateCompanyCode
+     , naet.AP_CREATE_SECTION_CODE apCreateSectionCode
+     , naet.AP_CREATE_SECTION_YEAR apCreateSectionYear
+     , naet.AP_STAFF_CODE apStaffCode
+     , naet.AP_COMPANY_CODE apCompanyCode
+     , naet.AP_SECTION_CODE apSectionCode
+     , naet.AP_SECTION_YEAR apSectionYear
+     , naet.AP_TEL apTel
+     , naet.AP_SKIP_APPROVE_FLAG apSkipApproveFlag
+     , naet.AP_NEED_CIO_JUDGE_FLAG apNeedCioJudgeFlag
+     , naet.AP_REASON_CODE apReasonCode
+     , naet.AP_REASON apReason
+     , naet.DISPOSE_COMPANY_CODE disposeCompanyCode
+     , naet.DISPOSE_COMPANY_NAME disposeCompanyName
+     , naet.DISPOSE_COMPANY_CHARGE disposeCompanyCharge
+     , naet.DISPOSE_COMPANY_TEL disposeCompanyTel
+     , naet.DISPOSE_DATE disposeDate
+     , naet.ATT_DESCRIPTION attDescription
+     , naet.COST_COMPANY_CODE costCompanyCode
+     , naet.COST_SECTION_CODE costSectionCode
+     , naet.COST_SECTION_YEAR costSectionYear
+     , naet.DESCRIPTION_AP descriptionAp
+     , naet.DESCRIPTION_ADMIN descriptionAdmin
+     , naet.TOTAL_BOOK_AMOUNT totalBookAmount
+     , naet.TOTAL_SALES_AMOUNT totalSalesAmount
+     , naet.APPROVE_DATE approveDate
+     , naet.REPORT_FLAG reportFlag
+     , DECODE(naet.REPORT_FLAG, '1', 'Yes', 'No') reportFlagName
+     , naet.REPORT_DATE reportDate
+     , naet.DELETE_EXEC_FLAG deleteExecFlag
+     , naet.REMINDER_DATE reminderDate
+     , NEA_UTIL_PKG.get_cn_value1_f('AP_END_TAN_TYPE', naet.AP_END_TAN_TYPE) apEndTanTypeName
+     , NEA_UTIL_PKG.get_cn_value1_f('AP_STATUS_END_TAN', naet.AP_STATUS) apStatusName
+     , NEA_UTIL_PKG.get_cn_value1_f('AP_FLD_TYPE', naet.AP_STATUS) apFldTypeName
+     , NEA_UTIL_PKG.get_ppfs_dispose_reason_name_f(naet.AP_COMPANY_CODE, naet.AP_REASON_CODE) apReasonName
+     , NEA_UTIL_PKG.get_staff_name_f(naet.AP_CREATE_STAFF_CODE) apCreateStaffName
+     , NEA_UTIL_PKG.get_staff_name_f(naet.AP_STAFF_CODE) apStaffName
+     , DECODE(AP_FLD_TYPE, '1'
+              , NEA_UTIL_PKG.get_cn_value1_f('AP_END_TAN_AMOUNT_RANGE', naet.AP_END_TAN_AMOUNT_RANGE, naet.AP_COMPANY_CODE)
+              , NEA_UTIL_PKG.get_cn_value1_f('AP_END_INT_AMOUNT_RANGE', naet.AP_END_TAN_AMOUNT_RANGE, naet.AP_COMPANY_CODE)
+             ) apEndTanAmountRangeName
+     , NEA_UTIL_PKG.get_section_name_f(naet.AP_CREATE_COMPANY_CODE, naet.AP_CREATE_SECTION_CODE, naet.AP_CREATE_SECTION_YEAR) apCreateSectionName
+     , NEA_UTIL_PKG.get_section_name_f(naet.AP_COMPANY_CODE, naet.AP_SECTION_CODE, naet.AP_SECTION_YEAR) apSectionName
+     , NEA_UTIL_PKG.get_cost_section_name_f(naet.COST_SECTION_CODE, naet.COST_SECTION_YEAR) costSectionName
+     , NEA_UTIL_PKG.get_company_name_f(naet.AP_CREATE_COMPANY_CODE) apCreateCompanyName
+     , NEA_UTIL_PKG.get_company_name_f(naet.AP_COMPANY_CODE) apCompanyName
+     , NEA_UTIL_PKG.get_company_name_f(naet.COST_COMPANY_CODE) costCompanyName
+  </sql>
+
+  <!--
+    固定資産除売却申請取得
+  -->
+  <select id="selectApEndTan_APET" parameterClass="java.util.Map" resultClass="jp.co.ctcg.easset.dto.ap_end_tan.ApEndTan">
+    SELECT
+      <include refid="selectApEndTanComColumn_APET" />
+     ,NEA_UTIL_PKG.get_tel_f(naet.AP_CREATE_COMPANY_CODE, naet.AP_CREATE_STAFF_CODE, naet.AP_CREATE_SECTION_YEAR) apCreateTel
+    FROM
+      NEA_AP_END_TAN naet
+    WHERE
+      <isNotEmpty property="applicationId">
+        naet.APPLICATION_ID = #applicationId#
+      </isNotEmpty>
+      <isNotEmpty property="eappId">
+        naet.EAPP_ID = #eappId#
+      </isNotEmpty>
+    <isNotEmpty property="lockFlag">
+      FOR UPDATE
+    </isNotEmpty>
+  </select>
+
+  <!--
+    固定資産除売却申請検索(共通)
+  -->
+  <sql id="selectApEndTanComList_APET">
+    SELECT
+      <include refid="selectApEndTanComColumn_APET" />
+
+    , naetlf.AST_DATE astDate
+    , naetlf.AST_NUM astNum
+    , naetlf.AST_NAME astName
+    , naetlf.COST_DIST_CODE costDistCode
+    , NEA_UTIL_PKG.get_dist_name_f(naet.AP_COMPANY_CODE, naetlf.COST_DIST_CODE) costDistName
+    , naetlf.ITEM_GROUP_CODE itemGroupCode
+    , naetlf.COST_SECTION_CODE costSectionCodeL
+    , naetlf.COST_SECTION_NAME costSectionNameL
+    , NEA_UTIL_PKG.get_item_group_name_f(naet.AP_COMPANY_CODE, naetlf.ITEM_GROUP_CODE) itemGroupName
+    , naetlf.HOL_REP_OFFICE_CODE holRepOfficeCode
+    , NEA_UTIL_PKG.get_rep_office_name_f(naet.AP_COMPANY_CODE, naetlf.HOL_REP_OFFICE_CODE) holRepOfficeName
+
+    , naetla.ASSET_ID assetId
+    , naetla.AST_NAME astNameAst
+    , naetla.HOL_SECTION_CODE holSectionCodeAst
+    , NEA_UTIL_PKG.get_section_name_f(naetla.HOL_COMPANY_CODE, naetla.HOL_SECTION_CODE, naetla.HOL_SECTION_YEAR) holSectionNameAst
+    , naetla.HOL_STAFF_CODE holStaffCodeAst
+    , NEA_UTIL_PKG.get_staff_name_f(naetla.HOL_STAFF_CODE) holStaffNameAst
+    , naetla.HOL_OFFICE_CODE holOfficeCode
+    , NEA_UTIL_PKG.get_cn_value1_f('OFFICE', naetla.HOL_OFFICE_CODE) holOfficeName
+    , naetla.USE_STAFF_CODE useStaffCode
+    , NEA_UTIL_PKG.get_staff_name_f(naetla.USE_STAFF_CODE) useStaffName
+    , naetla.HOL_QUANTITY holQuantity
+
+    , naetll.LICENSE_ID licenseId
+    , naetll.SOFTWARE_MAKER_ID softwareMakerId
+    , NEA_UTIL_PKG.get_software_maker_name_f(naetll.SOFTWARE_MAKER_ID) softwareMakerName
+    , naetll.SOFTWARE_ID softwareId
+    , NEA_UTIL_PKG.get_software_name_f(naetll.SOFTWARE_ID) softwareName
+    , naetll.HOL_SECTION_CODE holSectionCodeLic
+    , NEA_UTIL_PKG.get_section_name_f(naetll.HOL_COMPANY_CODE, naetll.HOL_SECTION_CODE, naetll.HOL_SECTION_YEAR) holSectionNameLic
+    , naetll.HOL_STAFF_CODE holStaffCodeLic
+    , NEA_UTIL_PKG.get_staff_name_f(naetll.HOL_STAFF_CODE) holStaffNameLic
+    , naetll.LIC_QUANTITY licQuantity
+
+    , naetlf.HOL_SECTION_CODE holSectionCodeI
+    , NEA_UTIL_PKG.get_section_name_f(naetlf.HOL_COMPANY_CODE, naetlf.HOL_SECTION_CODE, naetlf.HOL_SECTION_YEAR) holSectionNameI
+    , naetlf.HOL_STAFF_CODE holStaffCodeI
+    , NEA_UTIL_PKG.get_staff_name_f(naetlf.HOL_STAFF_CODE) holStaffNameI
+    , naetlf.GET_APPLICATION_ID getApplicationId
+    FROM
+      NEA_AP_END_TAN naet
+    , NEA_AP_END_TAN_LINE_FLD naetlf
+    , NEA_AP_END_TAN_LINE_AST naetla
+    , NEA_AP_END_TAN_LINE_LIC naetll
+    WHERE
+      naet.APPLICATION_ID = naetlf.APPLICATION_ID(+)
+    AND
+      naet.APPLICATION_ID = naetla.APPLICATION_ID(+)
+    AND
+      naet.APPLICATION_ID = naetll.APPLICATION_ID(+)
+    AND
+      1 = naetlf.LINE_SEQ(+)
+    AND
+      1 = naetla.LINE_SEQ(+)
+    AND
+      1 = naetll.LINE_SEQ(+)
+    AND
+      naet.APPLICATION_ID
+        IN (
+          SELECT
+             naet1.APPLICATION_ID
+          FROM
+            (
+             <!-- 検索対象:資産明細 -->
+             SELECT
+              L.ITEM_GROUP_CODE AS ITEM_GROUP_CODE
+            , L.HOL_REP_OFFICE_CODE AS HOL_REP_OFFICE_CODE
+            , L.COST_TYPE AS COST_TYPE
+            , L.COST_DEP_PRJ_CODE AS COST_DEP_PRJ_CODE
+            , L.AST_NUM AS AST_NUM
+            , TO_CHAR(NULL) AS HOL_COMPANY_CODE
+            , TO_CHAR(NULL) AS HOL_SECTION_CODE
+            , TO_NUMBER(NULL) AS HOL_SECTION_YEAR
+            , TO_CHAR(NULL) AS HOL_STAFF_CODE
+            , TO_CHAR(NULL) AS HOL_OFFICE_CODE
+            , TO_CHAR(NULL) AS USE_STAFF_CODE
+            , TO_CHAR(NULL) AS ASSET_ID
+            , TO_CHAR(NULL) AS LICENSE_ID
+            , L.GET_APPLICATION_ID AS GET_APPLICATION_ID
+            , L.HOL_STAFF_CODE AS HOL_STAFF_CODE_I
+            , L.COST_SECTION_CODE AS COST_SECTION_CODE_L
+            , E.*
+            FROM
+              NEA_AP_END_TAN E
+            , NEA_AP_END_TAN_LINE_FLD L
+            WHERE
+              E.APPLICATION_ID = L.APPLICATION_ID
+            UNION ALL
+            <!-- 検索対象:現物情報(情報機器等) -->
+            SELECT
+              TO_CHAR(NULL)
+            , TO_CHAR(NULL)
+            , TO_CHAR(NULL)
+            , TO_CHAR(NULL)
+            , TO_CHAR(NULL)
+            , L.HOL_COMPANY_CODE
+            , L.HOL_SECTION_CODE
+            , L.HOL_SECTION_YEAR
+            , L.HOL_STAFF_CODE
+            , L.HOL_OFFICE_CODE
+            , L.USE_STAFF_CODE
+            , L.ASSET_ID
+            , TO_CHAR(NULL)
+            , L.GET_APPLICATION_ID
+            , TO_CHAR(NULL)
+            , TO_CHAR(NULL)
+            , E.*
+            FROM
+              NEA_AP_END_TAN E
+            , NEA_AP_END_TAN_LINE_AST L
+            WHERE
+              E.APPLICATION_ID = L.APPLICATION_ID
+            UNION ALL
+            <!-- 検索対象:現物情報(ﾗｲｾﾝｽ) -->
+            SELECT
+              TO_CHAR(NULL)
+            , TO_CHAR(NULL)
+            , TO_CHAR(NULL)
+            , TO_CHAR(NULL)
+            , TO_CHAR(NULL)
+            , L.HOL_COMPANY_CODE
+            , L.HOL_SECTION_CODE
+            , L.HOL_SECTION_YEAR
+            , L.HOL_STAFF_CODE
+            , TO_CHAR(NULL)
+            , TO_CHAR(NULL)
+            , TO_CHAR(NULL)
+            , L.LICENSE_ID
+            , L.GET_APPLICATION_ID
+            , TO_CHAR(NULL)
+            , TO_CHAR(NULL)
+            , E.*
+            FROM
+              NEA_AP_END_TAN E
+            , NEA_AP_END_TAN_LINE_LIC L
+            WHERE
+              E.APPLICATION_ID = L.APPLICATION_ID
+            ) naet1
+          WHERE
+            1 = 1
+
+          <!-- 申請会社 -->
+          <isNotEmpty property="searchParam.apCompanyCode">
+            AND naet1.AP_COMPANY_CODE = #searchParam.apCompanyCode#
+          </isNotEmpty>
+
+          <!-- 基本 -->
+
+          <isNotEmpty property="searchParam.apFldType">
+            AND naet1.AP_FLD_TYPE = #searchParam.apFldType#
+          </isNotEmpty>
+
+          <isNotEmpty property="searchParam.applicationId">
+            AND naet1.APPLICATION_ID LIKE '%' || #searchParam.applicationId# || '%'
+          </isNotEmpty>
+          <isNotEmpty property="applicationIdPluralList">
+            AND $applicationIdPluralList$
+          </isNotEmpty>
+
+          <isNotEmpty property="searchParam.eappId">
+            AND naet1.EAPP_ID LIKE '%' || #searchParam.eappId# || '%'
+          </isNotEmpty>
+          <isNotEmpty property="eappIdPluralList">
+            AND $eappIdPluralList$
+          </isNotEmpty>
+
+          <isNotEmpty property="apStatusPluralList">
+            AND $apStatusPluralList$
+          </isNotEmpty>
+
+          <isNotEmpty property="searchParam.apDateFrom">
+            AND naet1.AP_DATE <![CDATA[>]]>= #searchParam.apDateFrom#
+          </isNotEmpty>
+          <isNotEmpty property="searchParam.apDateTo">
+            AND naet1.AP_DATE <![CDATA[<]]>= #searchParam.apDateTo#
+          </isNotEmpty>
+
+          <isNotEmpty property="searchParam.apStaffCode">
+            AND (naet1.AP_STAFF_CODE = #searchParam.apStaffCode# OR naet1.AP_CREATE_STAFF_CODE = #searchParam.apStaffCode#)
+          </isNotEmpty>
+
+          <isNotEmpty property="searchParam.apEndTanType">
+            AND $apEndTanTypePluralList$
+          </isNotEmpty>
+
+          <isNotEmpty property="reportFlagPluralList">
+            AND $reportFlagPluralList$
+          </isNotEmpty>
+
+          <isNotEmpty property="searchParam.reportDateFrom">
+            AND naet1.REPORT_DATE <![CDATA[>]]>= #searchParam.reportDateFrom#
+          </isNotEmpty>
+          <isNotEmpty property="searchParam.reportDateTo">
+            AND naet1.REPORT_DATE <![CDATA[<]]>= #searchParam.reportDateTo#
+          </isNotEmpty>
+
+          <!-- 資産・経済 -->
+          <isNotEmpty property="searchParam.itemGroupCode">
+            AND naet1.ITEM_GROUP_CODE = #searchParam.itemGroupCode#
+          </isNotEmpty>
+
+          <isNotEmpty property="searchParam.holRepOfficeCode">
+            AND naet1.HOL_REP_OFFICE_CODE = #searchParam.holRepOfficeCode#
+          </isNotEmpty>
+
+          <isNotEmpty property="searchParam.costType">
+            AND naet1.COST_TYPE = #searchParam.costType#
+          </isNotEmpty>
+
+          <isNotEmpty property="searchParam.costDepPrjCode">
+            AND naet1.COST_DEP_PRJ_CODE = #searchParam.costDepPrjCode#
+          </isNotEmpty>
+          <isNotEmpty property="searchParam.costSectionCode">
+            AND naet1.COST_SECTION_CODE_L = #searchParam.costSectionCode#
+          </isNotEmpty>
+
+          <!-- 管理番号 -->
+          <isNotEmpty property="searchParam.assetId">
+            AND naet1.ASSET_ID LIKE '%' || #searchParam.assetId# || '%'
+          </isNotEmpty>
+          <isNotEmpty property="assetIdPluralList">
+            AND $assetIdPluralList$
+          </isNotEmpty>
+
+          <isNotEmpty property="searchParam.licenseId">
+            AND naet1.LICENSE_ID LIKE '%' || #searchParam.licenseId# || '%'
+          </isNotEmpty>
+          <isNotEmpty property="licenseIdPluralList">
+            AND $licenseIdPluralList$
+          </isNotEmpty>
+
+          <isNotEmpty property="searchParam.getApplicationId">
+            AND naet1.GET_APPLICATION_ID LIKE '%' ||  #searchParam.getApplicationId# || '%'
+          </isNotEmpty>
+          <isNotEmpty property="getApplicationIdPluralList">
+            AND $getApplicationIdPluralList$
+          </isNotEmpty>
+
+          <isNotEmpty property="searchParam.astNum">
+            AND naet1.AST_NUM LIKE '%' || #searchParam.astNum# || '%'
+          </isNotEmpty>
+          <isNotEmpty property="astNumPluralList">
+            AND $astNumPluralList$
+          </isNotEmpty>
+
+          <!-- 現物情報 -->
+          <isNotEmpty property="searchParam.holStaffCode">
+            AND (naet1.HOL_STAFF_CODE = #searchParam.holStaffCode#)
+          </isNotEmpty>
+          <isNotEmpty property="searchParam.holOfficeCode">
+            AND (naet1.HOL_OFFICE_CODE = #searchParam.holOfficeCode#)
+          </isNotEmpty>
+          <isNotEmpty property="searchParam.holStaffCodeI">
+            AND HOL_STAFF_CODE_I = #searchParam.holStaffCodeI#
+          </isNotEmpty>
+
+          <!-- アクセスレベル/部署(保有/使用) -->
+          <isNotEmpty property="accessLevelSection">
+            AND $accessLevelSection$
+          </isNotEmpty>
+          <isNotEmpty property="section">
+            AND $section$
+          </isNotEmpty>
+          <isNotEmpty property="searchParam.useStaffCode">
+            AND naet1.USE_STAFF_CODE = #searchParam.useStaffCode#
+          </isNotEmpty>
+
+          <!-- 自動抹消バッチで使用 -->
+          <!-- 廃棄・売却予定日 -->
+          <isNotEmpty property="searchParam.disposeDateTo">
+            AND naet1.DISPOSE_DATE <![CDATA[<]]>= #searchParam.disposeDateTo#
+          </isNotEmpty>
+          <!-- 抹消処理実行フラグ -->
+          <isNotEmpty property="searchParam.deleteExecFlag">
+            AND naet1.DELETE_EXEC_FLAG = #searchParam.deleteExecFlag#
+          </isNotEmpty>
+
+          )
+     <isEmpty property="isDownload">
+        AND ROWNUM <![CDATA[<]]>= (SELECT TO_NUMBER(VALUE1) FROM NEA_CODE_NAME WHERE CATEGORY_CODE = 'MAX_SEARCH_ROW_COUNT' AND DELETE_FLAG = '0')
+     </isEmpty>
+
+  </sql>
+
+  <!--
+    固定資産除売却申請検索
+  -->
+  <select id="selectApEndTanList_APET" parameterClass="java.util.Map" resultClass="jp.co.ctcg.easset.dto.ap_end_tan.ApEndTanSR">
+    <include refid="selectApEndTanComList_APET" />
+    ORDER BY
+      naet.APPLICATION_ID
+  </select>
+
+  <!--
+    固定資産除売却申請_資産明細検索
+  -->
+  <select id="selectApEndTanFldList_APET" parameterClass="java.util.Map" resultClass="jp.co.ctcg.easset.dto.ap_end_tan.ApEndTanLineFld">
+    SELECT
+      fld.APPLICATION_ID applicationId
+    , fld.LINE_SEQ lineSeq
+    , fld.CREATE_DATE createDate
+    , fld.CREATE_STAFF_CODE createStaffCode
+    , fld.UPDATE_DATE updateDate
+    , fld.UPDATE_STAFF_CODE updateStaffCode
+    , fld.PP_ID ppId
+    , fld.GET_APPLICATION_ID getApplicationId
+    , fld.AST_DATE astDate
+    , fld.AST_NUM astNum
+    , fld.AST_NAME astName
+    , fld.AST_CLASS astClass
+    , fld.AST_GET_AMOUNT astGetAmount
+    , fld.AST_DEF_BOOK_AMOUNT astDefBookAmount
+    , fld.AST_BOOK_AMOUNT astBookAmount
+    , fld.SALES_AMOUNT salesAmount
+    , fld.COST_TYPE costType
+    , fld.COST_DEP_PRJ_CODE costDepPrjCode
+    , fld.COST_SECTION_CODE costSectionCode
+    , fld.COST_SECTION_NAME costSectionName
+    , fld.ITEM_GROUP_CODE itemGroupCode
+    , fld.HOL_REP_OFFICE_CODE holRepOfficeCode
+    , fld.COST_DIST_CODE costDistCode
+    , fld.HOL_COMPANY_CODE holCompanyCode
+    , fld.HOL_SECTION_CODE holSectionCode
+    , fld.HOL_SECTION_YEAR holSectionYear
+    , fld.HOL_STAFF_CODE holStaffCode
+    , fld.PP_TRANS_FLAG ppTransFlag
+    , NEA_UTIL_PKG.get_section_name_f(fld.HOL_COMPANY_CODE, fld.HOL_SECTION_CODE, fld.HOL_SECTION_YEAR) holSectionName
+    , NEA_UTIL_PKG.get_staff_name_f(fld.HOL_STAFF_CODE) holStaffName
+    , NEA_UTIL_PKG.get_rep_office_name_f(naet.AP_COMPANY_CODE, fld.HOL_REP_OFFICE_CODE) holRepOfficeName
+    , NEA_UTIL_PKG.get_cn_value1_f('COST_TYPE', fld.COST_TYPE) costTypeName
+    , NEA_UTIL_PKG.get_item_group_name_f(naet.AP_COMPANY_CODE, fld.ITEM_GROUP_CODE) itemGroupName
+    , NEA_UTIL_PKG.get_project_name_f(naet.AP_COMPANY_CODE, fld.COST_DEP_PRJ_CODE) costDepPrjName
+    , NEA_UTIL_PKG.get_ast_class_name_f(naet.AP_COMPANY_CODE, fld.AST_CLASS) astClassName
+    , TEMP_FLAG tempFlag
+    FROM
+      NEA_AP_END_TAN_LINE_FLD fld
+    , NEA_AP_END_TAN naet
+    WHERE
+      fld.APPLICATION_ID = naet.APPLICATION_ID
+     <isNotEmpty property="applicationId">
+       AND fld.APPLICATION_ID = #applicationId#
+     </isNotEmpty>
+     <isNotEmpty property="apStatusPluralList">
+       AND $apStatusPluralList$
+     </isNotEmpty>
+     <isNotEmpty property="astNumPluralList">
+       AND $astNumPluralList$
+     </isNotEmpty>
+     <!-- バリデーション用検索条件 -->
+     <isNotEmpty property="notApplicationId">
+       AND fld.APPLICATION_ID != #notApplicationId#
+     </isNotEmpty>
+
+    ORDER BY
+      fld.LINE_SEQ
+  </select>
+
+  <!--
+    固定資産除売却申請_資産(機器)明細検索
+  -->
+  <select id="selectApEndTanAstList_APET" parameterClass="java.util.Map" resultClass="jp.co.ctcg.easset.dto.ap_end_tan.ApEndTanLineAst">
+    SELECT
+      APPLICATION_ID applicationId
+    , LINE_SEQ lineSeq
+    , CREATE_DATE createDate
+    , CREATE_STAFF_CODE createStaffCode
+    , UPDATE_DATE updateDate
+    , UPDATE_STAFF_CODE updateStaffCode
+    , ASSET_ID assetId
+    , HOL_COMPANY_CODE holCompanyCode
+    , HOL_SECTION_CODE holSectionCode
+    , HOL_SECTION_YEAR holSectionYear
+    , HOL_STAFF_CODE holStaffCode
+    , HOL_OFFICE_CODE holOfficeCode
+    , HOL_QUANTITY holQuantity
+    , USE_STAFF_CODE useStaffCode
+    , USE_STAFF_COMPANY_CODE useStaffCompanyCode
+    , USE_STAFF_SECTION_CODE useStaffSectionCode
+    , USE_STAFF_SECTION_YEAR useStaffSectionYear
+    , AST_NAME astName
+    , AST_CATEGORY1_CODE astCategory1Code
+    , AST_CATEGORY2_CODE astCategory2Code
+    , AST_SYSTEM_SECTION_DEPLOY_FLAG astSystemSectionDeployFlag
+    , AST_ASSET_TYPE astAssetType
+    , AST_MANAGE_TYPE astManageType
+    , PP_ID ppId
+    , AST_NUM astNum
+    , GET_APPLICATION_ID getApplicationId
+    , NEA_UTIL_PKG.get_section_name_f(HOL_COMPANY_CODE, HOL_SECTION_CODE, HOL_SECTION_YEAR) holSectionName
+    , NEA_UTIL_PKG.get_staff_name_f(HOL_STAFF_CODE) holStaffName
+    , NEA_UTIL_PKG.get_cn_value1_f('OFFICE', HOL_OFFICE_CODE) holOfficeName
+    , NEA_UTIL_PKG.get_staff_name_f(USE_STAFF_CODE) useStaffName
+    , NEA_UTIL_PKG.get_cn_value1_f('ASSET_TYPE', AST_ASSET_TYPE) astAssetTypeName
+    FROM
+      NEA_AP_END_TAN_LINE_AST
+    WHERE
+      APPLICATION_ID = #applicationId#
+    ORDER BY
+      LINE_SEQ
+  </select>
+
+  <!--
+    固定資産除売却申請_ライセンス明細検索
+  -->
+  <select id="selectApEndTanLicList_APET" parameterClass="java.util.Map" resultClass="jp.co.ctcg.easset.dto.ap_end_tan.ApEndTanLineLic">
+    SELECT
+      APPLICATION_ID applicationId
+    , LINE_SEQ lineSeq
+    , CREATE_DATE createDate
+    , CREATE_STAFF_CODE createStaffCode
+    , UPDATE_DATE updateDate
+    , UPDATE_STAFF_CODE updateStaffCode
+    , LICENSE_ID licenseId
+    , HOL_COMPANY_CODE holCompanyCode
+    , HOL_SECTION_CODE holSectionCode
+    , HOL_SECTION_YEAR holSectionYear
+    , HOL_STAFF_CODE holStaffCode
+    , SOFTWARE_MAKER_ID softwareMakerId
+    , SOFTWARE_ID softwareId
+    , LIC_ASSET_TYPE licAssetType
+    , LIC_QUANTITY_TYPE licQuantityType
+    , LIC_QUANTITY licQuantity
+    , PP_ID ppId
+    , AST_NUM astNum
+    , GET_APPLICATION_ID getApplicationId
+    , NEA_UTIL_PKG.get_section_name_f(HOL_COMPANY_CODE, HOL_SECTION_CODE, HOL_SECTION_YEAR) holSectionName
+    , NEA_UTIL_PKG.get_staff_name_f(HOL_STAFF_CODE) holStaffName
+    , NEA_UTIL_PKG.get_cn_value1_f('LICENSE_ASSET_TYPE', LIC_ASSET_TYPE) licAssetTypeName
+    , NEA_UTIL_PKG.get_software_maker_name_f(SOFTWARE_MAKER_ID) softwareMakerName
+    , NEA_UTIL_PKG.get_software_name_f(SOFTWARE_ID) softwareName
+    FROM
+      NEA_AP_END_TAN_LINE_LIC
+    WHERE
+      APPLICATION_ID = #applicationId#
+    ORDER BY
+      LINE_SEQ
+  </select>
+
+  <!--
+    固定資産除売却申請_添付明細検索
+  -->
+  <select id="selectApEndTanAttList_APET" parameterClass="java.util.Map" resultClass="jp.co.ctcg.easset.dto.ap_end_tan.ApEndTanLineAtt">
+    SELECT
+      APPLICATION_ID applicationId
+    , LINE_SEQ lineSeq
+    , CREATE_DATE createDate
+    , CREATE_STAFF_CODE createStaffCode
+    , UPDATE_DATE updateDate
+    , UPDATE_STAFF_CODE updateStaffCode
+    , ATT_FILE_NAME attFileName
+    , ATT_FILE_ID attFileId
+    , ATT_FILE_COMMENT attFileComment
+    , NEA_UTIL_PKG.get_staff_name_f(CREATE_STAFF_CODE) createStaffName
+    FROM
+      NEA_AP_END_TAN_LINE_ATT
+    WHERE
+      APPLICATION_ID = #applicationId#
+    ORDER BY
+      LINE_SEQ
+  </select>
+
+  <!--
+    償却費予測結果検索
+  -->
+  <select id="selectPpfsYskCalc_APET" parameterClass="java.util.Map" resultClass="jp.co.ctcg.easset.dto.ap_end_tan.PpfsYskCalc">
+    SELECT
+      PERIOD period
+    , COMPANY_CODE companyCode
+    , CREATE_DATE createDate
+    , CREATE_STAFF_CODE createStaffCode
+    , UPDATE_DATE updateDate
+    , UPDATE_STAFF_CODE updateStaffCode
+    , PK_YSK pkYsk
+    , KOYUNO koyuno
+    , KAISHACD kaishacd
+    , USERIDPK useridpk
+    , USERID userid
+    , CHOBO chobo
+    , SKKYYDO skkyydo
+    , YSKDATAKBN yskdatakbn
+    , CALCSHORITAISHOFLG calcshoritaishoflg
+    , SKKGKHFKBN skkgkhfkbn
+    , IDOMOTOSAKIKBN idomotosakikbn
+    , ANBUNMOTOSAKIKBN anbunmotosakikbn
+    , OYA oya
+    , EDA eda
+    , SOSHIKI1PK soshiki1pk
+    , SOSHIKI1CD soshiki1cd
+    , SOSHIKI2PK soshiki2pk
+    , SOSHIKI2CD soshiki2cd
+    , SOSHIKI3PK soshiki3pk
+    , SOSHIKI3CD soshiki3cd
+    , SOSHIKI4PK soshiki4pk
+    , SOSHIKI4CD soshiki4cd
+    , SHURUIPK shuruipk
+    , SHURUICD shuruicd
+    , KOZOPK kozopk
+    , KOZOCD kozocd
+    , BUNRUIPK bunruipk
+    , BUNRUICD bunruicd
+    , SETCHIPK setchipk
+    , SETCHICD setchicd
+    , NINI_LD_1PK niniLd_1pk
+    , NINI_LD_1CD niniLd_1cd
+    , NINI_LD_2PK niniLd_2pk
+    , NINI_LD_2CD niniLd_2cd
+    , NINI_LD_3PK niniLd_3pk
+    , NINI_LD_3CD niniLd_3cd
+    , NINI_LD_4PK niniLd_4pk
+    , NINI_LD_4CD niniLd_4cd
+    , NINI_LD_5PK niniLd_5pk
+    , NINI_LD_5CD niniLd_5cd
+    , NINI_LD_6PK niniLd_6pk
+    , NINI_LD_6CD niniLd_6cd
+    , NINI_LD_7PK niniLd_7pk
+    , NINI_LD_7CD niniLd_7cd
+    , NINI_LD_8PK niniLd_8pk
+    , NINI_LD_8CD niniLd_8cd
+    , NINI_LD_9PK niniLd_9pk
+    , NINI_LD_9CD niniLd_9cd
+    , NINI_LD_10PK niniLd_10pk
+    , NINI_LD_10CD niniLd_10cd
+    , NINI_LD_11PK niniLd_11pk
+    , NINI_LD_11CD niniLd_11cd
+    , NINI_LD_12PK niniLd_12pk
+    , NINI_LD_12CD niniLd_12cd
+    , NINI_LD_13PK niniLd_13pk
+    , NINI_LD_13CD niniLd_13cd
+    , NINI_LD_14PK niniLd_14pk
+    , NINI_LD_14CD niniLd_14cd
+    , NINI_LD_15PK niniLd_15pk
+    , NINI_LD_15CD niniLd_15cd
+    , NINI_LD_16PK niniLd_16pk
+    , NINI_LD_16CD niniLd_16cd
+    , NINI_LD_17PK niniLd_17pk
+    , NINI_LD_17CD niniLd_17cd
+    , NINI_LD_18PK niniLd_18pk
+    , NINI_LD_18CD niniLd_18cd
+    , NINI_LD_19PK niniLd_19pk
+    , NINI_LD_19CD niniLd_19cd
+    , NINI_LD_20PK niniLd_20pk
+    , NINI_LD_20CD niniLd_20cd
+    , ASKSTKGK askstkgk
+    , KSBOKA ksboka
+    , ZKSKKGK_NEN zkskkgkNen
+    , TKSKKGK_NEN tkskkgkNen
+    , NINISKKGK_NEN niniskkgkNen
+    , GENSONGK_NEN gensongkNen
+    , FTSKKGK1 ftskkgk1
+    , FTSKKGK2 ftskkgk2
+    , FTSKKGK3 ftskkgk3
+    , FTSKKGK4 ftskkgk4
+    , FTSKKGK5 ftskkgk5
+    , FTSKKGK6 ftskkgk6
+    , FTSKKGK7 ftskkgk7
+    , FTSKKGK8 ftskkgk8
+    , FTSKKGK9 ftskkgk9
+    , FTSKKGK10 ftskkgk10
+    , FTSKKGK11 ftskkgk11
+    , FTSKKGK12 ftskkgk12
+    , ZKSKKGK1 zkskkgk1
+    , ZKSKKGK2 zkskkgk2
+    , ZKSKKGK3 zkskkgk3
+    , ZKSKKGK4 zkskkgk4
+    , ZKSKKGK5 zkskkgk5
+    , ZKSKKGK6 zkskkgk6
+    , ZKSKKGK7 zkskkgk7
+    , ZKSKKGK8 zkskkgk8
+    , ZKSKKGK9 zkskkgk9
+    , ZKSKKGK10 zkskkgk10
+    , ZKSKKGK11 zkskkgk11
+    , ZKSKKGK12 zkskkgk12
+    , TKSKKGK1 tkskkgk1
+    , TKSKKGK2 tkskkgk2
+    , TKSKKGK3 tkskkgk3
+    , TKSKKGK4 tkskkgk4
+    , TKSKKGK5 tkskkgk5
+    , TKSKKGK6 tkskkgk6
+    , TKSKKGK7 tkskkgk7
+    , TKSKKGK8 tkskkgk8
+    , TKSKKGK9 tkskkgk9
+    , TKSKKGK10 tkskkgk10
+    , TKSKKGK11 tkskkgk11
+    , TKSKKGK12 tkskkgk12
+    , NINISKKGK1 niniskkgk1
+    , NINISKKGK2 niniskkgk2
+    , NINISKKGK3 niniskkgk3
+    , NINISKKGK4 niniskkgk4
+    , NINISKKGK5 niniskkgk5
+    , NINISKKGK6 niniskkgk6
+    , NINISKKGK7 niniskkgk7
+    , NINISKKGK8 niniskkgk8
+    , NINISKKGK9 niniskkgk9
+    , NINISKKGK10 niniskkgk10
+    , NINISKKGK11 niniskkgk11
+    , NINISKKGK12 niniskkgk12
+    , GENSONGK1 gensongk1
+    , GENSONGK2 gensongk2
+    , GENSONGK3 gensongk3
+    , GENSONGK4 gensongk4
+    , GENSONGK5 gensongk5
+    , GENSONGK6 gensongk6
+    , GENSONGK7 gensongk7
+    , GENSONGK8 gensongk8
+    , GENSONGK9 gensongk9
+    , GENSONGK10 gensongk10
+    , GENSONGK11 gensongk11
+    , GENSONGK12 gensongk12
+    , HFPK hfpk
+    , HFCD hfcd
+    , KIHONSPAREC1 kihonsparec1
+    , KIHONSPAREC2 kihonsparec2
+    , KIHONSPAREC3 kihonsparec3
+    , KIHONSPAREC4 kihonsparec4
+    , KIHONSPAREC5 kihonsparec5
+    , KIHONSPAREC6 kihonsparec6
+    , KIHONSPAREC7 kihonsparec7
+    , KIHONSPAREC8 kihonsparec8
+    , KIHONSPAREC9 kihonsparec9
+    , KIHONSPAREC10 kihonsparec10
+    , KIHONSPAREN1 kihonsparen1
+    , KIHONSPAREN2 kihonsparen2
+    , KIHONSPAREN3 kihonsparen3
+    , KIHONSPAREN4 kihonsparen4
+    , KIHONSPAREN5 kihonsparen5
+    , KIHONSPAREN6 kihonsparen6
+    , KIHONSPAREN7 kihonsparen7
+    , KIHONSPAREN8 kihonsparen8
+    , KIHONSPAREN9 kihonsparen9
+    , KIHONSPAREN10 kihonsparen10
+    , ADDONSPAREC1 addonsparec1
+    , ADDONSPAREC2 addonsparec2
+    , ADDONSPAREC3 addonsparec3
+    , ADDONSPAREC4 addonsparec4
+    , ADDONSPAREC5 addonsparec5
+    , ADDONSPAREC6 addonsparec6
+    , ADDONSPAREC7 addonsparec7
+    , ADDONSPAREC8 addonsparec8
+    , ADDONSPAREC9 addonsparec9
+    , ADDONSPAREC10 addonsparec10
+    , ADDONSPAREN1 addonsparen1
+    , ADDONSPAREN2 addonsparen2
+    , ADDONSPAREN3 addonsparen3
+    , ADDONSPAREN4 addonsparen4
+    , ADDONSPAREN5 addonsparen5
+    , ADDONSPAREN6 addonsparen6
+    , ADDONSPAREN7 addonsparen7
+    , ADDONSPAREN8 addonsparen8
+    , ADDONSPAREN9 addonsparen9
+    , ADDONSPAREN10 addonsparen10
+    , UPDKAISU updkaisu
+    , UPDKAISHACD updkaishacd
+    , UPDID updid
+    , UPDYMD updymd
+    , UPDTIME updtime
+    FROM
+      NEA_PPFS_YSK_CALC
+    WHERE
+      COMPANY_CODE = #companyCode#
+    AND
+      CHOBO = '1'
+    AND
+      SKKGKHFKBN = '1'
+    <isNotEmpty property="skkyydo">
+      AND SKKYYDO = #skkyydo#
+    </isNotEmpty>
+    <isNotEmpty property="skkyydoFrom">
+      AND SKKYYDO <![CDATA[>]]>= #skkyydoFrom#
+    </isNotEmpty>
+    <isNotEmpty property="skkyydoTo">
+      AND SKKYYDO <![CDATA[<]]>= #skkyydoTo#
+    </isNotEmpty>
+    <isNotEmpty property="koyuno">
+      AND KOYUNO = #koyuno#
+    </isNotEmpty>
+    <isNotEmpty property="koyunoPluealList">
+      AND $koyunoPluealList$
+    </isNotEmpty>
+   ORDER BY
+      KOYUNO
+  </select>
+
+  <!--
+    固定資産除売却申請ヘッダ作成
+  -->
+  <insert id="insertApEndTan_APET" parameterClass="java.util.Map">
+    INSERT INTO NEA_AP_END_TAN (
+      APPLICATION_ID
+    , CREATE_DATE
+    , CREATE_STAFF_CODE
+    , UPDATE_DATE
+    , UPDATE_STAFF_CODE
+    , VERSION
+    , DISPLAY_VERSION
+    , UPDATE_COMMENT
+    , EAPP_ID
+    , AP_STATUS
+    , AP_DATE
+    , AP_FLD_TYPE
+    , AP_END_TAN_TYPE
+    , AP_END_TAN_AMOUNT_RANGE
+    , SPECIAL_APPROVE_FLAG
+    , SPECIAL_APPROVE_DATE
+    , AP_CREATE_STAFF_CODE
+    , AP_CREATE_COMPANY_CODE
+    , AP_CREATE_SECTION_CODE
+    , AP_CREATE_SECTION_YEAR
+    , AP_STAFF_CODE
+    , AP_COMPANY_CODE
+    , AP_SECTION_CODE
+    , AP_SECTION_YEAR
+    , AP_TEL
+    , AP_SKIP_APPROVE_FLAG
+    , AP_NEED_CIO_JUDGE_FLAG
+    , AP_REASON_CODE
+    , AP_REASON
+    , DISPOSE_COMPANY_CODE
+    , DISPOSE_COMPANY_NAME
+    , DISPOSE_COMPANY_CHARGE
+    , DISPOSE_COMPANY_TEL
+    , DISPOSE_DATE
+    , ATT_DESCRIPTION
+    , COST_COMPANY_CODE
+    , COST_SECTION_CODE
+    , COST_SECTION_YEAR
+    , DESCRIPTION_AP
+    , DESCRIPTION_ADMIN
+    , TOTAL_BOOK_AMOUNT
+    , TOTAL_SALES_AMOUNT
+    , APPROVE_DATE
+    , REPORT_FLAG
+    , REPORT_DATE
+    , DELETE_EXEC_FLAG
+    , REMINDER_DATE
+    ) VALUES (
+      #obj.applicationId:VARCHAR# /* APPLICATION_ID*/
+    , #obj.createDate:TIMESTAMP# /* CREATE_DATE*/
+    , #obj.createStaffCode:VARCHAR# /* CREATE_STAFF_CODE*/
+    , #obj.updateDate:TIMESTAMP# /* UPDATE_DATE*/
+    , #obj.updateStaffCode:VARCHAR# /* UPDATE_STAFF_CODE*/
+    , #obj.version:NUMERIC# /* VERSION*/
+    , #obj.displayVersion:NUMERIC# /* DISPLAY_VERSION*/
+    , #obj.updateComment:VARCHAR# /* UPDATE_COMMENT*/
+    , #obj.eappId:NUMERIC# /* EAPP_ID*/
+    , #obj.apStatus:CHAR# /* AP_STATUS*/
+    , #obj.apDate:DATE# /* AP_DATE*/
+    , #obj.apFldType:VARCHAR# /* AP_FLD_TYPE*/
+    , #obj.apEndTanType:VARCHAR# /* AP_END_TAN_TYPE*/
+    , #obj.apEndTanAmountRange:VARCHAR# /* AP_END_TAN_AMOUNT_RANGE*/
+    , #obj.specialApproveFlag:CHAR# /* SPECIAL_APPROVE_FLAG*/
+    , #obj.specialApproveDate:DATE# /* SPECIAL_APPROVE_DATE*/
+    , #obj.apCreateStaffCode:VARCHAR# /* AP_CREATE_STAFF_CODE*/
+    , #obj.apCreateCompanyCode:VARCHAR# /* AP_CREATE_COMPANY_CODE*/
+    , #obj.apCreateSectionCode:VARCHAR# /* AP_CREATE_SECTION_CODE*/
+    , #obj.apCreateSectionYear:NUMERIC# /* AP_CREATE_SECTION_YEAR*/
+    , #obj.apStaffCode:VARCHAR# /* AP_STAFF_CODE*/
+    , #obj.apCompanyCode:VARCHAR# /* AP_COMPANY_CODE*/
+    , #obj.apSectionCode:VARCHAR# /* AP_SECTION_CODE*/
+    , #obj.apSectionYear:NUMERIC# /* AP_SECTION_YEAR*/
+    , #obj.apTel:VARCHAR# /* AP_TEL*/
+    , #obj.apSkipApproveFlag:CHAR# /* AP_SKIP_APPROVE_FLAG*/
+    , #obj.apNeedCioJudgeFlag:CHAR# /* AP_NEED_CIO_JUDGE_FLAG*/
+    , #obj.apReasonCode:VARCHAR# /* AP_REASON_CODE*/
+    , #obj.apReason:VARCHAR# /* AP_REASON*/
+    , #obj.disposeCompanyCode:VARCHAR# /* DISPOSE_COMPANY_CODE*/
+    , #obj.disposeCompanyName:VARCHAR# /* DISPOSE_COMPANY_NAME*/
+    , #obj.disposeCompanyCharge:VARCHAR# /* DISPOSE_COMPANY_CHARGE*/
+    , #obj.disposeCompanyTel:VARCHAR# /* DISPOSE_COMPANY_TEL*/
+    , #obj.disposeDate:DATE# /* DISPOSE_DATE*/
+    , #obj.attDescription:VARCHAR# /* ATT_DESCRIPTION*/
+    , #obj.costCompanyCode:VARCHAR# /* COST_COMPANY_CODE*/
+    , #obj.costSectionCode:VARCHAR# /* COST_SECTION_CODE*/
+    , #obj.costSectionYear:NUMERIC# /* COST_SECTION_YEAR*/
+    , #obj.descriptionAp:VARCHAR# /* DESCRIPTION_AP*/
+    , #obj.descriptionAdmin:VARCHAR# /* DESCRIPTION_ADMIN*/
+    , #obj.totalBookAmount:NUMERIC# /* TOTAL_BOOK_AMOUNT*/
+    , #obj.totalSalesAmount:NUMERIC# /* TOTAL_SALES_AMOUNT*/
+    , #obj.approveDate:DATE# /* APPROVE_DATE*/
+    , #obj.reportFlag:CHAR# /* REPORT_FLAG*/
+    , #obj.reportDate:DATE# /* REPORT_DATE*/
+    , #obj.deleteExecFlag:CHAR# /* DELETE_EXEC_FLAG*/
+    , #obj.reminderDate:DATE# /* REMINDER_DATE*/
+    )
+  </insert>
+
+  <!--
+    固定資産除売却申請_資産明細作成
+  -->
+  <insert id="insertApEndTanLineFld_APET" parameterClass="java.util.Map">
+    INSERT INTO NEA_AP_END_TAN_LINE_FLD (
+      APPLICATION_ID
+    , LINE_SEQ
+    , CREATE_DATE
+    , CREATE_STAFF_CODE
+    , UPDATE_DATE
+    , UPDATE_STAFF_CODE
+    , PP_ID
+    , GET_APPLICATION_ID
+    , AST_DATE
+    , AST_NUM
+    , AST_NAME
+    , AST_CLASS
+    , AST_GET_AMOUNT
+    , AST_DEF_BOOK_AMOUNT
+    , AST_BOOK_AMOUNT
+    , SALES_AMOUNT
+    , COST_TYPE
+    , COST_DEP_PRJ_CODE
+    , COST_SECTION_CODE
+    , COST_SECTION_NAME
+    , ITEM_GROUP_CODE
+    , HOL_REP_OFFICE_CODE
+    , COST_DIST_CODE
+    , HOL_COMPANY_CODE
+    , HOL_SECTION_CODE
+    , HOL_SECTION_YEAR
+    , HOL_STAFF_CODE
+    , PP_TRANS_FLAG
+    , TEMP_FLAG
+    ) VALUES (
+      #obj.applicationId:VARCHAR# /* APPLICATION_ID*/
+    , #obj.lineSeq:NUMERIC# /* LINE_SEQ*/
+    , #obj.createDate:TIMESTAMP# /* CREATE_DATE*/
+    , #obj.createStaffCode:VARCHAR# /* CREATE_STAFF_CODE*/
+    , #obj.updateDate:TIMESTAMP# /* UPDATE_DATE*/
+    , #obj.updateStaffCode:VARCHAR# /* UPDATE_STAFF_CODE*/
+    , #obj.ppId:NUMERIC# /* PP_ID*/
+    , #obj.getApplicationId:VARCHAR# /* GET_APPLICATION_ID*/
+    , #obj.astDate:DATE# /* AST_DATE*/
+    , #obj.astNum:VARCHAR# /* AST_NUM*/
+    , #obj.astName:VARCHAR# /* AST_NAME*/
+    , #obj.astClass:VARCHAR# /* AST_CLASS*/
+    , #obj.astGetAmount:NUMERIC# /* AST_GET_AMOUNT*/
+    , #obj.astDefBookAmount:NUMERIC# /* AST_DEF_BOOK_AMOUNT*/
+    , #obj.astBookAmount:NUMERIC# /* AST_BOOK_AMOUNT*/
+    , #obj.salesAmount:NUMERIC# /* SALES_AMOUNT*/
+    , #obj.costType:CHAR# /* COST_TYPE*/
+    , #obj.costDepPrjCode:VARCHAR# /* COST_DEP_PRJ_CODE*/
+    , #obj.costSectionCode:VARCHAR# /* COST_SECTION_CODE*/
+    , #obj.costSectionName:VARCHAR# /* COST_SECTION_NAME*/
+    , #obj.itemGroupCode:VARCHAR# /* ITEM_GROUP_CODE*/
+    , #obj.holRepOfficeCode:VARCHAR# /* HOL_REP_OFFICE_CODE*/
+    , #obj.costDistCode:VARCHAR# /* COST_DIST_CODE*/
+    , #obj.holCompanyCode:VARCHAR# /* HOL_COMPANY_CODE*/
+    , #obj.holSectionCode:VARCHAR# /* HOL_SECTION_CODE*/
+    , #obj.holSectionYear:NUMERIC# /* HOL_SECTION_YEAR*/
+    , #obj.holStaffCode:VARCHAR# /* HOL_STAFF_CODE*/
+    , #obj.ppTransFlag:VARCHAR# /* PP_TRANS_FLAG*/
+    , #obj.tempFlag# /* TEMP_FLAG*/
+    )
+  </insert>
+
+  <!--
+    固定資産除売却申請_資産(機器)明細作成
+  -->
+  <insert id="insertApEndTanLineAst_APET" parameterClass="java.util.Map">
+    INSERT INTO NEA_AP_END_TAN_LINE_AST (
+      APPLICATION_ID
+    , LINE_SEQ
+    , CREATE_DATE
+    , CREATE_STAFF_CODE
+    , UPDATE_DATE
+    , UPDATE_STAFF_CODE
+    , ASSET_ID
+    , HOL_COMPANY_CODE
+    , HOL_SECTION_CODE
+    , HOL_SECTION_YEAR
+    , HOL_STAFF_CODE
+    , HOL_OFFICE_CODE
+    , HOL_QUANTITY
+    , USE_STAFF_CODE
+    , USE_STAFF_COMPANY_CODE
+    , USE_STAFF_SECTION_CODE
+    , USE_STAFF_SECTION_YEAR
+    , AST_NAME
+    , AST_CATEGORY1_CODE
+    , AST_CATEGORY2_CODE
+    , AST_SYSTEM_SECTION_DEPLOY_FLAG
+    , AST_ASSET_TYPE
+    , AST_MANAGE_TYPE
+    , PP_ID
+    , AST_NUM
+    , GET_APPLICATION_ID
+    ) VALUES (
+      #obj.applicationId:VARCHAR# /* APPLICATION_ID*/
+    , #obj.lineSeq:NUMERIC# /* LINE_SEQ*/
+    , #obj.createDate:TIMESTAMP# /* CREATE_DATE*/
+    , #obj.createStaffCode:VARCHAR# /* CREATE_STAFF_CODE*/
+    , #obj.updateDate:TIMESTAMP# /* UPDATE_DATE*/
+    , #obj.updateStaffCode:VARCHAR# /* UPDATE_STAFF_CODE*/
+    , #obj.assetId:VARCHAR# /* ASSET_ID*/
+    , #obj.holCompanyCode:VARCHAR# /* HOL_COMPANY_CODE*/
+    , #obj.holSectionCode:VARCHAR# /* HOL_SECTION_CODE*/
+    , #obj.holSectionYear:NUMERIC# /* HOL_SECTION_YEAR*/
+    , #obj.holStaffCode:VARCHAR# /* HOL_STAFF_CODE*/
+    , #obj.holOfficeCode:VARCHAR# /* HOL_OFFICE_CODE*/
+    , #obj.holQuantity:NUMERIC# /* HOL_QUANTITY*/
+    , #obj.useStaffCode:VARCHAR# /* USE_STAFF_CODE*/
+    , #obj.useStaffCompanyCode:VARCHAR# /* USE_STAFF_COMPANY_CODE*/
+    , #obj.useStaffSectionCode:VARCHAR# /* USE_STAFF_SECTION_CODE*/
+    , #obj.useStaffSectionYear:NUMERIC# /* USE_STAFF_SECTION_YEAR*/
+    , #obj.astName:VARCHAR# /* AST_NAME*/
+    , #obj.astCategory1Code:VARCHAR# /* AST_CATEGORY1_CODE*/
+    , #obj.astCategory2Code:VARCHAR# /* AST_CATEGORY2_CODE*/
+    , #obj.astSystemSectionDeployFlag:CHAR# /* AST_SYSTEM_SECTION_DEPLOY_FLAG*/
+    , #obj.astAssetType:VARCHAR# /* AST_ASSET_TYPE*/
+    , #obj.astManageType:VARCHAR# /* AST_MANAGE_TYPE*/
+    , #obj.ppId:NUMERIC# /* PP_ID*/
+    , #obj.astNum:VARCHAR# /* AST_NUM*/
+    , #obj.getApplicationId:VARCHAR# /* GET_APPLICATION_ID*/
+    )
+  </insert>
+
+ <!--
+    固定資産除売却申請_ライセンス明細作成
+  -->
+  <insert id="insertApEndTanLineLic_APET" parameterClass="java.util.Map">
+    INSERT INTO NEA_AP_END_TAN_LINE_LIC (
+      APPLICATION_ID
+    , LINE_SEQ
+    , CREATE_DATE
+    , CREATE_STAFF_CODE
+    , UPDATE_DATE
+    , UPDATE_STAFF_CODE
+    , LICENSE_ID
+    , HOL_COMPANY_CODE
+    , HOL_SECTION_CODE
+    , HOL_SECTION_YEAR
+    , HOL_STAFF_CODE
+    , SOFTWARE_MAKER_ID
+    , SOFTWARE_ID
+    , LIC_ASSET_TYPE
+    , LIC_QUANTITY_TYPE
+    , LIC_QUANTITY
+    , PP_ID
+    , AST_NUM
+    , GET_APPLICATION_ID
+    ) VALUES (
+      #obj.applicationId:VARCHAR# /* APPLICATION_ID*/
+    , #obj.lineSeq:NUMERIC# /* LINE_SEQ*/
+    , #obj.createDate:TIMESTAMP# /* CREATE_DATE*/
+    , #obj.createStaffCode:VARCHAR# /* CREATE_STAFF_CODE*/
+    , #obj.updateDate:TIMESTAMP# /* UPDATE_DATE*/
+    , #obj.updateStaffCode:VARCHAR# /* UPDATE_STAFF_CODE*/
+    , #obj.licenseId:VARCHAR# /* LICENSE_ID*/
+    , #obj.holCompanyCode:VARCHAR# /* HOL_COMPANY_CODE*/
+    , #obj.holSectionCode:VARCHAR# /* HOL_SECTION_CODE*/
+    , #obj.holSectionYear:NUMERIC# /* HOL_SECTION_YEAR*/
+    , #obj.holStaffCode:VARCHAR# /* HOL_STAFF_CODE*/
+    , #obj.softwareMakerId:NUMERIC# /* SOFTWARE_MAKER_ID*/
+    , #obj.softwareId:NUMERIC# /* SOFTWARE_ID*/
+    , #obj.licAssetType:VARCHAR# /* LIC_ASSET_TYPE*/
+    , #obj.licQuantityType:CHAR# /* LIC_QUANTITY_TYPE*/
+    , #obj.licQuantity:NUMERIC# /* LIC_QUANTITY*/
+    , #obj.ppId:NUMERIC# /* PP_ID*/
+    , #obj.astNum:VARCHAR# /* AST_NUM*/
+    , #obj.getApplicationId:VARCHAR# /* GET_APPLICATION_ID*/
+    )
+  </insert>
+
+  <!--
+    固定資産除売却申請_添付明細作成
+  -->
+  <insert id="insertApEndTanLineAtt_APET" parameterClass="java.util.Map">
+    INSERT INTO NEA_AP_END_TAN_LINE_ATT (
+      APPLICATION_ID
+    , LINE_SEQ
+    , CREATE_DATE
+    , CREATE_STAFF_CODE
+    , UPDATE_DATE
+    , UPDATE_STAFF_CODE
+    , ATT_FILE_NAME
+    , ATT_FILE_ID
+    , ATT_FILE_COMMENT
+    ) VALUES (
+      #obj.applicationId:VARCHAR# /* APPLICATION_ID*/
+    , #obj.lineSeq:NUMERIC# /* LINE_SEQ*/
+    , #obj.createDate:TIMESTAMP# /* CREATE_DATE*/
+    , #obj.createStaffCode:VARCHAR# /* CREATE_STAFF_CODE*/
+    , #obj.updateDate:TIMESTAMP# /* UPDATE_DATE*/
+    , #obj.updateStaffCode:VARCHAR# /* UPDATE_STAFF_CODE*/
+    , #obj.attFileName:VARCHAR# /* ATT_FILE_NAME*/
+    , #obj.attFileId:VARCHAR# /* ATT_FILE_ID*/
+    , #obj.attFileComment:VARCHAR# /* ATT_FILE_COMMENT*/
+    )
+  </insert>
+
+  <!--
+    固定資産除売却申請_ヘッダ更新
+  -->
+  <update id="updateApEndTan_APET" parameterClass="java.util.Map">
+    UPDATE
+      NEA_AP_END_TAN
+    SET
+      APPLICATION_ID = #obj.applicationId:VARCHAR#
+    , CREATE_DATE = #obj.createDate:TIMESTAMP#
+    , CREATE_STAFF_CODE = #obj.createStaffCode:VARCHAR#
+    , UPDATE_DATE = #obj.updateDate:TIMESTAMP#
+    , UPDATE_STAFF_CODE = #obj.updateStaffCode:VARCHAR#
+    , VERSION = #obj.version:NUMERIC#
+    , DISPLAY_VERSION = #obj.displayVersion:NUMERIC#
+    , UPDATE_COMMENT = #obj.updateComment:VARCHAR#
+    , EAPP_ID = #obj.eappId:NUMERIC#
+    , AP_STATUS = #obj.apStatus:CHAR#
+    , AP_DATE = #obj.apDate:DATE#
+    , AP_FLD_TYPE = #obj.apFldType:VARCHAR#
+    , AP_END_TAN_TYPE = #obj.apEndTanType:VARCHAR#
+    , AP_END_TAN_AMOUNT_RANGE = #obj.apEndTanAmountRange:VARCHAR#
+    , SPECIAL_APPROVE_FLAG = #obj.specialApproveFlag:CHAR#
+    , SPECIAL_APPROVE_DATE = #obj.specialApproveDate:DATE#
+    , AP_CREATE_STAFF_CODE = #obj.apCreateStaffCode:VARCHAR#
+    , AP_CREATE_COMPANY_CODE = #obj.apCreateCompanyCode:VARCHAR#
+    , AP_CREATE_SECTION_CODE = #obj.apCreateSectionCode:VARCHAR#
+    , AP_CREATE_SECTION_YEAR = #obj.apCreateSectionYear:NUMERIC#
+    , AP_STAFF_CODE = #obj.apStaffCode:VARCHAR#
+    , AP_COMPANY_CODE = #obj.apCompanyCode:VARCHAR#
+    , AP_SECTION_CODE = #obj.apSectionCode:VARCHAR#
+    , AP_SECTION_YEAR = #obj.apSectionYear:NUMERIC#
+    , AP_TEL = #obj.apTel:VARCHAR#
+    , AP_SKIP_APPROVE_FLAG = #obj.apSkipApproveFlag:CHAR#
+    , AP_NEED_CIO_JUDGE_FLAG = #obj.apNeedCioJudgeFlag:CHAR#
+    , AP_REASON_CODE = #obj.apReasonCode:VARCHAR#
+    , AP_REASON = #obj.apReason:VARCHAR#
+    , DISPOSE_COMPANY_CODE = #obj.disposeCompanyCode:VARCHAR#
+    , DISPOSE_COMPANY_NAME = #obj.disposeCompanyName:VARCHAR#
+    , DISPOSE_COMPANY_CHARGE = #obj.disposeCompanyCharge:VARCHAR#
+    , DISPOSE_COMPANY_TEL = #obj.disposeCompanyTel:VARCHAR#
+    , DISPOSE_DATE = #obj.disposeDate:DATE#
+    , ATT_DESCRIPTION = #obj.attDescription:VARCHAR#
+    , COST_COMPANY_CODE = #obj.costCompanyCode:VARCHAR#
+    , COST_SECTION_CODE = #obj.costSectionCode:VARCHAR#
+    , COST_SECTION_YEAR = #obj.costSectionYear:NUMERIC#
+    , DESCRIPTION_AP = #obj.descriptionAp:VARCHAR#
+    , DESCRIPTION_ADMIN = #obj.descriptionAdmin:VARCHAR#
+    , TOTAL_BOOK_AMOUNT = #obj.totalBookAmount:NUMERIC#
+    , TOTAL_SALES_AMOUNT = #obj.totalSalesAmount:NUMERIC#
+    , APPROVE_DATE = #obj.approveDate:DATE#
+    , REPORT_FLAG = #obj.reportFlag:CHAR#
+    , REPORT_DATE = #obj.reportDate:DATE#
+    , DELETE_EXEC_FLAG = #obj.deleteExecFlag:CHAR#
+    , REMINDER_DATE = #obj.reminderDate:DATE#
+    WHERE
+      APPLICATION_ID = #obj.applicationId#
+  </update>
+
+  <!--
+    固定資産除売却申請_資産明細更新
+  -->
+  <update id="updateApEndTanLineFld_APET" parameterClass="java.util.Map">
+    UPDATE
+      NEA_AP_END_TAN_LINE_FLD
+    SET
+    APPLICATION_ID = #obj.applicationId:VARCHAR#
+    , LINE_SEQ = #obj.lineSeq:NUMERIC#
+    , CREATE_DATE = #obj.createDate:TIMESTAMP#
+    , CREATE_STAFF_CODE = #obj.createStaffCode:VARCHAR#
+    , UPDATE_DATE = #obj.updateDate:TIMESTAMP#
+    , UPDATE_STAFF_CODE = #obj.updateStaffCode:VARCHAR#
+    , PP_ID = #obj.ppId:NUMERIC#
+    , GET_APPLICATION_ID = #obj.getApplicationId:VARCHAR#
+    , AST_DATE = #obj.astDate:DATE#
+    , AST_NUM = #obj.astNum:VARCHAR#
+    , AST_NAME = #obj.astName:VARCHAR#
+    , AST_CLASS = #obj.astClass:VARCHAR#
+    , AST_GET_AMOUNT = #obj.astGetAmount:NUMERIC#
+    , AST_DEF_BOOK_AMOUNT = #obj.astDefBookAmount:NUMERIC#
+    , AST_BOOK_AMOUNT = #obj.astBookAmount:NUMERIC#
+    , SALES_AMOUNT = #obj.salesAmount:NUMERIC#
+    , COST_TYPE = #obj.costType:CHAR#
+    , COST_DEP_PRJ_CODE = #obj.costDepPrjCode:VARCHAR#
+    , COST_SECTION_CODE = #obj.costSectionCode:VARCHAR#
+    , COST_SECTION_NAME = #obj.costSectionName:VARCHAR#
+    , ITEM_GROUP_CODE = #obj.itemGroupCode:VARCHAR#
+    , HOL_REP_OFFICE_CODE = #obj.holRepOfficeCode:VARCHAR#
+    , COST_DIST_CODE = #obj.costDistCode:VARCHAR#
+    , HOL_COMPANY_CODE = #obj.holCompanyCode:VARCHAR#
+    , HOL_SECTION_CODE = #obj.holSectionCode:VARCHAR#
+    , HOL_SECTION_YEAR = #obj.holSectionYear:NUMERIC#
+    , HOL_STAFF_CODE = #obj.holStaffCode:VARCHAR#
+    , PP_TRANS_FLAG = #obj.ppTransFlag:VARCHAR#
+    , TEMP_FLAG = #obj.tempFlag#
+   WHERE
+     APPLICATION_ID = #obj.applicationId#
+  </update>
+
+  <!--
+    固定資産除売却申請_資産(機器)明細更新
+  -->
+  <update id="updateApEndTanLineAst_APET" parameterClass="java.util.Map">
+    UPDATE
+      NEA_AP_END_TAN_LINE_AST
+    SET
+      APPLICATION_ID = #obj.applicationId:VARCHAR#
+    , LINE_SEQ = #obj.lineSeq:NUMERIC#
+    , CREATE_DATE = #obj.createDate:TIMESTAMP#
+    , CREATE_STAFF_CODE = #obj.createStaffCode:VARCHAR#
+    , UPDATE_DATE = #obj.updateDate:TIMESTAMP#
+    , UPDATE_STAFF_CODE = #obj.updateStaffCode:VARCHAR#
+    , ASSET_ID = #obj.assetId:VARCHAR#
+    , HOL_COMPANY_CODE = #obj.holCompanyCode:VARCHAR#
+    , HOL_SECTION_CODE = #obj.holSectionCode:VARCHAR#
+    , HOL_SECTION_YEAR = #obj.holSectionYear:NUMERIC#
+    , HOL_STAFF_CODE = #obj.holStaffCode:VARCHAR#
+    , HOL_OFFICE_CODE = #obj.holOfficeCode:VARCHAR#
+    , HOL_QUANTITY = #obj.holQuantity:NUMERIC#
+    , USE_STAFF_CODE = #obj.useStaffCode:VARCHAR#
+    , USE_STAFF_COMPANY_CODE = #obj.useStaffCompanyCode:VARCHAR#
+    , USE_STAFF_SECTION_CODE = #obj.useStaffSectionCode:VARCHAR#
+    , USE_STAFF_SECTION_YEAR = #obj.useStaffSectionYear:NUMERIC#
+    , AST_NAME = #obj.astName:VARCHAR#
+    , AST_CATEGORY1_CODE = #obj.astCategory1Code:VARCHAR#
+    , AST_CATEGORY2_CODE = #obj.astCategory2Code:VARCHAR#
+    , AST_SYSTEM_SECTION_DEPLOY_FLAG = #obj.astSystemSectionDeployFlag:CHAR#
+    , AST_ASSET_TYPE = #obj.astAssetType:VARCHAR#
+    , AST_MANAGE_TYPE = #obj.astManageType:VARCHAR#
+    , PP_ID = #obj.ppId:NUMERIC#
+    , AST_NUM = #obj.astNum:VARCHAR#
+    , GET_APPLICATION_ID = #obj.getApplicationId:VARCHAR#
+    WHERE
+      APPLICATION_ID = #obj.applicationId#
+  </update>
+
+  <!--
+    固定資産除売却申請_ライセンス明細更新
+  -->
+  <update id="updateApEndTanLineLic_APET" parameterClass="java.util.Map">
+    UPDATE
+      NEA_AP_END_TAN_LINE_LIC
+    SET
+      APPLICATION_ID = #obj.applicationId:VARCHAR#
+    , LINE_SEQ = #obj.lineSeq:NUMERIC#
+    , CREATE_DATE = #obj.createDate:TIMESTAMP#
+    , CREATE_STAFF_CODE = #obj.createStaffCode:VARCHAR#
+    , UPDATE_DATE = #obj.updateDate:TIMESTAMP#
+    , UPDATE_STAFF_CODE = #obj.updateStaffCode:VARCHAR#
+    , LICENSE_ID = #obj.licenseId:VARCHAR#
+    , HOL_COMPANY_CODE = #obj.holCompanyCode:VARCHAR#
+    , HOL_SECTION_CODE = #obj.holSectionCode:VARCHAR#
+    , HOL_SECTION_YEAR = #obj.holSectionYear:NUMERIC#
+    , HOL_STAFF_CODE = #obj.holStaffCode:VARCHAR#
+    , SOFTWARE_MAKER_ID = #obj.softwareMakerId:NUMERIC#
+    , SOFTWARE_ID = #obj.softwareId:NUMERIC#
+    , LIC_ASSET_TYPE = #obj.licAssetType:VARCHAR#
+    , LIC_QUANTITY_TYPE = #obj.licQuantityType:CHAR#
+    , LIC_QUANTITY = #obj.licQuantity:NUMERIC#
+    , PP_ID = #obj.ppId:NUMERIC#
+    , AST_NUM = #obj.astNum:VARCHAR#
+    , GET_APPLICATION_ID = #obj.getApplicationId:VARCHAR#
+   WHERE
+     APPLICATION_ID = #obj.applicationId#
+  </update>
+
+  <!--
+    固定資産除売却申請_添付明細更新
+  -->
+  <update id="updateApEndTanLineAtt_APET" parameterClass="java.util.Map">
+    UPDATE
+      NEA_AP_END_TAN_LINE_ATT
+    SET
+      APPLICATION_ID = #obj.applicationId:VARCHAR#
+    , LINE_SEQ = #obj.lineSeq:NUMERIC#
+    , CREATE_DATE = #obj.createDate:TIMESTAMP#
+    , CREATE_STAFF_CODE = #obj.createStaffCode:VARCHAR#
+    , UPDATE_DATE = #obj.updateDate:TIMESTAMP#
+    , UPDATE_STAFF_CODE = #obj.updateStaffCode:VARCHAR#
+    , ATT_FILE_NAME = #obj.attFileName:VARCHAR#
+    , ATT_FILE_ID = #obj.attFileId:VARCHAR#
+    , ATT_FILE_COMMENT = #obj.attFileComment:VARCHAR#
+    WHERE
+      APPLICATION_ID = #obj.applicationId#
+  </update>
+
+  <!--
+    固定資産除売却申請(ヘッダ)削除
+  -->
+  <delete id="deleteApEndTan_APET" parameterClass="java.util.Map">
+    DELETE FROM
+      NEA_AP_END_TAN
+    WHERE
+      APPLICATION_ID = #applicationId#
+  </delete>
+
+  <!--
+    固定資産除売却申請_資産明細削除
+  -->
+  <delete id="deleteApEndTanLineFld_APET" parameterClass="java.util.Map">
+    DELETE FROM
+      NEA_AP_END_TAN_LINE_FLD
+    WHERE
+      APPLICATION_ID = #applicationId#
+  </delete>
+
+  <!--
+    固定資産除売却申請_資産(機器)明細削除
+  -->
+  <delete id="deleteApEndTanLineAst_APET" parameterClass="java.util.Map">
+    DELETE FROM
+      NEA_AP_END_TAN_LINE_AST
+    WHERE
+      APPLICATION_ID = #applicationId#
+  </delete>
+
+  <!--
+    固定資産除売却申請_ライセンス明細削除
+  -->
+  <delete id="deleteApEndTanLineLic_APET" parameterClass="java.util.Map">
+    DELETE FROM
+      NEA_AP_END_TAN_LINE_LIC
+    WHERE
+      APPLICATION_ID = #applicationId#
+  </delete>
+
+  <!--
+    固定資産除売却申請_添付明細削除
+  -->
+  <delete id="deleteApEndTanLineAtt_APET" parameterClass="java.util.Map">
+    DELETE FROM
+      NEA_AP_END_TAN_LINE_ATT
+    WHERE
+      APPLICATION_ID = #applicationId#
+  </delete>
+
+</sqlMap>

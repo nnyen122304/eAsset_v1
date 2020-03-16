@@ -1,0 +1,20 @@
+<div class="asset-result">
+  <div class="asset-head">
+    <div>
+      <a class="head-search" href="javascript: void(0)" (click)="goBack()">
+        <img src="assets/images/button/to_search.gif">
+        <span>検索条件画面へ戻る</span>
+      </a>
+    </div>
+    <hr>
+    <div class="row">
+      <div class="col">
+        <label>ライセンスの割当/割当解除を行う情報機器を検索してください。</label>
+      </div>
+    </div>
+  </div>
+  <div class="asset-list">
+    <app-asset-result-list (select)="clickRow($event)" [dataList]="assetSRList" [checkBoxVisible]='true'>
+    </app-asset-result-list>
+  </div>
+</div>

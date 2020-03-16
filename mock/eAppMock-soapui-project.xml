@@ -1,0 +1,1187 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<con:soapui-project id="74c7f245-0169-48c4-98fa-58d415d52bd8" activeEnvironment="Default" name="eAppMock" resourceRoot="" soapui-version="5.1.3" abortOnError="false" runType="SEQUENTIAL" xmlns:con="http://eviware.com/soapui/config"><con:settings/><con:interface xsi:type="con:WsdlInterface" id="786e3d4a-1cbd-44e0-bbb7-9f12844e7a86" wsaVersion="NONE" name="ApAssetServiceSoapBinding" type="wsdl" bindingName="{http://ws.easset.ctcg.co.jp}ApAssetServiceSoapBinding" soapVersion="1_1" anonymous="optional" definition="file:/C:/dummy/wsdls/ApAssetService.wsdl" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:settings/><con:definitionCache type="TEXT" rootPart="file:/C:/dummy/wsdls/ApAssetService.wsdl"><con:part><con:url>file:/C:/dummy/wsdls/ApAssetService.wsdl</con:url><con:content><![CDATA[<wsdl:definitions targetNamespace="http://ws.easset.ctcg.co.jp" xmlns:apachesoap="http://xml.apache.org/xml-soap" xmlns:impl="http://ws.easset.ctcg.co.jp" xmlns:intf="http://ws.easset.ctcg.co.jp" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <!--WSDLはApache Axis version: 1.4
+Built on Apr 22, 2006 (06:55:48 PDT)によって生成されました / [en]-(WSDL created by Apache Axis version: 1.4
+Built on Apr 22, 2006 (06:55:48 PDT))-->
+  <wsdl:types>
+    <schema elementFormDefault="qualified" targetNamespace="http://ws.easset.ctcg.co.jp" xmlns="http://www.w3.org/2001/XMLSchema">
+      <element name="apply">
+        <complexType>
+          <sequence>
+            <element name="applicationId" type="xsd:string"/>
+            <element name="applicationType" type="xsd:string"/>
+            <element name="companyCode" type="xsd:string"/>
+            <element name="apSectionCode" type="xsd:string"/>
+            <element name="apCreateStaffCode" type="xsd:string"/>
+            <element name="apStaffCode" type="xsd:string"/>
+            <element name="apTel" type="xsd:string"/>
+            <element name="apTitle" type="xsd:string"/>
+            <element name="apSubTitle" type="xsd:string"/>
+            <element name="apListTitle" type="xsd:string"/>
+            <element name="eAssetUrl" type="xsd:string"/>
+            <element name="acceptRouteAuthDisp" type="xsd:string"/>
+            <element name="acceptRouteChargeDisp" type="xsd:string"/>
+            <element name="acceptRouteDispType" type="xsd:string"/>
+          </sequence>
+        </complexType>
+      </element>
+      <element name="applyResponse">
+        <complexType>
+          <sequence>
+            <element name="applyReturn" type="string"/>
+          </sequence>
+        </complexType>
+      </element>
+    </schema>
+  </wsdl:types>
+  <wsdl:message name="applyRequest">
+    <wsdl:part element="impl:apply" name="parameters"/>
+  </wsdl:message>
+  <wsdl:message name="applyResponse">
+    <wsdl:part element="impl:applyResponse" name="parameters"/>
+  </wsdl:message>
+  <wsdl:portType name="ApAssetService">
+    <wsdl:operation name="apply">
+      <wsdl:input message="impl:applyRequest" name="applyRequest"/>
+      <wsdl:output message="impl:applyResponse" name="applyResponse"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="ApAssetServiceSoapBinding" type="impl:ApAssetService">
+    <wsdlsoap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="apply">
+      <wsdlsoap:operation soapAction=""/>
+      <wsdl:input name="applyRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="applyResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="ApAssetServiceService">
+    <wsdl:port binding="impl:ApAssetServiceSoapBinding" name="ApAssetService">
+      <wsdlsoap:address location="http://localhost:8080/eAsset_Web/services/ApAssetService"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>]]></con:content><con:type>http://schemas.xmlsoap.org/wsdl/</con:type></con:part></con:definitionCache><con:endpoints><con:endpoint>http://localhost:8080/eAsset_Web/services/ApAssetService</con:endpoint></con:endpoints><con:operation id="0fb4d947-ccbc-400a-9fdf-35ecafcb1207" isOneWay="false" action="" name="apply" bindingOperationName="apply" type="Request-Response" outputName="applyResponse" inputName="applyRequest" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call id="04ace3a5-6790-409a-8c69-cfd8888843ea" name="Request 1"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:18080/ApAssetService/</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ws="http://ws.easset.ctcg.co.jp">\r
+   <soapenv:Header/>\r
+   <soapenv:Body>\r
+      <ws:apply>\r
+         <ws:applicationId>?</ws:applicationId>\r
+         <ws:applicationType>?</ws:applicationType>\r
+         <ws:companyCode>?</ws:companyCode>\r
+         <ws:apSectionCode>?</ws:apSectionCode>\r
+         <ws:apCreateStaffCode>?</ws:apCreateStaffCode>\r
+         <ws:apStaffCode>?</ws:apStaffCode>\r
+         <ws:apTel>?</ws:apTel>\r
+         <ws:apTitle>?</ws:apTitle>\r
+         <ws:apSubTitle>?</ws:apSubTitle>\r
+         <ws:apListTitle>?</ws:apListTitle>\r
+         <ws:eAssetUrl>?</ws:eAssetUrl>\r
+         <ws:acceptRouteAuthDisp>?</ws:acceptRouteAuthDisp>\r
+         <ws:acceptRouteChargeDisp>?</ws:acceptRouteChargeDisp>\r
+         <ws:acceptRouteDispType>?</ws:acceptRouteDispType>\r
+      </ws:apply>\r
+   </soapenv:Body>\r
+</soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://ws.easset.ctcg.co.jp/ApAssetService/applyRequest"/><con:wsrmConfig version="1.2"/></con:call></con:operation></con:interface><con:interface xsi:type="con:WsdlInterface" id="7f8d16cb-8920-4697-b5f4-4f031bfba6b9" wsaVersion="NONE" name="ApBgnIntServiceSoapBinding" type="wsdl" bindingName="{http://ws.easset.ctcg.co.jp}ApBgnIntServiceSoapBinding" soapVersion="1_1" anonymous="optional" definition="file:/C:/dummy/wsdls/ApBgnIntService.wsdl" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:settings/><con:definitionCache type="TEXT" rootPart="file:/C:/dummy/wsdls/ApBgnIntService.wsdl"><con:part><con:url>file:/C:/dummy/wsdls/ApBgnIntService.wsdl</con:url><con:content><![CDATA[<wsdl:definitions targetNamespace="http://ws.easset.ctcg.co.jp" xmlns:apachesoap="http://xml.apache.org/xml-soap" xmlns:impl="http://ws.easset.ctcg.co.jp" xmlns:intf="http://ws.easset.ctcg.co.jp" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <!--WSDLはApache Axis version: 1.4
+Built on Apr 22, 2006 (06:55:48 PDT)によって生成されました / [en]-(WSDL created by Apache Axis version: 1.4
+Built on Apr 22, 2006 (06:55:48 PDT))-->
+  <wsdl:types>
+    <schema elementFormDefault="qualified" targetNamespace="http://ws.easset.ctcg.co.jp" xmlns="http://www.w3.org/2001/XMLSchema">
+      <element name="apply">
+        <complexType>
+          <sequence>
+            <element name="applicationId" type="xsd:string"/>
+            <element name="applicationType" type="xsd:string"/>
+            <element name="companyCode" type="xsd:string"/>
+            <element name="apSectionCode" type="xsd:string"/>
+            <element name="apCreateStaffCode" type="xsd:string"/>
+            <element name="apStaffCode" type="xsd:string"/>
+            <element name="apTel" type="xsd:string"/>
+            <element name="apTitle" type="xsd:string"/>
+            <element name="apSubTitle" type="xsd:string"/>
+            <element name="apListTitle" type="xsd:string"/>
+            <element name="eAssetUrl" type="xsd:string"/>
+            <element maxOccurs="unbounded" name="applyRouteAuthDispArray" type="xsd:string"/>
+            <element maxOccurs="unbounded" name="applyRouteChargeDispArray" type="xsd:string"/>
+            <element maxOccurs="unbounded" name="applyRouteDispTypeArray" type="xsd:string"/>
+            <element maxOccurs="unbounded" name="approveRouteAuthDispArray" type="xsd:string"/>
+            <element maxOccurs="unbounded" name="approveRouteChargeDispArray" type="xsd:string"/>
+            <element maxOccurs="unbounded" name="approveRouteDispTypeArray" type="xsd:string"/>
+            <element maxOccurs="unbounded" name="acceptRouteAuthDispArray" type="xsd:string"/>
+            <element maxOccurs="unbounded" name="acceptRouteChargeDispArray" type="xsd:string"/>
+            <element maxOccurs="unbounded" name="acceptRouteDispTypeArray" type="xsd:string"/>
+            <element name="specialApproveDate" type="xsd:dateTime"/>
+          </sequence>
+        </complexType>
+      </element>
+      <element name="applyResponse">
+        <complexType>
+          <sequence>
+            <element name="applyReturn" type="string"/>
+          </sequence>
+        </complexType>
+      </element>
+    </schema>
+  </wsdl:types>
+  <wsdl:message name="applyRequest">
+    <wsdl:part element="impl:apply" name="parameters"/>
+  </wsdl:message>
+  <wsdl:message name="applyResponse">
+    <wsdl:part element="impl:applyResponse" name="parameters"/>
+  </wsdl:message>
+  <wsdl:portType name="ApBgnIntService">
+    <wsdl:operation name="apply">
+      <wsdl:input message="impl:applyRequest" name="applyRequest"/>
+      <wsdl:output message="impl:applyResponse" name="applyResponse"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="ApBgnIntServiceSoapBinding" type="impl:ApBgnIntService">
+    <wsdlsoap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="apply">
+      <wsdlsoap:operation soapAction=""/>
+      <wsdl:input name="applyRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="applyResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="ApBgnIntServiceService">
+    <wsdl:port binding="impl:ApBgnIntServiceSoapBinding" name="ApBgnIntService">
+      <wsdlsoap:address location="http://localhost:8080/eAsset_Web/services/ApBgnIntService"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>]]></con:content><con:type>http://schemas.xmlsoap.org/wsdl/</con:type></con:part></con:definitionCache><con:endpoints><con:endpoint>http://localhost:8080/eAsset_Web/services/ApBgnIntService</con:endpoint></con:endpoints><con:operation id="fc711b82-daed-43e9-b9c6-ccc67271b97e" isOneWay="false" action="" name="apply" bindingOperationName="apply" type="Request-Response" outputName="applyResponse" inputName="applyRequest" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call id="fd95fdfd-316a-4892-83ed-c097ba368147" name="Request 1"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:18080/ApBgnIntService/</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ws="http://ws.easset.ctcg.co.jp">\r
+   <soapenv:Header/>\r
+   <soapenv:Body>\r
+      <ws:apply>\r
+         <ws:applicationId>?</ws:applicationId>\r
+         <ws:applicationType>?</ws:applicationType>\r
+         <ws:companyCode>?</ws:companyCode>\r
+         <ws:apSectionCode>?</ws:apSectionCode>\r
+         <ws:apCreateStaffCode>?</ws:apCreateStaffCode>\r
+         <ws:apStaffCode>?</ws:apStaffCode>\r
+         <ws:apTel>?</ws:apTel>\r
+         <ws:apTitle>?</ws:apTitle>\r
+         <ws:apSubTitle>?</ws:apSubTitle>\r
+         <ws:apListTitle>?</ws:apListTitle>\r
+         <ws:eAssetUrl>?</ws:eAssetUrl>\r
+         <!--1 or more repetitions:-->\r
+         <ws:applyRouteAuthDispArray>?</ws:applyRouteAuthDispArray>\r
+         <!--1 or more repetitions:-->\r
+         <ws:applyRouteChargeDispArray>?</ws:applyRouteChargeDispArray>\r
+         <!--1 or more repetitions:-->\r
+         <ws:applyRouteDispTypeArray>?</ws:applyRouteDispTypeArray>\r
+         <!--1 or more repetitions:-->\r
+         <ws:approveRouteAuthDispArray>?</ws:approveRouteAuthDispArray>\r
+         <!--1 or more repetitions:-->\r
+         <ws:approveRouteChargeDispArray>?</ws:approveRouteChargeDispArray>\r
+         <!--1 or more repetitions:-->\r
+         <ws:approveRouteDispTypeArray>?</ws:approveRouteDispTypeArray>\r
+         <!--1 or more repetitions:-->\r
+         <ws:acceptRouteAuthDispArray>?</ws:acceptRouteAuthDispArray>\r
+         <!--1 or more repetitions:-->\r
+         <ws:acceptRouteChargeDispArray>?</ws:acceptRouteChargeDispArray>\r
+         <!--1 or more repetitions:-->\r
+         <ws:acceptRouteDispTypeArray>?</ws:acceptRouteDispTypeArray>\r
+         <ws:specialApproveDate>?</ws:specialApproveDate>\r
+      </ws:apply>\r
+   </soapenv:Body>\r
+</soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://ws.easset.ctcg.co.jp/ApBgnIntService/applyRequest"/><con:wsrmConfig version="1.2"/></con:call></con:operation></con:interface><con:interface xsi:type="con:WsdlInterface" id="36dbff0b-7004-4839-b418-8a24da0fef51" wsaVersion="NONE" name="ApChangeServiceSoapBinding" type="wsdl" bindingName="{http://ws.easset.ctcg.co.jp}ApChangeServiceSoapBinding" soapVersion="1_1" anonymous="optional" definition="file:/C:/dummy/wsdls/ApChangeService.wsdl" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:settings/><con:definitionCache type="TEXT" rootPart="file:/C:/dummy/wsdls/ApChangeService.wsdl"><con:part><con:url>file:/C:/dummy/wsdls/ApChangeService.wsdl</con:url><con:content><![CDATA[<wsdl:definitions targetNamespace="http://ws.easset.ctcg.co.jp" xmlns:apachesoap="http://xml.apache.org/xml-soap" xmlns:impl="http://ws.easset.ctcg.co.jp" xmlns:intf="http://ws.easset.ctcg.co.jp" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <!--WSDLはApache Axis version: 1.4
+Built on Apr 22, 2006 (06:55:48 PDT)によって生成されました / [en]-(WSDL created by Apache Axis version: 1.4
+Built on Apr 22, 2006 (06:55:48 PDT))-->
+  <wsdl:types>
+    <schema elementFormDefault="qualified" targetNamespace="http://ws.easset.ctcg.co.jp" xmlns="http://www.w3.org/2001/XMLSchema">
+      <element name="apply">
+        <complexType>
+          <sequence>
+            <element name="applicationId" type="xsd:string"/>
+            <element name="applicationType" type="xsd:string"/>
+            <element name="companyCode" type="xsd:string"/>
+            <element name="apSectionCode" type="xsd:string"/>
+            <element name="apCreateStaffCode" type="xsd:string"/>
+            <element name="apStaffCode" type="xsd:string"/>
+            <element name="apTel" type="xsd:string"/>
+            <element name="apTitle" type="xsd:string"/>
+            <element name="apSubTitle" type="xsd:string"/>
+            <element name="apListTitle" type="xsd:string"/>
+            <element name="eAssetUrl" type="xsd:string"/>
+            <element maxOccurs="unbounded" name="oldRouteStaffCodeArray" type="xsd:string"/>
+            <element maxOccurs="unbounded" name="oldRouteChargeDispArray" type="xsd:string"/>
+            <element maxOccurs="unbounded" name="oldRouteDispTypeArray" type="xsd:string"/>
+            <element maxOccurs="unbounded" name="newRouteStaffCodeArray" type="xsd:string"/>
+            <element maxOccurs="unbounded" name="newRouteChargeDispArray" type="xsd:string"/>
+            <element maxOccurs="unbounded" name="newRouteDispTypeArray" type="xsd:string"/>
+            <element maxOccurs="unbounded" name="approveRouteAuthDispArray" type="xsd:string"/>
+            <element maxOccurs="unbounded" name="approveRouteChargeDispArray" type="xsd:string"/>
+            <element maxOccurs="unbounded" name="approveRouteDispTypeArray" type="xsd:string"/>
+            <element maxOccurs="unbounded" name="acceptRouteAuthDispArray" type="xsd:string"/>
+            <element maxOccurs="unbounded" name="acceptRouteChargeDispArray" type="xsd:string"/>
+            <element maxOccurs="unbounded" name="acceptRouteDispTypeArray" type="xsd:string"/>
+          </sequence>
+        </complexType>
+      </element>
+      <element name="applyResponse">
+        <complexType>
+          <sequence>
+            <element name="applyReturn" type="string"/>
+          </sequence>
+        </complexType>
+      </element>
+    </schema>
+  </wsdl:types>
+  <wsdl:message name="applyRequest">
+    <wsdl:part element="impl:apply" name="parameters"/>
+  </wsdl:message>
+  <wsdl:message name="applyResponse">
+    <wsdl:part element="impl:applyResponse" name="parameters"/>
+  </wsdl:message>
+  <wsdl:portType name="ApChangeService">
+    <wsdl:operation name="apply">
+      <wsdl:input message="impl:applyRequest" name="applyRequest"/>
+      <wsdl:output message="impl:applyResponse" name="applyResponse"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="ApChangeServiceSoapBinding" type="impl:ApChangeService">
+    <wsdlsoap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="apply">
+      <wsdlsoap:operation soapAction=""/>
+      <wsdl:input name="applyRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="applyResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="ApChangeServiceService">
+    <wsdl:port binding="impl:ApChangeServiceSoapBinding" name="ApChangeService">
+      <wsdlsoap:address location="http://localhost:8080/eAsset_Web/services/ApChangeService"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>]]></con:content><con:type>http://schemas.xmlsoap.org/wsdl/</con:type></con:part></con:definitionCache><con:endpoints><con:endpoint>http://localhost:8080/eAsset_Web/services/ApChangeService</con:endpoint></con:endpoints><con:operation id="bc5b5b69-d059-4a96-9e1d-4d932dde5779" isOneWay="false" action="" name="apply" bindingOperationName="apply" type="Request-Response" outputName="applyResponse" inputName="applyRequest" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call id="136e594b-3d36-43eb-99c4-c449b986eedd" name="Request 1"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:18080/ApChangeService/</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ws="http://ws.easset.ctcg.co.jp">\r
+   <soapenv:Header/>\r
+   <soapenv:Body>\r
+      <ws:apply>\r
+         <ws:applicationId>?</ws:applicationId>\r
+         <ws:applicationType>?</ws:applicationType>\r
+         <ws:companyCode>?</ws:companyCode>\r
+         <ws:apSectionCode>?</ws:apSectionCode>\r
+         <ws:apCreateStaffCode>?</ws:apCreateStaffCode>\r
+         <ws:apStaffCode>?</ws:apStaffCode>\r
+         <ws:apTel>?</ws:apTel>\r
+         <ws:apTitle>?</ws:apTitle>\r
+         <ws:apSubTitle>?</ws:apSubTitle>\r
+         <ws:apListTitle>?</ws:apListTitle>\r
+         <ws:eAssetUrl>?</ws:eAssetUrl>\r
+         <!--1 or more repetitions:-->\r
+         <ws:oldRouteStaffCodeArray>?</ws:oldRouteStaffCodeArray>\r
+         <!--1 or more repetitions:-->\r
+         <ws:oldRouteChargeDispArray>?</ws:oldRouteChargeDispArray>\r
+         <!--1 or more repetitions:-->\r
+         <ws:oldRouteDispTypeArray>?</ws:oldRouteDispTypeArray>\r
+         <!--1 or more repetitions:-->\r
+         <ws:newRouteStaffCodeArray>?</ws:newRouteStaffCodeArray>\r
+         <!--1 or more repetitions:-->\r
+         <ws:newRouteChargeDispArray>?</ws:newRouteChargeDispArray>\r
+         <!--1 or more repetitions:-->\r
+         <ws:newRouteDispTypeArray>?</ws:newRouteDispTypeArray>\r
+         <!--1 or more repetitions:-->\r
+         <ws:approveRouteAuthDispArray>?</ws:approveRouteAuthDispArray>\r
+         <!--1 or more repetitions:-->\r
+         <ws:approveRouteChargeDispArray>?</ws:approveRouteChargeDispArray>\r
+         <!--1 or more repetitions:-->\r
+         <ws:approveRouteDispTypeArray>?</ws:approveRouteDispTypeArray>\r
+         <!--1 or more repetitions:-->\r
+         <ws:acceptRouteAuthDispArray>?</ws:acceptRouteAuthDispArray>\r
+         <!--1 or more repetitions:-->\r
+         <ws:acceptRouteChargeDispArray>?</ws:acceptRouteChargeDispArray>\r
+         <!--1 or more repetitions:-->\r
+         <ws:acceptRouteDispTypeArray>?</ws:acceptRouteDispTypeArray>\r
+      </ws:apply>\r
+   </soapenv:Body>\r
+</soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://ws.easset.ctcg.co.jp/ApChangeService/applyRequest"/><con:wsrmConfig version="1.2"/></con:call></con:operation></con:interface><con:interface xsi:type="con:WsdlInterface" id="4f6707e7-8818-47eb-9bce-10828cae3da8" wsaVersion="NONE" name="ApEndLeServiceSoapBinding" type="wsdl" bindingName="{http://ws.easset.ctcg.co.jp}ApEndLeServiceSoapBinding" soapVersion="1_1" anonymous="optional" definition="file:/C:/dummy/wsdls/ApEndLeService.wsdl" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:settings/><con:definitionCache type="TEXT" rootPart="file:/C:/dummy/wsdls/ApEndLeService.wsdl"><con:part><con:url>file:/C:/dummy/wsdls/ApEndLeService.wsdl</con:url><con:content><![CDATA[<wsdl:definitions targetNamespace="http://ws.easset.ctcg.co.jp" xmlns:apachesoap="http://xml.apache.org/xml-soap" xmlns:impl="http://ws.easset.ctcg.co.jp" xmlns:intf="http://ws.easset.ctcg.co.jp" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <!--WSDLはApache Axis version: 1.4
+Built on Apr 22, 2006 (06:55:48 PDT)によって生成されました / [en]-(WSDL created by Apache Axis version: 1.4
+Built on Apr 22, 2006 (06:55:48 PDT))-->
+  <wsdl:types>
+    <schema elementFormDefault="qualified" targetNamespace="http://ws.easset.ctcg.co.jp" xmlns="http://www.w3.org/2001/XMLSchema">
+      <element name="apply">
+        <complexType>
+          <sequence>
+            <element name="applicationId" type="xsd:string"/>
+            <element name="applicationType" type="xsd:string"/>
+            <element name="companyCode" type="xsd:string"/>
+            <element name="apSectionCode" type="xsd:string"/>
+            <element name="apCreateStaffCode" type="xsd:string"/>
+            <element name="apStaffCode" type="xsd:string"/>
+            <element name="apTel" type="xsd:string"/>
+            <element name="apTitle" type="xsd:string"/>
+            <element name="apSubTitle" type="xsd:string"/>
+            <element name="apListTitle" type="xsd:string"/>
+            <element name="eAssetUrl" type="xsd:string"/>
+            <element maxOccurs="unbounded" name="applyRouteAuthDispArray" type="xsd:string"/>
+            <element maxOccurs="unbounded" name="applyRouteChargeDispArray" type="xsd:string"/>
+            <element maxOccurs="unbounded" name="applyRouteDispTypeArray" type="xsd:string"/>
+            <element maxOccurs="unbounded" name="approveRouteAuthDispArray" type="xsd:string"/>
+            <element maxOccurs="unbounded" name="approveRouteChargeDispArray" type="xsd:string"/>
+            <element maxOccurs="unbounded" name="approveRouteDispTypeArray" type="xsd:string"/>
+            <element maxOccurs="unbounded" name="acceptRouteAuthDispArray" type="xsd:string"/>
+            <element maxOccurs="unbounded" name="acceptRouteChargeDispArray" type="xsd:string"/>
+            <element maxOccurs="unbounded" name="acceptRouteDispTypeArray" type="xsd:string"/>
+            <element name="specialApproveDate" type="xsd:dateTime"/>
+          </sequence>
+        </complexType>
+      </element>
+      <element name="applyResponse">
+        <complexType>
+          <sequence>
+            <element name="applyReturn" type="string"/>
+          </sequence>
+        </complexType>
+      </element>
+    </schema>
+  </wsdl:types>
+  <wsdl:message name="applyRequest">
+    <wsdl:part element="impl:apply" name="parameters"/>
+  </wsdl:message>
+  <wsdl:message name="applyResponse">
+    <wsdl:part element="impl:applyResponse" name="parameters"/>
+  </wsdl:message>
+  <wsdl:portType name="ApEndLeService">
+    <wsdl:operation name="apply">
+      <wsdl:input message="impl:applyRequest" name="applyRequest"/>
+      <wsdl:output message="impl:applyResponse" name="applyResponse"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="ApEndLeServiceSoapBinding" type="impl:ApEndLeService">
+    <wsdlsoap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="apply">
+      <wsdlsoap:operation soapAction=""/>
+      <wsdl:input name="applyRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="applyResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="ApEndLeServiceService">
+    <wsdl:port binding="impl:ApEndLeServiceSoapBinding" name="ApEndLeService">
+      <wsdlsoap:address location="http://localhost:8080/eAsset_Web/services/ApEndLeService"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>]]></con:content><con:type>http://schemas.xmlsoap.org/wsdl/</con:type></con:part></con:definitionCache><con:endpoints><con:endpoint>http://localhost:8080/eAsset_Web/services/ApEndLeService</con:endpoint></con:endpoints><con:operation id="74cb3643-04bd-4b6d-ac03-d689a781f6b8" isOneWay="false" action="" name="apply" bindingOperationName="apply" type="Request-Response" outputName="applyResponse" inputName="applyRequest" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call id="1563f0e6-b857-45e8-8c81-5e4502f64e66" name="Request 1"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:18080/ApEndLeService/</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ws="http://ws.easset.ctcg.co.jp">\r
+   <soapenv:Header/>\r
+   <soapenv:Body>\r
+      <ws:apply>\r
+         <ws:applicationId>?</ws:applicationId>\r
+         <ws:applicationType>?</ws:applicationType>\r
+         <ws:companyCode>?</ws:companyCode>\r
+         <ws:apSectionCode>?</ws:apSectionCode>\r
+         <ws:apCreateStaffCode>?</ws:apCreateStaffCode>\r
+         <ws:apStaffCode>?</ws:apStaffCode>\r
+         <ws:apTel>?</ws:apTel>\r
+         <ws:apTitle>?</ws:apTitle>\r
+         <ws:apSubTitle>?</ws:apSubTitle>\r
+         <ws:apListTitle>?</ws:apListTitle>\r
+         <ws:eAssetUrl>?</ws:eAssetUrl>\r
+         <!--1 or more repetitions:-->\r
+         <ws:applyRouteAuthDispArray>?</ws:applyRouteAuthDispArray>\r
+         <!--1 or more repetitions:-->\r
+         <ws:applyRouteChargeDispArray>?</ws:applyRouteChargeDispArray>\r
+         <!--1 or more repetitions:-->\r
+         <ws:applyRouteDispTypeArray>?</ws:applyRouteDispTypeArray>\r
+         <!--1 or more repetitions:-->\r
+         <ws:approveRouteAuthDispArray>?</ws:approveRouteAuthDispArray>\r
+         <!--1 or more repetitions:-->\r
+         <ws:approveRouteChargeDispArray>?</ws:approveRouteChargeDispArray>\r
+         <!--1 or more repetitions:-->\r
+         <ws:approveRouteDispTypeArray>?</ws:approveRouteDispTypeArray>\r
+         <!--1 or more repetitions:-->\r
+         <ws:acceptRouteAuthDispArray>?</ws:acceptRouteAuthDispArray>\r
+         <!--1 or more repetitions:-->\r
+         <ws:acceptRouteChargeDispArray>?</ws:acceptRouteChargeDispArray>\r
+         <!--1 or more repetitions:-->\r
+         <ws:acceptRouteDispTypeArray>?</ws:acceptRouteDispTypeArray>\r
+         <ws:specialApproveDate>?</ws:specialApproveDate>\r
+      </ws:apply>\r
+   </soapenv:Body>\r
+</soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://ws.easset.ctcg.co.jp/ApEndLeService/applyRequest"/><con:wsrmConfig version="1.2"/></con:call></con:operation></con:interface><con:interface xsi:type="con:WsdlInterface" id="550e337a-4b2e-4b57-943c-4e789a3ea601" wsaVersion="NONE" name="ApEndTanServiceSoapBinding" type="wsdl" bindingName="{http://ws.easset.ctcg.co.jp}ApEndTanServiceSoapBinding" soapVersion="1_1" anonymous="optional" definition="file:/C:/dummy/wsdls/ApEndTanService.wsdl" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:settings/><con:definitionCache type="TEXT" rootPart="file:/C:/dummy/wsdls/ApEndTanService.wsdl"><con:part><con:url>file:/C:/dummy/wsdls/ApEndTanService.wsdl</con:url><con:content><![CDATA[<wsdl:definitions targetNamespace="http://ws.easset.ctcg.co.jp" xmlns:apachesoap="http://xml.apache.org/xml-soap" xmlns:impl="http://ws.easset.ctcg.co.jp" xmlns:intf="http://ws.easset.ctcg.co.jp" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <!--WSDLはApache Axis version: 1.4
+Built on Apr 22, 2006 (06:55:48 PDT)によって生成されました / [en]-(WSDL created by Apache Axis version: 1.4
+Built on Apr 22, 2006 (06:55:48 PDT))-->
+  <wsdl:types>
+    <schema elementFormDefault="qualified" targetNamespace="http://ws.easset.ctcg.co.jp" xmlns="http://www.w3.org/2001/XMLSchema">
+      <element name="apply">
+        <complexType>
+          <sequence>
+            <element name="applicationId" type="xsd:string"/>
+            <element name="applicationType" type="xsd:string"/>
+            <element name="companyCode" type="xsd:string"/>
+            <element name="apSectionCode" type="xsd:string"/>
+            <element name="apCreateStaffCode" type="xsd:string"/>
+            <element name="apStaffCode" type="xsd:string"/>
+            <element name="apTel" type="xsd:string"/>
+            <element name="apTitle" type="xsd:string"/>
+            <element name="apSubTitle" type="xsd:string"/>
+            <element name="apListTitle" type="xsd:string"/>
+            <element name="eAssetUrl" type="xsd:string"/>
+            <element maxOccurs="unbounded" name="applyRouteAuthDispArray" type="xsd:string"/>
+            <element maxOccurs="unbounded" name="applyRouteChargeDispArray" type="xsd:string"/>
+            <element maxOccurs="unbounded" name="applyRouteDispTypeArray" type="xsd:string"/>
+            <element maxOccurs="unbounded" name="approveRouteAuthDispArray" type="xsd:string"/>
+            <element maxOccurs="unbounded" name="approveRouteChargeDispArray" type="xsd:string"/>
+            <element maxOccurs="unbounded" name="approveRouteDispTypeArray" type="xsd:string"/>
+            <element maxOccurs="unbounded" name="acceptRouteAuthDispArray" type="xsd:string"/>
+            <element maxOccurs="unbounded" name="acceptRouteChargeDispArray" type="xsd:string"/>
+            <element maxOccurs="unbounded" name="acceptRouteDispTypeArray" type="xsd:string"/>
+            <element name="specialApproveDate" type="xsd:dateTime"/>
+          </sequence>
+        </complexType>
+      </element>
+      <element name="applyResponse">
+        <complexType>
+          <sequence>
+            <element name="applyReturn" type="string"/>
+          </sequence>
+        </complexType>
+      </element>
+    </schema>
+  </wsdl:types>
+  <wsdl:message name="applyRequest">
+    <wsdl:part element="impl:apply" name="parameters"/>
+  </wsdl:message>
+  <wsdl:message name="applyResponse">
+    <wsdl:part element="impl:applyResponse" name="parameters"/>
+  </wsdl:message>
+  <wsdl:portType name="ApEndTanService">
+    <wsdl:operation name="apply">
+      <wsdl:input message="impl:applyRequest" name="applyRequest"/>
+      <wsdl:output message="impl:applyResponse" name="applyResponse"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="ApEndTanServiceSoapBinding" type="impl:ApEndTanService">
+    <wsdlsoap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="apply">
+      <wsdlsoap:operation soapAction=""/>
+      <wsdl:input name="applyRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="applyResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="ApEndTanServiceService">
+    <wsdl:port binding="impl:ApEndTanServiceSoapBinding" name="ApEndTanService">
+      <wsdlsoap:address location="http://localhost:8080/eAsset_Web/services/ApEndTanService"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>]]></con:content><con:type>http://schemas.xmlsoap.org/wsdl/</con:type></con:part></con:definitionCache><con:endpoints><con:endpoint>http://localhost:8080/eAsset_Web/services/ApEndTanService</con:endpoint></con:endpoints><con:operation id="e9f681f8-c672-4651-8f11-928e240db381" isOneWay="false" action="" name="apply" bindingOperationName="apply" type="Request-Response" outputName="applyResponse" inputName="applyRequest" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call id="4b348fed-09c7-48f1-aea1-d26ec8ef9761" name="Request 1"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:18080/ApEndTanService/</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ws="http://ws.easset.ctcg.co.jp">\r
+   <soapenv:Header/>\r
+   <soapenv:Body>\r
+      <ws:apply>\r
+         <ws:applicationId>?</ws:applicationId>\r
+         <ws:applicationType>?</ws:applicationType>\r
+         <ws:companyCode>?</ws:companyCode>\r
+         <ws:apSectionCode>?</ws:apSectionCode>\r
+         <ws:apCreateStaffCode>?</ws:apCreateStaffCode>\r
+         <ws:apStaffCode>?</ws:apStaffCode>\r
+         <ws:apTel>?</ws:apTel>\r
+         <ws:apTitle>?</ws:apTitle>\r
+         <ws:apSubTitle>?</ws:apSubTitle>\r
+         <ws:apListTitle>?</ws:apListTitle>\r
+         <ws:eAssetUrl>?</ws:eAssetUrl>\r
+         <!--1 or more repetitions:-->\r
+         <ws:applyRouteAuthDispArray>?</ws:applyRouteAuthDispArray>\r
+         <!--1 or more repetitions:-->\r
+         <ws:applyRouteChargeDispArray>?</ws:applyRouteChargeDispArray>\r
+         <!--1 or more repetitions:-->\r
+         <ws:applyRouteDispTypeArray>?</ws:applyRouteDispTypeArray>\r
+         <!--1 or more repetitions:-->\r
+         <ws:approveRouteAuthDispArray>?</ws:approveRouteAuthDispArray>\r
+         <!--1 or more repetitions:-->\r
+         <ws:approveRouteChargeDispArray>?</ws:approveRouteChargeDispArray>\r
+         <!--1 or more repetitions:-->\r
+         <ws:approveRouteDispTypeArray>?</ws:approveRouteDispTypeArray>\r
+         <!--1 or more repetitions:-->\r
+         <ws:acceptRouteAuthDispArray>?</ws:acceptRouteAuthDispArray>\r
+         <!--1 or more repetitions:-->\r
+         <ws:acceptRouteChargeDispArray>?</ws:acceptRouteChargeDispArray>\r
+         <!--1 or more repetitions:-->\r
+         <ws:acceptRouteDispTypeArray>?</ws:acceptRouteDispTypeArray>\r
+         <ws:specialApproveDate>?</ws:specialApproveDate>\r
+      </ws:apply>\r
+   </soapenv:Body>\r
+</soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://ws.easset.ctcg.co.jp/ApEndTanService/applyRequest"/><con:wsrmConfig version="1.2"/></con:call></con:operation></con:interface><con:interface xsi:type="con:WsdlInterface" id="638ae3ca-c76e-4698-8e4c-a42ce756bea6" wsaVersion="NONE" name="ApGetIntServiceSoapBinding" type="wsdl" bindingName="{http://ws.easset.ctcg.co.jp}ApGetIntServiceSoapBinding" soapVersion="1_1" anonymous="optional" definition="file:/C:/dummy/wsdls/ApGetIntService.wsdl" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:settings/><con:definitionCache type="TEXT" rootPart="file:/C:/dummy/wsdls/ApGetIntService.wsdl"><con:part><con:url>file:/C:/dummy/wsdls/ApGetIntService.wsdl</con:url><con:content><![CDATA[<wsdl:definitions targetNamespace="http://ws.easset.ctcg.co.jp" xmlns:apachesoap="http://xml.apache.org/xml-soap" xmlns:impl="http://ws.easset.ctcg.co.jp" xmlns:intf="http://ws.easset.ctcg.co.jp" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <!--WSDLはApache Axis version: 1.4
+Built on Apr 22, 2006 (06:55:48 PDT)によって生成されました / [en]-(WSDL created by Apache Axis version: 1.4
+Built on Apr 22, 2006 (06:55:48 PDT))-->
+  <wsdl:types>
+    <schema elementFormDefault="qualified" targetNamespace="http://ws.easset.ctcg.co.jp" xmlns="http://www.w3.org/2001/XMLSchema">
+      <element name="apply">
+        <complexType>
+          <sequence>
+            <element name="applicationId" type="xsd:string"/>
+            <element name="applicationVersion" type="xsd:string"/>
+            <element name="applicationType" type="xsd:string"/>
+            <element name="companyCode" type="xsd:string"/>
+            <element name="apSectionCode" type="xsd:string"/>
+            <element name="apCreateStaffCode" type="xsd:string"/>
+            <element name="apStaffCode" type="xsd:string"/>
+            <element name="apTel" type="xsd:string"/>
+            <element name="apTitle" type="xsd:string"/>
+            <element name="apSubTitle" type="xsd:string"/>
+            <element name="apListTitle" type="xsd:string"/>
+            <element name="eAssetUrl" type="xsd:string"/>
+            <element maxOccurs="unbounded" name="applyRouteAuthDispArray" type="xsd:string"/>
+            <element maxOccurs="unbounded" name="applyRouteChargeDispArray" type="xsd:string"/>
+            <element maxOccurs="unbounded" name="applyRouteDispTypeArray" type="xsd:string"/>
+            <element maxOccurs="unbounded" name="approveRouteAuthDispArray" type="xsd:string"/>
+            <element maxOccurs="unbounded" name="approveRouteChargeDispArray" type="xsd:string"/>
+            <element maxOccurs="unbounded" name="approveRouteDispTypeArray" type="xsd:string"/>
+            <element maxOccurs="unbounded" name="acceptRouteAuthDispArray" type="xsd:string"/>
+            <element maxOccurs="unbounded" name="acceptRouteChargeDispArray" type="xsd:string"/>
+            <element maxOccurs="unbounded" name="acceptRouteDispTypeArray" type="xsd:string"/>
+            <element name="specialApproveDate" type="xsd:dateTime"/>
+          </sequence>
+        </complexType>
+      </element>
+      <element name="applyResponse">
+        <complexType>
+          <sequence>
+            <element name="applyReturn" type="string"/>
+          </sequence>
+        </complexType>
+      </element>
+    </schema>
+  </wsdl:types>
+  <wsdl:message name="applyRequest">
+    <wsdl:part element="impl:apply" name="parameters"/>
+  </wsdl:message>
+  <wsdl:message name="applyResponse">
+    <wsdl:part element="impl:applyResponse" name="parameters"/>
+  </wsdl:message>
+  <wsdl:portType name="ApGetIntService">
+    <wsdl:operation name="apply">
+      <wsdl:input message="impl:applyRequest" name="applyRequest"/>
+      <wsdl:output message="impl:applyResponse" name="applyResponse"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="ApGetIntServiceSoapBinding" type="impl:ApGetIntService">
+    <wsdlsoap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="apply">
+      <wsdlsoap:operation soapAction=""/>
+      <wsdl:input name="applyRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="applyResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="ApGetIntServiceService">
+    <wsdl:port binding="impl:ApGetIntServiceSoapBinding" name="ApGetIntService">
+      <wsdlsoap:address location="http://localhost:8080/eAsset_Web/services/ApGetIntService"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>]]></con:content><con:type>http://schemas.xmlsoap.org/wsdl/</con:type></con:part></con:definitionCache><con:endpoints><con:endpoint>http://localhost:8080/eAsset_Web/services/ApGetIntService</con:endpoint></con:endpoints><con:operation id="34803b74-c114-4601-b3b1-fc1f356d836f" isOneWay="false" action="" name="apply" bindingOperationName="apply" type="Request-Response" outputName="applyResponse" inputName="applyRequest" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call id="c11da122-dcf5-4e54-a2f6-2a4f2eefc06a" name="Request 1"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:18080/ApGetIntService</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ws="http://ws.easset.ctcg.co.jp">\r
+   <soapenv:Header/>\r
+   <soapenv:Body>\r
+      <ws:apply>\r
+         <ws:applicationId>?</ws:applicationId>\r
+         <ws:applicationVersion>?</ws:applicationVersion>\r
+         <ws:applicationType>?</ws:applicationType>\r
+         <ws:companyCode>?</ws:companyCode>\r
+         <ws:apSectionCode>?</ws:apSectionCode>\r
+         <ws:apCreateStaffCode>?</ws:apCreateStaffCode>\r
+         <ws:apStaffCode>?</ws:apStaffCode>\r
+         <ws:apTel>?</ws:apTel>\r
+         <ws:apTitle>?</ws:apTitle>\r
+         <ws:apSubTitle>?</ws:apSubTitle>\r
+         <ws:apListTitle>?</ws:apListTitle>\r
+         <ws:eAssetUrl>?</ws:eAssetUrl>\r
+         <!--1 or more repetitions:-->\r
+         <ws:applyRouteAuthDispArray>?</ws:applyRouteAuthDispArray>\r
+         <!--1 or more repetitions:-->\r
+         <ws:applyRouteChargeDispArray>?</ws:applyRouteChargeDispArray>\r
+         <!--1 or more repetitions:-->\r
+         <ws:applyRouteDispTypeArray>?</ws:applyRouteDispTypeArray>\r
+         <!--1 or more repetitions:-->\r
+         <ws:approveRouteAuthDispArray>?</ws:approveRouteAuthDispArray>\r
+         <!--1 or more repetitions:-->\r
+         <ws:approveRouteChargeDispArray>?</ws:approveRouteChargeDispArray>\r
+         <!--1 or more repetitions:-->\r
+         <ws:approveRouteDispTypeArray>?</ws:approveRouteDispTypeArray>\r
+         <!--1 or more repetitions:-->\r
+         <ws:acceptRouteAuthDispArray>?</ws:acceptRouteAuthDispArray>\r
+         <!--1 or more repetitions:-->\r
+         <ws:acceptRouteChargeDispArray>?</ws:acceptRouteChargeDispArray>\r
+         <!--1 or more repetitions:-->\r
+         <ws:acceptRouteDispTypeArray>?</ws:acceptRouteDispTypeArray>\r
+         <ws:specialApproveDate>?</ws:specialApproveDate>\r
+      </ws:apply>\r
+   </soapenv:Body>\r
+</soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://ws.easset.ctcg.co.jp/ApGetIntService/applyRequest"/><con:wsrmConfig version="1.2"/></con:call></con:operation></con:interface><con:interface xsi:type="con:WsdlInterface" id="7a4d988d-4d73-4743-9867-e4385f55ba2b" wsaVersion="NONE" name="ApGetServiceSoapBinding" type="wsdl" bindingName="{http://ws.easset.ctcg.co.jp}ApGetServiceSoapBinding" soapVersion="1_1" anonymous="optional" definition="file:/C:/dummy/wsdls/ApGetService.wsdl" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:settings/><con:definitionCache type="TEXT" rootPart="file:/C:/dummy/wsdls/ApGetService.wsdl"><con:part><con:url>file:/C:/dummy/wsdls/ApGetService.wsdl</con:url><con:content><![CDATA[<wsdl:definitions targetNamespace="http://ws.easset.ctcg.co.jp" xmlns:apachesoap="http://xml.apache.org/xml-soap" xmlns:impl="http://ws.easset.ctcg.co.jp" xmlns:intf="http://ws.easset.ctcg.co.jp" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <!--WSDLはApache Axis version: 1.4
+Built on Apr 22, 2006 (06:55:48 PDT)によって生成されました / [en]-(WSDL created by Apache Axis version: 1.4
+Built on Apr 22, 2006 (06:55:48 PDT))-->
+  <wsdl:types>
+    <schema elementFormDefault="qualified" targetNamespace="http://ws.easset.ctcg.co.jp" xmlns="http://www.w3.org/2001/XMLSchema">
+      <element name="apply">
+        <complexType>
+          <sequence>
+            <element name="applicationId" type="xsd:string"/>
+            <element name="applicationType" type="xsd:string"/>
+            <element name="companyCode" type="xsd:string"/>
+            <element name="apSectionCode" type="xsd:string"/>
+            <element name="apCreateStaffCode" type="xsd:string"/>
+            <element name="apStaffCode" type="xsd:string"/>
+            <element name="apTel" type="xsd:string"/>
+            <element name="apTitle" type="xsd:string"/>
+            <element name="apSubTitle" type="xsd:string"/>
+            <element name="apListTitle" type="xsd:string"/>
+            <element name="eAssetUrl" type="xsd:string"/>
+            <element maxOccurs="unbounded" name="applyRouteAuthDispArray" type="xsd:string"/>
+            <element maxOccurs="unbounded" name="applyRouteChargeDispArray" type="xsd:string"/>
+            <element maxOccurs="unbounded" name="applyRouteDispTypeArray" type="xsd:string"/>
+            <element maxOccurs="unbounded" name="approveRouteAuthDispArray" type="xsd:string"/>
+            <element maxOccurs="unbounded" name="approveRouteChargeDispArray" type="xsd:string"/>
+            <element maxOccurs="unbounded" name="approveRouteDispTypeArray" type="xsd:string"/>
+            <element maxOccurs="unbounded" name="acceptRouteAuthDispArray" type="xsd:string"/>
+            <element maxOccurs="unbounded" name="acceptRouteChargeDispArray" type="xsd:string"/>
+            <element maxOccurs="unbounded" name="acceptRouteDispTypeArray" type="xsd:string"/>
+            <element name="specialApproveDate" type="xsd:dateTime"/>
+          </sequence>
+        </complexType>
+      </element>
+      <element name="applyResponse">
+        <complexType>
+          <sequence>
+            <element name="applyReturn" type="string"/>
+          </sequence>
+        </complexType>
+      </element>
+    </schema>
+  </wsdl:types>
+  <wsdl:message name="applyRequest">
+    <wsdl:part element="impl:apply" name="parameters"/>
+  </wsdl:message>
+  <wsdl:message name="applyResponse">
+    <wsdl:part element="impl:applyResponse" name="parameters"/>
+  </wsdl:message>
+  <wsdl:portType name="ApGetService">
+    <wsdl:operation name="apply">
+      <wsdl:input message="impl:applyRequest" name="applyRequest"/>
+      <wsdl:output message="impl:applyResponse" name="applyResponse"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="ApGetServiceSoapBinding" type="impl:ApGetService">
+    <wsdlsoap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="apply">
+      <wsdlsoap:operation soapAction=""/>
+      <wsdl:input name="applyRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="applyResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="ApGetServiceService">
+    <wsdl:port binding="impl:ApGetServiceSoapBinding" name="ApGetService">
+      <wsdlsoap:address location="http://localhost:8080/eAsset_Web/services/ApGetService"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>]]></con:content><con:type>http://schemas.xmlsoap.org/wsdl/</con:type></con:part></con:definitionCache><con:endpoints><con:endpoint>http://localhost:8080/eAsset_Web/services/ApGetService</con:endpoint></con:endpoints><con:operation id="a90ef3f7-652e-47a0-a1bc-ade4bcbb998e" isOneWay="false" action="" name="apply" bindingOperationName="apply" type="Request-Response" outputName="applyResponse" inputName="applyRequest" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call id="c34610f0-8c8d-44f5-8d50-10ef46f89fae" name="Request 1"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:18080/ApGetService/</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ws="http://ws.easset.ctcg.co.jp">\r
+   <soapenv:Header/>\r
+   <soapenv:Body>\r
+      <ws:apply>\r
+         <ws:applicationId>?</ws:applicationId>\r
+         <ws:applicationType>?</ws:applicationType>\r
+         <ws:companyCode>?</ws:companyCode>\r
+         <ws:apSectionCode>?</ws:apSectionCode>\r
+         <ws:apCreateStaffCode>?</ws:apCreateStaffCode>\r
+         <ws:apStaffCode>?</ws:apStaffCode>\r
+         <ws:apTel>?</ws:apTel>\r
+         <ws:apTitle>?</ws:apTitle>\r
+         <ws:apSubTitle>?</ws:apSubTitle>\r
+         <ws:apListTitle>?</ws:apListTitle>\r
+         <ws:eAssetUrl>?</ws:eAssetUrl>\r
+         <!--1 or more repetitions:-->\r
+         <ws:applyRouteAuthDispArray>?</ws:applyRouteAuthDispArray>\r
+         <!--1 or more repetitions:-->\r
+         <ws:applyRouteChargeDispArray>?</ws:applyRouteChargeDispArray>\r
+         <!--1 or more repetitions:-->\r
+         <ws:applyRouteDispTypeArray>?</ws:applyRouteDispTypeArray>\r
+         <!--1 or more repetitions:-->\r
+         <ws:approveRouteAuthDispArray>?</ws:approveRouteAuthDispArray>\r
+         <!--1 or more repetitions:-->\r
+         <ws:approveRouteChargeDispArray>?</ws:approveRouteChargeDispArray>\r
+         <!--1 or more repetitions:-->\r
+         <ws:approveRouteDispTypeArray>?</ws:approveRouteDispTypeArray>\r
+         <!--1 or more repetitions:-->\r
+         <ws:acceptRouteAuthDispArray>?</ws:acceptRouteAuthDispArray>\r
+         <!--1 or more repetitions:-->\r
+         <ws:acceptRouteChargeDispArray>?</ws:acceptRouteChargeDispArray>\r
+         <!--1 or more repetitions:-->\r
+         <ws:acceptRouteDispTypeArray>?</ws:acceptRouteDispTypeArray>\r
+         <ws:specialApproveDate>?</ws:specialApproveDate>\r
+      </ws:apply>\r
+   </soapenv:Body>\r
+</soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://ws.easset.ctcg.co.jp/ApGetService/applyRequest"/><con:wsrmConfig version="1.2"/></con:call></con:operation></con:interface><con:interface xsi:type="con:WsdlInterface" id="e8e926a4-9a2d-485c-b4d3-ab9324d79e86" wsaVersion="NONE" name="ApLicenseServiceSoapBinding" type="wsdl" bindingName="{http://ws.easset.ctcg.co.jp}ApLicenseServiceSoapBinding" soapVersion="1_1" anonymous="optional" definition="file:/C:/dummy/wsdls/ApLicenseService.wsdl" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:settings/><con:definitionCache type="TEXT" rootPart="file:/C:/dummy/wsdls/ApLicenseService.wsdl"><con:part><con:url>file:/C:/dummy/wsdls/ApLicenseService.wsdl</con:url><con:content><![CDATA[<wsdl:definitions targetNamespace="http://ws.easset.ctcg.co.jp" xmlns:apachesoap="http://xml.apache.org/xml-soap" xmlns:impl="http://ws.easset.ctcg.co.jp" xmlns:intf="http://ws.easset.ctcg.co.jp" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <!--WSDLはApache Axis version: 1.4
+Built on Apr 22, 2006 (06:55:48 PDT)によって生成されました / [en]-(WSDL created by Apache Axis version: 1.4
+Built on Apr 22, 2006 (06:55:48 PDT))-->
+  <wsdl:types>
+    <schema elementFormDefault="qualified" targetNamespace="http://ws.easset.ctcg.co.jp" xmlns="http://www.w3.org/2001/XMLSchema">
+      <element name="apply">
+        <complexType>
+          <sequence>
+            <element name="applicationId" type="xsd:string"/>
+            <element name="applicationType" type="xsd:string"/>
+            <element name="companyCode" type="xsd:string"/>
+            <element name="apSectionCode" type="xsd:string"/>
+            <element name="apCreateStaffCode" type="xsd:string"/>
+            <element name="apStaffCode" type="xsd:string"/>
+            <element name="apTel" type="xsd:string"/>
+            <element name="apTitle" type="xsd:string"/>
+            <element name="apSubTitle" type="xsd:string"/>
+            <element name="apListTitle" type="xsd:string"/>
+            <element name="eAssetUrl" type="xsd:string"/>
+            <element name="acceptRouteAuthDisp" type="xsd:string"/>
+            <element name="acceptRouteChargeDisp" type="xsd:string"/>
+            <element name="acceptRouteDispType" type="xsd:string"/>
+          </sequence>
+        </complexType>
+      </element>
+      <element name="applyResponse">
+        <complexType>
+          <sequence>
+            <element name="applyReturn" type="string"/>
+          </sequence>
+        </complexType>
+      </element>
+    </schema>
+  </wsdl:types>
+  <wsdl:message name="applyRequest">
+    <wsdl:part element="impl:apply" name="parameters"/>
+  </wsdl:message>
+  <wsdl:message name="applyResponse">
+    <wsdl:part element="impl:applyResponse" name="parameters"/>
+  </wsdl:message>
+  <wsdl:portType name="ApLicenseService">
+    <wsdl:operation name="apply">
+      <wsdl:input message="impl:applyRequest" name="applyRequest"/>
+      <wsdl:output message="impl:applyResponse" name="applyResponse"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="ApLicenseServiceSoapBinding" type="impl:ApLicenseService">
+    <wsdlsoap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="apply">
+      <wsdlsoap:operation soapAction=""/>
+      <wsdl:input name="applyRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="applyResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="ApLicenseServiceService">
+    <wsdl:port binding="impl:ApLicenseServiceSoapBinding" name="ApLicenseService">
+      <wsdlsoap:address location="http://localhost:8080/eAsset_Web/services/ApLicenseService"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>]]></con:content><con:type>http://schemas.xmlsoap.org/wsdl/</con:type></con:part></con:definitionCache><con:endpoints><con:endpoint>http://localhost:8080/eAsset_Web/services/ApLicenseService</con:endpoint></con:endpoints><con:operation id="28bc5c8a-1b51-4627-895c-05fd0232d3dd" isOneWay="false" action="" name="apply" bindingOperationName="apply" type="Request-Response" outputName="applyResponse" inputName="applyRequest" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call id="76fcdafe-80e5-4461-b406-ae803a8424ef" name="Request 1"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:18080/ApLicenseService</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ws="http://ws.easset.ctcg.co.jp">\r
+   <soapenv:Header/>\r
+   <soapenv:Body>\r
+      <ws:apply>\r
+         <ws:applicationId>?</ws:applicationId>\r
+         <ws:applicationType>?</ws:applicationType>\r
+         <ws:companyCode>?</ws:companyCode>\r
+         <ws:apSectionCode>?</ws:apSectionCode>\r
+         <ws:apCreateStaffCode>?</ws:apCreateStaffCode>\r
+         <ws:apStaffCode>?</ws:apStaffCode>\r
+         <ws:apTel>?</ws:apTel>\r
+         <ws:apTitle>?</ws:apTitle>\r
+         <ws:apSubTitle>?</ws:apSubTitle>\r
+         <ws:apListTitle>?</ws:apListTitle>\r
+         <ws:eAssetUrl>?</ws:eAssetUrl>\r
+         <ws:acceptRouteAuthDisp>?</ws:acceptRouteAuthDisp>\r
+         <ws:acceptRouteChargeDisp>?</ws:acceptRouteChargeDisp>\r
+         <ws:acceptRouteDispType>?</ws:acceptRouteDispType>\r
+      </ws:apply>\r
+   </soapenv:Body>\r
+</soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://ws.easset.ctcg.co.jp/ApLicenseService/applyRequest"/><con:wsrmConfig version="1.2"/></con:call></con:operation></con:interface><con:interface xsi:type="con:WsdlInterface" id="b3d5c3c4-9a67-49b6-b579-77ad7c426595" wsaVersion="NONE" name="EAssetServiceSoapBinding" type="wsdl" bindingName="{http://jp/co/ctcg/soa/easset/service}EAssetServiceSoapBinding" soapVersion="1_1" anonymous="optional" definition="file:/C:/dummy/wsdls/EAssetService.wsdl" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:settings/><con:definitionCache type="TEXT" rootPart="file:/C:/dummy/wsdls/EAssetService.wsdl"><con:part><con:url>file:/C:/dummy/wsdls/EAssetService.wsdl</con:url><con:content><![CDATA[<s0:definitions name="EAssetServiceDefinitions" targetNamespace="http://jp/co/ctcg/soa/easset/service" xmlns:s0="http://schemas.xmlsoap.org/wsdl/" xmlns:s1="http://jp/co/ctcg/soa/easset/service" xmlns:s2="java:jp.co.ctcg.soa.easset.control" xmlns:s3="http://schemas.xmlsoap.org/wsdl/soap/">
+  <s0:types>
+    <xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://jp/co/ctcg/soa/easset/service" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:element name="getEAppId">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="eassetId" type="xs:string"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getEAppIdResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="return" nillable="true" type="xs:long"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:schema>
+    <xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="java:jp.co.ctcg.soa.easset.control" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:complexType name="EAssetControlException"/>
+      <xs:element name="EAssetControlException" type="java:EAssetControlException" xmlns:java="java:jp.co.ctcg.soa.easset.control"/>
+    </xs:schema>
+  </s0:types>
+  <s0:message name="getEAppId">
+    <s0:part element="s1:getEAppId" name="parameters"/>
+  </s0:message>
+  <s0:message name="getEAppIdResponse">
+    <s0:part element="s1:getEAppIdResponse" name="parameters"/>
+  </s0:message>
+  <s0:message name="EAssetControlException">
+    <s0:part element="s2:EAssetControlException" name="EAssetControlException"/>
+  </s0:message>
+  <s0:portType name="EAssetService">
+    <s0:operation name="getEAppId" parameterOrder="parameters">
+      <s0:input message="s1:getEAppId"/>
+      <s0:output message="s1:getEAppIdResponse"/>
+      <s0:fault message="s1:EAssetControlException" name="EAssetControlException"/>
+    </s0:operation>
+  </s0:portType>
+  <s0:binding name="EAssetServiceSoapBinding" type="s1:EAssetService">
+    <s3:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <s0:operation name="getEAppId">
+      <s3:operation soapAction="" style="document"/>
+      <s0:input>
+        <s3:body parts="parameters" use="literal"/>
+      </s0:input>
+      <s0:output>
+        <s3:body parts="parameters" use="literal"/>
+      </s0:output>
+      <s0:fault name="EAssetControlException">
+        <s3:fault name="EAssetControlException" use="literal"/>
+      </s0:fault>
+    </s0:operation>
+  </s0:binding>
+  <s0:service name="EAssetService">
+    <s0:port binding="s1:EAssetServiceSoapBinding" name="EAssetServiceSoapPort">
+      <s3:address location="http://localhost:8080/EAssetServices/EAssetService"/>
+    </s0:port>
+  </s0:service>
+</s0:definitions>]]></con:content><con:type>http://schemas.xmlsoap.org/wsdl/</con:type></con:part></con:definitionCache><con:endpoints><con:endpoint>http://localhost:8080/EAssetServices/EAssetService</con:endpoint></con:endpoints><con:operation id="9579460b-dd70-4a0d-9f46-121ad6e590fa" isOneWay="false" action="" name="getEAppId" bindingOperationName="getEAppId" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call id="3ab920b3-2f8e-476f-95e4-685cfae721d8" name="Request 1"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:18080/EAssetServices/EAssetService</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ser="http://jp/co/ctcg/soa/easset/service">\r
+   <soapenv:Header/>\r
+   <soapenv:Body>\r
+      <ser:getEAppId>\r
+         <ser:eassetId>?</ser:eassetId>\r
+      </ser:getEAppId>\r
+   </soapenv:Body>\r
+</soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://jp/co/ctcg/soa/easset/service/EAssetService/getEAppIdRequest"/><con:wsrmConfig version="1.2"/></con:call></con:operation></con:interface><con:interface xsi:type="con:WsdlInterface" id="73437dba-4da7-4619-96ac-55ea22796bbf" wsaVersion="NONE" name="InvServiceSoapBinding" type="wsdl" bindingName="{http://ws.easset.ctcg.co.jp}InvServiceSoapBinding" soapVersion="1_1" anonymous="optional" definition="file:/C:/dummy/wsdls/InvService.wsdl" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:settings/><con:definitionCache type="TEXT" rootPart="file:/C:/dummy/wsdls/InvService.wsdl"><con:part><con:url>file:/C:/dummy/wsdls/InvService.wsdl</con:url><con:content><![CDATA[<wsdl:definitions targetNamespace="http://ws.easset.ctcg.co.jp" xmlns:apachesoap="http://xml.apache.org/xml-soap" xmlns:impl="http://ws.easset.ctcg.co.jp" xmlns:intf="http://ws.easset.ctcg.co.jp" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <!--WSDLはApache Axis version: 1.4
+Built on Apr 22, 2006 (06:55:48 PDT)によって生成されました / [en]-(WSDL created by Apache Axis version: 1.4
+Built on Apr 22, 2006 (06:55:48 PDT))-->
+  <wsdl:types>
+    <schema elementFormDefault="qualified" targetNamespace="http://ws.easset.ctcg.co.jp" xmlns="http://www.w3.org/2001/XMLSchema">
+      <element name="apply">
+        <complexType>
+          <sequence>
+            <element name="applicationType" type="xsd:string"/>
+            <element name="companyCode" type="xsd:string"/>
+            <element name="apSectionCode" type="xsd:string"/>
+            <element name="apCreateStaffCode" type="xsd:string"/>
+            <element name="apStaffCode" type="xsd:string"/>
+            <element name="apTel" type="xsd:string"/>
+            <element name="apTitle" type="xsd:string"/>
+            <element name="apSubTitle" type="xsd:string"/>
+            <element name="apListTitle" type="xsd:string"/>
+            <element name="eAssetUrl" type="xsd:string"/>
+          </sequence>
+        </complexType>
+      </element>
+      <element name="applyResponse">
+        <complexType>
+          <sequence>
+            <element name="applyReturn" type="string"/>
+          </sequence>
+        </complexType>
+      </element>
+    </schema>
+  </wsdl:types>
+  <wsdl:message name="applyRequest">
+    <wsdl:part element="impl:apply" name="parameters"/>
+  </wsdl:message>
+  <wsdl:message name="applyResponse">
+    <wsdl:part element="impl:applyResponse" name="parameters"/>
+  </wsdl:message>
+  <wsdl:portType name="InvService">
+    <wsdl:operation name="apply">
+      <wsdl:input message="impl:applyRequest" name="applyRequest"/>
+      <wsdl:output message="impl:applyResponse" name="applyResponse"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="InvServiceSoapBinding" type="impl:InvService">
+    <wsdlsoap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="apply">
+      <wsdlsoap:operation soapAction=""/>
+      <wsdl:input name="applyRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="applyResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="InvServiceService">
+    <wsdl:port binding="impl:InvServiceSoapBinding" name="InvService">
+      <wsdlsoap:address location="http://localhost:8080/eAsset_Web/services/InvService"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>]]></con:content><con:type>http://schemas.xmlsoap.org/wsdl/</con:type></con:part></con:definitionCache><con:endpoints><con:endpoint>http://localhost:8080/eAsset_Web/services/InvService</con:endpoint></con:endpoints><con:operation id="5348e4fe-9a83-479f-a8d2-90efa100a6a2" isOneWay="false" action="" name="apply" bindingOperationName="apply" type="Request-Response" outputName="applyResponse" inputName="applyRequest" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call id="2dcdb35a-7251-4cb5-8e0e-011f7938cbe6" name="Request 1"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:18080/InvService</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ws="http://ws.easset.ctcg.co.jp">\r
+   <soapenv:Header/>\r
+   <soapenv:Body>\r
+      <ws:apply>\r
+         <ws:applicationType>?</ws:applicationType>\r
+         <ws:companyCode>?</ws:companyCode>\r
+         <ws:apSectionCode>?</ws:apSectionCode>\r
+         <ws:apCreateStaffCode>?</ws:apCreateStaffCode>\r
+         <ws:apStaffCode>?</ws:apStaffCode>\r
+         <ws:apTel>?</ws:apTel>\r
+         <ws:apTitle>?</ws:apTitle>\r
+         <ws:apSubTitle>?</ws:apSubTitle>\r
+         <ws:apListTitle>?</ws:apListTitle>\r
+         <ws:eAssetUrl>?</ws:eAssetUrl>\r
+      </ws:apply>\r
+   </soapenv:Body>\r
+</soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://ws.easset.ctcg.co.jp/InvService/applyRequest"/><con:wsrmConfig version="1.2"/></con:call></con:operation></con:interface><con:interface xsi:type="con:WsdlInterface" id="07b2aada-1b34-44b9-9258-97632a0b61ea" wsaVersion="NONE" name="ApEndIntServiceSoapBinding" type="wsdl" bindingName="{http://ws.easset.ctcg.co.jp}ApEndIntServiceSoapBinding" soapVersion="1_1" anonymous="optional" definition="file:/C:/dummy/wsdls/ApEndIntService.wsdl" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:settings/><con:definitionCache type="TEXT" rootPart="file:/C:/dummy/wsdls/ApEndIntService.wsdl"><con:part><con:url>file:/C:/dummy/wsdls/ApEndIntService.wsdl</con:url><con:content><![CDATA[<wsdl:definitions targetNamespace="http://ws.easset.ctcg.co.jp" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:apachesoap="http://xml.apache.org/xml-soap" xmlns:impl="http://ws.easset.ctcg.co.jp" xmlns:intf="http://ws.easset.ctcg.co.jp" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <wsdl:types>
+    <schema elementFormDefault="qualified" targetNamespace="http://ws.easset.ctcg.co.jp" xmlns="http://www.w3.org/2001/XMLSchema">
+      <element name="apply">
+        <complexType>
+          <sequence>
+            <element name="applicationId" type="xsd:string"/>
+            <element name="applicationType" type="xsd:string"/>
+            <element name="companyCode" type="xsd:string"/>
+            <element name="apSectionCode" type="xsd:string"/>
+            <element name="apCreateStaffCode" type="xsd:string"/>
+            <element name="apStaffCode" type="xsd:string"/>
+            <element name="apTel" type="xsd:string"/>
+            <element name="apTitle" type="xsd:string"/>
+            <element name="apSubTitle" type="xsd:string"/>
+            <element name="apListTitle" type="xsd:string"/>
+            <element name="eAssetUrl" type="xsd:string"/>
+            <element maxOccurs="unbounded" name="applyRouteAuthDispArray" type="xsd:string"/>
+            <element maxOccurs="unbounded" name="applyRouteChargeDispArray" type="xsd:string"/>
+            <element maxOccurs="unbounded" name="applyRouteDispTypeArray" type="xsd:string"/>
+            <element maxOccurs="unbounded" name="approveRouteAuthDispArray" type="xsd:string"/>
+            <element maxOccurs="unbounded" name="approveRouteChargeDispArray" type="xsd:string"/>
+            <element maxOccurs="unbounded" name="approveRouteDispTypeArray" type="xsd:string"/>
+            <element maxOccurs="unbounded" name="acceptRouteAuthDispArray" type="xsd:string"/>
+            <element maxOccurs="unbounded" name="acceptRouteChargeDispArray" type="xsd:string"/>
+            <element maxOccurs="unbounded" name="acceptRouteDispTypeArray" type="xsd:string"/>
+            <element name="specialApproveDate" type="xsd:dateTime"/>
+          </sequence>
+        </complexType>
+      </element>
+      <element name="applyResponse">
+        <complexType>
+          <sequence>
+            <element name="applyReturn" type="string"/>
+          </sequence>
+        </complexType>
+      </element>
+    </schema>
+  </wsdl:types>
+  <wsdl:message name="applyResponse">
+    <wsdl:part element="impl:applyResponse" name="parameters"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="applyRequest">
+    <wsdl:part element="impl:apply" name="parameters"></wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="ApEndIntService">
+    <wsdl:operation name="apply">
+      <wsdl:input message="impl:applyRequest" name="applyRequest"></wsdl:input>
+      <wsdl:output message="impl:applyResponse" name="applyResponse"></wsdl:output>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="ApEndIntServiceSoapBinding" type="impl:ApEndIntService">
+    <wsdlsoap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="apply">
+      <wsdlsoap:operation soapAction=""/>
+      <wsdl:input name="applyRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="applyResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="ApEndIntServiceService">
+    <wsdl:port binding="impl:ApEndIntServiceSoapBinding" name="ApEndIntService">
+      <wsdlsoap:address location="http://0.0.0.0:7501/eAsset_ASB/ApEndIntService"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>]]></con:content><con:type>http://schemas.xmlsoap.org/wsdl/</con:type></con:part></con:definitionCache><con:endpoints><con:endpoint>http://0.0.0.0:7501/eAsset_ASB/ApEndIntService</con:endpoint></con:endpoints><con:operation id="20561f58-039d-41ab-bd7e-151539c90bec" isOneWay="false" action="" name="apply" bindingOperationName="apply" type="Request-Response" outputName="applyResponse" inputName="applyRequest" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call id="fc4264ad-eb77-4bf8-af3b-481d4c188784" name="Request 1"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:18080/ApEndIntService</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ws="http://ws.easset.ctcg.co.jp">\r
+   <soapenv:Header/>\r
+   <soapenv:Body>\r
+      <ws:apply>\r
+         <ws:applicationId>?</ws:applicationId>\r
+         <ws:applicationType>?</ws:applicationType>\r
+         <ws:companyCode>?</ws:companyCode>\r
+         <ws:apSectionCode>?</ws:apSectionCode>\r
+         <ws:apCreateStaffCode>?</ws:apCreateStaffCode>\r
+         <ws:apStaffCode>?</ws:apStaffCode>\r
+         <ws:apTel>?</ws:apTel>\r
+         <ws:apTitle>?</ws:apTitle>\r
+         <ws:apSubTitle>?</ws:apSubTitle>\r
+         <ws:apListTitle>?</ws:apListTitle>\r
+         <ws:eAssetUrl>?</ws:eAssetUrl>\r
+         <!--1 or more repetitions:-->\r
+         <ws:applyRouteAuthDispArray>?</ws:applyRouteAuthDispArray>\r
+         <!--1 or more repetitions:-->\r
+         <ws:applyRouteChargeDispArray>?</ws:applyRouteChargeDispArray>\r
+         <!--1 or more repetitions:-->\r
+         <ws:applyRouteDispTypeArray>?</ws:applyRouteDispTypeArray>\r
+         <!--1 or more repetitions:-->\r
+         <ws:approveRouteAuthDispArray>?</ws:approveRouteAuthDispArray>\r
+         <!--1 or more repetitions:-->\r
+         <ws:approveRouteChargeDispArray>?</ws:approveRouteChargeDispArray>\r
+         <!--1 or more repetitions:-->\r
+         <ws:approveRouteDispTypeArray>?</ws:approveRouteDispTypeArray>\r
+         <!--1 or more repetitions:-->\r
+         <ws:acceptRouteAuthDispArray>?</ws:acceptRouteAuthDispArray>\r
+         <!--1 or more repetitions:-->\r
+         <ws:acceptRouteChargeDispArray>?</ws:acceptRouteChargeDispArray>\r
+         <!--1 or more repetitions:-->\r
+         <ws:acceptRouteDispTypeArray>?</ws:acceptRouteDispTypeArray>\r
+         <ws:specialApproveDate>?</ws:specialApproveDate>\r
+      </ws:apply>\r
+   </soapenv:Body>\r
+</soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://ws.easset.ctcg.co.jp/ApEndIntService/applyRequest"/><con:wsrmConfig version="1.2"/></con:call></con:operation></con:interface><con:interface xsi:type="con:WsdlInterface" id="1addefc5-ff15-496c-b5a0-36c9d424159c" wsaVersion="NONE" name="ApEndReServiceSoapBinding" type="wsdl" bindingName="{http://ws.easset.ctcg.co.jp}ApEndReServiceSoapBinding" soapVersion="1_1" anonymous="optional" definition="file:/C:/dummy/wsdls/ApEndReService.wsdl" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:settings/><con:definitionCache type="TEXT" rootPart="file:/C:/dummy/wsdls/ApEndReService.wsdl"><con:part><con:url>file:/C:/dummy/wsdls/ApEndReService.wsdl</con:url><con:content><![CDATA[<wsdl:definitions targetNamespace="http://ws.easset.ctcg.co.jp" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:apachesoap="http://xml.apache.org/xml-soap" xmlns:impl="http://ws.easset.ctcg.co.jp" xmlns:intf="http://ws.easset.ctcg.co.jp" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <wsdl:types>
+    <schema elementFormDefault="qualified" targetNamespace="http://ws.easset.ctcg.co.jp" xmlns="http://www.w3.org/2001/XMLSchema">
+      <element name="apply">
+        <complexType>
+          <sequence>
+            <element name="applicationId" type="xsd:string"/>
+            <element name="applicationType" type="xsd:string"/>
+            <element name="companyCode" type="xsd:string"/>
+            <element name="apSectionCode" type="xsd:string"/>
+            <element name="apCreateStaffCode" type="xsd:string"/>
+            <element name="apStaffCode" type="xsd:string"/>
+            <element name="apTel" type="xsd:string"/>
+            <element name="apTitle" type="xsd:string"/>
+            <element name="apSubTitle" type="xsd:string"/>
+            <element name="apListTitle" type="xsd:string"/>
+            <element name="eAssetUrl" type="xsd:string"/>
+            <element maxOccurs="unbounded" name="applyRouteAuthDispArray" type="xsd:string"/>
+            <element maxOccurs="unbounded" name="applyRouteChargeDispArray" type="xsd:string"/>
+            <element maxOccurs="unbounded" name="applyRouteDispTypeArray" type="xsd:string"/>
+            <element maxOccurs="unbounded" name="approveRouteAuthDispArray" type="xsd:string"/>
+            <element maxOccurs="unbounded" name="approveRouteChargeDispArray" type="xsd:string"/>
+            <element maxOccurs="unbounded" name="approveRouteDispTypeArray" type="xsd:string"/>
+            <element maxOccurs="unbounded" name="acceptRouteAuthDispArray" type="xsd:string"/>
+            <element maxOccurs="unbounded" name="acceptRouteChargeDispArray" type="xsd:string"/>
+            <element maxOccurs="unbounded" name="acceptRouteDispTypeArray" type="xsd:string"/>
+            <element name="specialApproveDate" type="xsd:dateTime"/>
+          </sequence>
+        </complexType>
+      </element>
+      <element name="applyResponse">
+        <complexType>
+          <sequence>
+            <element name="applyReturn" type="string"/>
+          </sequence>
+        </complexType>
+      </element>
+    </schema>
+  </wsdl:types>
+  <wsdl:message name="applyResponse">
+    <wsdl:part element="impl:applyResponse" name="parameters"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="applyRequest">
+    <wsdl:part element="impl:apply" name="parameters"></wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="ApEndReService">
+    <wsdl:operation name="apply">
+      <wsdl:input message="impl:applyRequest" name="applyRequest"></wsdl:input>
+      <wsdl:output message="impl:applyResponse" name="applyResponse"></wsdl:output>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="ApEndReServiceSoapBinding" type="impl:ApEndReService">
+    <wsdlsoap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="apply">
+      <wsdlsoap:operation soapAction=""/>
+      <wsdl:input name="applyRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="applyResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="ApEndReServiceService">
+    <wsdl:port binding="impl:ApEndReServiceSoapBinding" name="ApEndReService">
+      <wsdlsoap:address location="http://0.0.0.0:7501/eAsset_ASB/ApEndReService"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>]]></con:content><con:type>http://schemas.xmlsoap.org/wsdl/</con:type></con:part></con:definitionCache><con:endpoints><con:endpoint>http://0.0.0.0:7501/eAsset_ASB/ApEndReService</con:endpoint></con:endpoints><con:operation id="00b9b806-a248-4bce-a596-54d501ca646c" isOneWay="false" action="" name="apply" bindingOperationName="apply" type="Request-Response" outputName="applyResponse" inputName="applyRequest" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call id="7343dd64-3828-4a51-a55d-7b500c204c71" name="Request 1"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:18080/ApEndReService</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ws="http://ws.easset.ctcg.co.jp">\r
+   <soapenv:Header/>\r
+   <soapenv:Body>\r
+      <ws:apply>\r
+         <ws:applicationId>?</ws:applicationId>\r
+         <ws:applicationType>?</ws:applicationType>\r
+         <ws:companyCode>?</ws:companyCode>\r
+         <ws:apSectionCode>?</ws:apSectionCode>\r
+         <ws:apCreateStaffCode>?</ws:apCreateStaffCode>\r
+         <ws:apStaffCode>?</ws:apStaffCode>\r
+         <ws:apTel>?</ws:apTel>\r
+         <ws:apTitle>?</ws:apTitle>\r
+         <ws:apSubTitle>?</ws:apSubTitle>\r
+         <ws:apListTitle>?</ws:apListTitle>\r
+         <ws:eAssetUrl>?</ws:eAssetUrl>\r
+         <!--1 or more repetitions:-->\r
+         <ws:applyRouteAuthDispArray>?</ws:applyRouteAuthDispArray>\r
+         <!--1 or more repetitions:-->\r
+         <ws:applyRouteChargeDispArray>?</ws:applyRouteChargeDispArray>\r
+         <!--1 or more repetitions:-->\r
+         <ws:applyRouteDispTypeArray>?</ws:applyRouteDispTypeArray>\r
+         <!--1 or more repetitions:-->\r
+         <ws:approveRouteAuthDispArray>?</ws:approveRouteAuthDispArray>\r
+         <!--1 or more repetitions:-->\r
+         <ws:approveRouteChargeDispArray>?</ws:approveRouteChargeDispArray>\r
+         <!--1 or more repetitions:-->\r
+         <ws:approveRouteDispTypeArray>?</ws:approveRouteDispTypeArray>\r
+         <!--1 or more repetitions:-->\r
+         <ws:acceptRouteAuthDispArray>?</ws:acceptRouteAuthDispArray>\r
+         <!--1 or more repetitions:-->\r
+         <ws:acceptRouteChargeDispArray>?</ws:acceptRouteChargeDispArray>\r
+         <!--1 or more repetitions:-->\r
+         <ws:acceptRouteDispTypeArray>?</ws:acceptRouteDispTypeArray>\r
+         <ws:specialApproveDate>?</ws:specialApproveDate>\r
+      </ws:apply>\r
+   </soapenv:Body>\r
+</soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://ws.easset.ctcg.co.jp/ApEndReService/applyRequest"/><con:wsrmConfig version="1.2"/></con:call></con:operation></con:interface><con:mockService id="68645573-ebd3-4a00-98df-8906de62e33d" port="18080" path="/" host="H1714672" name="eAppMockService" dispatchResponseMessages="false" bindToHostOnly="false" docroot=""><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.mock.WsdlMockService@require-soap-action">false</con:setting><con:setting id="com.eviware.soapui.impl.wsdl.mock.WsdlMockService@require-soap-version">false</con:setting></con:settings><con:properties/><con:mockOperation name="apply" id="d7ad388d-df9b-4cb2-8cbc-75decb46df77" interface="ApAssetServiceSoapBinding" operation="apply"><con:settings/><con:defaultResponse>Response 1</con:defaultResponse><con:dispatchStyle>SCRIPT</con:dispatchStyle><con:dispatchPath>requestContext.val =  (int)Math.floor(Math.random() * (9999999 - 9000000)) + 9000000
+</con:dispatchPath><con:response name="Response 1" id="0287930d-2d96-4776-947c-1935c3e42fdc" httpResponseStatus="200" encoding="UTF-8"><con:settings/><con:responseContent><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ws="http://ws.easset.ctcg.co.jp">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <ws:applyResponse>
+         <ws:applyReturn>${val}</ws:applyReturn>
+      </ws:applyResponse>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:responseContent><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://ws.easset.ctcg.co.jp/ApAssetService/applyResponse"/></con:response><con:dispatchConfig/></con:mockOperation><con:mockOperation name="getEAppId" id="a37c4f61-d6aa-4755-80b0-ca9b10293090" interface="EAssetServiceSoapBinding" operation="getEAppId"><con:settings/><con:defaultResponse>Response 1</con:defaultResponse><con:dispatchStyle>SCRIPT</con:dispatchStyle><con:dispatchPath>requestContext.val =  (int)Math.floor(Math.random() * (9999999 - 9000000)) + 9000000</con:dispatchPath><con:response name="Response 1" id="bec06b16-0b49-4012-ba21-7b681fdeb6f6" httpResponseStatus="200" encoding="UTF-8"><con:settings/><con:responseContent><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ser="http://jp/co/ctcg/soa/easset/service">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <ser:getEAppIdResponse>
+         <!--Optional:-->
+         <ser:return>${val}</ser:return>
+      </ser:getEAppIdResponse>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:responseContent><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://jp/co/ctcg/soa/easset/service/EAssetService/getEAppIdResponse"/></con:response><con:dispatchConfig/></con:mockOperation></con:mockService><con:properties/><con:wssContainer/><con:oAuth2ProfileContainer/><con:oAuth1ProfileContainer/><con:sensitiveInformation/></con:soapui-project>

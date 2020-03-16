@@ -1,0 +1,3050 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<!--
+ *===================================================================
+ * ファイル名 : FldDAO_SqlMap.xml
+ * 概要説明   : 固定資産(照会・管理項目修正)用SQL文
+ * バージョン : 1.0
+ *===================================================================
+ * 修正履歴
+ * 日付       Ver. 担当者       修正内容
+ * －－－－－ －－ －－－－－－ －－－－－－－－－－－－－－－－－－
+ * 2012-09-06 1.0  リヨン       新規
+ *===================================================================
+ -->
+<sqlMap namespace="FldDAO" >
+  <!--
+    固定資産共通SELECT項目
+  -->
+  <sql id="selectFldComColumn_FLD">
+    ptvf.COMPANY_CODE companyCode
+  , ptvf.PERIOD period
+
+  , ptvf.KOYUNO koyuno
+  , ptvf.KAISHACD kaishacd
+  , ptvf.KAISHANM kaishanm
+  , ptvf.OYA oya
+  , ptvf.EDA eda
+  , ptvf.SHISANKNRKBN shisanknrkbn
+  , ptvf.SHISANJOTAIKBN shisanjotaikbn
+  , ptvf.SHISANNMCD shisannmcd
+  , ptvf.SHISANNM shisannm
+  , ptvf.SHISANNMK shisannmk
+  , ptvf.SOSHIKI1CD soshiki1cd
+  , ptvf.SOSHIKI1NM soshiki1nm
+  , ptvf.SOSHIKI2CD soshiki2cd
+  , ptvf.SOSHIKI2NM soshiki2nm
+  , ptvf.SOSHIKI3CD soshiki3cd
+  , ptvf.SOSHIKI3NM soshiki3nm
+  , ptvf.SOSHIKI4CD soshiki4cd
+  , ptvf.SOSHIKI4NM soshiki4nm
+  , ptvf.SETCHICD setchicd
+  , ptvf.SETCHINM setchinm
+  , ptvf.SKKHIHFCD skkhihfcd
+  , ptvf.HFNM hfnm
+  , ptvf.LARYOHFCD laryohfcd
+  , ptvf.LARYOHFNM laryohfnm
+  , ptvf.SHURUICD shuruicd
+  , ptvf.SHURUINM shuruinm
+  , ptvf.KOZOCD kozocd
+  , ptvf.KOZONM kozonm
+  , ptvf.BUNRUICD bunruicd
+  , ptvf.BUNRUINM bunruinm
+  , ptvf.CPKEIJOYMD cpkeijoymd
+  , ptvf.FURIKAEYMD furikaeymd
+  , ptvf.FURIKAEGO_OYA furikaegoOya
+  , ptvf.FURIKAEGO_EDA furikaegoEda
+  , ptvf.FURIKAEGO_OYA || ptvf.FURIKAEGO_EDA furikaegoShisanNum
+  , ptvf.STKYMD stkymd
+  , ptvf.KADOYMD kadoymd
+  , ptvf.JBKYMD jbkymd
+  , ptvf.IDOYMD idoymd
+  , ptvf.SURYO suryo
+  , ptvf.SURYO_TANI suryoTani
+  , ptvf.MENSEKI menseki
+  , ptvf.MENSEKI_TANI mensekiTani
+  , ptvf.CHUKOKBN chukokbn
+  , ptvf.TOSAIMUKEIJOKBN tosaimukeijokbn
+  , ptvf.JKSAIMUKEIJOKBN jksaimukeijokbn
+  , ptvf.STKGKK stkgkk
+  , ptvf.ASKSTKGKK askstkgkk
+  , ptvf.SKKHOK skkhok
+  , DECODE(ptvf.SKKHOK, '3', TO_NUMBER(NULL), 'D', TO_NUMBER(NULL), ptvf.TAINENK) tainenk
+  , DECODE(ptvf.SKKHOK, '3', TO_NUMBER(NULL), 'D', TO_NUMBER(NULL), ptvf.SKKRITSUK) skkritsuk
+  , DECODE(ptvf.SKKHOK, '3', ptvf.SKKMMSUK, 'D', ptvf.SKKMMSUK, TO_NUMBER(NULL)) skkmmsuk
+  , DECODE(ptvf.SKKHOK, '3', ptvf.ZANZONMMSUK, 'D', ptvf.ZANZONMMSUK, TO_NUMBER(NULL)) zanzonmmsuk
+  , ptvf.KSBOKAK ksbokak
+  , ptvf.SKKCALCKISOGKK skkcalckisogkk
+  , ptvf.ZANZONRITSUK zanzonritsuk
+  , ptvf.ZANZONGKK zanzongkk
+  , ptvf.KSFTSKKRUIGKK ksftskkruigkk
+  , ptvf.KSZKSKKRUIGKK kszkskkruigkk
+  , ptvf.KSTKSKKRUIGKK kstkskkruigkk
+  , (ptvf.KSFTSKKRUIGKK + ptvf.KSZKSKKRUIGKK + ptvf.KSTKSKKRUIGKK) ksskkruigkk
+  , ptvf.ZEN_TOFTSKKGKK zenToftskkgkk
+  , ptvf.ZEN_TOZKSKKGKK zenTozkskkgkk
+  , ptvf.ZEN_TOTKSKKGKK zenTotkskkgkk
+  , ptvf.ZEN_TONINISKKGKK zenToniniskkgkk
+  , ptvf.TO_TOFTSKKGKK toToftskkgkk
+  , ptvf.TO_TOZKSKKGKK toTozkskkgkk
+  , ptvf.TO_TOTKSKKGKK toTotkskkgkk
+  , ptvf.TO_TONINISKKGKK toToniniskkgkk
+  , ptvf.TO_TOFTSKKGKK + ptvf.TO_TONINISKKGKK + ptvf.TO_TOTKSKKGKK + ptvf.TO_TOZKSKKGKK toToskkgkk
+  , (ptvf.TO_TOFTSKKGKK + ptvf.TO_TONINISKKGKK + ptvf.TO_TOTKSKKGKK + ptvf.TO_TOZKSKKGKK) - (ptvf.ZEN_TOFTSKKGKK + ptvf.ZEN_TONINISKKGKK + ptvf.ZEN_TOTKSKKGKK + ptvf.ZEN_TOZKSKKGKK) toSkkgkk
+  , ptvf.TO_BOKAK toBokak
+  , ptvf.ZOGENBOKAK zogenbokak
+  , ptvf.ZKSKKRITSUK zkskkritsuk
+  , ptvf.YUKYUSTYMK yukyustymk
+  , ptvf.YUKYUFKYMK yukyufkymk
+  , ptvf.SHONENCALCKBNK shonencalckbnk
+  , ptvf.SKKKANRYOFLGK skkkanryoflgk
+  , ptvf.SKKKIRIKAEYYK skkkirikaeyyk
+  , ptvf.ZANZONSKKSTYYK zanzonskkstyyk
+  , ptvf.ZANZONSKKMMSUK zanzonskkmmsuk
+  , ptvf.FAMITSUMORIHKYMDK famitsumorihkymdk
+  , ptvf.MITSUMORIHKGOBOKAK mitsumorihkgobokak
+  , DECODE(ptvf.SKKHOK, '3', TO_NUMBER(NULL), 'D', TO_NUMBER(NULL), ptvf.MITSUMORIHKMAETAINENK) mitsumorihkmaetainenk
+  , DECODE(ptvf.SKKHOK, '3', TO_NUMBER(NULL), 'D', TO_NUMBER(NULL), ptvf.MITSUMORIHKMAESKKRITSUK) mitsumorihkmaeskkritsuk
+  , DECODE(ptvf.SKKHOK, '3', ptvf.MITSUMORIHKMAESKKMMSUK, 'D', ptvf.MITSUMORIHKMAESKKMMSUK, TO_NUMBER(NULL)) mitsumorihkmaeskkmmsuk
+  , ptvf.STKGKZ stkgkz
+  , ptvf.ASKSTKGKZ askstkgkz
+  , ptvf.SKKHOZ skkhoz
+  , DECODE(ptvf.SKKHOZ, '3', TO_NUMBER(NULL), 'D', TO_NUMBER(NULL), ptvf.TAINENZ) tainenz
+  , DECODE(ptvf.SKKHOZ, '3', TO_NUMBER(NULL), 'D', TO_NUMBER(NULL), ptvf.SKKRITSUZ) skkritsuz
+  , DECODE(ptvf.SKKHOZ, '3', ptvf.SKKMMSUZ, 'D', ptvf.SKKMMSUZ, TO_NUMBER(NULL)) skkmmsuz
+  , DECODE(ptvf.SKKHOZ, '3', ptvf.ZANZONMMSUZ, 'D', ptvf.ZANZONMMSUZ, TO_NUMBER(NULL)) zanzonmmsuz
+  , ptvf.KSBOKAZ ksbokaz
+  , ptvf.SKKCALCKISOGKZ skkcalckisogkz
+  , ptvf.ZANZONRITSUZ zanzonritsuz
+  , ptvf.ZANZONGKZ zanzongkz
+  , ptvf.KSFTSKKRUIGKZ ksftskkruigkz
+  , ptvf.KSZKSKKRUIGKZ kszkskkruigkz
+  , ptvf.KSTKSKKRUIGKZ kstkskkruigkz
+  , (ptvf.KSFTSKKRUIGKZ + ptvf.KSZKSKKRUIGKZ + ptvf.KSTKSKKRUIGKZ) ksskkruigkz
+  , ptvf.ZEN_TOFTSKKGKZ zenToftskkgkz
+  , ptvf.ZEN_TOZKSKKGKZ zenTozkskkgkz
+  , ptvf.ZEN_TOTKSKKGKZ zenTotkskkgkz
+  , ptvf.ZEN_TONINISKKGKZ zenToniniskkgkz
+  , ptvf.TO_TOFTSKKGKZ toToftskkgkz
+  , ptvf.TO_TOZKSKKGKZ toTozkskkgkz
+  , ptvf.TO_TOTKSKKGKZ toTotkskkgkz
+  , ptvf.TO_TONINISKKGKZ toToniniskkgkz
+  , ptvf.TO_TOFTSKKGKZ + ptvf.TO_TONINISKKGKZ + ptvf.TO_TOTKSKKGKZ + ptvf.TO_TOZKSKKGKZ toToskkgkz
+  , (ptvf.TO_TOFTSKKGKZ + ptvf.TO_TONINISKKGKZ + ptvf.TO_TOTKSKKGKZ + ptvf.TO_TOZKSKKGKZ) - (ptvf.ZEN_TOFTSKKGKZ + ptvf.ZEN_TONINISKKGKZ + ptvf.ZEN_TOTKSKKGKZ + ptvf.ZEN_TOZKSKKGKZ) toSkkgkz
+  , ptvf.TO_BOKAZ toBokaz
+  , ptvf.ZOGENBOKAZ zogenbokaz
+  , ptvf.ZKSKKRITSUZ zkskkritsuz
+  , ptvf.YUKYUSTYMZ yukyustymz
+  , ptvf.YUKYUFKYMZ yukyufkymz
+  , ptvf.SHONENCALCKBNZ shonencalckbnz
+  , ptvf.SKKKANRYOFLGZ skkkanryoflgz
+  , ptvf.SKKKIRIKAEYYZ skkkirikaeyyz
+  , ptvf.ZANZONSKKSTYYZ zanzonskkstyyz
+  , ptvf.ZANZONSKKMMSUZ zanzonskkmmsuz
+  , ptvf.FAMITSUMORIHKYMDZ famitsumorihkymdz
+  , ptvf.MITSUMORIHKGOBOKAZ mitsumorihkgobokaz
+  , DECODE(ptvf.SKKHOZ, '3', TO_NUMBER(NULL), 'D', TO_NUMBER(NULL), ptvf.MITSUMORIHKMAETAINENZ) mitsumorihkmaetainenz
+  , DECODE(ptvf.SKKHOZ, '3', TO_NUMBER(NULL), 'D', TO_NUMBER(NULL), ptvf.MITSUMORIHKMAESKKRITSUZ) mitsumorihkmaeskkritsuz
+  , DECODE(ptvf.SKKHOZ, '3', ptvf.MITSUMORIHKMAESKKMMSUZ, 'D', ptvf.MITSUMORIHKMAESKKMMSUZ, TO_NUMBER(NULL)) mitsumorihkmaeskkmmsuz
+  , ptvf.STKGK_L3 stkgkL3
+  , ptvf.ASKSTKGK_L3 askstkgkL3
+  , ptvf.SKKHO_L3 skkhoL3
+  , DECODE(ptvf.SKKHO_L3, '3', TO_NUMBER(NULL), 'D', TO_NUMBER(NULL), ptvf.TAINEN_L3) tainenL3
+  , DECODE(ptvf.SKKHO_L3, '3', TO_NUMBER(NULL), 'D', TO_NUMBER(NULL), ptvf.SKKRITSU_L3) skkritsuL3
+  , DECODE(ptvf.SKKHO_L3, '3', ptvf.SKKMMSU_L3, 'D', ptvf.SKKMMSU_L3, TO_NUMBER(NULL)) skkmmsuL3
+  , DECODE(ptvf.SKKHO_L3, '3', ptvf.ZANZONMMSU_L3, 'D', ptvf.ZANZONMMSU_L3, TO_NUMBER(NULL)) zanzonmmsuL3
+  , ptvf.KSBOKA_L3 ksbokaL3
+  , ptvf.SKKCALCKISOGK_L3 skkcalckisogkL3
+  , ptvf.ZANZONRITSU_L3 zanzonritsuL3
+  , ptvf.ZANZONGK_L3 zanzongkL3
+  , ptvf.KSFTSKKRUIGK_L3 ksftskkruigkL3
+  , ptvf.KSZKSKKRUIGK_L3 kszkskkruigkL3
+  , ptvf.KSTKSKKRUIGK_L3 kstkskkruigkL3
+  , (ptvf.KSFTSKKRUIGK_L3 + ptvf.KSZKSKKRUIGK_L3 + ptvf.KSTKSKKRUIGK_L3) ksskkruigkL3
+  , ptvf.ZEN_TOFTSKKGK_L3 zenToftskkgkL3
+  , ptvf.ZEN_TOZKSKKGK_L3 zenTozkskkgkL3
+  , ptvf.ZEN_TOTKSKKGK_L3 zenTotkskkgkL3
+  , ptvf.ZEN_TONINISKKGK_L3 zenToniniskkgkL3
+  , ptvf.TO_TOFTSKKGK_L3 toToftskkgkL3
+  , ptvf.TO_TOZKSKKGK_L3 toTozkskkgkL3
+  , ptvf.TO_TOTKSKKGK_L3 toTotkskkgkL3
+  , ptvf.TO_TONINISKKGK_L3 toToniniskkgkL3
+  , ptvf.TO_TOFTSKKGK_L3 + ptvf.TO_TONINISKKGK_L3 + ptvf.TO_TOTKSKKGK_L3 + ptvf.TO_TOZKSKKGK_L3 toToskkgkL3
+  , (ptvf.TO_TOFTSKKGK_L3 + ptvf.TO_TONINISKKGK_L3 + ptvf.TO_TOTKSKKGK_L3 + ptvf.TO_TOZKSKKGK_L3) - (ptvf.ZEN_TOFTSKKGK_L3 + ptvf.ZEN_TONINISKKGK_L3 + ptvf.ZEN_TOTKSKKGK_L3 + ptvf.ZEN_TOZKSKKGK_L3) toSkkgkL3
+  , ptvf.TO_BOKA_L3 toBokaL3
+  , ptvf.ZOGENBOKA_L3 zogenbokaL3
+  , ptvf.ZKSKKRITSU_L3 zkskkritsuL3
+  , ptvf.YUKYUSTYM_L3 yukyustymL3
+  , ptvf.YUKYUFKYM_L3 yukyufkymL3
+  , ptvf.SHONENCALCKBN_L3 shonencalckbnL3
+  , ptvf.SKKKANRYOFLG_L3 skkkanryoflgL3
+  , ptvf.SKKKIRIKAEYY_L3 skkkirikaeyyL3
+  , ptvf.ZANZONSKKSTYY_L3 zanzonskkstyyL3
+  , ptvf.ZANZONSKKMMSU_L3 zanzonskkmmsuL3
+  , ptvf.FAMITSUMORIHKYMD_L3 famitsumorihkymdL3
+  , ptvf.MITSUMORIHKGOBOKA_L3 mitsumorihkgobokaL3
+  , DECODE(ptvf.SKKHO_L3, '3', TO_NUMBER(NULL), 'D', TO_NUMBER(NULL), ptvf.MITSUMORIHKMAETAINEN_L3) mitsumorihkmaetainenL3
+  , DECODE(ptvf.SKKHO_L3, '3', TO_NUMBER(NULL), 'D', TO_NUMBER(NULL), ptvf.MITSUMORIHKMAESKKRITSU_L3) mitsumorihkmaeskkritsuL3
+  , DECODE(ptvf.SKKHO_L3, '3', ptvf.MITSUMORIHKMAESKKMMSU_L3, 'D', ptvf.MITSUMORIHKMAESKKMMSU_L3, TO_NUMBER(NULL)) mitsumorihkmaeskkmmsuL3
+  , ptvf.STKGK_L4 stkgkL4
+  , ptvf.ASKSTKGK_L4 askstkgkL4
+  , ptvf.SKKHO_L4 skkhoL4
+  , DECODE(ptvf.SKKHO_L4, '3', TO_NUMBER(NULL), 'D', TO_NUMBER(NULL), ptvf.TAINEN_L4) tainenL4
+  , DECODE(ptvf.SKKHO_L4, '3', TO_NUMBER(NULL), 'D', TO_NUMBER(NULL), ptvf.SKKRITSU_L4) skkritsuL4
+  , DECODE(ptvf.SKKHO_L4, '3', ptvf.SKKMMSU_L4, 'D', ptvf.SKKMMSU_L4, TO_NUMBER(NULL)) skkmmsuL4
+  , DECODE(ptvf.SKKHO_L4, '3', ptvf.ZANZONMMSU_L4, 'D', ptvf.ZANZONMMSU_L4, TO_NUMBER(NULL)) zanzonmmsuL4
+  , ptvf.KSBOKA_L4 ksbokaL4
+  , ptvf.SKKCALCKISOGK_L4 skkcalckisogkL4
+  , ptvf.ZANZONRITSU_L4 zanzonritsuL4
+  , ptvf.ZANZONGK_L4 zanzongkL4
+  , ptvf.KSFTSKKRUIGK_L4 ksftskkruigkL4
+  , ptvf.KSZKSKKRUIGK_L4 kszkskkruigkL4
+  , ptvf.KSTKSKKRUIGK_L4 kstkskkruigkL4
+  , (ptvf.KSFTSKKRUIGK_L4 + ptvf.KSZKSKKRUIGK_L4 + ptvf.KSTKSKKRUIGK_L4) ksskkruigkL4
+  , ptvf.ZEN_TOFTSKKGK_L4 zenToftskkgkL4
+  , ptvf.ZEN_TOZKSKKGK_L4 zenTozkskkgkL4
+  , ptvf.ZEN_TOTKSKKGK_L4 zenTotkskkgkL4
+  , ptvf.ZEN_TONINISKKGK_L4 zenToniniskkgkL4
+  , ptvf.TO_TOFTSKKGK_L4 toToftskkgkL4
+  , ptvf.TO_TOZKSKKGK_L4 toTozkskkgkL4
+  , ptvf.TO_TOTKSKKGK_L4 toTotkskkgkL4
+  , ptvf.TO_TONINISKKGK_L4 toToniniskkgkL4
+  , ptvf.TO_TOFTSKKGK_L4 + ptvf.TO_TONINISKKGK_L4 + ptvf.TO_TOTKSKKGK_L4 + ptvf.TO_TOZKSKKGK_L4 toToskkgkL4
+  , (ptvf.TO_TOFTSKKGK_L4 + ptvf.TO_TONINISKKGK_L4 + ptvf.TO_TOTKSKKGK_L4 + ptvf.TO_TOZKSKKGK_L4) - (ptvf.ZEN_TOFTSKKGK_L4 + ptvf.ZEN_TONINISKKGK_L4 + ptvf.ZEN_TOTKSKKGK_L4 + ptvf.ZEN_TOZKSKKGK_L4) toSkkgkL4
+  , ptvf.TO_BOKA_L4 toBokaL4
+  , ptvf.ZOGENBOKA_L4 zogenbokaL4
+  , ptvf.ZKSKKRITSU_L4 zkskkritsuL4
+  , ptvf.YUKYUSTYM_L4 yukyustymL4
+  , ptvf.YUKYUFKYM_L4 yukyufkymL4
+  , ptvf.SHONENCALCKBN_L4 shonencalckbnL4
+  , ptvf.SKKKANRYOFLG_L4 skkkanryoflgL4
+  , ptvf.SKKKIRIKAEYY_L4 skkkirikaeyyL4
+  , ptvf.ZANZONSKKSTYY_L4 zanzonskkstyyL4
+  , ptvf.ZANZONSKKMMSU_L4 zanzonskkmmsuL4
+  , ptvf.FAMITSUMORIHKYMD_L4 famitsumorihkymdL4
+  , ptvf.MITSUMORIHKGOBOKA_L4 mitsumorihkgobokaL4
+  , DECODE(ptvf.SKKHO_L4, '3', TO_NUMBER(NULL), 'D', TO_NUMBER(NULL), ptvf.MITSUMORIHKMAETAINEN_L4) mitsumorihkmaetainenL4
+  , DECODE(ptvf.SKKHO_L4, '3', TO_NUMBER(NULL), 'D', TO_NUMBER(NULL), ptvf.MITSUMORIHKMAESKKRITSU_L4) mitsumorihkmaeskkritsuL4
+  , DECODE(ptvf.SKKHO_L4, '3', ptvf.MITSUMORIHKMAESKKMMSU_L4, 'D', ptvf.MITSUMORIHKMAESKKMMSU_L4, TO_NUMBER(NULL)) mitsumorihkmaeskkmmsuL4
+  , ptvf.STKGK_L5 stkgkL5
+  , ptvf.ASKSTKGK_L5 askstkgkL5
+  , ptvf.SKKHO_L5 skkhoL5
+  , DECODE(ptvf.SKKHO_L5, '3', TO_NUMBER(NULL), 'D', TO_NUMBER(NULL), ptvf.TAINEN_L5) tainenL5
+  , DECODE(ptvf.SKKHO_L5, '3', TO_NUMBER(NULL), 'D', TO_NUMBER(NULL), ptvf.SKKRITSU_L5) skkritsuL5
+  , DECODE(ptvf.SKKHO_L5, '3', ptvf.SKKMMSU_L5, 'D', ptvf.SKKMMSU_L5, TO_NUMBER(NULL)) skkmmsuL5
+  , DECODE(ptvf.SKKHO_L5, '3', ptvf.ZANZONMMSU_L5, 'D', ptvf.ZANZONMMSU_L5, TO_NUMBER(NULL)) zanzonmmsuL5
+  , ptvf.KSBOKA_L5 ksbokaL5
+  , ptvf.SKKCALCKISOGK_L5 skkcalckisogkL5
+  , ptvf.ZANZONRITSU_L5 zanzonritsuL5
+  , ptvf.ZANZONGK_L5 zanzongkL5
+  , ptvf.KSFTSKKRUIGK_L5 ksftskkruigkL5
+  , ptvf.KSZKSKKRUIGK_L5 kszkskkruigkL5
+  , ptvf.KSTKSKKRUIGK_L5 kstkskkruigkL5
+  , (ptvf.KSFTSKKRUIGK_L5 + ptvf.KSZKSKKRUIGK_L5 + ptvf.KSTKSKKRUIGK_L5) ksskkruigkL5
+  , ptvf.ZEN_TOFTSKKGK_L5 zenToftskkgkL5
+  , ptvf.ZEN_TOZKSKKGK_L5 zenTozkskkgkL5
+  , ptvf.ZEN_TOTKSKKGK_L5 zenTotkskkgkL5
+  , ptvf.ZEN_TONINISKKGK_L5 zenToniniskkgkL5
+  , ptvf.TO_TOFTSKKGK_L5 toToftskkgkL5
+  , ptvf.TO_TOZKSKKGK_L5 toTozkskkgkL5
+  , ptvf.TO_TOTKSKKGK_L5 toTotkskkgkL5
+  , ptvf.TO_TONINISKKGK_L5 toToniniskkgkL5
+  , ptvf.TO_TOFTSKKGK_L5 + ptvf.TO_TONINISKKGK_L5 + ptvf.TO_TOTKSKKGK_L5 + ptvf.TO_TOZKSKKGK_L5 toToskkgkL5
+  , (ptvf.TO_TOFTSKKGK_L5 + ptvf.TO_TONINISKKGK_L5 + ptvf.TO_TOTKSKKGK_L5 + ptvf.TO_TOZKSKKGK_L5) - (ptvf.ZEN_TOFTSKKGK_L5 + ptvf.ZEN_TONINISKKGK_L5 + ptvf.ZEN_TOTKSKKGK_L5 + ptvf.ZEN_TOZKSKKGK_L5) toSkkgkL5
+  , ptvf.TO_BOKA_L5 toBokaL5
+  , ptvf.ZOGENBOKA_L5 zogenbokaL5
+  , ptvf.ZKSKKRITSU_L5 zkskkritsuL5
+  , ptvf.YUKYUSTYM_L5 yukyustymL5
+  , ptvf.YUKYUFKYM_L5 yukyufkymL5
+  , ptvf.SHONENCALCKBN_L5 shonencalckbnL5
+  , ptvf.SKKKANRYOFLG_L5 skkkanryoflgL5
+  , ptvf.SKKKIRIKAEYY_L5 skkkirikaeyyL5
+  , ptvf.ZANZONSKKSTYY_L5 zanzonskkstyyL5
+  , ptvf.ZANZONSKKMMSU_L5 zanzonskkmmsuL5
+  , ptvf.FAMITSUMORIHKYMD_L5 famitsumorihkymdL5
+  , ptvf.MITSUMORIHKGOBOKA_L5 mitsumorihkgobokaL5
+  , DECODE(ptvf.SKKHO_L5, '3', TO_NUMBER(NULL), 'D', TO_NUMBER(NULL), ptvf.MITSUMORIHKMAETAINEN_L5) mitsumorihkmaetainenL5
+  , DECODE(ptvf.SKKHO_L5, '3', TO_NUMBER(NULL), 'D', TO_NUMBER(NULL), ptvf.MITSUMORIHKMAESKKRITSU_L5) mitsumorihkmaeskkritsuL5
+  , DECODE(ptvf.SKKHO_L5, '3', ptvf.MITSUMORIHKMAESKKMMSU_L5, 'D', ptvf.MITSUMORIHKMAESKKMMSU_L5, TO_NUMBER(NULL)) mitsumorihkmaeskkmmsuL5
+  , ptvf.STKGK_L6 stkgkL6
+  , ptvf.ASKSTKGK_L6 askstkgkL6
+  , ptvf.SKKHO_L6 skkhoL6
+  , DECODE(ptvf.SKKHO_L6, '3', TO_NUMBER(NULL), 'D', TO_NUMBER(NULL), ptvf.TAINEN_L6) tainenL6
+  , DECODE(ptvf.SKKHO_L6, '3', TO_NUMBER(NULL), 'D', TO_NUMBER(NULL), ptvf.SKKRITSU_L6) skkritsuL6
+  , DECODE(ptvf.SKKHO_L6, '3', ptvf.SKKMMSU_L6, 'D', ptvf.SKKMMSU_L6, TO_NUMBER(NULL)) skkmmsuL6
+  , DECODE(ptvf.SKKHO_L6, '3', ptvf.ZANZONMMSU_L6, 'D', ptvf.ZANZONMMSU_L6, TO_NUMBER(NULL)) zanzonmmsuL6
+  , ptvf.KSBOKA_L6 ksbokaL6
+  , ptvf.SKKCALCKISOGK_L6 skkcalckisogkL6
+  , ptvf.ZANZONRITSU_L6 zanzonritsuL6
+  , ptvf.ZANZONGK_L6 zanzongkL6
+  , ptvf.KSFTSKKRUIGK_L6 ksftskkruigkL6
+  , ptvf.KSZKSKKRUIGK_L6 kszkskkruigkL6
+  , ptvf.KSTKSKKRUIGK_L6 kstkskkruigkL6
+  , (ptvf.KSFTSKKRUIGK_L6 + ptvf.KSZKSKKRUIGK_L6 + ptvf.KSTKSKKRUIGK_L6) ksskkruigkL6
+  , ptvf.ZEN_TOFTSKKGK_L6 zenToftskkgkL6
+  , ptvf.ZEN_TOZKSKKGK_L6 zenTozkskkgkL6
+  , ptvf.ZEN_TOTKSKKGK_L6 zenTotkskkgkL6
+  , ptvf.ZEN_TONINISKKGK_L6 zenToniniskkgkL6
+  , ptvf.TO_TOFTSKKGK_L6 toToftskkgkL6
+  , ptvf.TO_TOZKSKKGK_L6 toTozkskkgkL6
+  , ptvf.TO_TOTKSKKGK_L6 toTotkskkgkL6
+  , ptvf.TO_TONINISKKGK_L6 toToniniskkgkL6
+  , ptvf.TO_TOFTSKKGK_L6 + ptvf.TO_TONINISKKGK_L6 + ptvf.TO_TOTKSKKGK_L6 + ptvf.TO_TOZKSKKGK_L6 toToskkgkL6
+  , (ptvf.TO_TOFTSKKGK_L6 + ptvf.TO_TONINISKKGK_L6 + ptvf.TO_TOTKSKKGK_L6 + ptvf.TO_TOZKSKKGK_L6) - (ptvf.ZEN_TOFTSKKGK_L6 + ptvf.ZEN_TONINISKKGK_L6 + ptvf.ZEN_TOTKSKKGK_L6 + ptvf.ZEN_TOZKSKKGK_L6) toSkkgkL6
+  , ptvf.TO_BOKA_L6 toBokaL6
+  , ptvf.ZOGENBOKA_L6 zogenbokaL6
+  , ptvf.ZKSKKRITSU_L6 zkskkritsuL6
+  , ptvf.YUKYUSTYM_L6 yukyustymL6
+  , ptvf.YUKYUFKYM_L6 yukyufkymL6
+  , ptvf.SHONENCALCKBN_L6 shonencalckbnL6
+  , ptvf.SKKKANRYOFLG_L6 skkkanryoflgL6
+  , ptvf.SKKKIRIKAEYY_L6 skkkirikaeyyL6
+  , ptvf.ZANZONSKKSTYY_L6 zanzonskkstyyL6
+  , ptvf.ZANZONSKKMMSU_L6 zanzonskkmmsuL6
+  , ptvf.FAMITSUMORIHKYMD_L6 famitsumorihkymdL6
+  , ptvf.MITSUMORIHKGOBOKA_L6 mitsumorihkgobokaL6
+  , DECODE(ptvf.SKKHO_L6, '3', TO_NUMBER(NULL), 'D', TO_NUMBER(NULL), ptvf.MITSUMORIHKMAETAINEN_L6) mitsumorihkmaetainenL6
+  , DECODE(ptvf.SKKHO_L6, '3', TO_NUMBER(NULL), 'D', TO_NUMBER(NULL), ptvf.MITSUMORIHKMAESKKRITSU_L6) mitsumorihkmaeskkritsuL6
+  , DECODE(ptvf.SKKHO_L6, '3', ptvf.MITSUMORIHKMAESKKMMSU_L6, 'D', ptvf.MITSUMORIHKMAESKKMMSU_L6, TO_NUMBER(NULL)) mitsumorihkmaeskkmmsuL6
+  , ptvf.KONYUCD konyucd
+  , ptvf.KONYUNM konyunm
+  , ptvf.KASHICD kashicd
+  , ptvf.KASHINM kashinm
+  , ptvf.CP_OYA cpOya
+  , ptvf.CP_EDA cpEda
+  , ptvf.CP_OYA || ptvf.CP_EDA cpShisanNum
+  , ptvf.KNRBUNRUICD knrbunruicd
+  , ptvf.BIKO1 biko1
+  , ptvf.BIKO2 biko2
+  , ptvf.STKRINGINO stkringino
+  , ptvf.STKTEKIYO stktekiyo
+  , ptvf.ASKCD askcd
+  , ptvf.ASKNM asknm
+  , ptvf.ASKKBN askkbn
+  , ptvf.ASKGK askgk
+  , ptvf.KSASKZAN ksaskzan
+  , ptvf.KSASKNINYOGK ksaskninyogk
+  , ptvf.ASKNINYOGK askninyogk
+  , ptvf.ASKKISOGK askkisogk
+  , ptvf.ASKZANZONGK askzanzongk
+  , ptvf.KAITEIASKGK kaiteiaskgk
+  , ptvf.SKKCHOKAGK skkchokagk
+  , ptvf.SKKFUSOKUGK skkfusokugk
+  , ptvf.TKCD tkcd
+  , ptvf.TKNM tknm
+  , ptvf.TKKBN tkkbn
+  , ptvf.TKRITSU_BUNSHI tkritsuBunshi
+  , ptvf.TKRITSU_BUNBO tkritsuBunbo
+  , ptvf.BEPPYOTAISHOKBN beppyotaishokbn
+  , ptvf.SKKSHISANKBN skkshisankbn
+  , ptvf.AITEKANJOCD aitekanjocd
+  , ptvf.AITEKANJONM aitekanjonm
+  , ptvf.AITEHOJOKAMOKUCD aitehojokamokucd
+  , ptvf.AITEHOJOKAMOKUNM aitehojokamokunm
+  , ptvf.GAPPEIUKEKBN gappeiukekbn
+  , ptvf.GENSHISTKYMD genshistkymd
+  , ptvf.GROUPCD groupcd
+  , ptvf.GROUPNM groupnm
+  , ptvf.SHINARIOCD shinariocd
+  , ptvf.SHINARIONM shinarionm
+  , ptvf.SHUYOSHISANKBN shuyoshisankbn
+  , ptvf.NINI_LD_1CD niniLd_1cd
+  , ptvf.NINI_LD_1NM niniLd_1nm
+  , ptvf.NINI_LD_2CD niniLd_2cd
+  , ptvf.NINI_LD_2NM niniLd_2nm
+  , ptvf.NINI_LD_3CD niniLd_3cd
+  , ptvf.NINI_LD_3NM niniLd_3nm
+  , ptvf.NINI_LD_4CD niniLd_4cd
+  , ptvf.NINI_LD_4NM niniLd_4nm
+  , ptvf.NINI_LD_5CD niniLd_5cd
+  , ptvf.NINI_LD_5NM niniLd_5nm
+  , ptvf.NINI_LD_6CD niniLd_6cd
+  , ptvf.NINI_LD_6NM niniLd_6nm
+  , ptvf.NINI_LD_7CD niniLd_7cd
+  , ptvf.NINI_LD_7NM niniLd_7nm
+  , ptvf.NINI_LD_8CD niniLd_8cd
+  , ptvf.NINI_LD_8NM niniLd_8nm
+  , ptvf.NINI_LD_9CD niniLd_9cd
+  , ptvf.NINI_LD_9NM niniLd_9nm
+  , ptvf.NINI_LD_10CD niniLd_10cd
+  , ptvf.NINI_LD_10NM niniLd_10nm
+  , ptvf.NINI_LD_11CD niniLd_11cd
+  , ptvf.NINI_LD_11NM niniLd_11nm
+  , ptvf.NINI_LD_12CD niniLd_12cd
+  , ptvf.NINI_LD_12NM niniLd_12nm
+  , ptvf.NINI_LD_13CD niniLd_13cd
+  , ptvf.NINI_LD_13NM niniLd_13nm
+  , ptvf.NINI_LD_14CD niniLd_14cd
+  , ptvf.NINI_LD_14NM niniLd_14nm
+  , ptvf.NINI_LD_15CD niniLd_15cd
+  , ptvf.NINI_LD_15NM niniLd_15nm
+  , ptvf.NINI_LD_16CD niniLd_16cd
+  , ptvf.NINI_LD_16NM niniLd_16nm
+  , ptvf.NINI_LD_17CD niniLd_17cd
+  , ptvf.NINI_LD_17NM niniLd_17nm
+  , ptvf.NINI_LD_18CD niniLd_18cd
+  , ptvf.NINI_LD_18NM niniLd_18nm
+  , ptvf.NINI_LD_19CD niniLd_19cd
+  , ptvf.NINI_LD_19NM niniLd_19nm
+  , ptvf.NINI_LD_20CD niniLd_20cd
+  , ptvf.NINI_LD_20NM niniLd_20nm
+  , ptvf.TOSHINKKYY toshinkkyy
+  , ptvf.TOSHINKKCHICD toshinkkchicd
+  , ptvf.TOSHINKKCHINM toshinkkchinm
+  , ptvf.TOSHINKKSHURUI toshinkkshurui
+  , ptvf.TOSHINKKSTKGK toshinkkstkgk
+  , ptvf.TOSHINKKTAINEN toshinkktainen
+  , ptvf.TOSHINKK_ZKSKKRITSU toshinkkZkskkritsu
+  , ptvf.TOTHZEICD tothzeicd
+  , ptvf.TOTHZEINM tothzeinm
+  , ptvf.TOTKREIRITSU_BUNSHI totkreiritsuBunshi
+  , ptvf.TOTKREIRITSU_BUNBO totkreiritsuBunbo
+  , ptvf.ZENSHINKKYY zenshinkkyy
+  , ptvf.ZENSHINKKCHICD zenshinkkchicd
+  , ptvf.ZENSHINKKCHINM zenshinkkchinm
+  , ptvf.ZENSHINKKSHURUI zenshinkkshurui
+  , ptvf.ZENSHINKKSTKGK zenshinkkstkgk
+  , ptvf.ZENSHINKKTAINEN zenshinkktainen
+  , ptvf.ZENSHINKK_ZKSKKRITSU zenshinkkZkskkritsu
+  , ptvf.ZENTHZEICD zenthzeicd
+  , ptvf.ZENTHZEINM zenthzeinm
+  , ptvf.ZENTKREIRITSU_BUNSHI zentkreiritsuBunshi
+  , ptvf.ZENTKREIRITSU_BUNBO zentkreiritsuBunbo
+  , ptvf.ZENRIRONBOKA zenrironboka
+  , ptvf.ZENHYOKAGK zenhyokagk
+  , ptvf.YKSHINKKYY ykshinkkyy
+  , ptvf.YKSHINKKCHICD ykshinkkchicd
+  , ptvf.YKSHINKKCHINM ykshinkkchinm
+  , ptvf.YKSHINKKSHURUI ykshinkkshurui
+  , ptvf.YKSHINKKSTKGK ykshinkkstkgk
+  , ptvf.YKSHINKKTAINEN ykshinkktainen
+  , ptvf.YKSHINKK_ZKSKKRITSU ykshinkkZkskkritsu
+  , ptvf.YKTHZEICD ykthzeicd
+  , ptvf.YKTHZEINM ykthzeinm
+  , ptvf.YKTKREIRITSU_BUNSHI yktkreiritsuBunshi
+  , ptvf.YKTKREIRITSU_BUNBO yktkreiritsuBunbo
+  , ptvf.LASTSHINKKYY lastshinkkyy
+  , ptvf.TOGENSONKBNK togensonkbnk
+  , ptvf.KSGENSONRUIGKK ksgensonruigkk
+  , ptvf.TOGENSONGKK togensongkk
+  , ptvf.SKKCALCZANZONGKK skkcalczanzongkk
+  , ptvf.GENSONBOKAK gensonbokak
+  , ptvf.GENSONMAETAINENK gensonmaetainenk
+  , ptvf.GENSONMAESKKMMSUK gensonmaeskkmmsuk
+  , ptvf.GENSONYMDK gensonymdk
+  , ptvf.GENSHISTKGKK genshistkgkk
+  , ptvf.KAITEISTKGKK kaiteistkgkk
+  , ptvf.KAITEITAINENK kaiteitainenk
+  , ptvf.KAITEIYMDK kaiteiymdk
+  , ptvf.YUSENZOGENKBNK yusenzogenkbnk
+  , ptvf.TOGENSONKBNZ togensonkbnz
+  , ptvf.KSGENSONRUIGKZ ksgensonruigkz
+  , ptvf.TOGENSONGKZ togensongkz
+  , ptvf.SKKCALCZANZONGKZ skkcalczanzongkz
+  , ptvf.GENSONBOKAZ gensonbokaz
+  , ptvf.GENSONMAETAINENZ gensonmaetainenz
+  , ptvf.GENSONMAESKKMMSUZ gensonmaeskkmmsuz
+  , ptvf.GENSONYMDZ gensonymdz
+  , ptvf.GENSHISTKGKZ genshistkgkz
+  , ptvf.KAITEISTKGKZ kaiteistkgkz
+  , ptvf.KAITEITAINENZ kaiteitainenz
+  , ptvf.KAITEIYMDZ kaiteiymdz
+  , ptvf.YUSENZOGENKBNZ yusenzogenkbnz
+  , ptvf.TOGENSONKBN_L3 togensonkbnL3
+  , ptvf.KSGENSONRUIGK_L3 ksgensonruigkL3
+  , ptvf.TOGENSONGK_L3 togensongkL3
+  , ptvf.SKKCALCZANZONGK_L3 skkcalczanzongkL3
+  , ptvf.GENSONBOKA_L3 gensonbokaL3
+  , ptvf.GENSONMAETAINEN_L3 gensonmaetainenL3
+  , ptvf.GENSONMAESKKMMSU_L3 gensonmaeskkmmsuL3
+  , ptvf.GENSONYMD_L3 gensonymdL3
+  , ptvf.GENSHISTKGK_L3 genshistkgkL3
+  , ptvf.KAITEISTKGK_L3 kaiteistkgkL3
+  , ptvf.KAITEITAINEN_L3 kaiteitainenL3
+  , ptvf.KAITEIYMD_L3 kaiteiymdL3
+  , ptvf.YUSENZOGENKBN_L3 yusenzogenkbnL3
+  , ptvf.TOGENSONKBN_L4 togensonkbnL4
+  , ptvf.KSGENSONRUIGK_L4 ksgensonruigkL4
+  , ptvf.TOGENSONGK_L4 togensongkL4
+  , ptvf.SKKCALCZANZONGK_L4 skkcalczanzongkL4
+  , ptvf.GENSONBOKA_L4 gensonbokaL4
+  , ptvf.GENSONMAETAINEN_L4 gensonmaetainenL4
+  , ptvf.GENSONMAESKKMMSU_L4 gensonmaeskkmmsuL4
+  , ptvf.GENSONYMD_L4 gensonymdL4
+  , ptvf.GENSHISTKGK_L4 genshistkgkL4
+  , ptvf.KAITEISTKGK_L4 kaiteistkgkL4
+  , ptvf.KAITEITAINEN_L4 kaiteitainenL4
+  , ptvf.KAITEIYMD_L4 kaiteiymdL4
+  , ptvf.YUSENZOGENKBN_L4 yusenzogenkbnL4
+  , ptvf.TOGENSONKBN_L5 togensonkbnL5
+  , ptvf.KSGENSONRUIGK_L5 ksgensonruigkL5
+  , ptvf.TOGENSONGK_L5 togensongkL5
+  , ptvf.SKKCALCZANZONGK_L5 skkcalczanzongkL5
+  , ptvf.GENSONBOKA_L5 gensonbokaL5
+  , ptvf.GENSONMAETAINEN_L5 gensonmaetainenL5
+  , ptvf.GENSONMAESKKMMSU_L5 gensonmaeskkmmsuL5
+  , ptvf.GENSONYMD_L5 gensonymdL5
+  , ptvf.GENSHISTKGK_L5 genshistkgkL5
+  , ptvf.KAITEISTKGK_L5 kaiteistkgkL5
+  , ptvf.KAITEITAINEN_L5 kaiteitainenL5
+  , ptvf.KAITEIYMD_L5 kaiteiymdL5
+  , ptvf.YUSENZOGENKBN_L5 yusenzogenkbnL5
+  , ptvf.TOGENSONKBN_L6 togensonkbnL6
+  , ptvf.KSGENSONRUIGK_L6 ksgensonruigkL6
+  , ptvf.TOGENSONGK_L6 togensongkL6
+  , ptvf.SKKCALCZANZONGK_L6 skkcalczanzongkL6
+  , ptvf.GENSONBOKA_L6 gensonbokaL6
+  , ptvf.GENSONMAETAINEN_L6 gensonmaetainenL6
+  , ptvf.GENSONMAESKKMMSU_L6 gensonmaeskkmmsuL6
+  , ptvf.GENSONYMD_L6 gensonymdL6
+  , ptvf.GENSHISTKGK_L6 genshistkgkL6
+  , ptvf.KAITEISTKGK_L6 kaiteistkgkL6
+  , ptvf.KAITEITAINEN_L6 kaiteitainenL6
+  , ptvf.KAITEIYMD_L6 kaiteiymdL6
+  , ptvf.YUSENZOGENKBN_L6 yusenzogenkbnL6
+  , ptvf.UPDKAISU updkaisu
+  , ptvf.UPDKAISHACD updkaishacd
+  , ptvf.UPDID updid
+  , ptvf.UPDYMD updymd
+  , ptvf.UPDTIME updtime
+  , ptvf.ROUTE_TYPE routeType
+  , ptvf.ROUTE_TYPE_NAME routeTypeName
+  , ptvf.PUR_COMPANY_CODE purCompanyCode
+  , ptvf.PUR_COMPANY_NAME purCompanyName
+  , ptvf.ITEM_GROUP_CODE itemGroupCode
+  , ptvf.ITEM_GROUP_NAME itemGroupName
+  , ptvf.MANAGE_SECTION_CODE manageSectionCode
+  , ptvf.MANAGE_SECTION_NAME manageSectionName
+  , ptvf.AST_PRJ_CODE astPrjCode
+  , ptvf.AST_PRJ_NAME astPrjName
+  , ptvf.DEP_PRJ_CODE depPrjCode
+  , ptvf.DEP_PRJ_NAME depPrjName
+  , ptvf.COST_TYPE costType
+  , ptvf.COST_TYPE_NAME costTypeName
+  , ptvf.APPLICATION_ID applicationId
+  , ptvf.SLIP_NUM slipNum
+  , ptvf.INTEREST_FLAG interestFlag
+  , ptvf.INTEREST_FLAG_NAME interestFlagName
+  , ptvf.AP_STAFF apStaff
+  , ptvf.INVENTORY_FLAG inventoryFlag
+  , ptvf.INVENTORY_FLAG_NAME inventoryFlagName
+  , ptvf.DISPOSE_PLAN_CODE disposePlanCode
+  , ptvf.DISPOSE_PLAN_NAME disposePlanName
+  , ptvf.TAX_ADJUST_CODE taxAdjustCode
+  , ptvf.TAX_ADJUST_NAME taxAdjustName
+  , ptvf.CONTRACT_BRANCH_NUM contractBranchNum
+  , ptvf.CHARGE_TYPE chargeType
+  , ptvf.CHARGE_TYPE_NAME chargeTypeName
+  , ptvf.DISPOSE_REASON_CODE disposeReasonCode
+  , ptvf.DISPOSE_REASON_NAME disposeReasonName
+  , ptvf.DISPOSE_SECTION_CODE disposeSectionCode
+  , ptvf.DISPOSE_SECTION_NAME disposeSectionName
+  , ptvf.CALC_TYPE calcType
+  , ptvf.CALC_TYPE_NAME calcTypeName
+  , ptvf.UPPER_SECTION_CODE upperSectionCode
+  , ptvf.UPPER_SECTION_NAME upperSectionName
+  , ptvf.ADD_UP_PLAN_DATE addUpPlanDate
+  , ptvf.ADD_UP_PLAN_DATE_NAME addUpPlanDateName
+  , ptvf.PA_TEMPLATE_CODE paTemplateCode
+  , ptvf.PA_TEMPLATE_NAME paTemplateName
+  , ptvf.UPPER_ACCOUNT_CODE upperAccountCode
+  , ptvf.UPPER_ACCOUNT_NAME upperAccountName
+  , ptvf.JGZZ_RECON_REF jgzzReconRef
+  , ptvf.EXPENSE_TYPE expenseType
+  , ptvf.EXPENSE_NAME expenseName
+  , ptvf.OYA || ptvf.EDA shisanNum
+  , NEA_UTIL_PKG.get_cn_value1_f('PPFS_FLD_SHISANKNRKBN', ptvf.SHISANKNRKBN) shisanknrkbnName
+  , NEA_UTIL_PKG.get_cn_value1_f('PPFS_FLD_SHISANJOTAIKBN', ptvf.SHISANJOTAIKBN) shisanjotaikbnName
+  , NEA_UTIL_PKG.get_cn_value1_f('PPFS_FLD_GENSONKBN', ptvf.TOGENSONKBNK) togensonkbnkName
+  , NEA_UTIL_PKG.format_date_char_f(ptvf.CPKEIJOYMD) cpkeijoymdF
+  , NEA_UTIL_PKG.format_date_char_f(ptvf.FURIKAEYMD) furikaeymdF
+  , NEA_UTIL_PKG.format_date_char_f(ptvf.STKYMD) stkymdF
+  , NEA_UTIL_PKG.format_date_char_f(ptvf.KADOYMD) kadoymdF
+  , NEA_UTIL_PKG.format_date_char_f(ptvf.JBKYMD) jbkymdF
+  , NEA_UTIL_PKG.format_date_char_f(ptvf.IDOYMD) idoymdF
+  , NEA_UTIL_PKG.format_date_char_f(ptvf.GENSHISTKYMD) genshistkymdF
+  , NEA_UTIL_PKG.format_date_char_f(ptvf.GENSONYMDK) gensonymdkF
+  , NEA_UTIL_PKG.format_date_char_f(ptvf.KAITEIYMDK) kaiteiymdkF
+  , NEA_UTIL_PKG.format_date_char_f(ptvf.GENSONYMDZ) gensonymdzF
+  , NEA_UTIL_PKG.format_date_char_f(ptvf.KAITEIYMDZ) kaiteiymdzF
+  , NEA_UTIL_PKG.format_date_char_f(ptvf.GENSONYMD_L3) gensonymdL3F
+  , NEA_UTIL_PKG.format_date_char_f(ptvf.KAITEIYMD_L3) kaiteiymdL3F
+  , NEA_UTIL_PKG.format_date_char_f(ptvf.GENSONYMD_L4) gensonymdL4F
+  , NEA_UTIL_PKG.format_date_char_f(ptvf.KAITEIYMD_L4) kaiteiymdL4F
+  , NEA_UTIL_PKG.format_date_char_f(ptvf.GENSONYMD_L5) gensonymdL5F
+  , NEA_UTIL_PKG.format_date_char_f(ptvf.KAITEIYMD_L5) kaiteiymdL5F
+  , NEA_UTIL_PKG.format_date_char_f(ptvf.GENSONYMD_L6) gensonymdL6F
+  , NEA_UTIL_PKG.format_date_char_f(ptvf.KAITEIYMD_L6) kaiteiymdL6F
+  , NEA_UTIL_PKG.format_date_char_f(ptvf.UPDYMD) updymdF
+  , NEA_UTIL_PKG.format_date_char_f(ptvf.ADD_UP_PLAN_DATE) addUpPlanDateF
+  , NEA_UTIL_PKG.format_date_char_f(ptvf.YUKYUSTYMK) yukyustymkF
+  , NEA_UTIL_PKG.format_date_char_f(ptvf.YUKYUSTYMZ) yukyustymzF
+  , NEA_UTIL_PKG.format_date_char_f(ptvf.YUKYUSTYM_L3) yukyustymL3F
+  , NEA_UTIL_PKG.format_date_char_f(ptvf.YUKYUSTYM_L4) yukyustymL4F
+  , NEA_UTIL_PKG.format_date_char_f(ptvf.YUKYUSTYM_L5) yukyustymL5F
+  , NEA_UTIL_PKG.format_date_char_f(ptvf.YUKYUSTYM_L6) yukyustymL6F
+  , NEA_UTIL_PKG.format_date_char_f(ptvf.YUKYUFKYMK) yukyufkymkF
+  , NEA_UTIL_PKG.format_date_char_f(ptvf.YUKYUFKYMZ) yukyufkymzF
+  , NEA_UTIL_PKG.format_date_char_f(ptvf.YUKYUFKYM_L3) yukyufkymL3F
+  , NEA_UTIL_PKG.format_date_char_f(ptvf.YUKYUFKYM_L4) yukyufkymL4F
+  , NEA_UTIL_PKG.format_date_char_f(ptvf.YUKYUFKYM_L5) yukyufkymL5F
+  , NEA_UTIL_PKG.format_date_char_f(ptvf.YUKYUFKYM_L6) yukyufkymL6F
+
+  , NEA_UTIL_PKG.get_cn_value1_f('PPFS_FLD_CHUKOKBN', ptvf.CHUKOKBN) chukokbnName
+  , NEA_UTIL_PKG.get_cn_value1_f('PPFS_FLD_SKKSHISANKBN', ptvf.SKKSHISANKBN) skkshisankbnName
+  , NEA_UTIL_PKG.get_cn_value1_f('PPFS_FLD_ASKKBN', ptvf.ASKKBN) askkbnName
+  , NEA_UTIL_PKG.get_cn_value1_f('PPFS_FLD_TKKBN', ptvf.TKKBN) tkkbnName
+  , NEA_UTIL_PKG.get_cn_value1_f('PPFS_FLD_SHUYOSHISANKBN', ptvf.SHUYOSHISANKBN) shuyoshisankbnName
+  , NEA_UTIL_PKG.get_cn_value1_f('PPFS_FLD_GAPPEIUKEKBN', ptvf.GAPPEIUKEKBN) gappeiukekbnName
+  , NEA_UTIL_PKG.get_cn_value1_f('PPFS_FLD_JKSAIMUKEIJOKBN', ptvf.JKSAIMUKEIJOKBN) jksaimukeijokbnName
+  , NEA_UTIL_PKG.get_cn_value1_f('PPFS_FLD_SKKHO', ptvf.SKKHOK)  skkhokName
+  , NEA_UTIL_PKG.get_cn_value1_f('PPFS_FLD_SKKHO', ptvf.SKKHOZ)  skkhozName
+  , NEA_UTIL_PKG.get_cn_value1_f('PPFS_FLD_SKKHO', ptvf.SKKHO_L3) skkhoL3Name
+  , NEA_UTIL_PKG.get_cn_value1_f('PPFS_FLD_SKKHO', ptvf.SKKHO_L4) skkhoL4Name
+  , NEA_UTIL_PKG.get_cn_value1_f('PPFS_FLD_SKKHO', ptvf.SKKHO_L5) skkhoL5Name
+  , NEA_UTIL_PKG.get_cn_value1_f('PPFS_FLD_SKKHO', ptvf.SKKHO_L6) skkhoL6Name
+  , NEA_UTIL_PKG.get_cn_value1_f('PPFS_FLD_SHONENCALCKBN', ptvf.SHONENCALCKBNK)  shonencalckbnkName
+  , NEA_UTIL_PKG.get_cn_value1_f('PPFS_FLD_SHONENCALCKBN', ptvf.SHONENCALCKBNZ)  shonencalckbnzName
+  , NEA_UTIL_PKG.get_cn_value1_f('PPFS_FLD_SHONENCALCKBN', ptvf.SHONENCALCKBN_L3) shonencalckbnL3Name
+  , NEA_UTIL_PKG.get_cn_value1_f('PPFS_FLD_SHONENCALCKBN', ptvf.SHONENCALCKBN_L4) shonencalckbnL4Name
+  , NEA_UTIL_PKG.get_cn_value1_f('PPFS_FLD_SHONENCALCKBN', ptvf.SHONENCALCKBN_L5) shonencalckbnL5Name
+  , NEA_UTIL_PKG.get_cn_value1_f('PPFS_FLD_SHONENCALCKBN', ptvf.SHONENCALCKBN_L6) shonencalckbnL6Name
+  , NEA_UTIL_PKG.get_cn_value1_f('PPFS_FLD_SKKKANRYOFLG', ptvf.SKKKANRYOFLGK)  skkkanryoflgkName
+  , NEA_UTIL_PKG.get_cn_value1_f('PPFS_FLD_SKKKANRYOFLG', ptvf.SKKKANRYOFLGZ)  skkkanryoflgzName
+  , NEA_UTIL_PKG.get_cn_value1_f('PPFS_FLD_SKKKANRYOFLG', ptvf.SKKKANRYOFLG_L3) skkkanryoflgL3Name
+  , NEA_UTIL_PKG.get_cn_value1_f('PPFS_FLD_SKKKANRYOFLG', ptvf.SKKKANRYOFLG_L4) skkkanryoflgL4Name
+  , NEA_UTIL_PKG.get_cn_value1_f('PPFS_FLD_SKKKANRYOFLG', ptvf.SKKKANRYOFLG_L5) skkkanryoflgL5Name
+  , NEA_UTIL_PKG.get_cn_value1_f('PPFS_FLD_SKKKANRYOFLG', ptvf.SKKKANRYOFLG_L6) skkkanryoflgL6Name
+
+  <!-- 資産除去債務項目 -->
+  , ptvr.SAIMUHFCD saimuhfcdR
+  , ptvr.SAIMUHFNM saimuhfnmR
+  , NEA_UTIL_PKG.format_date_char_f(ptvr.SAIMUKEIJOYMD) saimukeijoymdRF
+  , NEA_UTIL_PKG.format_date_char_f(ptvr.SAIMURIKOYMD) saimurikoymdRF
+
+  , ptvr.MITSUMORIGK_WARIBIKIMAEK mitsumorigkWaribikimaekR
+  , ptvr.WARIBIKIRITSUK waribikiritsukR
+  , ptvr.KEIJOGK_WARIBIKIGOK keijogkWaribikigokR
+  , ptvr.KSSAIMUBOKAK kssaimubokakR
+  , ptvr.RISOKUCALCKISOGKK risokucalckisogkkR
+  , ptvr.TO_SAIMUBOKAK toSaimubokakR
+  , ptvr.TO_SAIMUZOGENBOKAK toSaimuzogenbokakR
+  , ptvr.TO_TORISOKUGKK toTorisokugkkR
+  , ptvr.KSRISOKURUIGKK ksrisokuruigkkR
+
+  , ptvr.MITSUMORIGK_WARIBIKIMAEZ mitsumorigkWaribikimaezR
+  , ptvr.WARIBIKIRITSUZ waribikiritsuzR
+  , ptvr.KEIJOGK_WARIBIKIGOZ keijogkWaribikigozR
+  , ptvr.KSSAIMUBOKAZ kssaimubokazR
+  , ptvr.RISOKUCALCKISOGKZ risokucalckisogkzR
+  , ptvr.TO_SAIMUBOKAZ toSaimubokazR
+  , ptvr.TO_SAIMUZOGENBOKAZ toSaimuzogenbokazR
+  , ptvr.TO_TORISOKUGKZ toTorisokugkzR
+  , ptvr.KSRISOKURUIGKZ ksrisokuruigkzR
+
+  , ptvr.MITSUMORIGK_WARIBIKIMAE_L3 mitsumorigkWaribikimaeL3R
+  , ptvr.WARIBIKIRITSU_L3 waribikiritsuL3R
+  , ptvr.KEIJOGK_WARIBIKIGO_L3 keijogkWaribikigoL3R
+  , ptvr.KSSAIMUBOKA_L3 kssaimubokaL3R
+  , ptvr.RISOKUCALCKISOGK_L3 risokucalckisogkL3R
+  , ptvr.TO_SAIMUBOKA_L3 toSaimubokaL3R
+  , ptvr.TO_SAIMUZOGENBOKA_L3 toSaimuzogenbokaL3R
+  , ptvr.TO_TORISOKUGK_L3 toTorisokugkL3R
+  , ptvr.KSRISOKURUIGK_L3 ksrisokuruigkL3R
+
+  , ptvr.MITSUMORIGK_WARIBIKIMAE_L4 mitsumorigkWaribikimaeL4R
+  , ptvr.WARIBIKIRITSU_L4 waribikiritsuL4R
+  , ptvr.KEIJOGK_WARIBIKIGO_L4 keijogkWaribikigoL4R
+  , ptvr.KSSAIMUBOKA_L4 kssaimubokaL4R
+  , ptvr.RISOKUCALCKISOGK_L4 risokucalckisogkL4R
+  , ptvr.TO_SAIMUBOKA_L4 toSaimubokaL4R
+  , ptvr.TO_SAIMUZOGENBOKA_L4 toSaimuzogenbokaL4R
+  , ptvr.TO_TORISOKUGK_L4 toTorisokugkL4R
+  , ptvr.KSRISOKURUIGK_L4 ksrisokuruigkL4R
+
+  , ptvr.MITSUMORIGK_WARIBIKIMAE_L5 mitsumorigkWaribikimaeL5R
+  , ptvr.WARIBIKIRITSU_L5 waribikiritsuL5R
+  , ptvr.KEIJOGK_WARIBIKIGO_L5 keijogkWaribikigoL5R
+  , ptvr.KSSAIMUBOKA_L5 kssaimubokaL5R
+  , ptvr.RISOKUCALCKISOGK_L5 risokucalckisogkL5R
+  , ptvr.TO_SAIMUBOKA_L5 toSaimubokaL5R
+  , ptvr.TO_SAIMUZOGENBOKA_L5 toSaimuzogenbokaL5R
+  , ptvr.TO_TORISOKUGK_L5 toTorisokugkL5R
+  , ptvr.KSRISOKURUIGK_L5 ksrisokuruigkL5R
+
+  , ptvr.MITSUMORIGK_WARIBIKIMAE_L6 mitsumorigkWaribikimaeL6R
+  , ptvr.WARIBIKIRITSU_L6 waribikiritsuL6R
+  , ptvr.KEIJOGK_WARIBIKIGO_L6 keijogkWaribikigoL6R
+  , ptvr.KSSAIMUBOKA_L6 kssaimubokaL6R
+  , ptvr.RISOKUCALCKISOGK_L6 risokucalckisogkL6R
+  , ptvr.TO_SAIMUBOKA_L6 toSaimubokaL6R
+  , ptvr.TO_SAIMUZOGENBOKA_L6 toSaimuzogenbokaL6R
+  , ptvr.TO_TORISOKUGK_L6 toTorisokugkL6R
+  , ptvr.KSRISOKURUIGK_L6 ksrisokuruigkL6R
+
+  <!-- 除去債務不要項目
+  , ptvr.KOYUNO koyunoR
+  , ptvr.KAISHACD kaishacdR
+  , ptvr.KAISHANM kaishanmR
+  , ptvr.OYA oyaR
+  , ptvr.EDA edaR
+  , ptvr.SHISANKNRKBN shisanknrkbnR
+  , ptvr.SHISANJOTAIKBN shisanjotaikbnR
+  , ptvr.SHISANNMCD shisannmcdR
+  , ptvr.SHISANNM shisannmR
+  , ptvr.SHISANNMK shisannmkR
+  , ptvr.SOSHIKI1CD soshiki1cdR
+  , ptvr.SOSHIKI1NM soshiki1nmR
+  , ptvr.SOSHIKI2CD soshiki2cdR
+  , ptvr.SOSHIKI2NM soshiki2nmR
+  , ptvr.SOSHIKI3CD soshiki3cdR
+  , ptvr.SOSHIKI3NM soshiki3nmR
+  , ptvr.SOSHIKI4CD soshiki4cdR
+  , ptvr.SOSHIKI4NM soshiki4nmR
+  , ptvr.SETCHICD setchicdR
+  , ptvr.SETCHINM setchinmR
+  , ptvr.SKKHIHFCD skkhihfcdR
+  , ptvr.HFNM hfnmR
+  , ptvr.SHURUICD shuruicdR
+  , ptvr.SHURUINM shuruinmR
+  , ptvr.KOZOCD kozocdR
+  , ptvr.KOZONM kozonmR
+  , ptvr.BUNRUICD bunruicdR
+  , ptvr.BUNRUINM bunruinmR
+  , ptvr.SAIMUKEIJOYMD saimukeijoymdR
+  , ptvr.SAIMURIKOYMD saimurikoymdR
+  , ptvr.KADOYMD kadoymdR
+  , ptvr.JBKYMD jbkymdR
+  , ptvr.IDOYMD idoymdR
+  , ptvr.SURYO suryoR
+  , ptvr.SURYO_TANI suryoTaniR
+  , ptvr.MENSEKI mensekiR
+  , ptvr.MENSEKI_TANI mensekiTaniR
+  , ptvr.TOSAIMUKEIJOKBN tosaimukeijokbnR
+  , ptvr.JKSAIMUKEIJOKBN jksaimukeijokbnR
+  , ptvr.MITSUMORIHKYMDK mitsumorihkymdkR
+  , ptvr.FAMITSUMORIHKYMDK famitsumorihkymdkR
+  , ptvr.MITSUMORIHKGOBOKAK mitsumorihkgobokakR
+  , ptvr.MITSUMORIHKMAETAINENK mitsumorihkmaetainenkR
+  , ptvr.MITSUMORIHKMAESKKMMSUK mitsumorihkmaeskkmmsukR
+  , ptvr.MITSUMORIHKMAESKKRITSUK mitsumorihkmaeskkritsukR
+  , ptvr.TOMITSUMORIHKCHOSEIGKK tomitsumorihkchoseigkkR
+  , ptvr.STKGKK stkgkkR
+  , ptvr.SKKHOK skkhokR
+  , ptvr.TAINENK tainenkR
+  , ptvr.SKKRITSUK skkritsukR
+  , ptvr.SKKMMSUK skkmmsukR
+  , ptvr.ZANZONMMSUK zanzonmmsukR
+  , ptvr.KSBOKAK ksbokakR
+  , ptvr.SKKCALCKISOGKK skkcalckisogkkR
+  , ptvr.ZANZONRITSUK zanzonritsukR
+  , ptvr.ZANZONGKK zanzongkkR
+  , ptvr.KSFTSKKRUIGKK ksftskkruigkkR
+  , ptvr.KSZKSKKRUIGKK kszkskkruigkkR
+  , ptvr.TO_TOFTSKKGKK toToftskkgkkR
+  , ptvr.TO_TOZKSKKGKK toTozkskkgkkR
+  , ptvr.TO_TONINISKKGKK toToniniskkgkkR
+  , ptvr.TO_BOKAK toBokakR
+  , ptvr.ZOGENBOKAK zogenbokakR
+  , ptvr.ZKSKKRITSUK zkskkritsukR
+  , ptvr.YUKYUSTYMK yukyustymkR
+  , ptvr.YUKYUFKYMK yukyufkymkR
+  , ptvr.SHONENCALCKBNK shonencalckbnkR
+  , ptvr.SKKKANRYOFLGK skkkanryoflgkR
+  , ptvr.SKKKIRIKAEYYK skkkirikaeyykR
+  , ptvr.ZANZONSKKSTYYK zanzonskkstyykR
+  , ptvr.MITSUMORIHKYMDZ mitsumorihkymdzR
+  , ptvr.FAMITSUMORIHKYMDZ famitsumorihkymdzR
+  , ptvr.MITSUMORIHKGOBOKAZ mitsumorihkgobokazR
+  , ptvr.MITSUMORIHKMAETAINENZ mitsumorihkmaetainenzR
+  , ptvr.MITSUMORIHKMAESKKMMSUZ mitsumorihkmaeskkmmsuzR
+  , ptvr.MITSUMORIHKMAESKKRITSUZ mitsumorihkmaeskkritsuzR
+  , ptvr.TOMITSUMORIHKCHOSEIGKZ tomitsumorihkchoseigkzR
+  , ptvr.STKGKZ stkgkzR
+  , ptvr.SKKHOZ skkhozR
+  , ptvr.TAINENZ tainenzR
+  , ptvr.SKKRITSUZ skkritsuzR
+  , ptvr.SKKMMSUZ skkmmsuzR
+  , ptvr.ZANZONMMSUZ zanzonmmsuzR
+  , ptvr.KSBOKAZ ksbokazR
+  , ptvr.SKKCALCKISOGKZ skkcalckisogkzR
+  , ptvr.ZANZONRITSUZ zanzonritsuzR
+  , ptvr.ZANZONGKZ zanzongkzR
+  , ptvr.KSFTSKKRUIGKZ ksftskkruigkzR
+  , ptvr.KSZKSKKRUIGKZ kszkskkruigkzR
+  , ptvr.TO_TOFTSKKGKZ toToftskkgkzR
+  , ptvr.TO_TOZKSKKGKZ toTozkskkgkzR
+  , ptvr.TO_TONINISKKGKZ toToniniskkgkzR
+  , ptvr.TO_BOKAZ toBokazR
+  , ptvr.ZOGENBOKAZ zogenbokazR
+  , ptvr.ZKSKKRITSUZ zkskkritsuzR
+  , ptvr.YUKYUSTYMZ yukyustymzR
+  , ptvr.YUKYUFKYMZ yukyufkymzR
+  , ptvr.SHONENCALCKBNZ shonencalckbnzR
+  , ptvr.SKKKANRYOFLGZ skkkanryoflgzR
+  , ptvr.SKKKIRIKAEYYZ skkkirikaeyyzR
+  , ptvr.ZANZONSKKSTYYZ zanzonskkstyyzR
+  , ptvr.MITSUMORIHKYMD_L3 mitsumorihkymdL3R
+  , ptvr.FAMITSUMORIHKYMD_L3 famitsumorihkymdL3R
+  , ptvr.MITSUMORIHKGOBOKA_L3 mitsumorihkgobokaL3R
+  , ptvr.MITSUMORIHKMAETAINEN_L3 mitsumorihkmaetainenL3R
+  , ptvr.MITSUMORIHKMAESKKMMSU_L3 mitsumorihkmaeskkmmsuL3R
+  , ptvr.MITSUMORIHKMAESKKRITSU_L3 mitsumorihkmaeskkritsuL3R
+  , ptvr.TOMITSUMORIHKCHOSEIGK_L3 tomitsumorihkchoseigkL3R
+  , ptvr.STKGK_L3 stkgkL3R
+  , ptvr.SKKHO_L3 skkhoL3R
+  , ptvr.TAINEN_L3 tainenL3R
+  , ptvr.SKKRITSU_L3 skkritsuL3R
+  , ptvr.SKKMMSU_L3 skkmmsuL3R
+  , ptvr.ZANZONMMSU_L3 zanzonmmsuL3R
+  , ptvr.KSBOKA_L3 ksbokaL3R
+  , ptvr.SKKCALCKISOGK_L3 skkcalckisogkL3R
+  , ptvr.ZANZONRITSU_L3 zanzonritsuL3R
+  , ptvr.ZANZONGK_L3 zanzongkL3R
+  , ptvr.KSFTSKKRUIGK_L3 ksftskkruigkL3R
+  , ptvr.KSZKSKKRUIGK_L3 kszkskkruigkL3R
+  , ptvr.TO_TOFTSKKGK_L3 toToftskkgkL3R
+  , ptvr.TO_TOZKSKKGK_L3 toTozkskkgkL3R
+  , ptvr.TO_TONINISKKGK_L3 toToniniskkgkL3R
+  , ptvr.TO_BOKA_L3 toBokaL3R
+  , ptvr.ZOGENBOKA_L3 zogenbokaL3R
+  , ptvr.ZKSKKRITSU_L3 zkskkritsuL3R
+  , ptvr.YUKYUSTYM_L3 yukyustymL3R
+  , ptvr.YUKYUFKYM_L3 yukyufkymL3R
+  , ptvr.SHONENCALCKBN_L3 shonencalckbnL3R
+  , ptvr.SKKKANRYOFLG_L3 skkkanryoflgL3R
+  , ptvr.SKKKIRIKAEYY_L3 skkkirikaeyyL3R
+  , ptvr.ZANZONSKKSTYY_L3 zanzonskkstyyL3R
+  , ptvr.MITSUMORIHKYMD_L4 mitsumorihkymdL4R
+  , ptvr.FAMITSUMORIHKYMD_L4 famitsumorihkymdL4R
+  , ptvr.MITSUMORIHKGOBOKA_L4 mitsumorihkgobokaL4R
+  , ptvr.MITSUMORIHKMAETAINEN_L4 mitsumorihkmaetainenL4R
+  , ptvr.MITSUMORIHKMAESKKMMSU_L4 mitsumorihkmaeskkmmsuL4R
+  , ptvr.MITSUMORIHKMAESKKRITSU_L4 mitsumorihkmaeskkritsuL4R
+  , ptvr.TOMITSUMORIHKCHOSEIGK_L4 tomitsumorihkchoseigkL4R
+  , ptvr.STKGK_L4 stkgkL4R
+  , ptvr.SKKHO_L4 skkhoL4R
+  , ptvr.TAINEN_L4 tainenL4R
+  , ptvr.SKKRITSU_L4 skkritsuL4R
+  , ptvr.SKKMMSU_L4 skkmmsuL4R
+  , ptvr.ZANZONMMSU_L4 zanzonmmsuL4R
+  , ptvr.KSBOKA_L4 ksbokaL4R
+  , ptvr.SKKCALCKISOGK_L4 skkcalckisogkL4R
+  , ptvr.ZANZONRITSU_L4 zanzonritsuL4R
+  , ptvr.ZANZONGK_L4 zanzongkL4R
+  , ptvr.KSFTSKKRUIGK_L4 ksftskkruigkL4R
+  , ptvr.KSZKSKKRUIGK_L4 kszkskkruigkL4R
+  , ptvr.TO_TOFTSKKGK_L4 toToftskkgkL4R
+  , ptvr.TO_TOZKSKKGK_L4 toTozkskkgkL4R
+  , ptvr.TO_TONINISKKGK_L4 toToniniskkgkL4R
+  , ptvr.TO_BOKA_L4 toBokaL4R
+  , ptvr.ZOGENBOKA_L4 zogenbokaL4R
+  , ptvr.ZKSKKRITSU_L4 zkskkritsuL4R
+  , ptvr.YUKYUSTYM_L4 yukyustymL4R
+  , ptvr.YUKYUFKYM_L4 yukyufkymL4R
+  , ptvr.SHONENCALCKBN_L4 shonencalckbnL4R
+  , ptvr.SKKKANRYOFLG_L4 skkkanryoflgL4R
+  , ptvr.SKKKIRIKAEYY_L4 skkkirikaeyyL4R
+  , ptvr.ZANZONSKKSTYY_L4 zanzonskkstyyL4R
+  , ptvr.MITSUMORIHKYMD_L5 mitsumorihkymdL5R
+  , ptvr.FAMITSUMORIHKYMD_L5 famitsumorihkymdL5R
+  , ptvr.MITSUMORIHKGOBOKA_L5 mitsumorihkgobokaL5R
+  , ptvr.MITSUMORIHKMAETAINEN_L5 mitsumorihkmaetainenL5R
+  , ptvr.MITSUMORIHKMAESKKMMSU_L5 mitsumorihkmaeskkmmsuL5R
+  , ptvr.MITSUMORIHKMAESKKRITSU_L5 mitsumorihkmaeskkritsuL5R
+  , ptvr.TOMITSUMORIHKCHOSEIGK_L5 tomitsumorihkchoseigkL5R
+  , ptvr.STKGK_L5 stkgkL5R
+  , ptvr.SKKHO_L5 skkhoL5R
+  , ptvr.TAINEN_L5 tainenL5R
+  , ptvr.SKKRITSU_L5 skkritsuL5R
+  , ptvr.SKKMMSU_L5 skkmmsuL5R
+  , ptvr.ZANZONMMSU_L5 zanzonmmsuL5R
+  , ptvr.KSBOKA_L5 ksbokaL5R
+  , ptvr.SKKCALCKISOGK_L5 skkcalckisogkL5R
+  , ptvr.ZANZONRITSU_L5 zanzonritsuL5R
+  , ptvr.ZANZONGK_L5 zanzongkL5R
+  , ptvr.KSFTSKKRUIGK_L5 ksftskkruigkL5R
+  , ptvr.KSZKSKKRUIGK_L5 kszkskkruigkL5R
+  , ptvr.TO_TOFTSKKGK_L5 toToftskkgkL5R
+  , ptvr.TO_TOZKSKKGK_L5 toTozkskkgkL5R
+  , ptvr.TO_TONINISKKGK_L5 toToniniskkgkL5R
+  , ptvr.TO_BOKA_L5 toBokaL5R
+  , ptvr.ZOGENBOKA_L5 zogenbokaL5R
+  , ptvr.ZKSKKRITSU_L5 zkskkritsuL5R
+  , ptvr.YUKYUSTYM_L5 yukyustymL5R
+  , ptvr.YUKYUFKYM_L5 yukyufkymL5R
+  , ptvr.SHONENCALCKBN_L5 shonencalckbnL5R
+  , ptvr.SKKKANRYOFLG_L5 skkkanryoflgL5R
+  , ptvr.SKKKIRIKAEYY_L5 skkkirikaeyyL5R
+  , ptvr.ZANZONSKKSTYY_L5 zanzonskkstyyL5R
+  , ptvr.MITSUMORIHKYMD_L6 mitsumorihkymdL6R
+  , ptvr.FAMITSUMORIHKYMD_L6 famitsumorihkymdL6R
+  , ptvr.MITSUMORIHKGOBOKA_L6 mitsumorihkgobokaL6R
+  , ptvr.MITSUMORIHKMAETAINEN_L6 mitsumorihkmaetainenL6R
+  , ptvr.MITSUMORIHKMAESKKMMSU_L6 mitsumorihkmaeskkmmsuL6R
+  , ptvr.MITSUMORIHKMAESKKRITSU_L6 mitsumorihkmaeskkritsuL6R
+  , ptvr.TOMITSUMORIHKCHOSEIGK_L6 tomitsumorihkchoseigkL6R
+  , ptvr.STKGK_L6 stkgkL6R
+  , ptvr.SKKHO_L6 skkhoL6R
+  , ptvr.TAINEN_L6 tainenL6R
+  , ptvr.SKKRITSU_L6 skkritsuL6R
+  , ptvr.SKKMMSU_L6 skkmmsuL6R
+  , ptvr.ZANZONMMSU_L6 zanzonmmsuL6R
+  , ptvr.KSBOKA_L6 ksbokaL6R
+  , ptvr.SKKCALCKISOGK_L6 skkcalckisogkL6R
+  , ptvr.ZANZONRITSU_L6 zanzonritsuL6R
+  , ptvr.ZANZONGK_L6 zanzongkL6R
+  , ptvr.KSFTSKKRUIGK_L6 ksftskkruigkL6R
+  , ptvr.KSZKSKKRUIGK_L6 kszkskkruigkL6R
+  , ptvr.TO_TOFTSKKGK_L6 toToftskkgkL6R
+  , ptvr.TO_TOZKSKKGK_L6 toTozkskkgkL6R
+  , ptvr.TO_TONINISKKGK_L6 toToniniskkgkL6R
+  , ptvr.TO_BOKA_L6 toBokaL6R
+  , ptvr.ZOGENBOKA_L6 zogenbokaL6R
+  , ptvr.ZKSKKRITSU_L6 zkskkritsuL6R
+  , ptvr.YUKYUSTYM_L6 yukyustymL6R
+  , ptvr.YUKYUFKYM_L6 yukyufkymL6R
+  , ptvr.SHONENCALCKBN_L6 shonencalckbnL6R
+  , ptvr.SKKKANRYOFLG_L6 skkkanryoflgL6R
+  , ptvr.SKKKIRIKAEYY_L6 skkkirikaeyyL6R
+  , ptvr.ZANZONSKKSTYY_L6 zanzonskkstyyL6R
+  , ptvr.KONYUCD konyucdR
+  , ptvr.KONYUNM konyunmR
+  , ptvr.KASHICD kashicdR
+  , ptvr.KASHINM kashinmR
+  , ptvr.KNRBUNRUICD knrbunruicdR
+  , ptvr.BIKO1 biko1R
+  , ptvr.BIKO2 biko2R
+  , ptvr.STKRINGINO stkringinoR
+  , ptvr.STKTEKIYO stktekiyoR
+  , ptvr.GROUPCD groupcdR
+  , ptvr.GROUPNM groupnmR
+  , ptvr.SHINARIOCD shinariocdR
+  , ptvr.SHINARIONM shinarionmR
+  , ptvr.SHUYOSHISANKBN shuyoshisankbnR
+  , ptvr.NINI_LD_1CD niniLd_1cdR
+  , ptvr.NINI_LD_1NM niniLd_1nmR
+  , ptvr.NINI_LD_2CD niniLd_2cdR
+  , ptvr.NINI_LD_2NM niniLd_2nmR
+  , ptvr.NINI_LD_3CD niniLd_3cdR
+  , ptvr.NINI_LD_3NM niniLd_3nmR
+  , ptvr.NINI_LD_4CD niniLd_4cdR
+  , ptvr.NINI_LD_4NM niniLd_4nmR
+  , ptvr.NINI_LD_5CD niniLd_5cdR
+  , ptvr.NINI_LD_5NM niniLd_5nmR
+  , ptvr.NINI_LD_6CD niniLd_6cdR
+  , ptvr.NINI_LD_6NM niniLd_6nmR
+  , ptvr.NINI_LD_7CD niniLd_7cdR
+  , ptvr.NINI_LD_7NM niniLd_7nmR
+  , ptvr.NINI_LD_8CD niniLd_8cdR
+  , ptvr.NINI_LD_8NM niniLd_8nmR
+  , ptvr.NINI_LD_9CD niniLd_9cdR
+  , ptvr.NINI_LD_9NM niniLd_9nmR
+  , ptvr.NINI_LD_10CD niniLd_10cdR
+  , ptvr.NINI_LD_10NM niniLd_10nmR
+  , ptvr.NINI_LD_11CD niniLd_11cdR
+  , ptvr.NINI_LD_11NM niniLd_11nmR
+  , ptvr.NINI_LD_12CD niniLd_12cdR
+  , ptvr.NINI_LD_12NM niniLd_12nmR
+  , ptvr.NINI_LD_13CD niniLd_13cdR
+  , ptvr.NINI_LD_13NM niniLd_13nmR
+  , ptvr.NINI_LD_14CD niniLd_14cdR
+  , ptvr.NINI_LD_14NM niniLd_14nmR
+  , ptvr.NINI_LD_15CD niniLd_15cdR
+  , ptvr.NINI_LD_15NM niniLd_15nmR
+  , ptvr.NINI_LD_16CD niniLd_16cdR
+  , ptvr.NINI_LD_16NM niniLd_16nmR
+  , ptvr.NINI_LD_17CD niniLd_17cdR
+  , ptvr.NINI_LD_17NM niniLd_17nmR
+  , ptvr.NINI_LD_18CD niniLd_18cdR
+  , ptvr.NINI_LD_18NM niniLd_18nmR
+  , ptvr.NINI_LD_19CD niniLd_19cdR
+  , ptvr.NINI_LD_19NM niniLd_19nmR
+  , ptvr.NINI_LD_20CD niniLd_20cdR
+  , ptvr.NINI_LD_20NM niniLd_20nmR
+  , ptvr.TOSHINKKYY toshinkkyyR
+  , ptvr.KSGENSONRUIGKK ksgensonruigkkR
+  , ptvr.TOGENSONGKK togensongkkR
+  , ptvr.SKKCALCZANZONGKK skkcalczanzongkkR
+  , ptvr.GENSONBOKAK gensonbokakR
+  , ptvr.GENSONMAETAINENK gensonmaetainenkR
+  , ptvr.GENSONMAESKKMMSUK gensonmaeskkmmsukR
+  , ptvr.GENSONYMDK gensonymdkR
+  , ptvr.GENSHISTKGKK genshistkgkkR
+  , ptvr.KAITEISTKGKK kaiteistkgkkR
+  , ptvr.KAITEITAINENK kaiteitainenkR
+  , ptvr.KAITEIYMDK kaiteiymdkR
+  , ptvr.YUSENZOGENKBNK yusenzogenkbnkR
+  , ptvr.KSGENSONRUIGKZ ksgensonruigkzR
+  , ptvr.TOGENSONGKZ togensongkzR
+  , ptvr.SKKCALCZANZONGKZ skkcalczanzongkzR
+  , ptvr.GENSONBOKAZ gensonbokazR
+  , ptvr.GENSONMAETAINENZ gensonmaetainenzR
+  , ptvr.GENSONMAESKKMMSUZ gensonmaeskkmmsuzR
+  , ptvr.GENSONYMDZ gensonymdzR
+  , ptvr.GENSHISTKGKZ genshistkgkzR
+  , ptvr.KAITEISTKGKZ kaiteistkgkzR
+  , ptvr.KAITEITAINENZ kaiteitainenzR
+  , ptvr.KAITEIYMDZ kaiteiymdzR
+  , ptvr.YUSENZOGENKBNZ yusenzogenkbnzR
+  , ptvr.KSGENSONRUIGK_L3 ksgensonruigkL3R
+  , ptvr.TOGENSONGK_L3 togensongkL3R
+  , ptvr.SKKCALCZANZONGK_L3 skkcalczanzongkL3R
+  , ptvr.GENSONBOKA_L3 gensonbokaL3R
+  , ptvr.GENSONMAETAINEN_L3 gensonmaetainenL3R
+  , ptvr.GENSONMAESKKMMSU_L3 gensonmaeskkmmsuL3R
+  , ptvr.GENSONYMD_L3 gensonymdL3R
+  , ptvr.GENSHISTKGK_L3 genshistkgkL3R
+  , ptvr.KAITEISTKGK_L3 kaiteistkgkL3R
+  , ptvr.KAITEITAINEN_L3 kaiteitainenL3R
+  , ptvr.KAITEIYMD_L3 kaiteiymdL3R
+  , ptvr.YUSENZOGENKBN_L3 yusenzogenkbnL3R
+  , ptvr.KSGENSONRUIGK_L4 ksgensonruigkL4R
+  , ptvr.TOGENSONGK_L4 togensongkL4R
+  , ptvr.SKKCALCZANZONGK_L4 skkcalczanzongkL4R
+  , ptvr.GENSONBOKA_L4 gensonbokaL4R
+  , ptvr.GENSONMAETAINEN_L4 gensonmaetainenL4R
+  , ptvr.GENSONMAESKKMMSU_L4 gensonmaeskkmmsuL4R
+  , ptvr.GENSONYMD_L4 gensonymdL4R
+  , ptvr.GENSHISTKGK_L4 genshistkgkL4R
+  , ptvr.KAITEISTKGK_L4 kaiteistkgkL4R
+  , ptvr.KAITEITAINEN_L4 kaiteitainenL4R
+  , ptvr.KAITEIYMD_L4 kaiteiymdL4R
+  , ptvr.YUSENZOGENKBN_L4 yusenzogenkbnL4R
+  , ptvr.KSGENSONRUIGK_L5 ksgensonruigkL5R
+  , ptvr.TOGENSONGK_L5 togensongkL5R
+  , ptvr.SKKCALCZANZONGK_L5 skkcalczanzongkL5R
+  , ptvr.GENSONBOKA_L5 gensonbokaL5R
+  , ptvr.GENSONMAETAINEN_L5 gensonmaetainenL5R
+  , ptvr.GENSONMAESKKMMSU_L5 gensonmaeskkmmsuL5R
+  , ptvr.GENSONYMD_L5 gensonymdL5R
+  , ptvr.GENSHISTKGK_L5 genshistkgkL5R
+  , ptvr.KAITEISTKGK_L5 kaiteistkgkL5R
+  , ptvr.KAITEITAINEN_L5 kaiteitainenL5R
+  , ptvr.KAITEIYMD_L5 kaiteiymdL5R
+  , ptvr.YUSENZOGENKBN_L5 yusenzogenkbnL5R
+  , ptvr.KSGENSONRUIGK_L6 ksgensonruigkL6R
+  , ptvr.TOGENSONGK_L6 togensongkL6R
+  , ptvr.SKKCALCZANZONGK_L6 skkcalczanzongkL6R
+  , ptvr.GENSONBOKA_L6 gensonbokaL6R
+  , ptvr.GENSONMAETAINEN_L6 gensonmaetainenL6R
+  , ptvr.GENSONMAESKKMMSU_L6 gensonmaeskkmmsuL6R
+  , ptvr.GENSONYMD_L6 gensonymdL6R
+  , ptvr.GENSHISTKGK_L6 genshistkgkL6R
+  , ptvr.KAITEISTKGK_L6 kaiteistkgkL6R
+  , ptvr.KAITEITAINEN_L6 kaiteitainenL6R
+  , ptvr.KAITEIYMD_L6 kaiteiymdL6R
+  , ptvr.YUSENZOGENKBN_L6 yusenzogenkbnL6R
+  , ptvr.UPDID updidR
+  , ptvr.UPDYMD updymdR
+  , NEA_UTIL_PKG.format_date_char_f(ptvr.KADOYMD) kadoymdRF
+  , NEA_UTIL_PKG.format_date_char_f(ptvr.JBKYMD) jbkymdRF
+  , NEA_UTIL_PKG.format_date_char_f(ptvr.IDOYMD) idoymdRF
+  , NEA_UTIL_PKG.format_date_char_f(ptvr.MITSUMORIHKYMDK) mitsumorihkymdkRF
+  , NEA_UTIL_PKG.format_date_char_f(ptvr.MITSUMORIHKYMDZ) mitsumorihkymdzRF
+  , NEA_UTIL_PKG.format_date_char_f(ptvr.MITSUMORIHKYMD_L3) mitsumorihkymdL3RF
+  , NEA_UTIL_PKG.format_date_char_f(ptvr.MITSUMORIHKYMD_L4) mitsumorihkymdL4RF
+  , NEA_UTIL_PKG.format_date_char_f(ptvr.MITSUMORIHKYMD_L5) mitsumorihkymdL5RF
+  , NEA_UTIL_PKG.format_date_char_f(ptvr.MITSUMORIHKYMD_L6) mitsumorihkymdL6RF
+  , NEA_UTIL_PKG.format_date_char_f(ptvr.FAMITSUMORIHKYMDK) famitsumorihkymdkRF
+  , NEA_UTIL_PKG.format_date_char_f(ptvr.FAMITSUMORIHKYMDZ) famitsumorihkymdzRF
+  , NEA_UTIL_PKG.format_date_char_f(ptvr.FAMITSUMORIHKYMD_L3) famitsumorihkymdL3RF
+  , NEA_UTIL_PKG.format_date_char_f(ptvr.FAMITSUMORIHKYMD_L4) famitsumorihkymdL4RF
+  , NEA_UTIL_PKG.format_date_char_f(ptvr.FAMITSUMORIHKYMD_L5) famitsumorihkymdL5RF
+  , NEA_UTIL_PKG.format_date_char_f(ptvr.FAMITSUMORIHKYMD_L6) famitsumorihkymdL6RF
+  -->
+  </sql>
+
+  <!--
+    固定資産一覧SELECT項目
+  -->
+  <sql id="selectFldComColumnL_FLD">
+    <!-- 稼動(予定)日/除売却日 -->
+      CASE
+        WHEN
+          ptvf.SHISANKNRKBN = '1' THEN NEA_UTIL_PKG.format_date_char_f(NVL(ptvf.FURIKAEYMD, ptvf.ADD_UP_PLAN_DATE))
+        ELSE
+          NEA_UTIL_PKG.format_date_char_f(NVL(ptvf.JBKYMD, ptvf.KADOYMD))
+      END kadoymdL
+    <!-- 伝票番号/資産番号 -->
+    , CASE
+        WHEN ROUTE_TYPE = 'PA' THEN
+          ptvf.AST_PRJ_CODE || ' ' || ptvf.AST_PRJ_NAME
+        ELSE
+          ptvf.SLIP_NUM
+      END slipAstPtjCode
+    <!-- 仕入先(検索結果用) -->
+    , CASE
+        WHEN ROUTE_TYPE = 'AP' THEN
+          ptvf.PUR_COMPANY_CODE || ' ' || ptvf.PUR_COMPANY_NAME
+        ELSE
+          ptvf.ROUTE_TYPE_NAME
+      END purCompanyNameL
+      <!-- 振替資産番号 -->
+    , CASE
+        WHEN
+          ptvf.SHISANKNRKBN = '1' THEN ptvf.FURIKAEGO_OYA || ptvf.FURIKAEGO_EDA
+        ELSE
+          ptvf.CP_OYA || ptvf.CP_EDA
+      END furikaeNum
+    <!-- 計上日 -->
+    , NEA_UTIL_PKG.format_date_char_f(NVL(ptvf.STKYMD, ptvf.CPKEIJOYMD)) keijoymdL
+
+    <!-- 保有部署 -->
+    , CASE
+        WHEN SKKSHISANKBN IN ('2', '4') THEN
+          nie.HOL_COMPANY_CODE
+        ELSE
+          TO_CHAR(NULL)
+      END holCompanyCode
+    , CASE
+        WHEN SKKSHISANKBN IN ('2', '4') THEN
+          nie.HOL_SECTION_CODE
+        ELSE
+          TO_CHAR(NULL)
+      END holSectionCode
+    , CASE
+        WHEN SKKSHISANKBN IN ('2', '4') THEN
+          nie.HOL_SECTION_YEAR
+        ELSE
+          TO_NUMBER(NULL)
+      END holSectionYear
+    , CASE
+        WHEN SKKSHISANKBN IN ('2', '4') THEN
+          NEA_UTIL_PKG.get_section_name_f(nie.HOL_COMPANY_CODE, nie.HOL_SECTION_CODE, nie.HOL_SECTION_YEAR)
+        ELSE
+          TO_CHAR(NULL)
+      END holSectionName
+    , CASE
+        WHEN SKKSHISANKBN IN ('2', '4') THEN
+          NEA_UTIL_PKG.get_section_name_f(nie.HOL_COMPANY_CODE, nie.HOL_SECTION_CODE, nie.HOL_SECTION_YEAR)
+        ELSE
+          NEA_UTIL_PKG.get_fld_hol_sec_name_f(ptvf.KOYUNO)
+      END holSectionNameL
+
+    <!-- 無形管理担当者 -->
+    , CASE
+        WHEN SKKSHISANKBN IN ('2', '4') THEN
+          nie.HOL_STAFF_CODE
+        ELSE
+          TO_CHAR(NULL)
+      END holStaffCode
+    , CASE
+        WHEN SKKSHISANKBN IN ('2', '4') THEN
+          NEA_UTIL_PKG.get_staff_name_f(nie.HOL_STAFF_CODE)
+        ELSE
+          TO_CHAR(NULL)
+      END holStaffName
+
+    <!-- 管理項目 -->
+    , CASE
+        WHEN SKKSHISANKBN IN ('2', '4') THEN
+          nie.DSC_ATTRIBUTE1
+        ELSE
+          TO_CHAR(NULL)
+      END dscAttribute1
+    , CASE
+        WHEN SKKSHISANKBN IN ('2', '4') THEN
+          nie.DSC_ATTRIBUTE2
+        ELSE
+          TO_CHAR(NULL)
+      END dscAttribute2
+    , CASE
+        WHEN SKKSHISANKBN IN ('2', '4') THEN
+          nie.DSC_ATTRIBUTE3
+        ELSE
+          TO_CHAR(NULL)
+      END dscAttribute3
+    , CASE
+        WHEN SKKSHISANKBN IN ('2', '4') THEN
+          nie.DSC_ATTRIBUTE4
+        ELSE
+          TO_CHAR(NULL)
+      END dscAttribute4
+    , CASE
+        WHEN SKKSHISANKBN IN ('2', '4') THEN
+          nie.DSC_ATTRIBUTE5
+        ELSE
+          TO_CHAR(NULL)
+      END dscAttribute5
+    , CASE
+        WHEN SKKSHISANKBN IN ('2', '4') THEN
+          nie.DSC_ATTRIBUTE6
+        ELSE
+          TO_CHAR(NULL)
+      END dscAttribute6
+    , CASE
+        WHEN SKKSHISANKBN IN ('2', '4') THEN
+          nie.DSC_ATTRIBUTE7
+        ELSE
+          TO_CHAR(NULL)
+      END dscAttribute7
+    , CASE
+        WHEN SKKSHISANKBN IN ('2', '4') THEN
+          nie.DSC_ATTRIBUTE8
+        ELSE
+          TO_CHAR(NULL)
+      END dscAttribute8
+    , CASE
+        WHEN SKKSHISANKBN IN ('2', '4') THEN
+          nie.DSC_ATTRIBUTE9
+        ELSE
+          TO_CHAR(NULL)
+      END dscAttribute9
+    , CASE
+        WHEN SKKSHISANKBN IN ('2', '4') THEN
+          nie.DSC_ATTRIBUTE10
+        ELSE
+          TO_CHAR(NULL)
+      END dscAttribute10
+    , CASE
+        WHEN SKKSHISANKBN IN ('2', '4') THEN
+          nie.DSC_ATTRIBUTE11
+        ELSE
+          TO_CHAR(NULL)
+      END dscAttribute11
+    , CASE
+        WHEN SKKSHISANKBN IN ('2', '4') THEN
+          nie.DSC_ATTRIBUTE12
+        ELSE
+          TO_CHAR(NULL)
+      END dscAttribute12
+    , CASE
+        WHEN SKKSHISANKBN IN ('2', '4') THEN
+          nie.DSC_ATTRIBUTE13
+        ELSE
+          TO_CHAR(NULL)
+      END dscAttribute13
+    , CASE
+        WHEN SKKSHISANKBN IN ('2', '4') THEN
+          nie.DSC_ATTRIBUTE14
+        ELSE
+          TO_CHAR(NULL)
+      END dscAttribute14
+    , CASE
+        WHEN SKKSHISANKBN IN ('2', '4') THEN
+          nie.DSC_ATTRIBUTE15
+        ELSE
+          TO_CHAR(NULL)
+      END dscAttribute15
+    , CASE
+        WHEN SKKSHISANKBN IN ('2', '4') THEN
+          nie.DSC_ATTRIBUTE16
+        ELSE
+          TO_CHAR(NULL)
+      END dscAttribute16
+    , CASE
+        WHEN SKKSHISANKBN IN ('2', '4') THEN
+          nie.DSC_ATTRIBUTE17
+        ELSE
+          TO_CHAR(NULL)
+      END dscAttribute17
+    , CASE
+        WHEN SKKSHISANKBN IN ('2', '4') THEN
+          nie.DSC_ATTRIBUTE18
+        ELSE
+          TO_CHAR(NULL)
+      END dscAttribute18
+    , CASE
+        WHEN SKKSHISANKBN IN ('2', '4') THEN
+          nie.DSC_ATTRIBUTE19
+        ELSE
+          TO_CHAR(NULL)
+      END dscAttribute19
+    , CASE
+        WHEN SKKSHISANKBN IN ('2', '4') THEN
+          nie.DSC_ATTRIBUTE20
+        ELSE
+          TO_CHAR(NULL)
+      END dscAttribute20
+  </sql>
+
+  <!--
+    固定資産共通From句
+  -->
+  <sql id="selectFldComFrom_FLD">
+    NEA_$histTablePrefixLd$PPFS_FLD ptvf
+    LEFT OUTER JOIN NEA_$histTablePrefixLd$PPFS_FLD_RO ptvr ON ptvf.COMPANY_CODE = ptvr.COMPANY_CODE AND ptvf.PERIOD = ptvr.PERIOD AND ptvf.KOYUNO = ptvr.KOYUNO
+    LEFT OUTER JOIN NEA_INT_EXT nie ON ptvf.COMPANY_CODE = nie.HOL_COMPANY_CODE AND CSCONVERT(ptvf.APPLICATION_ID,'CHAR_CS') = nie.APPLICATION_ID
+  </sql>
+
+  <!--
+    固定資産共通Where句
+  -->
+  <sql id="selectFldComWhere_FLD">
+      ptvf.COMPANY_CODE = #companyCode#
+      <!-- 本勘定税務上ソフトウェアは非表示 -->
+      AND NOT(
+        ptvf.SHISANKNRKBN != '1'
+        AND EXISTS(
+          SELECT
+            'X'
+          FROM
+            NEA_CODE_NAME c
+          WHERE
+            c.CATEGORY_CODE = 'PPFS_FLD_SR_EXCLUDE_BUNRUI'
+            AND C.INTERNAL_CODE = TO_CHAR(ptvf.BUNRUICD)
+        )
+      )
+      <!-- 資産状態区分:検索除外区分 -->
+      AND ptvf.SHISANJOTAIKBN != '9' /* 取消済は除外 */
+
+      <!-- 会計年月 -->
+      <isNotEmpty property="searchParam.reportPeriod">
+        AND ptvf.PERIOD = #searchParam.reportPeriod#
+      </isNotEmpty>
+
+      <!-- 固有番号 -->
+       <isNotEmpty property="searchParam.koyuno">
+        AND ptvf.KOYUNO = #searchParam.koyuno#
+       </isNotEmpty>
+      <!-- 資産区分 -->
+       <isNotEmpty property="skkshisankbnPluralList">
+        AND $skkshisankbnPluralList$
+       </isNotEmpty>
+      <!-- 資産管理区分 -->
+       <isNotEmpty property="shisanknrkbnPluralList">
+        AND $shisanknrkbnPluralList$
+       </isNotEmpty>
+      <!-- 資産状態区分 -->
+       <isNotEmpty property="shisanjotaikbnPluralList">
+        AND $shisanjotaikbnPluralList$
+       </isNotEmpty>
+       <!-- 資産名 -->
+       <isNotEmpty property="searchParam.shisannm">
+         AND NEA_UTIL_PKG.to_fuzzy_f(ptvf.SHISANNM) LIKE '%' || NEA_UTIL_PKG.to_fuzzy_f(#searchParam.shisannm#) || '%'
+       </isNotEmpty>
+
+       <!-- 種類 -->
+       <isNotEmpty property="searchParam.shuruicd">
+         AND ptvf.SHURUICD = #searchParam.shuruicd#
+       </isNotEmpty>
+       <isNotEmpty property="shuruinmPluralList">
+         AND $shuruinmPluralList$
+       </isNotEmpty>
+
+       <!-- 分類 -->
+       <isNotEmpty property="searchParam.bunruicd">
+         AND ptvf.BUNRUICD = #searchParam.bunruicd#
+       </isNotEmpty>
+        <isNotEmpty property="bunruinmPluralList">
+         AND $bunruinmPluralList$
+       </isNotEmpty>
+
+       <!-- 代表設置場所 -->
+       <isNotEmpty property="searchParam.setchicd">
+         AND ptvf.SETCHICD = #searchParam.setchicd#
+       </isNotEmpty>
+       <isNotEmpty property="setchinmPluralList">
+         AND $setchinmPluralList$
+       </isNotEmpty>
+       <!-- 案件グループ -->
+       <isNotEmpty property="searchParam.itemGroupCode">
+         AND ptvf.ITEM_GROUP_CODE = #searchParam.itemGroupCode#
+       </isNotEmpty>
+       <isNotEmpty property="itemGroupNamePluralList">
+         AND $itemGroupNamePluralList$
+       </isNotEmpty>
+       <!-- 取得日 -->
+       <isNotEmpty property="searchParam.stkymdFrom">
+         AND NVL(ptvf.STKYMD, ptvf.CPKEIJOYMD) <![CDATA[>]]>= TO_CHAR(#searchParam.stkymdFrom#, 'YYYYMMDD')
+       </isNotEmpty>
+       <isNotEmpty property="searchParam.stkymdTo">
+         AND NVL(ptvf.STKYMD, ptvf.CPKEIJOYMD) <![CDATA[<]]>= TO_CHAR(#searchParam.stkymdTo#, 'YYYYMMDD')
+       </isNotEmpty>
+        <!-- 稼動日 -->
+       <isNotEmpty property="searchParam.kadoymdFrom">
+         AND ptvf.KADOYMD <![CDATA[>]]>= TO_CHAR(#searchParam.kadoymdFrom#, 'YYYYMMDD')
+       </isNotEmpty>
+       <isNotEmpty property="searchParam.kadoymdTo">
+         AND ptvf.KADOYMD <![CDATA[<]]>= TO_CHAR(#searchParam.kadoymdTo#, 'YYYYMMDD')
+       </isNotEmpty>
+       <!-- 除売却日 -->
+       <isNotEmpty property="searchParam.jbkymdFrom">
+         AND DECODE(ptvf.SHISANKNRKBN , '1', ptvf.FURIKAEYMD, ptvf.JBKYMD) <![CDATA[>]]>= TO_CHAR(#searchParam.jbkymdFrom#, 'YYYYMMDD')
+       </isNotEmpty>
+       <isNotEmpty property="searchParam.jbkymdTo">
+         AND DECODE(ptvf.SHISANKNRKBN , '1', ptvf.FURIKAEYMD, ptvf.JBKYMD) <![CDATA[<]]>= TO_CHAR(#searchParam.jbkymdTo#, 'YYYYMMDD')
+       </isNotEmpty>
+       <!-- 伝票番号 -->
+       <isNotEmpty property="searchParam.slipNum">
+         AND ptvf.SLIP_NUM LIKE '%' || #searchParam.slipNum# || '%'
+       </isNotEmpty>
+       <isNotEmpty property="slipNumPluralList">
+         AND $slipNumPluralList$
+       </isNotEmpty>
+
+       <!-- 管理番号 -->
+       <!-- 資産番号 -->
+       <isNotEmpty property="searchParam.shisanNum">
+         AND ptvf.OYA || ptvf.EDA LIKE '%' || #searchParam.shisanNum# || '%'
+       </isNotEmpty>
+       <isNotEmpty property="shisanNumPluralList">
+         AND $shisanNumPluralList$
+       </isNotEmpty>
+       <!-- 取得申請番号 -->
+       <isNotEmpty property="searchParam.applicationId">
+         AND ptvf.APPLICATION_ID LIKE '%' || #searchParam.applicationId# || '%'
+       </isNotEmpty>
+       <isNotEmpty property="applicationIdPluralList">
+         AND $applicationIdPluralList$
+       </isNotEmpty>
+       <!-- 販菅/原価区分 -->
+       <isNotEmpty property="searchParam.costType">
+         AND ptvf.COST_TYPE = #searchParam.costType#
+       </isNotEmpty>
+       <!-- 減価償却PJ -->
+       <isNotEmpty property="searchParam.depPrjCode">
+         AND ptvf.DEP_PRJ_CODE = #searchParam.depPrjCode#
+       </isNotEmpty>
+       <!-- 経費負担 -->
+       <isEmpty property="excludeCostSectionComWhere">
+         <isNotEmpty property="costSectionCodeIn">
+           AND
+             (ptvf.SOSHIKI2CD IN ( $costSectionCodeIn$ )
+               OR
+              EXISTS (
+                SELECT
+                  'X'
+                FROM
+                  PPFS_MS28_H h
+                , PPFS_MS28_D d
+                WHERE
+                  h.HFPK = d.HFPK
+                  AND h.KAISHACD = ptvf.KAISHACD
+                  AND h.HFCD = ptvf.SKKHIHFCD
+                  AND d.soshiki2cd IN ( $costSectionCodeIn$ )
+              )
+           )
+         </isNotEmpty>
+       </isEmpty>
+
+       <!-- 現物情報入力時のみの条件 -->
+       <isNotEmpty  property="subKoyunoList">
+          AND $subKoyunoList$
+       </isNotEmpty>
+
+     <isEmpty property="isDownload">
+        AND ROWNUM <![CDATA[<]]>= (SELECT TO_NUMBER(VALUE1) FROM NEA_CODE_NAME WHERE CATEGORY_CODE = 'MAX_SEARCH_ROW_COUNT' AND DELETE_FLAG = '0')
+     </isEmpty>
+  </sql>
+
+<!-- ****************************************************** ↓ 照会・台帳で使用するメインSQL ****************************************************** -->
+  <!--
+    固定資産(照会・管理項目修正)一覧・台帳
+  -->
+  <select id="selectFldList_FLD" parameterClass="java.util.Map" resultClass="jp.co.ctcg.easset.dto.fld.PpfsFldSR">
+    SELECT
+      <include refid="selectFldComColumn_FLD" />
+      , <include refid="selectFldComColumnL_FLD" />
+    FROM
+      <include refid="selectFldComFrom_FLD" />
+    WHERE
+      <include refid="selectFldComWhere_FLD" />
+
+    ORDER BY
+      <!-- 有形 -->
+      <isEqual property="skkshisankbnTrans" compareValue="1">
+        ptvf.OYA || ptvf.EDA
+      </isEqual>
+      <!-- 無形 -->
+      <isNotEqual property="skkshisankbnTrans" compareValue="1">
+        ptvf.APPLICATION_ID, ptvf.OYA || ptvf.EDA
+      </isNotEqual>
+  </select>
+
+  <!--
+    固定資産一覧:申請書単位共通部
+  -->
+  <sql id="selectFldListAppCom_FLD">
+    SELECT
+      fld.*
+    <!-- 資産集約情報 -->
+      <!-- 資産管理区分 -->
+      , NEA_UTIL_PKG.get_cn_value1_f('PPFS_FLD_SHISANKNRKBN',
+          CASE
+            WHEN MIN(fldapp.SHISANKNRKBN) = MAX(fldapp.SHISANKNRKBN) THEN /* 全データ資産管理区分同一 */
+              TO_CHAR(MIN(fldapp.SHISANKNRKBN))
+            WHEN MIN(DECODE(fldapp.SHISANKNRKBN, '1', 'Z', fldapp.SHISANKNRKBN)) = MAX(fldapp.SHISANKNRKBN) THEN /* 仮勘定を除き資産管理区分同一 */
+              TO_CHAR(MIN(DECODE(fldapp.SHISANKNRKBN, '1', 'Z', fldapp.SHISANKNRKBN)))
+            ELSE /* その他(混在) */
+              TO_CHAR(NULL)
+          END
+        ) shisanknrkbnName
+      <!-- 資産状態区分 -->
+      , NEA_UTIL_PKG.get_cn_value1_f('PPFS_FLD_SHISANJOTAIKBN',
+          CASE
+            WHEN MIN(fldapp.SHISANJOTAIKBN) = MAX(fldapp.SHISANJOTAIKBN) THEN /* 全データ同一 */
+              TO_CHAR(MIN(fldapp.SHISANJOTAIKBN))
+            WHEN MIN(DECODE(fldapp.SHISANKNRKBN, '1', 'Z', fldapp.SHISANJOTAIKBN)) = MAX(DECODE(fldapp.SHISANKNRKBN, '1', '0', fldapp.SHISANJOTAIKBN)) THEN /* 仮勘定を除き資産状態区分同一 */
+              TO_CHAR(MIN(DECODE(fldapp.SHISANKNRKBN, '1', 'Z', fldapp.SHISANJOTAIKBN)))
+            ELSE /* その他(混在) */
+              TO_CHAR(NULL)
+          END
+        ) shisanjotaikbnName
+      <!-- 計上日 -->
+      , NEA_UTIL_PKG.format_date_char_f(
+          MAX(NVL(fldapp.STKYMD, fldapp.CPKEIJOYMD))
+        ) keijoymdL
+      <!-- 稼動(予定)日/除売却日 -->
+      , NEA_UTIL_PKG.format_date_char_f(
+          CASE
+            WHEN MAX(fldapp.SHISANKNRKBN) = '1' THEN /* 仮勘定のみ存在 */
+              TO_CHAR(MAX(NVL(fldapp.FURIKAEYMD, fldapp.ADD_UP_PLAN_DATE)))
+            ELSE /* 仮勘定以外から取得 */
+              TO_CHAR(MAX(DECODE(fldapp.SHISANKNRKBN, '1', NULL, NVL(fldapp.JBKYMD, fldapp.KADOYMD))))
+          END
+        ) kadoymdL
+      <!-- 計上日が最新のデータ -->
+      , MAX(fldapp.SHISANNM) KEEP (DENSE_RANK LAST ORDER BY NVL(fldapp.STKYMD, fldapp.CPKEIJOYMD), fldapp.OYA, fldapp.EDA) shisannm
+      , MAX(fldapp.SHURUICD) KEEP (DENSE_RANK LAST ORDER BY NVL(fldapp.STKYMD, fldapp.CPKEIJOYMD), fldapp.OYA, fldapp.EDA) shuruicd
+      , MAX(fldapp.SHURUINM) KEEP (DENSE_RANK LAST ORDER BY NVL(fldapp.STKYMD, fldapp.CPKEIJOYMD), fldapp.OYA, fldapp.EDA) shuruinm
+      , MAX(fldapp.BUNRUICD) KEEP (DENSE_RANK LAST ORDER BY NVL(fldapp.STKYMD, fldapp.CPKEIJOYMD), fldapp.OYA, fldapp.EDA) bunruicd
+      , MAX(fldapp.BUNRUINM) KEEP (DENSE_RANK LAST ORDER BY NVL(fldapp.STKYMD, fldapp.CPKEIJOYMD), fldapp.OYA, fldapp.EDA) bunruinm
+      , MAX(CASE WHEN ROUTE_TYPE = 'AP' THEN fldapp.PUR_COMPANY_CODE || ' ' || fldapp.PUR_COMPANY_NAME ELSE ROUTE_TYPE_NAME END) KEEP (DENSE_RANK LAST ORDER BY NVL(fldapp.STKYMD, fldapp.CPKEIJOYMD), fldapp.OYA, fldapp.EDA) purCompanyNameL
+      , MAX(CASE WHEN ROUTE_TYPE = 'PA' THEN AST_PRJ_CODE || ' ' || AST_PRJ_NAME ELSE SLIP_NUM END) KEEP (DENSE_RANK LAST ORDER BY NVL(fldapp.STKYMD, fldapp.CPKEIJOYMD), fldapp.OYA, fldapp.EDA) slipAstPtjCode
+      , MAX(fldapp.SOSHIKI2CD) KEEP (DENSE_RANK LAST ORDER BY NVL(fldapp.STKYMD, fldapp.CPKEIJOYMD), fldapp.OYA, fldapp.EDA) soshiki2cd
+      , MAX(fldapp.SOSHIKI2NM) KEEP (DENSE_RANK LAST ORDER BY NVL(fldapp.STKYMD, fldapp.CPKEIJOYMD), fldapp.OYA, fldapp.EDA) soshiki2nm
+      , MAX(fldapp.COST_TYPE_NAME) KEEP (DENSE_RANK LAST ORDER BY NVL(fldapp.STKYMD, fldapp.CPKEIJOYMD), fldapp.OYA, fldapp.EDA) costTypeName
+      , MAX(fldapp.DEP_PRJ_CODE) KEEP (DENSE_RANK LAST ORDER BY NVL(fldapp.STKYMD, fldapp.CPKEIJOYMD), fldapp.OYA, fldapp.EDA) depPrjCode
+      , MAX(fldapp.DEP_PRJ_NAME) KEEP (DENSE_RANK LAST ORDER BY NVL(fldapp.STKYMD, fldapp.CPKEIJOYMD), fldapp.OYA, fldapp.EDA) depPrjName
+      , MAX(fldapp.SETCHINM) KEEP (DENSE_RANK LAST ORDER BY NVL(fldapp.STKYMD, fldapp.CPKEIJOYMD), fldapp.OYA, fldapp.EDA) setchinm
+      , MAX(fldapp.ITEM_GROUP_CODE) KEEP (DENSE_RANK LAST ORDER BY NVL(fldapp.STKYMD, fldapp.CPKEIJOYMD), fldapp.OYA, fldapp.EDA) itemGroupCode
+      , MAX(fldapp.ITEM_GROUP_NAME) KEEP (DENSE_RANK LAST ORDER BY NVL(fldapp.STKYMD, fldapp.CPKEIJOYMD), fldapp.OYA, fldapp.EDA) itemGroupName
+      <!-- 金額  -->
+      , CASE
+          WHEN MIN(fldapp.SHISANKNRKBN) = MAX(fldapp.SHISANKNRKBN) THEN /* 全データ資産管理区分同一の場合は合算 */
+            SUM(fldapp.STKGKZ)
+          ELSE /* 仮勘定を除き合算 */
+            SUM(DECODE(fldapp.SHISANKNRKBN, '1', 0, fldapp.STKGKZ))
+        END stkgkz
+      , CASE
+          WHEN MIN(fldapp.SHISANKNRKBN) = MAX(fldapp.SHISANKNRKBN) THEN /* 全データ資産管理区分同一の場合は合算 */
+            SUM(fldapp.STKGKK)
+          ELSE /* 仮勘定を除き合算 */
+            SUM(DECODE(fldapp.SHISANKNRKBN, '1', 0, fldapp.STKGKK))
+        END stkgkk
+      , CASE
+          WHEN MIN(fldapp.SHISANKNRKBN) = MAX(fldapp.SHISANKNRKBN) THEN /* 全データ資産管理区分同一の場合は合算 */
+            SUM(fldapp.TO_BOKAK)
+          ELSE /* 仮勘定を除き合算 */
+            SUM(DECODE(fldapp.SHISANKNRKBN, '1', 0, fldapp.TO_BOKAK))
+        END toBokak
+    FROM
+      (
+        SELECT
+          nie.APPLICATION_ID as applicationId
+        <!-- 保有部署 -->
+          , MIN(nie.HOL_COMPANY_CODE) holCompanyCode
+          , MIN(NEA_UTIL_PKG.get_company_name_f(nie.HOL_COMPANY_CODE)) holCompanyName
+          , MIN(nie.HOL_SECTION_CODE) holSectionCode
+          , MIN(nie.HOL_SECTION_YEAR) holSectionYear
+          , NEA_UTIL_PKG.get_section_name_f(MIN(nie.HOL_COMPANY_CODE), MIN(nie.HOL_SECTION_CODE), MIN(nie.HOL_SECTION_YEAR)) holSectionName
+        <!-- 無形管理担当者 -->
+          , MIN(nie.HOL_STAFF_CODE) holStaffCode
+          , NEA_UTIL_PKG.get_staff_name_f(MIN(nie.HOL_STAFF_CODE)) holStaffName
+        <!-- 管理項目 -->
+          , MIN(nie.DSC_ATTRIBUTE1) dscAttribute1
+          , MIN(nie.DSC_ATTRIBUTE2) dscAttribute2
+          , MIN(nie.DSC_ATTRIBUTE3) dscAttribute3
+          , MIN(nie.DSC_ATTRIBUTE4) dscAttribute4
+          , MIN(nie.DSC_ATTRIBUTE5) dscAttribute5
+          , MIN(nie.DSC_ATTRIBUTE6) dscAttribute6
+          , MIN(nie.DSC_ATTRIBUTE7) dscAttribute7
+          , MIN(nie.DSC_ATTRIBUTE8) dscAttribute8
+          , MIN(nie.DSC_ATTRIBUTE9) dscAttribute9
+          , MIN(nie.DSC_ATTRIBUTE10) dscAttribute10
+          , MIN(nie.DSC_ATTRIBUTE11) dscAttribute11
+          , MIN(nie.DSC_ATTRIBUTE12) dscAttribute12
+          , MIN(nie.DSC_ATTRIBUTE13) dscAttribute13
+          , MIN(nie.DSC_ATTRIBUTE14) dscAttribute14
+          , MIN(nie.DSC_ATTRIBUTE15) dscAttribute15
+          , MIN(nie.DSC_ATTRIBUTE16) dscAttribute16
+          , MIN(nie.DSC_ATTRIBUTE17) dscAttribute17
+          , MIN(nie.DSC_ATTRIBUTE18) dscAttribute18
+          , MIN(nie.DSC_ATTRIBUTE19) dscAttribute19
+          , MIN(nie.DSC_ATTRIBUTE20) dscAttribute20
+        FROM
+          <include refid="selectFldComFrom_FLD" />
+        WHERE
+          <include refid="selectFldComWhere_FLD" />
+          AND nie.APPLICATION_ID = CSCONVERT(ptvf.APPLICATION_ID,'CHAR_CS')
+          AND nie.HOL_COMPANY_CODE = ptvf.COMPANY_CODE
+        GROUP BY
+          nie.APPLICATION_ID
+      ) fld
+      , NEA_$histTablePrefixLd$PPFS_FLD fldapp
+    WHERE
+      CSCONVERT(fld.applicationId,'NCHAR_CS') = fldapp.APPLICATION_ID
+      AND fld.holCompanyCode = fldapp.COMPANY_CODE
+      <!-- 会計年月 -->
+      <isNotEmpty property="searchParam.reportPeriod">
+        AND fldapp.PERIOD = #searchParam.reportPeriod#
+      </isNotEmpty>
+      <!-- 本勘定税務上ソフトウェアは非表示 -->
+      AND NOT(
+        fldapp.SHISANKNRKBN != '1'
+        AND EXISTS(
+          SELECT
+            'X'
+          FROM
+            NEA_CODE_NAME c
+          WHERE
+            c.CATEGORY_CODE = 'PPFS_FLD_SR_EXCLUDE_BUNRUI'
+            AND C.INTERNAL_CODE = TO_CHAR(fldapp.BUNRUICD)
+        )
+      )
+      <!-- 資産状態区分:検索除外区分 -->
+      AND fldapp.SHISANJOTAIKBN not in ('7', '8', '9') /* リース・取消済は除外 */
+    GROUP BY
+      fld.applicationId
+      , fld.holCompanyCode
+      , fld.holCompanyName
+      , fld.holSectionCode
+      , fld.holSectionYear
+      , fld.holSectionName
+      , fld.holStaffCode
+      , fld.holStaffName
+      , fld.dscAttribute1
+      , fld.dscAttribute2
+      , fld.dscAttribute3
+      , fld.dscAttribute4
+      , fld.dscAttribute5
+      , fld.dscAttribute6
+      , fld.dscAttribute7
+      , fld.dscAttribute8
+      , fld.dscAttribute9
+      , fld.dscAttribute10
+      , fld.dscAttribute11
+      , fld.dscAttribute12
+      , fld.dscAttribute13
+      , fld.dscAttribute14
+      , fld.dscAttribute15
+      , fld.dscAttribute16
+      , fld.dscAttribute17
+      , fld.dscAttribute18
+      , fld.dscAttribute19
+      , fld.dscAttribute20
+  </sql>
+
+  <!--
+    固定資産(照会・管理項目修正)一覧:申請書単位
+  -->
+  <select id="selectFldListApp_FLD" parameterClass="java.util.Map" resultClass="jp.co.ctcg.easset.dto.fld.PpfsFldSR">
+    <include refid="selectFldListAppCom_FLD" />
+    ORDER BY
+      applicationId
+  </select>
+
+  <!--
+    償却費・社内金利明細
+  -->
+  <select id="selectFldPlList_FLD" parameterClass="java.util.Map" resultClass="jp.co.ctcg.easset.dto.fld.PpfsFldSRRep">
+    SELECT
+      <!-- *********** 償却費・社内金利明細用項目 *********** -->
+      NEA_UTIL_PKG.format_date_char_f(ph.PERIOD) periodName
+      , ptvf.OYA || ptvf.EDA reportKey1
+      , ph.ACCOUNT_NAME accountName
+      , ph.AMOUNT amount
+      , (ph.HFRITSU * 100) distRate
+      , ph.AMOUNT_NO_DIST amountNoDist
+      , ph.SOSHIKI2CD costSectionCode
+      , NEA_UTIL_PKG.GET_COST_SECTION_NAME_F(ph.SOSHIKI2CD, NEA_UTIL_PKG.get_year_by_period_f(ph.PERIOD)) costSectionName
+      , ph.HFCD distCode
+      , NEA_UTIL_PKG.GET_DIST_NAME_F(ph.COMPANY_CODE, ph.HFCD) distName
+      <!-- *********** 共通項目 *********** -->
+      , <include refid="selectFldComColumn_FLD" />
+      , <include refid="selectFldComColumnL_FLD" />
+    FROM
+      <include refid="selectFldComFrom_FLD" />
+      , (
+        /* 償却費 */
+        SELECT
+          h.COMPANY_CODE
+          , h.PERIOD
+          , h.KOYUNO
+          , '1' ACCOUNT_TYPE
+          , '償却費' ACCOUNT_NAME
+          , h.SKKGK_L1 AMOUNT
+          , h.HFCD
+          <isEqual property="searchParam.reportDistType" compareValue="2">
+            , h.HFRITSU
+            , h_no_dist.SKKGK_L1 AMOUNT_NO_DIST
+          </isEqual>
+          <isNotEqual property="searchParam.reportDistType" compareValue="2">
+            , TO_NUMBER(NULL) HFRITSU
+            , TO_NUMBER(NULL) AMOUNT_NO_DIST
+          </isNotEqual>
+          , h.SOSHIKI2CD
+          , h.SKKGKHFKBN REPORT_DIST_TYPE
+        FROM
+          NEA_$histTablePrefixFromTo$PPFS_DP_HISTORY h
+          <!-- 配賦後の場合は配賦前取得 -->
+          <isEqual property="searchParam.reportDistType" compareValue="2">
+            , NEA_$histTablePrefixFromTo$PPFS_DP_HISTORY h_no_dist
+          </isEqual>
+        WHERE
+          h.SHISANKNRKBN != '8' /* オンバランスリース以外 */
+          AND h.SKKGK_L1 != 0 /* 償却費 != 0 */
+          AND h.SKKGKKBN != '5' /* 減損以外 */
+          <!-- 配賦後の場合は配賦前取得 -->
+          <isEqual property="searchParam.reportDistType" compareValue="2">
+            AND h.COMPANY_CODE = h_no_dist.COMPANY_CODE
+            AND h.PERIOD = h_no_dist.PERIOD
+            AND h.KOYUNO = h_no_dist.KOYUNO
+            AND h.SKKGKKBN = h_no_dist.SKKGKKBN
+            AND h.SKKCHOSEIKBN = h_no_dist.SKKCHOSEIKBN
+            AND h.SENKOENTRYKBN = h_no_dist.SENKOENTRYKBN
+            AND NVL(h.HKKBN, '0') = NVL(h_no_dist.HKKBN, '0')
+            AND h.SOSHIKI2CD = NVL(h_no_dist.HFMOTOSOSHIKI2CD, h.SOSHIKI2CD)
+            AND h_no_dist.SKKGKHFKBN = '1'
+          </isEqual>
+        /* 社内金利 */
+        UNION ALL
+        SELECT
+          h.COMPANY_CODE
+          , h.PERIOD
+          , h.KOYUNO
+          , '2' ACCOUNT_TYPE
+          , '社内金利' ACCOUNT_NAME
+          , h.KINRI_L1 AMOUNT
+          , h.HFCD
+          <isEqual property="searchParam.reportDistType" compareValue="2">
+            , h.HFRITSU
+            , h_no_dist.KINRI_L1 AMOUNT_NO_DIST
+          </isEqual>
+          <isNotEqual property="searchParam.reportDistType" compareValue="2">
+            , TO_NUMBER(NULL) HFRITSU
+            , TO_NUMBER(NULL) AMOUNT_NO_DIST
+          </isNotEqual>
+          , h.SOSHIKI2CD
+          , h.KINRIHFKBN REPORT_DIST_TYPE
+        FROM
+          NEA_$histTablePrefixFromTo$PPFS_KINRI_HISTORY h
+          <!-- 配賦後の場合は配賦前取得 -->
+          <isEqual property="searchParam.reportDistType" compareValue="2">
+            , NEA_$histTablePrefixFromTo$PPFS_KINRI_HISTORY h_no_dist
+          </isEqual>
+        WHERE
+          h.SHISANKNRKBN != '8' /* オンバランスリース以外 */
+          AND h.KINRI_L1 != 0  /* 社内金利 != 0 */
+          <!-- 配賦後の場合は配賦前取得 -->
+          <isEqual property="searchParam.reportDistType" compareValue="2">
+            AND h.COMPANY_CODE = h_no_dist.COMPANY_CODE
+            AND h.PERIOD = h_no_dist.PERIOD
+            AND h.KOYUNO =h_no_dist.KOYUNO
+            AND h.SENKOENTRYKBN = h_no_dist.SENKOENTRYKBN
+            AND NVL(h.HKKBN, '0') = NVL(h_no_dist.HKKBN, '0')
+            AND h.SOSHIKI2CD = NVL(h_no_dist.HFMOTOSOSHIKI2CD, h.SOSHIKI2CD)
+            AND h_no_dist.KINRIHFKBN = '1'
+          </isEqual>
+      ) ph
+    WHERE
+      <!-- *********** 共通条件 *********** -->
+      <include refid="selectFldComWhere_FLD" />
+
+      <!-- *********** 償却費・社内金利明細用条件 *********** -->
+      AND ph.COMPANY_CODE = #companyCode#
+      AND ph.KOYUNO = ptvf.KOYUNO
+      <!-- 会計年月 -->
+      AND ph.PERIOD <![CDATA[>]]>= #searchParam.reportPeriodFrom#
+      AND ph.PERIOD <![CDATA[<]]>= #searchParam.reportPeriodTo#
+      <!-- 配賦 -->
+      AND ph.REPORT_DIST_TYPE = #searchParam.reportDistType#
+      <!-- 経費負担 -->
+      <isNotEmpty property="costSectionCodeIn">
+        AND ph.SOSHIKI2CD IN ( $costSectionCodeIn$ )
+      </isNotEmpty>
+
+    ORDER BY
+      ph.PERIOD
+      <!-- 有形 -->
+      <isEqual property="skkshisankbnTrans" compareValue="1">
+        , ptvf.OYA || ptvf.EDA
+      </isEqual>
+      <!-- 無形 -->
+      <isNotEqual property="skkshisankbnTrans" compareValue="1">
+        , ptvf.APPLICATION_ID
+        , ptvf.OYA || ptvf.EDA
+      </isNotEqual>
+      , ph.SOSHIKI2CD
+      , ph.ACCOUNT_TYPE
+  </select>
+
+  <!--
+    償却費・社内金利スケジュール
+  -->
+  <select id="selectFldPlSchList_FLD" parameterClass="java.util.Map" resultClass="jp.co.ctcg.easset.dto.fld.PpfsFldSRRep">
+    SELECT
+      <!-- *********** 償却費・社内金利明細用項目 *********** -->
+      ptvf.OYA || ptvf.EDA reportKey1
+      , ph.ACCOUNT_NAME accountName
+      , ptvf.STKGKK amount_s
+      <!-- 年数分ループ -->
+      <iterate property="yearCountList">
+        <!-- 配賦後の場合は期首額は無し -->
+        <isEqual property="searchParam.reportDistType" compareValue="1">
+          , AMOUNT$yearCountList[]$_k amount$yearCountList[]$_k
+        </isEqual>
+        <isEqual property="searchParam.reportDistType" compareValue="2">
+          , TO_NUMBER(NULL) amount$yearCountList[]$_k
+        </isEqual>
+
+        , AMOUNT$yearCountList[]$_1 amount$yearCountList[]$_1
+        , AMOUNT$yearCountList[]$_2 amount$yearCountList[]$_2
+        , AMOUNT$yearCountList[]$_3 amount$yearCountList[]$_3
+        , AMOUNT$yearCountList[]$_4 amount$yearCountList[]$_4
+        , AMOUNT$yearCountList[]$_5 amount$yearCountList[]$_5
+        , AMOUNT$yearCountList[]$_6 amount$yearCountList[]$_6
+        , AMOUNT$yearCountList[]$_7 amount$yearCountList[]$_7
+        , AMOUNT$yearCountList[]$_8 amount$yearCountList[]$_8
+        , AMOUNT$yearCountList[]$_9 amount$yearCountList[]$_9
+        , AMOUNT$yearCountList[]$_10 amount$yearCountList[]$_10
+        , AMOUNT$yearCountList[]$_11 amount$yearCountList[]$_11
+        , AMOUNT$yearCountList[]$_12 amount$yearCountList[]$_12
+
+        , AMOUNT$yearCountList[]$_n amount$yearCountList[]$_n
+        , AMOUNT$yearCountList[]$_z amount$yearCountList[]$_z
+        , AMOUNT$yearCountList[]$_t amount$yearCountList[]$_t
+        , AMOUNT$yearCountList[]$_g amount$yearCountList[]$_g
+      </iterate>
+      , ph.SOSHIKI2CD costSectionCode
+      , NEA_UTIL_PKG.GET_COST_SECTION_NAME_F(ph.SOSHIKI2CD, NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#)) costSectionName
+      <!-- *********** 共通項目 *********** -->
+      , <include refid="selectFldComColumn_FLD" />
+      , <include refid="selectFldComColumnL_FLD" />
+    FROM
+      <include refid="selectFldComFrom_FLD" />
+      , (
+        /* 償却費 */
+        SELECT
+          h.COMPANY_CODE
+          , h.KOYUNO
+          , '1' ACCOUNT_TYPE
+          , '償却費' ACCOUNT_NAME
+          <!-- 年数分ループ -->
+          <iterate property="yearCountList">
+            , MAX(DECODE(TO_NUMBER(SKKYYDO), NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), DECODE(IDOMOTOSAKIKBN, '1', KSBOKA, TO_NUMBER(NULL)), TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_k
+            <isEqual property="searchParam.reportSchUnit" compareValue="1"> <!-- 月 -->
+              , SUM(DECODE(TO_NUMBER(SKKYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), FTSKKGK1, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_1
+              , SUM(DECODE(TO_NUMBER(SKKYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), FTSKKGK2, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_2
+              , SUM(DECODE(TO_NUMBER(SKKYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), FTSKKGK3, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_3
+              , SUM(DECODE(TO_NUMBER(SKKYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), FTSKKGK4, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_4
+              , SUM(DECODE(TO_NUMBER(SKKYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), FTSKKGK5, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_5
+              , SUM(DECODE(TO_NUMBER(SKKYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), FTSKKGK6, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_6
+              , SUM(DECODE(TO_NUMBER(SKKYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), FTSKKGK7, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_7
+              , SUM(DECODE(TO_NUMBER(SKKYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), FTSKKGK8, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_8
+              , SUM(DECODE(TO_NUMBER(SKKYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), FTSKKGK9, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_9
+              , SUM(DECODE(TO_NUMBER(SKKYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), FTSKKGK10, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_10
+              , SUM(DECODE(TO_NUMBER(SKKYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), FTSKKGK11, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_11
+              , SUM(DECODE(TO_NUMBER(SKKYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), FTSKKGK12, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_12
+            </isEqual>
+            <isEqual property="searchParam.reportSchUnit" compareValue="2"> <!-- 四半期 -->
+              , SUM(DECODE(TO_NUMBER(SKKYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), FTSKKGK1 + FTSKKGK2 + FTSKKGK3, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_1
+              , SUM(DECODE(TO_NUMBER(SKKYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), FTSKKGK4 + FTSKKGK5 + FTSKKGK6, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_2
+              , SUM(DECODE(TO_NUMBER(SKKYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), FTSKKGK7 + FTSKKGK8 + FTSKKGK9, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_3
+              , SUM(DECODE(TO_NUMBER(SKKYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), FTSKKGK10 + FTSKKGK11 + FTSKKGK12, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_4
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_5
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_6
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_7
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_8
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_9
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_10
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_11
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_12
+            </isEqual>
+            <isEqual property="searchParam.reportSchUnit" compareValue="3"> <!-- 半期 -->
+              , SUM(DECODE(TO_NUMBER(SKKYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), FTSKKGK1 + FTSKKGK2 + FTSKKGK3 + FTSKKGK4 + FTSKKGK5 + FTSKKGK6, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_1
+              , SUM(DECODE(TO_NUMBER(SKKYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), FTSKKGK7 + FTSKKGK8 + FTSKKGK9 + FTSKKGK10 + FTSKKGK11 + FTSKKGK12, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_2
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_3
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_4
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_5
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_6
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_7
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_8
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_9
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_10
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_11
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_12
+            </isEqual>
+            <isEqual property="searchParam.reportSchUnit" compareValue="4"> <!-- 年 -->
+              , SUM(DECODE(TO_NUMBER(SKKYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), FTSKKGK1 + FTSKKGK2 + FTSKKGK3 + FTSKKGK4 + FTSKKGK5 + FTSKKGK6 + FTSKKGK7 + FTSKKGK8 + FTSKKGK9 + FTSKKGK10 + FTSKKGK11 + FTSKKGK12, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_1
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_2
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_3
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_4
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_5
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_6
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_7
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_8
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_9
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_10
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_11
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_12
+            </isEqual>
+            , SUM(DECODE(TO_NUMBER(SKKYYDO), NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), (NINISKKGK1 + NINISKKGK2 + NINISKKGK3 + NINISKKGK4 + NINISKKGK5 + NINISKKGK6 + NINISKKGK7 + NINISKKGK8 + NINISKKGK9 + NINISKKGK10 + NINISKKGK11 + NINISKKGK12), TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_n
+            , SUM(DECODE(TO_NUMBER(SKKYYDO), NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), (ZKSKKGK1 + ZKSKKGK2 + ZKSKKGK3 + ZKSKKGK4 + ZKSKKGK5 + ZKSKKGK6 + ZKSKKGK7 + ZKSKKGK8 + ZKSKKGK9 + ZKSKKGK10 + ZKSKKGK11 + ZKSKKGK12), TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_z
+            , SUM(DECODE(TO_NUMBER(SKKYYDO), NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), (TKSKKGK1 + TKSKKGK2 + TKSKKGK3 + TKSKKGK4 + TKSKKGK5 + TKSKKGK6 + TKSKKGK7 + TKSKKGK8 + TKSKKGK9 + TKSKKGK10 + TKSKKGK11 + TKSKKGK12), TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_t
+            , SUM(DECODE(TO_NUMBER(SKKYYDO), NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), (GENSONGK1 + GENSONGK2 + GENSONGK3 + GENSONGK4 + GENSONGK5 + GENSONGK6 + GENSONGK7 + GENSONGK8 + GENSONGK9 + GENSONGK10 + GENSONGK11 + GENSONGK12), TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_g
+          </iterate>
+          , h.SOSHIKI2CD
+          , h.SKKGKHFKBN REPORT_DIST_TYPE
+        FROM
+          NEA_PPFS_YSK_CALC h
+        WHERE
+          h.CHOBO = '1' /* 会社帳簿 */
+          /* AND h.YSKDATAKBN = '1' */ /* 計算処理対象 */
+        GROUP BY
+          h.COMPANY_CODE
+          , h.KOYUNO
+          , h.SOSHIKI2CD
+          , h.SKKGKHFKBN
+        <isNotEmpty property="kinriDisplay">
+        /* 社内金利 */
+        UNION ALL
+        SELECT
+          h.COMPANY_CODE
+          , h.KOYUNO
+          , '2' ACCOUNT_TYPE
+          , '社内金利' ACCOUNT_NAME
+          <!-- 年数分ループ -->
+          <iterate property="yearCountList">
+            , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_k
+            <isEqual property="searchParam.reportSchUnit" compareValue="1"> <!-- 月 -->
+              , SUM(DECODE(TO_NUMBER(SKKYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), SHIKINKINRI1, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_1
+              , SUM(DECODE(TO_NUMBER(SKKYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), SHIKINKINRI2, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_2
+              , SUM(DECODE(TO_NUMBER(SKKYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), SHIKINKINRI3, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_3
+              , SUM(DECODE(TO_NUMBER(SKKYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), SHIKINKINRI4, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_4
+              , SUM(DECODE(TO_NUMBER(SKKYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), SHIKINKINRI5, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_5
+              , SUM(DECODE(TO_NUMBER(SKKYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), SHIKINKINRI6, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_6
+              , SUM(DECODE(TO_NUMBER(SKKYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), SHIKINKINRI7, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_7
+              , SUM(DECODE(TO_NUMBER(SKKYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), SHIKINKINRI8, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_8
+              , SUM(DECODE(TO_NUMBER(SKKYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), SHIKINKINRI9, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_9
+              , SUM(DECODE(TO_NUMBER(SKKYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), SHIKINKINRI10, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_10
+              , SUM(DECODE(TO_NUMBER(SKKYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), SHIKINKINRI11, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_11
+              , SUM(DECODE(TO_NUMBER(SKKYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), SHIKINKINRI12, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_12
+            </isEqual>
+            <isEqual property="searchParam.reportSchUnit" compareValue="2"> <!-- 四半期 -->
+              , SUM(DECODE(TO_NUMBER(SKKYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), SHIKINKINRI1 + SHIKINKINRI2 + SHIKINKINRI3, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_1
+              , SUM(DECODE(TO_NUMBER(SKKYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), SHIKINKINRI4 + SHIKINKINRI5 + SHIKINKINRI6, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_2
+              , SUM(DECODE(TO_NUMBER(SKKYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), SHIKINKINRI7 + SHIKINKINRI8 + SHIKINKINRI9, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_3
+              , SUM(DECODE(TO_NUMBER(SKKYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), SHIKINKINRI10 + SHIKINKINRI11 + SHIKINKINRI12, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_4
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_5
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_6
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_7
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_8
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_9
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_10
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_11
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_12
+            </isEqual>
+            <isEqual property="searchParam.reportSchUnit" compareValue="3"> <!-- 半期 -->
+              , SUM(DECODE(TO_NUMBER(SKKYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), SHIKINKINRI1 + SHIKINKINRI2 + SHIKINKINRI3 + SHIKINKINRI4 + SHIKINKINRI5 + SHIKINKINRI6, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_1
+              , SUM(DECODE(TO_NUMBER(SKKYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), SHIKINKINRI7 + SHIKINKINRI8 + SHIKINKINRI9 + SHIKINKINRI10 + SHIKINKINRI11 + SHIKINKINRI12, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_2
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_3
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_4
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_5
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_6
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_7
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_8
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_9
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_10
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_11
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_12
+            </isEqual>
+            <isEqual property="searchParam.reportSchUnit" compareValue="4"> <!-- 年 -->
+              , SUM(DECODE(TO_NUMBER(SKKYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), SHIKINKINRI1 + SHIKINKINRI2 + SHIKINKINRI3 + SHIKINKINRI4 + SHIKINKINRI5 + SHIKINKINRI6 + SHIKINKINRI7 + SHIKINKINRI8 + SHIKINKINRI9 + SHIKINKINRI10 + SHIKINKINRI11 + SHIKINKINRI12, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_1
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_2
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_3
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_4
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_5
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_6
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_7
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_8
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_9
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_10
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_11
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_12
+            </isEqual>
+            , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_n
+            , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_z
+            , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_t
+            , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_g
+          </iterate>
+          , h.SOSHIKI2CD
+          , h.SKKGKHFKBN REPORT_DIST_TYPE
+        FROM
+          NEA_PPFS_KINRI_YSK_CALC h
+        WHERE
+          h.CHOBO = '1' /* 会社帳簿 */
+          /* AND h.YSKDATAKBN = '1' */ /* 計算処理対象 */
+        GROUP BY
+          h.COMPANY_CODE
+          , h.KOYUNO
+          , h.SOSHIKI2CD
+          , h.SKKGKHFKBN
+        </isNotEmpty>
+      ) ph
+    WHERE
+      <!-- *********** 共通条件 *********** -->
+      <include refid="selectFldComWhere_FLD" />
+
+      <!-- *********** 償却費・社内金利明細用条件 *********** -->
+      AND ph.COMPANY_CODE = #companyCode#
+      AND ph.KOYUNO = ptvf.KOYUNO
+      <!-- 配賦 -->
+      AND ph.REPORT_DIST_TYPE = #searchParam.reportDistType#
+      <!-- 経費負担 -->
+      <isNotEmpty property="costSectionCodeIn">
+        AND ph.SOSHIKI2CD IN ( $costSectionCodeIn$ )
+      </isNotEmpty>
+
+    ORDER BY
+      <!-- 有形 -->
+      <isEqual property="skkshisankbnTrans" compareValue="1">
+        ptvf.OYA || ptvf.EDA
+      </isEqual>
+      <!-- 無形 -->
+      <isNotEqual property="skkshisankbnTrans" compareValue="1">
+        ptvf.APPLICATION_ID
+        , ptvf.OYA || ptvf.EDA
+      </isNotEqual>
+      , ph.SOSHIKI2CD
+      , ph.ACCOUNT_TYPE
+  </select>
+
+  <!--
+    仮勘定・本勘定紐付リスト
+  -->
+  <select id="selectFldJoinKHList_FLD" parameterClass="java.util.Map" resultClass="jp.co.ctcg.easset.dto.fld.PpfsFldSRRep">
+    SELECT
+      fld_k.shisanNum shisanNumKari /* 仮勘定資産番号 */
+      , fld_h.shisanNum shisanNumHon /* 本勘定資産番号 */
+      <!-- 仮勘定項目 -->
+      , fld_k.applicationId applicationIdKari /* 取得申請番号 */
+      , fld_k.shisanjotaikbnName shisanjotaikbnNameKari /* 資産状態区分 */
+      , fld_k.shisannm shisannmKari /* 資産名 */
+      , fld_k.soshiki1cd soshiki1cdKari /* 事業グループコード */
+      , fld_k.soshiki1nm soshiki1nmKari /* 事業グループ名 */
+      , fld_k.soshiki2cd soshiki2cdKari /* 資産計上部課コード */
+      , fld_k.soshiki2nm soshiki2nmKari /* 資産計上部課名 */
+      , fld_k.setchinm setchinmKari /* 代表設置場所 */
+      , fld_k.shuruicd shuruicdKari /* 種類コード */
+      , fld_k.shuruinm shuruinmKari /* 種類 */
+      , fld_k.bunruicd bunruicdKari /* 分類コード */
+      , fld_k.bunruinm bunruinmKari /* 分類 */
+      , fld_k.cpkeijoymdF cpkeijoymdKF /* 建仮計上日 */
+      , fld_k.suryo suryoKari /* 数量 */
+      , fld_k.stkgkk stkgkkKari /* 取得価額 */
+      , fld_k.ksgensonruigkk ksgensonruigkkKari /* 期首減損累計額 */
+      , fld_k.togensongkk togensongkkKari /* 当期減損額 */
+      , fld_k.biko1 biko1Kari /* 備考1 */
+      , fld_k.biko2 biko2Kari /* 備考2 */
+      , fld_k.furikaeymdF furikaeymdKF /* 振替日 */
+      , fld_k.routeTypeName routeTypeNameKari /* 経路ﾌﾗｸﾞ名 */
+      , fld_k.purCompanyCode purCompanyCodeKari /* 仕入先コード */
+      , fld_k.purCompanyName purCompanyNameKari /* 仕入先名 */
+      , fld_k.upperSectionCode upperSectionCodeKari /* 上流部課コード */
+      , fld_k.upperSectionName upperSectionNameKari /* 上流部課名 */
+      , fld_k.astPrjCode astPrjCodeKari /* 資産プロジェクトコード */
+      , fld_k.astPrjName astPrjNameKari /* 資産プロジェクト名 */
+      , fld_k.slipNum slipNumKari /* 伝票番号 */
+      , fld_k.paTemplateCode paTemplateCodeKari /* PAﾃﾝﾌﾟﾚｰﾄ */
+      , fld_k.paTemplateName paTemplateNameKari /* PAﾃﾝﾌﾟﾚｰﾄ名 */
+      , fld_k.upperAccountCode upperAccountCodeKari /* 上流勘定 */
+      , fld_k.upperAccountName upperAccountNameKari /* 上流勘定名 */
+      , fld_k.jgzzReconRef jgzzReconRefKari /* 消込参照 */
+      <!-- 本勘定項目 -->
+      , fld_h.*
+    FROM
+      (
+        SELECT
+          <include refid="selectFldComColumn_FLD" />
+          , <include refid="selectFldComColumnL_FLD" />
+        FROM
+          <include refid="selectFldComFrom_FLD" />
+        WHERE
+          ptvf.shisanknrkbn != '1' /* 本勘定 */
+          AND <include refid="selectFldComWhere_FLD" />
+      ) fld_h
+      , (
+        SELECT
+          <include refid="selectFldComColumn_FLD" />
+          , <include refid="selectFldComColumnL_FLD" />
+        FROM
+          <include refid="selectFldComFrom_FLD" />
+        WHERE
+          ptvf.shisanknrkbn = '1' /* 仮勘定 */
+      ) fld_k
+    WHERE
+      fld_k.furikaegoOya = fld_h.oya
+      AND fld_k.furikaegoEda = fld_h.eda
+    UNION
+    SELECT
+      fld_k.shisanNum shisanNumKari /* 仮勘定資産番号 */
+      , fld_h.shisanNum shisanNumHon /* 本勘定資産番号 */
+      <!-- 仮勘定項目 -->
+      , fld_k.applicationId applicationIdKari /* 取得申請番号 */
+      , fld_k.shisanjotaikbnName shisanjotaikbnNameKari /* 資産状態区分 */
+      , fld_k.shisannm shisannmKari /* 資産名 */
+      , fld_k.soshiki1cd soshiki1cdKari /* 事業グループコード */
+      , fld_k.soshiki1nm soshiki1nmKari /* 事業グループ名 */
+      , fld_k.soshiki2cd soshiki2cdKari /* 資産計上部課コード */
+      , fld_k.soshiki2nm soshiki2nmKari /* 資産計上部課名 */
+      , fld_k.setchinm setchinmKari /* 代表設置場所 */
+      , fld_k.shuruicd shuruicdKari /* 種類コード */
+      , fld_k.shuruinm shuruinmKari /* 種類 */
+      , fld_k.bunruicd bunruicdKari /* 分類コード */
+      , fld_k.bunruinm bunruinmKari /* 分類 */
+      , fld_k.cpkeijoymdF cpkeijoymdKF /* 建仮計上日 */
+      , fld_k.suryo suryoKari /* 数量 */
+      , fld_k.stkgkk stkgkkKari /* 取得価額 */
+      , fld_k.ksgensonruigkk ksgensonruigkkKari /* 期首減損累計額 */
+      , fld_k.togensongkk togensongkkKari /* 当期減損額 */
+      , fld_k.biko1 biko1Kari /* 備考1 */
+      , fld_k.biko2 biko2Kari /* 備考2 */
+      , fld_k.furikaeymdF furikaeymdKF /* 振替日 */
+      , fld_k.routeTypeName routeTypeNameKari /* 経路ﾌﾗｸﾞ名 */
+      , fld_k.purCompanyCode purCompanyCodeKari /* 仕入先コード */
+      , fld_k.purCompanyName purCompanyNameKari /* 仕入先名 */
+      , fld_k.upperSectionCode upperSectionCodeKari /* 上流部課コード */
+      , fld_k.upperSectionName upperSectionNameKari /* 上流部課名 */
+      , fld_k.astPrjCode astPrjCodeKari /* 資産プロジェクトコード */
+      , fld_k.astPrjName astPrjNameKari /* 資産プロジェクト名 */
+      , fld_k.slipNum slipNumKari /* 伝票番号 */
+      , fld_k.paTemplateCode paTemplateCodeKari /* PAﾃﾝﾌﾟﾚｰﾄ */
+      , fld_k.paTemplateName paTemplateNameKari /* PAﾃﾝﾌﾟﾚｰﾄ名 */
+      , fld_k.upperAccountCode upperAccountCodeKari /* 上流勘定 */
+      , fld_k.upperAccountName upperAccountNameKari /* 上流勘定名 */
+      , fld_k.jgzzReconRef jgzzReconRefKari /* 消込参照 */
+      <!-- 本勘定項目 -->
+      , fld_h.*
+    FROM
+      (
+        SELECT
+          <include refid="selectFldComColumn_FLD" />
+          , <include refid="selectFldComColumnL_FLD" />
+        FROM
+          <include refid="selectFldComFrom_FLD" />
+        WHERE
+          ptvf.shisanknrkbn != '1' /* 本勘定 */
+      ) fld_h
+      , (
+        SELECT
+          <include refid="selectFldComColumn_FLD" />
+          , <include refid="selectFldComColumnL_FLD" />
+        FROM
+          <include refid="selectFldComFrom_FLD" />
+        WHERE
+          ptvf.shisanknrkbn = '1' /* 仮勘定 */
+          AND <include refid="selectFldComWhere_FLD" />
+      ) fld_k
+    WHERE
+      fld_k.furikaegoOya = fld_h.oya
+      AND fld_k.furikaegoEda = fld_h.eda
+
+    ORDER BY
+      <!-- 有形 -->
+      <isEqual property="skkshisankbnTrans" compareValue="1">
+        shisanNumKari
+      </isEqual>
+      <!-- 無形 -->
+      <isNotEqual property="skkshisankbnTrans" compareValue="1">
+        applicationIdKari, shisanNumKari
+      </isNotEqual>
+  </select>
+
+  <!--
+    資産-現物紐付リスト(有形)
+  -->
+  <select id="selectFldJoinSGTanList_FLD" parameterClass="java.util.Map" resultClass="jp.co.ctcg.easset.dto.fld.PpfsFldSRRep">
+    <!-- 情報機器等 -->
+    SELECT
+      ptvf.OYA || ptvf.EDA reportKey1
+      , a.ASSET_ID reportKey2
+      <!-- 現物項目 -->
+      , a.AST_NAME astNameGen
+      , NEA_UTIL_PKG.get_company_name_f(a.HOL_COMPANY_CODE) holCompanyNameGen
+      , NEA_UTIL_PKG.get_section_name_f(a.HOL_COMPANY_CODE, a.HOL_SECTION_CODE, a.HOL_SECTION_YEAR) holSectionNameGen
+      , a.HOL_STAFF_CODE holStaffCodeGen
+      , NEA_UTIL_PKG.get_staff_name_f(a.HOL_STAFF_CODE) holStaffNameGen
+      , a.USE_STAFF_CODE useStaffCodeGen
+      , NEA_UTIL_PKG.get_staff_name_f(a.USE_STAFF_CODE) useStaffNameGen
+      , NEA_UTIL_PKG.get_cn_value1_f('OFFICE', a.HOL_OFFICE_CODE) holOfficeNameGen
+      , a.HOL_OFFICE_FLOOR holOfficeFloorGen
+      , a.HOL_QUANTITY holQuantityGen
+      , a.DELETE_DATE deleteDateGen
+
+      <!-- 固定資産項目 -->
+      , <include refid="selectFldComColumn_FLD" />
+      , <include refid="selectFldComColumnL_FLD" />
+    FROM
+      <include refid="selectFldComFrom_FLD" />
+      , PPFS_LD_SUPPORT s
+      , NEA_ASSET a
+    WHERE
+      ptvf.KOYUNO = s.KOYUNO
+      AND s.HOJOSHUBETSUCD = '00001'
+      AND CSCONVERT(s.HOJOSPAREC1,'CHAR_CS') = a.ASSET_ID
+      AND <include refid="selectFldComWhere_FLD" />
+
+    <!-- ライセンス -->
+    UNION ALL
+    SELECT
+      ptvf.OYA || ptvf.EDA reportKey1
+      , a.LICENSE_ID reportKey2
+      <!-- 現物項目 -->
+      , NEA_UTIL_PKG.get_software_name_f(a.SOFTWARE_ID) astNameGen
+      , NEA_UTIL_PKG.get_company_name_f(a.HOL_COMPANY_CODE) holCompanyNameGen
+      , NEA_UTIL_PKG.get_section_name_f(a.HOL_COMPANY_CODE, a.HOL_SECTION_CODE, a.HOL_SECTION_YEAR) holSectionNameGen
+      , a.HOL_STAFF_CODE holStaffCodeGen
+      , NEA_UTIL_PKG.get_staff_name_f(a.HOL_STAFF_CODE) holStaffNameGen
+      , TO_CHAR(NULL) useStaffCodeGen
+      , TO_CHAR(NULL) useStaffNameGen
+      , TO_CHAR(NULL) holOfficeNameGen
+      , TO_NUMBER(NULL) holOfficeFloorGen
+      , TO_NUMBER(NULL) holQuantityGen
+      , a.DELETE_DATE deleteDateGen
+
+      <!-- 固定資産項目 -->
+      , <include refid="selectFldComColumn_FLD" />
+      , <include refid="selectFldComColumnL_FLD" />
+    FROM
+      <include refid="selectFldComFrom_FLD" />
+      , PPFS_LD_SUPPORT s
+      , NEA_LICENSE a
+    WHERE
+      ptvf.KOYUNO = s.KOYUNO
+      AND s.HOJOSHUBETSUCD = '00001'
+      AND CSCONVERT(s.HOJOSPAREC1,'CHAR_CS') = a.LICENSE_ID
+      AND <include refid="selectFldComWhere_FLD" />
+
+    ORDER BY
+      reportKey1
+      , reportKey2
+  </select>
+
+  <!--
+    資産-現物紐付リスト(無形)
+  -->
+  <select id="selectFldJoinSGIntList_FLD" parameterClass="java.util.Map" resultClass="jp.co.ctcg.easset.dto.fld.PpfsFldSRRep">
+    SELECT
+      fld.applicationId reportKey1
+      , a.LICENSE_ID reportKey2
+      <!-- 現物項目 -->
+      , NEA_UTIL_PKG.get_software_name_f(a.SOFTWARE_ID) astNameGen
+      , NEA_UTIL_PKG.get_company_name_f(a.HOL_COMPANY_CODE) holCompanyNameGen
+      , NEA_UTIL_PKG.get_section_name_f(a.HOL_COMPANY_CODE, a.HOL_SECTION_CODE, a.HOL_SECTION_YEAR) holSectionNameGen
+      , a.HOL_STAFF_CODE holStaffCodeGen
+      , NEA_UTIL_PKG.get_staff_name_f(a.HOL_STAFF_CODE) holStaffNameGen
+      , a.DELETE_DATE deleteDateGen
+
+      <!-- 固定資産項目 -->
+      , fld.*
+    FROM
+      (
+        <include refid="selectFldListAppCom_FLD" />
+      ) fld
+      , NEA_LICENSE a
+    WHERE
+      CSCONVERT(fld.applicationId,'CHAR_CS') = a.GET_APPLICATION_ID
+
+    ORDER BY
+      reportKey1
+      , reportKey2
+  </select>
+
+  <!-- ****************************************************** ↑ 照会・台帳で使用するメインSQL ****************************************************** -->
+
+  <!--
+    現物情報検索SQL
+  -->
+  <select id="selectFldKoyuno_FLD" parameterClass="java.util.Map" resultClass="java.lang.Long">
+    SELECT
+      ptvf1.KOYUNO
+    FROM
+      (
+      <!-- 無形以外（有形 or 両方） -->
+      <isNotEqual property="skkshisankbnTrans" compareValue="2">
+        <!-- 情報機器 -->
+        SELECT
+          a.HOL_COMPANY_CODE
+        , a.HOL_SECTION_CODE
+        , a.HOL_SECTION_YEAR
+        , TO_CHAR(NULL) AS HOL_STAFF_CODE_I
+        , HOL_STAFF_CODE AS HOL_STAFF_CODE_T
+        , a.DSC_ATTRIBUTE1
+        , a.DSC_ATTRIBUTE2
+        , a.DSC_ATTRIBUTE3
+        , a.DSC_ATTRIBUTE4
+        , a.DSC_ATTRIBUTE5
+        , a.DSC_ATTRIBUTE6
+        , a.DSC_ATTRIBUTE7
+        , a.DSC_ATTRIBUTE8
+        , a.DSC_ATTRIBUTE9
+        , a.DSC_ATTRIBUTE10
+        , a.DSC_ATTRIBUTE11
+        , a.DSC_ATTRIBUTE12
+        , a.DSC_ATTRIBUTE13
+        , a.DSC_ATTRIBUTE14
+        , a.DSC_ATTRIBUTE15
+        , a.DSC_ATTRIBUTE16
+        , a.DSC_ATTRIBUTE17
+        , a.DSC_ATTRIBUTE18
+        , a.DSC_ATTRIBUTE19
+        , a.DSC_ATTRIBUTE20
+        , a.ASSET_ID
+        , TO_CHAR(NULL) AS LICENSE_ID
+        , a.HOL_OFFICE_CODE
+        , a.HOL_OFFICE_FLOOR
+        , a.USE_STAFF_CODE
+        , a.USE_COMPANY_CODE
+        , a.USE_SECTION_CODE
+        , a.USE_SECTION_YEAR
+        , a.AST_SYSTEM_SECTION_DEPLOY_FLAG
+        , a.AST_MANAGE_TYPE
+        , s.KOYUNO
+        FROM
+          PPFS_LD_SUPPORT s
+        , NEA_ASSET a
+        WHERE
+          s.HOJOSHUBETSUCD = '00001'
+        AND s.HOJOSPAREC1 = CSCONVERT(a.ASSET_ID,'NCHAR_CS')
+        <!-- アクセスレベル -->
+        <isNotEmpty property="accessLevelUserA">
+          AND (a.USE_STAFF_CODE = #accessLevelUserA#)
+        </isNotEmpty>
+        <!-- アクセスレベル -->
+        <isNotEmpty property="accessLevelSectionA">
+          AND $accessLevelSectionA$
+        </isNotEmpty>
+        <!-- ﾗｲｾﾝｽ -->
+        UNION ALL
+          SELECT
+            l.HOL_COMPANY_CODE
+          , l.HOL_SECTION_CODE
+          , l.HOL_SECTION_YEAR
+          , TO_CHAR(NULL) AS HOL_STAFF_CODE_I
+          , HOL_STAFF_CODE AS HOL_STAFF_CODE_T
+          , l.DSC_ATTRIBUTE1
+          , l.DSC_ATTRIBUTE2
+          , l.DSC_ATTRIBUTE3
+          , l.DSC_ATTRIBUTE4
+          , l.DSC_ATTRIBUTE5
+          , l.DSC_ATTRIBUTE6
+          , l.DSC_ATTRIBUTE7
+          , l.DSC_ATTRIBUTE8
+          , l.DSC_ATTRIBUTE9
+          , l.DSC_ATTRIBUTE10
+          , l.DSC_ATTRIBUTE11
+          , l.DSC_ATTRIBUTE12
+          , l.DSC_ATTRIBUTE13
+          , l.DSC_ATTRIBUTE14
+          , l.DSC_ATTRIBUTE15
+          , l.DSC_ATTRIBUTE16
+          , l.DSC_ATTRIBUTE17
+          , l.DSC_ATTRIBUTE18
+          , l.DSC_ATTRIBUTE19
+          , l.DSC_ATTRIBUTE20
+          , TO_CHAR(NULL) AS ASSET_ID
+          , l.LICENSE_ID AS LICENSE_ID
+          , TO_CHAR(NULL) AS HOL_OFFICE_CODE
+          , TO_NUMBER(NULL) AS HOL_OFFICE_FLOOR
+          , TO_CHAR(NULL) AS USE_STAFF_CODE
+          , l.USE_COMPANY_CODE
+          , l.USE_SECTION_CODE
+          , l.USE_SECTION_YEAR
+          , TO_CHAR(NULL) AST_SYSTEM_SECTION_DEPLOY_FLAG
+          , TO_CHAR(NULL) AST_MANAGE_TYPE
+          , s.KOYUNO
+          FROM
+            PPFS_LD_SUPPORT s
+          , NEA_LICENSE l
+          WHERE
+            s.HOJOSHUBETSUCD = '00001'
+          AND s.HOJOSPAREC1 = CSCONVERT(l.LICENSE_ID,'NCHAR_CS')
+          <!-- アクセスレベル -->
+          <isNotEmpty property="accessLevelUserL">
+            AND 1 != 1
+          </isNotEmpty>
+          <!-- アクセスレベル -->
+          <isNotEmpty property="accessLevelSectionL">
+            AND $accessLevelSectionL$
+          </isNotEmpty>
+        </isNotEqual>
+        <!-- 有形以外(無形or両方) -->
+        <isNotEqual property="skkshisankbnTrans" compareValue="1">
+        <isNotEqual property="skkshisankbnTrans" compareValue="2">
+           UNION ALL
+        </isNotEqual>
+        <!-- 無形付加情報、申請書番号リンクライセンス -->
+        SELECT
+          nie.HOL_COMPANY_CODE
+        , nie.HOL_SECTION_CODE
+        , nie.HOL_SECTION_YEAR
+        , nie.HOL_STAFF_CODE AS HOL_STAFF_CODE_I
+        , TO_CHAR(NULL) AS HOL_STAFF_CODE_T
+        , nie.DSC_ATTRIBUTE1
+        , nie.DSC_ATTRIBUTE2
+        , nie.DSC_ATTRIBUTE3
+        , nie.DSC_ATTRIBUTE4
+        , nie.DSC_ATTRIBUTE5
+        , nie.DSC_ATTRIBUTE6
+        , nie.DSC_ATTRIBUTE7
+        , nie.DSC_ATTRIBUTE8
+        , nie.DSC_ATTRIBUTE9
+        , nie.DSC_ATTRIBUTE10
+        , nie.DSC_ATTRIBUTE11
+        , nie.DSC_ATTRIBUTE12
+        , nie.DSC_ATTRIBUTE13
+        , nie.DSC_ATTRIBUTE14
+        , nie.DSC_ATTRIBUTE15
+        , nie.DSC_ATTRIBUTE16
+        , nie.DSC_ATTRIBUTE17
+        , nie.DSC_ATTRIBUTE18
+        , nie.DSC_ATTRIBUTE19
+        , nie.DSC_ATTRIBUTE20
+        , TO_CHAR(NULL) AS ASSET_ID
+        , l.LICENSE_ID AS LICENSE_ID
+        , TO_CHAR(NULL) AS HOL_OFFICE_CODE
+        , TO_NUMBER(NULL) AS HOL_OFFICE_FLOOR
+        , TO_CHAR(NULL) AS USE_STAFF_CODE
+        , TO_CHAR(NULL) AS USE_COMPANY_CODE
+        , TO_CHAR(NULL) AS USE_SECTION_CODE
+        , TO_NUMBER(NULL) AS USE_SECTION_YEAR
+        , TO_CHAR(NULL) AST_SYSTEM_SECTION_DEPLOY_FLAG
+        , TO_CHAR(NULL) AST_MANAGE_TYPE
+        , p.KOYUNO
+        FROM
+          NEA_PPFS_FLD p
+        , NEA_INT_EXT nie
+        , NEA_LICENSE l
+        WHERE
+          p.APPLICATION_ID = CSCONVERT(nie.APPLICATION_ID,'NCHAR_CS')
+        AND l.GET_APPLICATION_ID = nie.APPLICATION_ID
+        AND p.COMPANY_CODE = nie.HOL_COMPANY_CODE
+        AND p.SKKSHISANKBN IN ('2', '4')
+        <!-- アクセスレベル -->
+        <isNotEmpty property="accessLevelUserI">
+           AND $accessLevelUserI$
+        </isNotEmpty>
+        <!-- アクセスレベル -->
+        <isNotEmpty property="accessLevelSectionI">
+           AND $accessLevelSectionI$
+        </isNotEmpty>
+        UNION ALL
+        <!-- 無形付加情報 -->
+          SELECT
+            nie.HOL_COMPANY_CODE
+          , nie.HOL_SECTION_CODE
+          , nie.HOL_SECTION_YEAR
+          , nie.HOL_STAFF_CODE AS HOL_STAFF_CODE_I
+          , TO_CHAR(NULL) AS HOL_STAFF_CODE_T
+          , nie.DSC_ATTRIBUTE1
+          , nie.DSC_ATTRIBUTE2
+          , nie.DSC_ATTRIBUTE3
+          , nie.DSC_ATTRIBUTE4
+          , nie.DSC_ATTRIBUTE5
+          , nie.DSC_ATTRIBUTE6
+          , nie.DSC_ATTRIBUTE7
+          , nie.DSC_ATTRIBUTE8
+          , nie.DSC_ATTRIBUTE9
+          , nie.DSC_ATTRIBUTE10
+          , nie.DSC_ATTRIBUTE11
+          , nie.DSC_ATTRIBUTE12
+          , nie.DSC_ATTRIBUTE13
+          , nie.DSC_ATTRIBUTE14
+          , nie.DSC_ATTRIBUTE15
+          , nie.DSC_ATTRIBUTE16
+          , nie.DSC_ATTRIBUTE17
+          , nie.DSC_ATTRIBUTE18
+          , nie.DSC_ATTRIBUTE19
+          , nie.DSC_ATTRIBUTE20
+          , TO_CHAR(NULL) AS ASSET_ID
+          , TO_CHAR(NULL) AS LICENSE_ID
+          , TO_CHAR(NULL) AS HOL_OFFICE_CODE
+          , TO_NUMBER(NULL) AS HOL_OFFICE_FLOOR
+          , TO_CHAR(NULL) AS USE_STAFF_CODE
+          , TO_CHAR(NULL) AS USE_COMPANY_CODE
+          , TO_CHAR(NULL) AS USE_SECTION_CODE
+          , TO_NUMBER(NULL) AS USE_SECTION_YEAR
+          , TO_CHAR(NULL) AST_SYSTEM_SECTION_DEPLOY_FLAG
+          , TO_CHAR(NULL) AST_MANAGE_TYPE
+          , p.KOYUNO
+          FROM
+            NEA_PPFS_FLD p
+          , NEA_INT_EXT nie
+          WHERE
+            p.APPLICATION_ID = CSCONVERT(nie.APPLICATION_ID,'NCHAR_CS')
+          AND NOT EXISTS (SELECT 'X' FROM NEA_LICENSE l WHERE l.GET_APPLICATION_ID = nie.APPLICATION_ID)
+          AND p.COMPANY_CODE = nie.HOL_COMPANY_CODE
+          AND p.SKKSHISANKBN IN ('2', '4')
+          <!-- アクセスレベル -->
+          <isNotEmpty property="accessLevelUserI">
+            AND $accessLevelUserI$
+          </isNotEmpty>
+          <!-- アクセスレベル -->
+          <isNotEmpty property="accessLevelSectionI">
+            AND $accessLevelSectionI$
+          </isNotEmpty>
+      </isNotEqual>
+      ) ptvf1
+     WHERE
+       1 = 1
+     <!-- 情報機器管理番号 -->
+     <isNotEmpty property="searchParam.assetId">
+       AND ptvf1.ASSET_ID LIKE '%' || #searchParam.assetId# || '%'
+     </isNotEmpty>
+     <isNotEmpty property="assetIdPluralList">
+       AND $assetIdPluralList$
+     </isNotEmpty>
+     <!-- ﾗｲｾﾝｽ管理番号 -->
+     <isNotEmpty property="searchParam.licenseId">
+       AND ptvf1.LICENSE_ID LIKE '%' || #searchParam.licenseId# || '%'
+     </isNotEmpty>
+     <isNotEmpty property="licenseIdPluralList">
+       AND $licenseIdPluralList$
+     </isNotEmpty>
+     <!-- 現物情報 -->
+     <!-- 保有/使用部署 -->
+     <isNotEmpty property="section">
+       AND $section$
+     </isNotEmpty>
+     <!-- 資産管理担当者 -->
+     <isNotEmpty property="searchParam.holStaffCodeT">
+       AND ptvf1.HOL_STAFF_CODE_T = #searchParam.holStaffCodeT#
+     </isNotEmpty>
+     <!-- 設置(使用)場所 -->
+     <isNotEmpty property="searchParam.holOfficeCode">
+       AND ptvf1.HOL_OFFICE_CODE = #searchParam.holOfficeCode#
+     </isNotEmpty>
+     <isNotEmpty property="holOfficePluralList">
+       AND $holOfficePluralList$
+     </isNotEmpty>
+     <isNotEmpty property="searchParam.holOfficeFloor">
+       AND ptvf1.HOL_OFFICE_FLOOR = #searchParam.holOfficeFloor#
+     </isNotEmpty>
+     <!-- 情シス配備 -->
+     <isNotEmpty property="searchParam.astSystemSectionDeployFlag">
+       AND ptvf1.AST_SYSTEM_SECTION_DEPLOY_FLAG = #searchParam.astSystemSectionDeployFlag#
+     </isNotEmpty>
+     <!-- 管理区分 -->
+     <isNotEmpty property="astManageTypePluralList">
+       AND $astManageTypePluralList$
+     </isNotEmpty>
+     <!-- 使用者 -->
+     <isNotEmpty property="searchParam.useStaffCode">
+       AND ptvf1.USE_STAFF_CODE = #searchParam.useStaffCode#
+     </isNotEmpty>
+     <!-- 拡張情報の条件 -->
+     <!-- 無形担当者 -->
+     <isNotEmpty property="searchParam.holStaffCodeI">
+       AND ptvf1.HOL_STAFF_CODE_I = #searchParam.holStaffCodeI#
+     </isNotEmpty>
+     <!-- 管理項目 -->
+     <isNotEmpty property="dscAttribute1PluralList">
+       AND ($dscAttribute1PluralList$
+         OR $dscAttribute2PluralList$
+         OR $dscAttribute3PluralList$
+         OR $dscAttribute4PluralList$
+         OR $dscAttribute5PluralList$
+         OR $dscAttribute6PluralList$
+         OR $dscAttribute7PluralList$
+         OR $dscAttribute8PluralList$
+         OR $dscAttribute9PluralList$
+         OR $dscAttribute10PluralList$
+         OR $dscAttribute11PluralList$
+         OR $dscAttribute12PluralList$
+         OR $dscAttribute13PluralList$
+         OR $dscAttribute14PluralList$
+         OR $dscAttribute15PluralList$
+         OR $dscAttribute16PluralList$
+         OR $dscAttribute17PluralList$
+         OR $dscAttribute18PluralList$
+         OR $dscAttribute19PluralList$
+         OR $dscAttribute20PluralList$
+       )
+     </isNotEmpty>
+     <isNotEmpty property="dscAttribute1List">
+       AND $dscAttribute1List$
+     </isNotEmpty>
+     <isNotEmpty property="dscAttribute2List">
+       AND $dscAttribute2List$
+     </isNotEmpty>
+     <isNotEmpty property="dscAttribute3List">
+       AND $dscAttribute3List$
+     </isNotEmpty>
+     <isNotEmpty property="dscAttribute4List">
+       AND $dscAttribute4List$
+     </isNotEmpty>
+     <isNotEmpty property="dscAttribute5List">
+       AND $dscAttribute5List$
+     </isNotEmpty>
+     <isNotEmpty property="dscAttribute6List">
+       AND $dscAttribute6List$
+     </isNotEmpty>
+     <isNotEmpty property="dscAttribute7List">
+       AND $dscAttribute7List$
+     </isNotEmpty>
+     <isNotEmpty property="dscAttribute8List">
+       AND $dscAttribute8List$
+     </isNotEmpty>
+     <isNotEmpty property="dscAttribute9List">
+       AND $dscAttribute9List$
+     </isNotEmpty>
+     <isNotEmpty property="dscAttribute10List">
+       AND $dscAttribute10List$
+     </isNotEmpty>
+     <isNotEmpty property="dscAttribute11List">
+       AND $dscAttribute11List$
+     </isNotEmpty>
+     <isNotEmpty property="dscAttribute12List">
+       AND $dscAttribute12List$
+     </isNotEmpty>
+     <isNotEmpty property="dscAttribute13List">
+       AND $dscAttribute13List$
+     </isNotEmpty>
+     <isNotEmpty property="dscAttribute14List">
+       AND $dscAttribute14List$
+     </isNotEmpty>
+     <isNotEmpty property="dscAttribute15List">
+       AND $dscAttribute15List$
+     </isNotEmpty>
+     <isNotEmpty property="dscAttribute16List">
+       AND $dscAttribute16List$
+     </isNotEmpty>
+     <isNotEmpty property="dscAttribute17List">
+       AND $dscAttribute17List$
+     </isNotEmpty>
+     <isNotEmpty property="dscAttribute18List">
+       AND $dscAttribute18List$
+     </isNotEmpty>
+     <isNotEmpty property="dscAttribute19List">
+       AND $dscAttribute19List$
+     </isNotEmpty>
+     <isNotEmpty property="dscAttribute20List">
+       AND $dscAttribute20List$
+     </isNotEmpty>
+  </select>
+
+  <!--
+    固定資産(照会・管理項目修正)詳細
+  -->
+  <select id="selectFld_FLD" parameterClass="java.util.Map" resultClass="jp.co.ctcg.easset.dto.fld.PpfsFld">
+    SELECT
+     <include refid="selectFldComColumn_FLD" />
+    FROM
+     <include refid="selectFldComFrom_FLD" />
+    WHERE
+      ptvf.KOYUNO = #koyuno#
+  </select>
+
+  <!--
+    固定資産_詳細(取得申請単位)
+  -->
+  <select id="selectFldApp_FLD" parameterClass="java.util.Map" resultClass="jp.co.ctcg.easset.dto.fld.PpfsFldApp">
+    SELECT
+      APPLICATION_ID applicationId
+    , CREATE_DATE createDate
+    , CREATE_STAFF_CODE createStaffCode
+    , UPDATE_DATE updateDate
+    , UPDATE_STAFF_CODE updateStaffCode
+    , VERSION version
+    , HOL_COMPANY_CODE holCompanyCode
+    , HOL_SECTION_CODE holSectionCode
+    , HOL_SECTION_YEAR holSectionYear
+    , HOL_STAFF_CODE holStaffCode
+    , HOL_STAFF_COMPANY_CODE holStaffCompanyCode
+    , HOL_STAFF_SECTION_CODE holStaffSectionCode
+    , HOL_STAFF_SECTION_YEAR holStaffSectionYear
+    , DSC_ATTRIBUTE1 dscAttribute1
+    , DSC_ATTRIBUTE2 dscAttribute2
+    , DSC_ATTRIBUTE3 dscAttribute3
+    , DSC_ATTRIBUTE4 dscAttribute4
+    , DSC_ATTRIBUTE5 dscAttribute5
+    , DSC_ATTRIBUTE6 dscAttribute6
+    , DSC_ATTRIBUTE7 dscAttribute7
+    , DSC_ATTRIBUTE8 dscAttribute8
+    , DSC_ATTRIBUTE9 dscAttribute9
+    , DSC_ATTRIBUTE10 dscAttribute10
+    , DSC_ATTRIBUTE11 dscAttribute11
+    , DSC_ATTRIBUTE12 dscAttribute12
+    , DSC_ATTRIBUTE13 dscAttribute13
+    , DSC_ATTRIBUTE14 dscAttribute14
+    , DSC_ATTRIBUTE15 dscAttribute15
+    , DSC_ATTRIBUTE16 dscAttribute16
+    , DSC_ATTRIBUTE17 dscAttribute17
+    , DSC_ATTRIBUTE18 dscAttribute18
+    , DSC_ATTRIBUTE19 dscAttribute19
+    , DSC_ATTRIBUTE20 dscAttribute20
+    , NEA_UTIL_PKG.get_company_name_f(HOL_COMPANY_CODE) holCompanyName
+    , NEA_UTIL_PKG.get_company_name_f(HOL_STAFF_COMPANY_CODE) holStaffCompanyName
+    , NEA_UTIL_PKG.get_staff_name_f(HOL_STAFF_CODE) holStaffName
+    , NEA_UTIL_PKG.get_section_name_f(HOL_COMPANY_CODE, HOL_SECTION_CODE, HOL_SECTION_YEAR) holSectionName
+    , NEA_UTIL_PKG.get_section_name_f(HOL_STAFF_COMPANY_CODE, HOL_STAFF_SECTION_CODE, HOL_STAFF_SECTION_YEAR) holStaffSectionName
+    FROM
+      NEA_INT_EXT
+    WHERE
+      APPLICATION_ID = #applicationId#
+      AND HOL_COMPANY_CODE = #companyCode#
+  </select>
+
+  <!--
+    固定資産_詳細(取得申請単位)作成
+  -->
+   <insert id="insertFldApp_FLD" parameterClass="java.util.Map">
+     INSERT INTO NEA_INT_EXT (
+       APPLICATION_ID
+       , HOL_COMPANY_CODE
+       , CREATE_DATE
+       , CREATE_STAFF_CODE
+       , UPDATE_DATE
+       , UPDATE_STAFF_CODE
+       , VERSION
+       , HOL_SECTION_CODE
+       , HOL_SECTION_YEAR
+       , HOL_STAFF_CODE
+       , HOL_STAFF_COMPANY_CODE
+       , HOL_STAFF_SECTION_CODE
+       , HOL_STAFF_SECTION_YEAR
+       , DSC_ATTRIBUTE1
+       , DSC_ATTRIBUTE2
+       , DSC_ATTRIBUTE3
+       , DSC_ATTRIBUTE4
+       , DSC_ATTRIBUTE5
+       , DSC_ATTRIBUTE6
+       , DSC_ATTRIBUTE7
+       , DSC_ATTRIBUTE8
+       , DSC_ATTRIBUTE9
+       , DSC_ATTRIBUTE10
+       , DSC_ATTRIBUTE11
+       , DSC_ATTRIBUTE12
+       , DSC_ATTRIBUTE13
+       , DSC_ATTRIBUTE14
+       , DSC_ATTRIBUTE15
+       , DSC_ATTRIBUTE16
+       , DSC_ATTRIBUTE17
+       , DSC_ATTRIBUTE18
+       , DSC_ATTRIBUTE19
+       , DSC_ATTRIBUTE20
+     ) VALUES (
+       #obj.applicationId:VARCHAR# /* APPLICATION_ID*/
+       , #obj.holCompanyCode:VARCHAR# /* HOL_COMPANY_CODE*/
+       , #obj.createDate:TIMESTAMP# /* CREATE_DATE*/
+       , #obj.createStaffCode:VARCHAR# /* CREATE_STAFF_CODE*/
+       , #obj.updateDate:TIMESTAMP# /* UPDATE_DATE*/
+       , #obj.updateStaffCode:VARCHAR# /* UPDATE_STAFF_CODE*/
+       , #obj.version:NUMERIC# /* VERSION*/
+       , #obj.holSectionCode:VARCHAR# /* HOL_SECTION_CODE*/
+       , #obj.holSectionYear:NUMERIC# /* HOL_SECTION_YEAR*/
+       , #obj.holStaffCode:VARCHAR# /* HOL_STAFF_CODE*/
+       , #obj.holStaffCompanyCode:VARCHAR# /* HOL_STAFF_COMPANY_CODE*/
+       , #obj.holStaffSectionCode:VARCHAR# /* HOL_STAFF_SECTION_CODE*/
+       , #obj.holStaffSectionYear:NUMERIC# /* HOL_STAFF_SECTION_YEAR*/
+       , #obj.dscAttribute1:VARCHAR# /* DSC_ATTRIBUTE1*/
+       , #obj.dscAttribute2:VARCHAR# /* DSC_ATTRIBUTE2*/
+       , #obj.dscAttribute3:VARCHAR# /* DSC_ATTRIBUTE3*/
+       , #obj.dscAttribute4:VARCHAR# /* DSC_ATTRIBUTE4*/
+       , #obj.dscAttribute5:VARCHAR# /* DSC_ATTRIBUTE5*/
+       , #obj.dscAttribute6:VARCHAR# /* DSC_ATTRIBUTE6*/
+       , #obj.dscAttribute7:VARCHAR# /* DSC_ATTRIBUTE7*/
+       , #obj.dscAttribute8:VARCHAR# /* DSC_ATTRIBUTE8*/
+       , #obj.dscAttribute9:VARCHAR# /* DSC_ATTRIBUTE9*/
+       , #obj.dscAttribute10:VARCHAR# /* DSC_ATTRIBUTE10*/
+       , #obj.dscAttribute11:VARCHAR# /* DSC_ATTRIBUTE11*/
+       , #obj.dscAttribute12:VARCHAR# /* DSC_ATTRIBUTE12*/
+       , #obj.dscAttribute13:VARCHAR# /* DSC_ATTRIBUTE13*/
+       , #obj.dscAttribute14:VARCHAR# /* DSC_ATTRIBUTE14*/
+       , #obj.dscAttribute15:VARCHAR# /* DSC_ATTRIBUTE15*/
+       , #obj.dscAttribute16:VARCHAR# /* DSC_ATTRIBUTE16*/
+       , #obj.dscAttribute17:VARCHAR# /* DSC_ATTRIBUTE17*/
+       , #obj.dscAttribute18:VARCHAR# /* DSC_ATTRIBUTE18*/
+       , #obj.dscAttribute19:VARCHAR# /* DSC_ATTRIBUTE19*/
+       , #obj.dscAttribute20:VARCHAR# /* DSC_ATTRIBUTE20*/
+     )
+   </insert>
+
+  <!--
+    固定資産_詳細(取得申請単位)更新
+  -->
+  <update id="updateFldApp_FLD" parameterClass="java.util.Map">
+    UPDATE
+      NEA_INT_EXT
+    SET
+    APPLICATION_ID = #obj.applicationId:VARCHAR#
+    , HOL_COMPANY_CODE = #obj.holCompanyCode:VARCHAR#
+    , CREATE_DATE = #obj.createDate:TIMESTAMP#
+    , CREATE_STAFF_CODE = #obj.createStaffCode:VARCHAR#
+    , UPDATE_DATE = #obj.updateDate:TIMESTAMP#
+    , UPDATE_STAFF_CODE = #obj.updateStaffCode:VARCHAR#
+    , VERSION = #obj.version:NUMERIC#
+    , HOL_SECTION_CODE = #obj.holSectionCode:VARCHAR#
+    , HOL_SECTION_YEAR = #obj.holSectionYear:NUMERIC#
+    , HOL_STAFF_CODE = #obj.holStaffCode:VARCHAR#
+    , HOL_STAFF_COMPANY_CODE = #obj.holStaffCompanyCode:VARCHAR#
+    , HOL_STAFF_SECTION_CODE = #obj.holStaffSectionCode:VARCHAR#
+    , HOL_STAFF_SECTION_YEAR = #obj.holStaffSectionYear:NUMERIC#
+    , DSC_ATTRIBUTE1 = #obj.dscAttribute1:VARCHAR#
+    , DSC_ATTRIBUTE2 = #obj.dscAttribute2:VARCHAR#
+    , DSC_ATTRIBUTE3 = #obj.dscAttribute3:VARCHAR#
+    , DSC_ATTRIBUTE4 = #obj.dscAttribute4:VARCHAR#
+    , DSC_ATTRIBUTE5 = #obj.dscAttribute5:VARCHAR#
+    , DSC_ATTRIBUTE6 = #obj.dscAttribute6:VARCHAR#
+    , DSC_ATTRIBUTE7 = #obj.dscAttribute7:VARCHAR#
+    , DSC_ATTRIBUTE8 = #obj.dscAttribute8:VARCHAR#
+    , DSC_ATTRIBUTE9 = #obj.dscAttribute9:VARCHAR#
+    , DSC_ATTRIBUTE10 = #obj.dscAttribute10:VARCHAR#
+    , DSC_ATTRIBUTE11 = #obj.dscAttribute11:VARCHAR#
+    , DSC_ATTRIBUTE12 = #obj.dscAttribute12:VARCHAR#
+    , DSC_ATTRIBUTE13 = #obj.dscAttribute13:VARCHAR#
+    , DSC_ATTRIBUTE14 = #obj.dscAttribute14:VARCHAR#
+    , DSC_ATTRIBUTE15 = #obj.dscAttribute15:VARCHAR#
+    , DSC_ATTRIBUTE16 = #obj.dscAttribute16:VARCHAR#
+    , DSC_ATTRIBUTE17 = #obj.dscAttribute17:VARCHAR#
+    , DSC_ATTRIBUTE18 = #obj.dscAttribute18:VARCHAR#
+    , DSC_ATTRIBUTE19 = #obj.dscAttribute19:VARCHAR#
+    , DSC_ATTRIBUTE20 = #obj.dscAttribute20:VARCHAR#
+    WHERE
+      APPLICATION_ID = #obj.applicationId#
+      AND HOL_COMPANY_CODE = #obj.holCompanyCode#
+  </update>
+
+  <!--
+     ファイル・直入力可能マスタ値取得(ProPlus)
+  -->
+  <select id="selectFldPossibleInputMasterList_FLD" parameterClass="java.util.Map" resultClass="jp.co.ctcg.easset.dto.CodeName">
+    SELECT
+      *
+    FROM
+      (
+      SELECT
+          1 sort1
+        , '種類' categoryCode
+        , m.shuruicd value1
+        , m.shuruinm description
+        , 'shuruinm' property
+      FROM
+        PPFS_MS01 m
+      WHERE
+        m.kaishacd = NEA_UTIL_PKG.GET_CN_VALUE_F('USE_COMPANY', #companyCode#, 7)
+      UNION ALL
+      SELECT
+          2 sort1
+        , '分類' categoryCode
+        , m.bunruicd value1
+        , m.bunruinm description
+        , 'bunruinm' property
+      FROM
+        PPFS_MS03 m
+      WHERE
+        m.kaishacd = NEA_UTIL_PKG.GET_CN_VALUE_F('USE_COMPANY', #companyCode#, 7)
+      UNION ALL
+      SELECT
+          3 sort1
+        , '代表設置場所' categoryCode
+        , m.setchicd value1
+        , m.setchinm description
+        , 'setchinm' property
+      FROM
+        PPFS_MS07 m
+      WHERE
+        m.kaishacd = NEA_UTIL_PKG.GET_CN_VALUE_F('USE_COMPANY', #companyCode#, 7)
+      UNION ALL
+      SELECT
+          4 sort1
+        , '案件グループ' categoryCode
+        , m.groupcd value1
+        , m.groupnm description
+        , 'groupnm' property
+      FROM
+        PPFS_GROUP m
+      WHERE
+        m.kaishacd = NEA_UTIL_PKG.GET_CN_VALUE_F('USE_COMPANY', #companyCode#, 7)
+      UNION ALL
+      SELECT
+          5 sort1
+        , '保有部署' categoryCode
+        , TRANSLATE(ND.DIVISIONCODE USING NCHAR_CS) value1
+        , TRANSLATE(NEA_UTIL_PKG.GET_SECTION_NAME_F(ND.COMPANYCODE, ND.DIVISIONKANJI) USING NCHAR_CS) description
+        , 'holSectionName' property
+      FROM
+        NEA_NEWDIVISIONMASTERTABLE_V ND
+      WHERE
+        ND.COMPANYCODE = #companyCode#
+        AND ND.NENDO = (SELECT VALUE1 FROM NEA_CODE_NAME CN WHERE CN.CATEGORY_CODE = 'CURRENT_YEAR' AND CN.DELETE_FLAG = '0')
+      )
+      WHERE
+        1 = 1
+        <isNotEmpty property="propertyList">
+          <iterate property="propertyList" open=" AND property IN(" close=")" conjunction=",">
+            #propertyList[]#
+          </iterate>
+        </isNotEmpty>
+
+    ORDER BY
+      1, 2, 3
+  </select>
+
+  <!--
+    補助台帳一覧取得
+  -->
+  <select id="selectFldSupport_FLD" parameterClass="java.util.Map" resultClass="jp.co.ctcg.easset.dto.fld.PpfsFldSupport">
+    SELECT
+      KOYUNO koyuno
+    , HOJOSHUBETSUPK hojoshubetsupk
+    , MEISAINO meisaino
+    , KAISHACD kaishacd
+    , HOJOSHUBETSUCD hojoshubetsucd
+    , HOJOSPAREC1 hojosparec1
+    , HOJOSPAREC2 hojosparec2
+    , HOJOSPAREC3 hojosparec3
+    , HOJOSPAREC4 hojosparec4
+    , HOJOSPAREC5 hojosparec5
+    , HOJOSPAREC6 hojosparec6
+    , HOJOSPAREC7 hojosparec7
+    , HOJOSPAREC8 hojosparec8
+    , HOJOSPAREC9 hojosparec9
+    , HOJOSPAREC10 hojosparec10
+    , HOJOSPAREC11 hojosparec11
+    , HOJOSPAREC12 hojosparec12
+    , HOJOSPAREC13 hojosparec13
+    , HOJOSPAREC14 hojosparec14
+    , HOJOSPAREC15 hojosparec15
+    , HOJOSPAREC16 hojosparec16
+    , HOJOSPAREC17 hojosparec17
+    , HOJOSPAREC18 hojosparec18
+    , HOJOSPAREC19 hojosparec19
+    , HOJOSPAREC20 hojosparec20
+    , SYSKBN syskbn
+    , KIHONSPAREC1 kihonsparec1
+    , KIHONSPAREC2 kihonsparec2
+    , KIHONSPAREC3 kihonsparec3
+    , KIHONSPAREC4 kihonsparec4
+    , KIHONSPAREC5 kihonsparec5
+    , KIHONSPAREC6 kihonsparec6
+    , KIHONSPAREC7 kihonsparec7
+    , KIHONSPAREC8 kihonsparec8
+    , KIHONSPAREC9 kihonsparec9
+    , KIHONSPAREC10 kihonsparec10
+    , KIHONSPAREN1 kihonsparen1
+    , KIHONSPAREN2 kihonsparen2
+    , KIHONSPAREN3 kihonsparen3
+    , KIHONSPAREN4 kihonsparen4
+    , KIHONSPAREN5 kihonsparen5
+    , KIHONSPAREN6 kihonsparen6
+    , KIHONSPAREN7 kihonsparen7
+    , KIHONSPAREN8 kihonsparen8
+    , KIHONSPAREN9 kihonsparen9
+    , KIHONSPAREN10 kihonsparen10
+    , ADDONSPAREC1 addonsparec1
+    , ADDONSPAREC2 addonsparec2
+    , ADDONSPAREC3 addonsparec3
+    , ADDONSPAREC4 addonsparec4
+    , ADDONSPAREC5 addonsparec5
+    , ADDONSPAREC6 addonsparec6
+    , ADDONSPAREC7 addonsparec7
+    , ADDONSPAREC8 addonsparec8
+    , ADDONSPAREC9 addonsparec9
+    , ADDONSPAREC10 addonsparec10
+    , ADDONSPAREN1 addonsparen1
+    , ADDONSPAREN2 addonsparen2
+    , ADDONSPAREN3 addonsparen3
+    , ADDONSPAREN4 addonsparen4
+    , ADDONSPAREN5 addonsparen5
+    , ADDONSPAREN6 addonsparen6
+    , ADDONSPAREN7 addonsparen7
+    , ADDONSPAREN8 addonsparen8
+    , ADDONSPAREN9 addonsparen9
+    , ADDONSPAREN10 addonsparen10
+    , UPDKAISU updkaisu
+    , UPDKAISHACD updkaishacd
+    , UPDID updid
+    , UPDYMD updymd
+    , UPDTIME updtime
+    <isNotEmpty property="costSecHist">
+     <!--
+      , NEA_UTIL_PKG.get_cost_section_name_f(HOJOSPAREC1) costSectionName
+      -->
+      , NEA_UTIL_PKG.get_cost_section_name_f(HOJOSPAREC1, DECODE(SUBSTR(HOJOSPAREC1, 0, 1), '0', NULL, (SELECT VALUE1 FROM NEA_CODE_NAME C WHERE C.CATEGORY_CODE = 'CURRENT_YEAR' AND DELETE_FLAG = '0'))) costSectionName
+      , NEA_UTIL_PKG.format_date_char_f(HOJOSPAREC2) periodFrom
+      , NEA_UTIL_PKG.format_date_char_f(HOJOSPAREC3) periodTo
+    </isNotEmpty>
+    <isEmpty property="costSecHist">
+      , NULL costSectionName
+      , NULL periodFrom
+      , NULL periodTo
+    </isEmpty>
+    FROM
+      PPFS_LD_SUPPORT
+    WHERE
+      1 = 1
+
+    <isNotEmpty property="koyuno">
+      AND  KOYUNO = #koyuno#
+    </isNotEmpty>
+    <isNotEmpty property="syubetucd">
+      AND HOJOSHUBETSUCD = #syubetucd#
+    </isNotEmpty>
+
+  </select>
+
+  <!--
+    未承認データ一覧取得
+  -->
+  <select id="selectPpfsUnUpd_FLD" parameterClass="java.util.Map" resultClass="jp.co.ctcg.easset.dto.fld.PpfsUnUpd">
+    SELECT
+      KAISHACD kaishacd
+    , SHORIKBN shorikbn
+    , KIHONNM kihonnm
+    , SHONINKBN shoninkbn
+    , KOYUNO koyuno
+    , OYA oya
+    , EDA eda
+    , KYKNO kykno
+    , SENKOENTRYKBN senkoentrykbn
+    , KARIENTRYKBN karientrykbn
+    FROM
+      PPFS_UN_UPD
+    WHERE
+      KAISHACD = NEA_UTIL_PKG.GET_CN_VALUE_F('USE_COMPANY', #companyCode#, 7)
+    <isNotEmpty property="koyunoPluralList">
+      AND $koyunoPluralList$
+    </isNotEmpty>
+  </select>
+
+  <select id="selectPpfsFld_FLD" parameterClass="java.util.Map" resultClass="jp.co.ctcg.easset.dto.fld.PpfsFldSR">
+    SELECT
+      KOYUNO koyuno
+    , UPDYMD updymd
+    , UPDTIME updtime
+    FROM
+      PPFS_FLD
+    WHERE
+      KAISHACD = NEA_UTIL_PKG.GET_CN_VALUE_F('USE_COMPANY', #companyCode#, 7)
+    <isNotEmpty property="koyunoPluralList">
+      AND $koyunoPluralList$
+    </isNotEmpty>
+  </select>
+
+  <!--
+    取得申請書番号に紐付くeAsset側の資産数を取得（サービス提供開始報告用）
+  -->
+  <select id="selectFldCountEAsset_FLD" parameterClass="java.util.Map" resultClass="java.lang.Integer">
+    SELECT count(*)
+      FROM NEA_PPFS_FLD
+     WHERE APPLICATION_ID = #applicationId#
+       AND SHISANKNRKBN = '1'
+       AND SKKSHISANKBN IN ('2', '4')
+  </select>
+
+  <!--
+    取得申請書番号に紐付くProPlus側の資産数を取得（サービス提供開始報告用）
+  -->
+  <select id="selectFldCountProPlus_FLD" parameterClass="java.util.Map" resultClass="java.lang.Integer">
+    SELECT count(*)
+      FROM PPFS_FLD_V
+     WHERE APPLICATION_ID = #applicationId#
+       AND SHISANKNRKBN = '1'
+       AND SKKSHISANKBN IN ('2', '4')
+  </select>
+
+</sqlMap>

@@ -1,0 +1,38 @@
+<form class="d-block" [formGroup]="formExportSearch">
+  <ea-input-mask #inputDisplay class="input-display wm-combo is-rounded" formControlName="{{ statusNameControlName }}"
+    [ngClass]="extClass" [required]="required" [isReadOnly]="isReadOnly"></ea-input-mask>
+  <button type="button" class="wm-btn wm-sm btn-icon btn-tooltip" (click)="clear()" *ngIf="isShowButtonClear">
+    <span class="ico"><img src="assets/images/button/clear.gif" /></span><span class="tooltip-text">クリア</span>
+  </button>
+  <button type="button" class="wm-btn wm-sm" (click)="open($event.currentTarget)" [hidden]="!visibleStatus">
+    <span class="ico"><img src="assets/images/button/popup.png" /></span>
+  </button>
+</form>
+
+<ea-popup #codeNameSelectionPopup class="popup-status-selection" [ngClass]="popupClass" [hideTrigger]="'None'"
+  (hidden)="close()">
+  <div class="form-select-status" [formGroup]="formSearch">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">{{ modalTitle }}</h5>
+        <button type="button" tabindex="-1" class="close bt-close wj-hide">
+          &times;
+        </button>
+      </div>
+      <div class="modal-body modal-body--search">
+        <div class="section-status ">
+          <ea-flex-grid #gridCodeNameSelectionList class="grid-common-list grid-status-selection-list"
+            [ngClass]="gridClass" [itemsSource]="statusList" (dblclick)="submit()" [headersVisibility]="'Column'">
+            <ea-flex-grid-column header="{{headerGrid}}" binding="{{value}}" [width]="'*'"></ea-flex-grid-column>
+          </ea-flex-grid>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="wm-btn" (click)="submit()">
+          選択
+        </button>
+        <button type="button" class="wm-btn wj-hide">閉じる</button>
+      </div>
+    </div>
+  </div>
+</ea-popup>

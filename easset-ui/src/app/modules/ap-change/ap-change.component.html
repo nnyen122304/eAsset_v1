@@ -1,0 +1,53 @@
+<wj-tab-panel #viewStack class="view-stack" (selectedIndexChange)="this.selectedIndexChangeHandler($event)">
+  <ea-view-stack-tab [keepViewState]="false">
+    <!-- 画面切替後も状態を維持する画面：true、維持しない画面:false-->
+    <a>照会/修正</a>
+    <div>
+      <app-ap-change-asset-search [parent]="this" #childViewAssetSearch
+        *ngIf="this.isLoaded.get(this.viewIndexAssetSearch)">
+        {{this.changeChildSubject.set(this.viewIndexAssetSearch, childViewAssetSearch.changeChildSubject)}}
+      </app-ap-change-asset-search>
+    </div>
+  </ea-view-stack-tab>
+  <ea-view-stack-tab [keepViewState]="false">
+    <!-- 画面切替後も状態を維持する画面：true、維持しない画面:false-->
+    <a>照会/修正</a>
+    <div>
+      <app-ap-change-asset-result [parent]="this" #childViewAssetResult
+        *ngIf="this.isLoaded.get(this.viewIndexAssetResult)">
+        {{this.changeChildSubject.set(this.viewIndexAssetResult, childViewAssetResult.changeChildSubject)}}
+      </app-ap-change-asset-result>
+    </div>
+  </ea-view-stack-tab>
+
+  <ea-view-stack-tab [keepViewState]="false">
+    <!-- 画面切替後も状態を維持する画面：true、維持しない画面:false-->
+    <a>照会/修正</a>
+    <div>
+      <app-ap-change-entry [parent]="this" #childViewSearch *ngIf="this.isLoaded.get(this.viewIndexSearch)">
+        {{this.changeChildSubject.set(this.viewIndexSearch, childViewSearch.changeChildSubject)}}
+      </app-ap-change-entry>
+    </div>
+  </ea-view-stack-tab>
+  <ea-view-stack-tab [keepViewState]="false">
+    <!-- 画面切替後も状態を維持する画面：true、維持しない画面:false-->
+    <a>照会/修正</a>
+    <div>
+      <app-ap-change-license-search [parent]="this" #childViewSearchLisense
+        *ngIf="this.isLoaded.get(this.viewIndexSearchLicense)">
+        {{this.changeChildSubject.set(this.viewIndexSearchLicense, childViewSearchLisense.changeChildSubject)}}
+      </app-ap-change-license-search>
+    </div>
+  </ea-view-stack-tab>
+  <ea-view-stack-tab [keepViewState]="false">
+    <!-- 画面切替後も状態を維持する画面：true、維持しない画面:false-->
+    <a>照会/修正</a>
+    <div>
+      <app-ap-change-hist [parent]="this" #childViewHist *ngIf="this.isLoaded.get(this.viewIndexHist)">
+        {{this.changeChildSubject.set(this.viewIndexHist, childViewHist.changeChildSubject)}}
+      </app-ap-change-hist>
+    </div>
+  </ea-view-stack-tab>
+
+</wj-tab-panel>
+<app-confirm-popup #confirmPopup (confirm)="onConfirm()"></app-confirm-popup>

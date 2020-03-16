@@ -1,0 +1,49 @@
+<div class="page-container page-admin-master">
+
+  <div class="section-master-search">
+    <div class="block-frame-border">
+      <h2 class="frame-title">検索</h2>
+      <form [formGroup]="searchForm" class="row">
+        <div class="col col-form">
+          <div class="row">
+            <div class="col col-label">会社：</div>
+            <div class="col col-input">
+              <ea-input-mask class="ip-company-code wm-combo wm-tab-element bg-gray" formControlName="companyCode" [isReadOnly]="true"></ea-input-mask>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col col-label">マスタ名：</div>
+            <div class="col col-input">
+              <ea-input-mask class="ip-category-name wm-combo wm-tab-element" formControlName="categoryName"></ea-input-mask>
+            </div>
+          </div>
+        </div>
+        <div class="col col-button">
+          <button type="button" class="wm-tab-element wm-btn" (click)="search()">検索</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="section-master-list" *ngIf="isSearched" [ngClass]="{hidden: !isSearched}">
+    <div class="list-desc">※行をダブルクリックすると詳細が表示されます。</div>
+    <div class="grid-common-wrap">
+      <div class="grid-common-count">【件数：{{gridAdminMaster && gridAdminMaster.rows ? (gridAdminMaster.rows.length | number) : 0}} 件】</div>
+      <ea-flex-grid
+        #gridAdminMaster
+        class="grid-common-list grid-admin-master"
+        [itemsSource]="categoriesList"
+        (dblclick)="onCategorySelect(gridAdminMaster, $event)"
+      >
+        <ea-flex-grid-column header="マスタ名" binding="description" [allowMerging]=true [width]="360"></ea-flex-grid-column>
+        <ea-flex-grid-column header="最終更新者" binding="updateStaffCode" [allowMerging]=true [width]="180">
+          <ng-template wjFlexGridCellTemplate [cellType]="'Cell'" let-cell="cell">
+            {{cell.item.updateStaffCode}}　{{cell.item.updateStaffName}}
+          </ng-template>
+        </ea-flex-grid-column>
+        <ea-flex-grid-column header="最終更新日" binding="updateDate" [allowMerging]=true [width]="120"></ea-flex-grid-column>
+      </ea-flex-grid>
+    </div>
+  </div>
+
+</div>

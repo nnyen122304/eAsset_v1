@@ -1,0 +1,23 @@
+{
+	"folders": [
+		{
+			"path": "./easset-ui",
+			"_comment": "easset-uiを先頭プロジェクトにしないとAngularConsole拡張機能のデフォルトとしてangular.jsonが読み込まれない。"
+		},
+		{
+			"path": "./easset-api"
+		},
+		{
+			"path": "./mock"
+		}
+	],
+	"settings": {
+		"files.exclude": {
+			"**/.classpath": true,
+			"**/.project": true,
+			"**/.settings": true,
+			"**/.factorypath": true
+		},
+		"java.configuration.updateBuildConfiguration": "disabled"
+	}
+}

@@ -1,0 +1,49 @@
+<div class="int-head">
+    <div>
+        <a class="head-search" href="javascript: void(0)" (click)="goBack()">
+            <img src="assets/images/button/to_search.gif">
+            <span>検索条件画面へ戻る</span>
+        </a>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col-6">
+            <div *ngIf="currentState !== stateMenuApGetInt.menuIdApGetIntCopy">
+                <div class="text-left pb-3">
+                    <button type="button" class="wm-btn wm-tab-element" (click)="print()">印刷
+                    </button>
+                    <button *ngIf="getAccessLevel() === 'admin'" type="button" class="wm-btn wm-tab-element ml-3"
+                            (click)="sendMail()">
+                        <span class="ico"><img src="assets/images/button/save.png"/></span>
+                        <span class="mail">督促メール</span>
+                    </button>
+                    <button type="button" class="wm-btn wm-tab-element ml-3"
+                            (click)="downloadOption.open($event.currentTarget)">ダウンロード(全件)
+                    </button>
+                </div>
+            </div>
+            <label *ngIf="currentState !== stateMenuApGetInt.menuIdApGetIntCopy">※　行をダブルクリックすると詳細が表示されます。</label>
+            <label *ngIf="currentState === stateMenuApGetInt.menuIdApGetIntCopy">※　コピーする申請をダブルクリックしてください</label>
+        </div>
+        <div class="col-6">
+            <div *ngIf="getAccessLevel() === 'admin'" class="block-frame-border">
+                <h2 class="frame-title horizontal-tb">簡易検索</h2>
+                <div class="col p-0">
+                    <label>取得申請書番号:</label>
+                    <ea-input-mask class="input-display wm-combo" id="applicationId" name="applicationId"
+                                   [(ngModel)]="searchApplicationId"></ea-input-mask>
+                    <span>(あいまい)</span>
+                    <button type="button" class="wm-btn wm-sm" (click)="search()">検索</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<div class="int-list">
+    <app-ap-get-int-result-list (select)="clickRow($event)" [dataList]="apGetIntSRList"
+                                [currentState]="currentState"></app-ap-get-int-result-list>
+</div>
+
+<app-confirm-popup #confirmPopup></app-confirm-popup>
+<app-download-option [optText1]="'申請書単位'" [optText2]="'明細単位'" (select)="download($event)"></app-download-option>

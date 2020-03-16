@@ -1,0 +1,64 @@
+<div class="page-container page-admin-profile" [ngClass]="{'has-profile-register': isProfileRegisterShown}">
+
+  <div class="section-profile-search">
+    <div class="block-frame-border">
+      <h2 class="frame-title">検索</h2>
+      <form [formGroup]="searchForm" class="row">
+        <div class="col col-form col-form-root">
+          <div class="row">
+            <div class="col col-label">会社：</div>
+            <div class="col col-input">
+              <ea-input-mask class="ip-company-code wm-combo bg-gray" formControlName="companyCode" [isReadOnly]="true"></ea-input-mask>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col col-label">
+              <span>部署：</span>
+            </div>
+            <div class="col col-form">
+              <app-section-selection (select)="selectSection($event)" [sectionForm]="sectionForm" [sectionCodeControlName]="'sectionCode'" [sectionNameControlName]="'sectionName'" [sectionYearControlName]="'sectionYear'"></app-section-selection>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col col-label">
+              <span>資産管理担当者：</span>
+            </div>
+            <div class="col col-form">
+              <app-staff-selection (select)="selectStaff($event)" [staffForm]="staffForm" [staffCodeControlName]="'staffCode'" [staffNameControlName]="'staffName'" [usableDataOnly]="true"></app-staff-selection>
+            </div>
+          </div>
+        </div>
+        <div class="col col-button">
+          <button type="button" class="wm-btn" (click)="search()">検索</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="section-profile-register">
+    <app-profile-register [data]="selectedProfile" (update)="onProfileUpdate($event['data'])" (cancel)="removeProfileRegister($event)"></app-profile-register>
+  </div>
+
+  <div class="section-profile-list" [ngClass]="{hidden: staffList === null || staffList === undefined}">
+    <div class="list-desc">※行をクリックするとプロファイルを設定できます。</div>
+    <div class="grid-common-wrap">
+      <div class="grid-common-count">【件数：{{gridAdminProfile && gridAdminProfile.rows ? (gridAdminProfile.rows.length | number) : 0}} 件】</div>
+      <ea-flex-grid
+        #gridAdminProfile
+        class="grid-common-list grid-admin-profile"
+        [itemsSource]="staffList"
+        (click)="onProfileSelect(gridAdminProfile, $event)"
+      >
+        <ea-flex-grid-column header="部署" binding="sectionName" [allowMerging]=true [width]="200"></ea-flex-grid-column>
+        <ea-flex-grid-column header="資産管理有担当者" binding="staffCode" [allowMerging]=true [width]="200">
+          <ng-template wjFlexGridCellTemplate [cellType]="'Cell'" let-cell="cell">
+            {{cell.item.staffCode}}　{{cell.item.staffName}}
+          </ng-template>
+        </ea-flex-grid-column>
+        <ea-flex-grid-column header="公開" binding="publicFlagName" [allowMerging]=true [width]="100"></ea-flex-grid-column>
+        <ea-flex-grid-column header="公開コメント" binding="publicComment" [allowMerging]=true [width]="200"></ea-flex-grid-column>
+      </ea-flex-grid>
+    </div>
+  </div>
+
+</div>

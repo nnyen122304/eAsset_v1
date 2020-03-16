@@ -1,0 +1,53 @@
+<form class="form-project row-selection" [formGroup]="sectionForm">
+  <label [ngClass]="title ? styleTitle : ''">{{title}}</label>
+  <div class="wm-buttons">
+    <ea-input-mask #inputDisplay class="input-display wm-combo is-rounded" [ngClass]="extClass"
+    formControlName="{{sectionNameControlName}}" [isReadOnly]="true"
+    [required]="required"></ea-input-mask>
+    <button type="button" class="wm-btn wm-sm btn-icon btn-tooltip" (click)="clear()" *ngIf="!selectOnly"><span
+      class="ico"><img src="assets/images/button/clear.gif"></span><span class="tooltip-text">クリア</span></button>
+    <button type="button" class="wm-btn wm-sm" (click)="open($event.currentTarget)" [hidden]="!visibleStatus"><span class="ico"><img
+      src="assets/images/button/popup.png"></span></button>
+  </div>
+</form>
+
+<ea-popup #treePopup class="popup-section-selection" [hideTrigger]="'None'" (hidden)="close()">
+  <form class="form-tree-selection" [formGroup]="treeForm">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">部署選択</h5>
+        <button type="button" tabindex="-1" class="close bt-close wj-hide">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="row row-filter">
+          <div class="col col-4 col-label">部署名（あいまい）：</div>
+          <div class="col col-4">
+            <ea-input-mask #filterText class="wm-combo field-filter-text" formControlName="filterText"></ea-input-mask>
+          </div>
+          <div class="col col-4 col-button">
+            <button type="button" class="wm-btn wm-sm" (click)="init()">検索</button>
+          </div>
+        </div>
+        <div class="row">
+          <div class="tree-wrapper">
+            <wj-tree-view
+              #treeView
+              class="wm-tree-view"
+              [itemsSource]="dataList"
+              [displayMemberPath]="'sectionShortName'"
+              [childItemsPath]="'items'"
+              [autoCollapse]="false"
+              (loadedItems)="onTreeInitialized()"
+              (dblclick)="submit()"
+            >
+            </wj-tree-view>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="wm-btn" (click)="submit()">選択</button>
+        <button type="button" class="wm-btn wj-hide">閉じる</button>
+      </div>
+    </div>
+  </form>
+</ea-popup>

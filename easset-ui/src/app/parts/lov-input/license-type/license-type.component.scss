@@ -1,0 +1,33 @@
+.section-status {
+    border: none;
+  }
+  .popup-status-selection {
+      width: 330px;
+      .grid-status-selection-list {
+          display: block;
+          width: 100%;
+          min-height: 200px;
+          max-height: 300px;
+      }
+      &.lic-type{
+          left: 430px !important;
+          width: 500px !important;
+          .grid-status-selection-list {            
+              min-height: 300px;
+              max-height: 300px;
+          }
+      }
+  }
+  
+  .row {
+    .wm-100 {
+      width: 100px;
+    }
+    .wm-150 {
+      width: 150px;
+    }
+    .wm-200 {
+      width: 200px;
+    }
+  }
+  

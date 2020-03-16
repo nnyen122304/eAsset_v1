@@ -1,0 +1,33 @@
+<wj-tab-panel #viewStack class="view-stack" (selectedIndexChange)="this.selectedIndexChangeHandler($event)">
+  <ea-view-stack-tab [keepViewState]="false">
+    <!-- 画面切替後も状態を維持する画面：true、維持しない画面:false-->
+    <a>割当情報(ライセンスから検索)</a>
+    <div>
+      <app-license-report-alloc-license [parent]="this" #childViewReportAllocLicense
+        *ngIf="this.isLoaded.get(this.viewIndexReportAllocLicense)">
+        {{this.changeChildSubject.set(this.viewIndexReportAllocLicense, childViewReportAllocLicense.changeChildSubject)}}
+      </app-license-report-alloc-license>
+    </div>
+  </ea-view-stack-tab>
+  <ea-view-stack-tab [keepViewState]="false">
+    <!-- 画面切替後も状態を維持する画面：true、維持しない画面:false-->
+    <a>割当情報(ライセンスから検索)</a>
+    <div>
+      <app-license-report-asset [parent]="this" #childViewReportAllocAsset
+        *ngIf="this.isLoaded.get(this.viewIndexReportAllocAsset)">
+        {{this.changeChildSubject.set(this.viewIndexReportAllocAsset, childViewReportAllocAsset.changeChildSubject)}}
+      </app-license-report-asset>
+    </div>
+  </ea-view-stack-tab>
+  <ea-view-stack-tab [keepViewState]="false">
+    <!-- 画面切替後も状態を維持する画面：true、維持しない画面:false-->
+    <a>アップグレード情報</a>
+    <div>
+      <app-license-report-upgrade [parent]="this" #childViewReportUpgrade
+        *ngIf="this.isLoaded.get(this.viewIndexReportUpgrade)">
+        {{this.changeChildSubject.set(this.viewIndexReportUpgrade, childViewReportUpgrade.changeChildSubject)}}
+      </app-license-report-upgrade>
+    </div>
+  </ea-view-stack-tab>
+</wj-tab-panel>
+<app-confirm-popup #confirmPopup (confirm)="onConfirm()"></app-confirm-popup>

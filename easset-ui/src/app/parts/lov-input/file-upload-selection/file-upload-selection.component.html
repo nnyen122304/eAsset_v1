@@ -1,0 +1,17 @@
+<div fxLayout="row">
+  <div class="form-group" [hidden]="!visibleInput">
+    <label class="label">{{labelText}}</label>
+    <ea-input-mask class="wm-combo bg-gray input-filename" [(ngModel)]="file.fileName"
+                   [ngModelOptions]="{standalone: true}"
+                   [isReadOnly]="true"></ea-input-mask>
+  </div>
+  <div class="form-group">
+    <button type="button" class="wm-btn wm-sm wm-tab-element btn-upload-cm" (click)="fileSelectCSV.click()">
+      <span class="ico" *ngIf="isIcon"><img src="assets/images/button/save.png" alt=""></span>
+      <label class="label">{{btnText}}</label>
+    </button>
+    <input [hidden]="true" #fileSelectCSV type="file" (change)="fileSelected($event.target.files)"
+           (cancel)="fileSelected($event.target.files)">
+  </div>
+</div>
+

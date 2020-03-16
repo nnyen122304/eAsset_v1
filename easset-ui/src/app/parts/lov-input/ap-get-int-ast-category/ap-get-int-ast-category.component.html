@@ -1,0 +1,38 @@
+<form class="d-block" [formGroup]="astCategoryForm">
+    <ea-input-mask #inputDisplay class="input-display wm-combo is-rounded"
+                   formControlName="{{ categoryNameControlName }}"
+                   [ngClass]="extClass" [required]="required" [isReadOnly]="isReadOnly"></ea-input-mask>
+    <button type="button" class="wm-btn wm-sm btn-icon btn-tooltip" (click)="clear()" *ngIf="isShowButtonClear">
+        <span class="ico"><img src="assets/images/button/clear.gif"/></span><span class="tooltip-text">クリア</span>
+    </button>
+    <button type="button" class="wm-btn wm-sm" (click)="open($event.currentTarget)" [hidden]="!visibleStatus">
+        <span class="ico"><img src="assets/images/button/popup.png"/></span>
+    </button>
+</form>
+
+<ea-popup #astCategoryPopup class="popup-common-sel popup-status-selection" [hideTrigger]="'None'"
+          (hidden)="close()">
+    <div class="form-select-status" [formGroup]="searchForm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">{{ modalTitle }}</h5>
+                <button type="button" tabindex="-1" class="close bt-close wj-hide">
+                    &times;
+                </button>
+            </div>
+            <div class="modal-body modal-body--search">
+                <ea-flex-grid #gridCategoryList class="grid-common-list grid-list"
+                              [itemsSource]="categoryList" (dblclick)="submit()" [headersVisibility]="'Column'">
+                    <ea-flex-grid-column header="{{headerGrid}}" binding="{{binding}}"
+                                         [width]="'*'"></ea-flex-grid-column>
+                </ea-flex-grid>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="wm-btn" (click)="submit()">
+                    選択
+                </button>
+                <button type="button" class="wm-btn wj-hide">閉じる</button>
+            </div>
+        </div>
+    </div>
+</ea-popup>

@@ -1,0 +1,118 @@
+<div class="page-container page-admin-proplus">
+
+  <div class="section-proplus-form">
+    <div class="block-frame">
+      <h2 class="frame-title">取込内容</h2>
+      <div class="frame-body">
+        <form class="form-search" [formGroup]="searchForm">
+          <div class="row">
+            <div class="col-label">
+              <label>会社：</label>
+            </div>
+            <div class="col col-content">
+              <div class="form-group bt">
+                <ea-input-mask class="wm-combo wm-tab-element wm-100 bg-gray" formControlName="companyName" [isReadOnly]="true"></ea-input-mask>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-label">
+              <label>取込年月：</label>
+            </div>
+            <div class="col col-content">
+              <div class="form-group bt">
+                <ea-input-mask class="wm-combo wm-tab-element wm-100 bg-gray" formControlName="period" mask="0000-00" [isReadOnly]="true"></ea-input-mask>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-label">
+              <label>取込対象：</label>
+            </div>
+            <div class="col col-content">
+              <div class="form-group bt">
+                <div class="form-check form-check-inline" *ngFor="let item of dataType; let i = index" formArrayName="dataType">
+                  <input type="checkbox" class="form-check-input wm-tab-element wm-checkbox" [id]="'item-data-type-' + i" [formControlName]="i" (change)="toggleDataType($event)">
+                  <label class="form-check-label" [for]="'item-data-type-' + i">{{item}}</label>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-label">
+              <label>予測取込：</label>
+            </div>
+            <div class="col col-content">
+              <div class="form-group bt">
+                <div class="form-check form-check-inline" *ngFor="let item of schCreateFlag; let i = index" formArrayName="schCreateFlag">
+                  <input type="checkbox" class="form-check-input wm-tab-element wm-checkbox" [id]="'item-sch-create-flag-' + i" [formControlName]="i">
+                  <label class="form-check-label" [for]="'item-sch-create-flag-' + i">{{item}}</label>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-label">
+            </div>
+            <div class="col col-content">
+              <div class="form-group bt">
+                <p class="text-imp">※　固定資産の予測取込を行う際には、事前にProPlusの償却予測計算を配賦計算付きで行ってください。</p>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-label">
+            </div>
+            <div class="col col-content">
+              <div class="form-group bt">
+                <p class="text-imp">※　リース・レンタルの予測取込を行う際には、事前にProPlusのリース料支払配賦計算を行ってください。</p>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-proplus-list">
+    <div class="block-frame">
+      <h2 class="frame-title bg-blue">取込状況</h2>
+      <div class="frame-body">
+        <div class="block-buttons">
+          <button type="button" class="wm-btn wm-tab-element" (click)="update()">最新の情報に更新</button>
+          <p class="text-desc">※　画面を閉じても実行中の処理は停止しません。</p>
+        </div>
+        <div class="grid-common-wrap">
+          <div class="grid-common-count">【件数：{{gridOperationsList && gridOperationsList.rows ? (gridOperationsList.rows.length | number) : 0}} 件】</div>
+          <ea-flex-grid
+            #gridOperationsList
+            class="grid-common-list grid-operations-list"
+            [itemsSource]="operationsList"
+          >
+            <ea-flex-grid-column header="取込年月" binding="periodFormated" [width]="100"></ea-flex-grid-column>
+            <ea-flex-grid-column header="取込対象" binding="dataTypeName" [width]="150"></ea-flex-grid-column>
+            <ea-flex-grid-column header="ステータス" binding="execStatusName" [width]="100"></ea-flex-grid-column>
+            <ea-flex-grid-column header="処理開始日" binding="createDate" [width]="120" [format]="'yyyy/MM/dd HH:mm'"></ea-flex-grid-column>
+            <ea-flex-grid-column header="処理終了日" binding="updateDate" [width]="120" [format]="'yyyy/MM/dd HH:mm'">
+              <ng-template wjFlexGridCellTemplate [cellType]="'Cell'" let-cell="cell">
+                <ng-container *ngIf="cell.item.execStatus !== '1'">
+                  {{cell.item.updateDate | date:'yyyy/MM/dd HH:mm'}}
+                </ng-container>
+              </ng-template>
+            </ea-flex-grid-column>
+            <ea-flex-grid-column header="実行者" binding="createStaffCode" [width]="200">
+              <ng-template wjFlexGridCellTemplate [cellType]="'Cell'" let-cell="cell">
+                {{cell.item.createStaffCode}}　{{cell.item.createStaffName}}
+              </ng-template>
+            </ea-flex-grid-column>
+          </ea-flex-grid>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-proplus-buttons">
+    <button type="button" class="wm-btn wm-tab-element" (click)="execute()"><span class="ico"><img src="assets/images/button/save.png" alt="取込実行"></span><span class="txt">取込実行</span></button>
+  </div>
+
+</div>

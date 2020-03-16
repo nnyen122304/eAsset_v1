@@ -1,0 +1,11 @@
+{
+  "/eAsset_Web/api/v1": {
+    "target": "http://localhost:8080"
+  },
+  "/eAsset_Web/download": {
+    "target": "http://localhost:8080"
+  },
+  "/eAsset_Web/upload": {
+    "target": "http://localhost:8080"
+  }
+}

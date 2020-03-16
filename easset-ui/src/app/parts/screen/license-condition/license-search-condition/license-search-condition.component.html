@@ -1,0 +1,249 @@
+
+  <div class="section-search">
+    <form [formGroup]="searchForm">
+      <div class="row mt-3 mb-3" [hidden]="isSearchScopeType">
+        <label class="col-label text-right">検索対象:</label>
+        <div class="form-group">
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" id="searchScopeType1" formControlName="searchScopeType"
+              [value]="'1'" (change)="selectScopeType()">
+            <label class="form-check-label" for="searchScopeType1">{{labelSearchScopeType}}</label>
+          </div>
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" id="searchScopeType2" formControlName="searchScopeType"
+              [value]="'2'" (change)="selectScopeType()">
+            <label class="form-check-label" for="searchScopeType2">全てのライセンス</label>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="width-body">
+          <div class="row">
+            <label class="col-label-search text-right">ライセンス管理番号:</label>
+            <div class="col-8">
+              <div class="row">
+                <div class="form-group" [hidden]="!isLicense">
+                  <ea-input-mask id="licenseId" class="wm-combo wm-tab-element wm-100" formControlName="licenseId">
+                  </ea-input-mask>
+                  <label class="text-inline">(あいまい)</label>
+                  <span class="e-link col-label-toggle">
+                    <a class="link " (click)="linkBtnClickEvent('licenseId')">複数指定</a>
+                  </span>
+                </div>
+                <div class="form-group pb-2" [hidden]="isLicense">
+                  <ea-input-mask id="licenseIdPlural" class="wm-combo wm-tab-element wm-300"
+                    formControlName="licenseIdPlural">
+                  </ea-input-mask>
+                </div>
+              </div>
+              <div class="row" [hidden]="isLicense">
+                <label class="text-inline">(スペース区切で複数指定可)</label>
+                <span class="e-link col-label-toggle">
+                  <a class="link" (click)="linkBtnClickEvent('licenseIdPlural')">あいまい検索</a>
+                </span>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <label class="col-label-search text-right">契約番号:</label>
+            <div class="col-8">
+              <div class="row">
+                <div class="form-group" [hidden]="!isContractNum">
+                  <ea-input-mask id="contractNum" class="wm-combo wm-tab-element wm-200" formControlName="contractNum">
+                  </ea-input-mask>
+                  <label class="text-inline">(あいまい)</label>
+                  <span class="e-link col-label-toggle">
+                    <a class="link " (click)="linkBtnClickEvent('contractNum')">複数指定</a>
+                  </span>
+                </div>
+                <div class="form-group pb-2" [hidden]="isContractNum">
+                  <ea-input-mask id="contractNumPlural" class="wm-combo wm-tab-element wm-300"
+                    formControlName="contractNumPlural">
+                  </ea-input-mask>
+                </div>
+              </div>
+              <div class="row" [hidden]="isContractNum">
+                <label class="text-inline">(スペース区切で複数指定可)</label>
+                <span class="e-link col-label-toggle">
+                  <a class="link" (click)="linkBtnClickEvent('contractNumPlural')">あいまい検索</a>
+                </span>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <label class="col-label-search text-right">契約枝番:</label>
+            <div class="col-8">
+              <div class="row">
+                <div class="form-group" [hidden]="!isContractEda">
+                  <ea-input-mask id="contractEda" class="wm-combo wm-tab-element wm-200" formControlName="contractEda">
+                  </ea-input-mask>
+                  <label class="text-inline">(あいまい)</label>
+                  <span class="e-link col-label-toggle">
+                    <a class="link " (click)="linkBtnClickEvent('contractEda')">複数指定</a>
+                  </span>
+                </div>
+                <div class="form-group pb-2" [hidden]="isContractEda">
+                  <ea-input-mask id="contractEdaPlural" class="wm-combo wm-tab-element wm-300"
+                    formControlName="contractEdaPlural">
+                  </ea-input-mask>
+                </div>
+              </div>
+              <div class="row" [hidden]="isContractEda">
+                <label class="text-inline">(スペース区切で複数指定可)</label>
+                <span class="e-link col-label-toggle">
+                  <a class="link" (click)="linkBtnClickEvent('contractEdaPlural')">あいまい検索</a>
+                </span>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <label class="col-label-search text-right">資産番号:</label>
+            <div class="col-8">
+              <div class="row">
+                <div class="form-group" [hidden]="!isShisanNum">
+                  <ea-input-mask id="shisanNum" class="wm-combo wm-tab-element wm-200" formControlName="shisanNum">
+                  </ea-input-mask>
+                  <label class="text-inline">(あいまい)</label>
+                  <span class="e-link col-label-toggle">
+                    <a class="link " (click)="linkBtnClickEvent('shisanNum')">複数指定</a>
+                  </span>
+                </div>
+                <div class="form-group pb-2" [hidden]="isShisanNum">
+                  <ea-input-mask id="shisanNumPlural" class="wm-combo wm-tab-element wm-300"
+                    formControlName="shisanNumPlural">
+                  </ea-input-mask>
+                </div>
+              </div>
+              <div class="row" [hidden]="isShisanNum">
+                <label class="text-inline">(スペース区切で複数指定可)</label>
+                <span class="e-link col-label-toggle">
+                  <a class="link" (click)="linkBtnClickEvent('shisanNumPlural')">あいまい検索</a>
+                </span>
+              </div>
+              <div class="row">
+                <div class="form-check form-check-inline ml-2">
+                  <input class="form-check-input wm-checkbox" type="checkbox" id="relationShisanNumFlag"
+                    formControlName="relationShisanNumFlag">
+                  <label class="form-check-label" for="relationShisanNumFlag">関連資産も同時に検索する</label>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <label class="col-label-search text-right">申請者:</label>
+            <div>
+              <app-staff-selection [staffForm]="searchForm" [staffCodeControlName]="'apStaffCode'"
+                [staffNameControlName]="'apStaffName'" [extNameClass]="'wm-150'"></app-staff-selection>
+            </div>
+          </div>
+        </div>
+        <div class="width-body">
+          <div class="row">
+            <label class="col-label-search text-right">割当情報機器管理番号:</label>
+            <div class="col-8">
+              <div class="row">
+                <div class="form-group" [hidden]="!isAssetId">
+                  <ea-input-mask id="assetId" class="wm-combo wm-tab-element wm-100" formControlName="assetId">
+                  </ea-input-mask>
+                  <label class="text-inline">(あいまい)</label>
+                  <span class="e-link col-label-toggle">
+                    <a class="link " (click)="linkBtnClickEvent('assetId')">複数指定</a>
+                  </span>
+                </div>
+                <div class="form-group pb-2" [hidden]="isAssetId">
+                  <ea-input-mask id="assetIdPlural" class="wm-combo wm-tab-element wm-300"
+                    formControlName="assetIdPlural">
+                  </ea-input-mask>
+                </div>
+              </div>
+              <div class="row" [hidden]="isAssetId">
+                <label class="text-inline">(スペース区切で複数指定可)</label>
+                <span class="e-link col-label-toggle">
+                  <a class="link" (click)="linkBtnClickEvent('assetIdPlural')">あいまい検索</a>
+                </span>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <label class="col-label-search text-right">取得申請書番号:</label>
+            <div class="col-8">
+              <div class="row">
+                <div class="form-group" [hidden]="!isGetApplicationId">
+                  <ea-input-mask id="getApplicationId" class="wm-combo wm-tab-element wm-100"
+                    formControlName="getApplicationId">
+                  </ea-input-mask>
+                  <label class="text-inline">(あいまい)</label>
+                  <span class="e-link col-label-toggle">
+                    <a class="link " (click)="linkBtnClickEvent('getApplicationId')">複数指定</a>
+                  </span>
+                </div>
+                <div class="form-group pb-2" [hidden]="isGetApplicationId">
+                  <ea-input-mask id="getApplicationId" class="wm-combo wm-tab-element wm-300"
+                    formControlName="getApplicationIdPlural">
+                  </ea-input-mask>
+                </div>
+              </div>
+              <div class="row" [hidden]="isGetApplicationId">
+                <label class="text-inline">(スペース区切で複数指定可)</label>
+                <span class="e-link col-label-toggle">
+                  <a class="link" (click)="linkBtnClickEvent('getApplicationIdPlural')">あいまい検索</a>
+                </span>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <label class="col-label-search text-right">登録申請番号:</label>
+            <div class="col-8">
+              <div class="row">
+                <div class="form-group" [hidden]="!isRegistApplicationId">
+                  <ea-input-mask id="registApplicationId" class="wm-combo wm-tab-element wm-100"
+                    formControlName="registApplicationId">
+                  </ea-input-mask>
+                  <label class="text-inline">(あいまい)</label>
+                  <span class="e-link col-label-toggle">
+                    <a class="link " (click)="linkBtnClickEvent('registApplicationId')">複数指定</a>
+                  </span>
+                </div>
+                <div class="form-group pb-2" [hidden]="isRegistApplicationId">
+                  <ea-input-mask id="registApplicationIdPlural" class="wm-combo wm-tab-element wm-300"
+                    formControlName="registApplicationIdPlural">
+                  </ea-input-mask>
+                </div>
+              </div>
+              <div class="row" [hidden]="isRegistApplicationId">
+                <label class="text-inline">(スペース区切で複数指定可)</label>
+                <span class="e-link col-label-toggle">
+                  <a class="link" (click)="linkBtnClickEvent('registApplicationIdPlural')">あいまい検索</a>
+                </span>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <label class="col-label-search text-right">申請日:</label>
+            <div class="col-8">
+              <div class="row">
+                <wj-input-date id="apDateFrom" formControlName="apDateFrom" name="apDateFrom" [isRequired]="false"
+                  class="wm-120 ml-1"></wj-input-date>
+                <span class="label-date">～</span>
+                <wj-input-date id="apDateTo" formControlName="apDateTo" name="apDateTo" [isRequired]="false"
+                  class="wm-120"></wj-input-date>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <label class="col-label-search text-right">抹消済みオプション:</label>
+            <div class="col-8">
+              <div class="row">
+                <div class="form-check form-check-inline ml-2">
+                  <input class="form-check-input wm-checkbox" type="checkbox" id="deleteFlag"
+                    formControlName="deleteFlag">
+                  <label class="form-check-label" for="deleteFlag">抹消済みを含む</label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+    <app-com-license-search-condition [statesStatus]="statesStatus"></app-com-license-search-condition>
+  </div>

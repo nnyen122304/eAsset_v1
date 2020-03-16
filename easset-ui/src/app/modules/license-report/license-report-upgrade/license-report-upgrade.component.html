@@ -1,0 +1,13 @@
+<div class="page-container page-search-license">
+  <div class="section-body">
+    <app-license-search-condition [currentState]="'LICENSE_REPORT_UPGRADE'"></app-license-search-condition>
+  </div>
+  <div class="section-footer mt-1 pt-2">
+    <div class="button-bottom ">
+      <button type="button" class="wm-btn wm-tab-element ml-3"
+              (click)="downloadCSV()">ダウンロード
+      </button>
+      <button type="button" class="wm-btn wm-tab-element ml-3" (click)="resetSearch()">クリア</button>
+    </div>
+  </div>
+</div>

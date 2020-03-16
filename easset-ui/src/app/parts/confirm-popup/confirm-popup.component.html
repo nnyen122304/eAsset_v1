@@ -1,0 +1,10 @@
+<ea-popup #popup class="warning-popup" [hideTrigger]="'None'" (hidden)="close()">
+  <div class="wj-dialog-header">確認</div>
+  <div class="wj-dialog-body">
+    <p class="message-info" [innerHTML]="message"></p>
+  </div>
+  <div class="wj-dialog-footer wm-buttons">
+    <button type="button" class="wm-btn no-shadow" (click)="ok()">はい</button>
+    <button type="button" class="wm-btn wj-hide">いいえ</button>
+  </div>
+</ea-popup>

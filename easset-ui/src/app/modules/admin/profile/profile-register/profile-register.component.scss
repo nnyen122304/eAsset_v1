@@ -1,0 +1,53 @@
+
+.form-profile-register {
+  padding: 10px;
+  width: 700px;
+  &.form-sm {
+    width: 430px;
+  }
+  .frame-body {
+    > .row:not(:first-child) {
+      margin-top: 5px;
+    }
+    > .row {
+      margin: 0;
+      > .col {
+        padding: 0;
+        margin: 0;
+      }
+    }
+    .col-label {
+      flex: 0 0 90px;
+      margin-right: 10px !important;
+      text-align: right;
+      white-space: nowrap;
+    }
+    .col-form {
+      width: auto;
+      .ip-section-name {
+        width: 292px;
+      }
+      .ip-staff-code {
+        width: 100px;
+      }
+      .ip-staff-name {
+        width: 100px;
+      }
+      .group-input-staff .label {
+        margin-right: 5px;
+        &:not(:first-child) {
+          margin-left: 10px;
+        }
+      }
+    }
+  }
+  .ip-comment {
+    width: 325px;
+  }
+  .buttons {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid #fff;
+    text-align: center;
+  }
+}

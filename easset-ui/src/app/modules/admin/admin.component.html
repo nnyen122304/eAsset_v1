@@ -1,0 +1,43 @@
+<wj-tab-panel #viewStack class="view-stack" (selectedIndexChange)="this.selectedIndexChangeHandler($event)">
+  <ea-view-stack-tab [keepViewState]="false"> <!-- 画面切替後も状態を維持する画面：true、維持しない画面:false-->
+    <a>管理者設定</a>
+    <div>
+      <app-setting [parent]="this" #childViewSetting *ngIf="this.isLoaded.get(this.viewIndexSetting)">
+        {{this.changeChildSubject.set(this.viewIndexSetting, childViewSetting.changeChildSubject)}}
+      </app-setting>
+    </div>
+  </ea-view-stack-tab>
+  <ea-view-stack-tab [keepViewState]="false"> <!-- 画面切替後も状態を維持する画面：true、維持しない画面:false-->
+    <a>資産管理担当者プロファイル</a>
+    <div>
+      <app-profile [parent]="this" #childViewProfile *ngIf="this.isLoaded.get(this.viewIndexProfile)">
+        {{this.changeChildSubject.set(this.viewIndexProfile, childViewProfile.changeChildSubject)}}
+      </app-profile>
+    </div>
+  </ea-view-stack-tab>
+  <ea-view-stack-tab [keepViewState]="true"> <!-- 画面切替後も状態を維持する画面：true、維持しない画面:false-->
+    <a>汎用マスタ管理</a>
+    <div>
+      <app-master [parent]="this" #childViewMaster *ngIf="this.isLoaded.get(this.viewIndexMaster)">
+        {{this.changeChildSubject.set(this.viewIndexMaster, childViewMaster.changeChildSubject)}}
+      </app-master>
+    </div>
+  </ea-view-stack-tab>
+  <ea-view-stack-tab [keepViewState]="false"> <!-- 画面切替後も状態を維持する画面：true、維持しない画面:false-->
+    <a>汎用マスタ設定</a>
+    <div>
+      <app-master-setting [parent]="this" #childViewMasterSetting *ngIf="this.isLoaded.get(this.viewIndexMasterSetting)">
+        {{this.changeChildSubject.set(this.viewIndexMasterSetting, childViewMasterSetting.changeChildSubject)}}
+      </app-master-setting>
+    </div>
+  </ea-view-stack-tab>
+  <ea-view-stack-tab [keepViewState]="false"> <!-- 画面切替後も状態を維持する画面：true、維持しない画面:false-->
+    <a>ProPlusデータ取込</a>
+    <div>
+      <app-proplus [parent]="this" #childViewProplus *ngIf="this.isLoaded.get(this.viewIndexProplus)">
+        {{this.changeChildSubject.set(this.viewIndexProplus, childViewProplus.changeChildSubject)}}
+      </app-proplus>
+    </div>
+  </ea-view-stack-tab>
+</wj-tab-panel>
+<app-confirm-popup #confirmPopup (confirm)="onConfirm()"></app-confirm-popup>

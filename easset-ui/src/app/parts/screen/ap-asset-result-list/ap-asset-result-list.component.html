@@ -1,0 +1,79 @@
+<div class="page-container page-ap-asset-result-list">
+  <div class="grid-common-wrap grid-common-wrap-ap-asset-result-list">
+    <div class="grid-common-count">
+      【件数：{{ gridDataResultList && gridDataResultList.rows ? (gridDataResultList.rows.length | number) : 0 }} 件】
+    </div>
+    <div class="grid-inventory-list wp-grid-ap-asset-result-list">
+      <ea-flex-grid #gridDataResultList class="grid-common-list grid-data-result-list grid-inventory-list" id="wp-grid-ap-asset-result-list"
+        [itemsSource]="dataList" (initialized)="onGridInitialized(gridDataResultList)" [isReadOnly]="false">
+        <ea-flex-grid-column header="Sel" binding="sel" [allowDragging]="'None'" [allowMerging]="false" [width]="30"
+          [isReadOnly]="false"></ea-flex-grid-column>
+        <ea-flex-grid-column header="情報機器管理番号" binding="assetAssetId" [width]="120"></ea-flex-grid-column>
+        <ea-flex-grid-column header="取得申請書番号" binding="getApplicationId" [width]="100"></ea-flex-grid-column>
+        <ea-flex-grid-column header="シリアル番号" binding="astSerialCode" [width]="120"></ea-flex-grid-column>
+        <ea-flex-grid-column header="OIR" binding="astOir" [width]="70"></ea-flex-grid-column>
+        <ea-flex-grid-column header="管理区分" binding="astManageTypeName" [width]="150"></ea-flex-grid-column>
+        <ea-flex-grid-column header="資産区分" binding="astAssetTypeName" [width]="100"></ea-flex-grid-column>
+        <ea-flex-grid-column header="資産保有者" binding="astHolderName" [width]="150"></ea-flex-grid-column>
+        <ea-flex-grid-column header="e申請書類ID" binding="eappId" [width]="100"></ea-flex-grid-column>
+        <ea-flex-grid-column header="登録申請番号" binding="assetId" [width]="100"></ea-flex-grid-column>
+        <ea-flex-grid-column header="ステータス" binding="apStatusName" [width]="80"></ea-flex-grid-column>
+        <ea-flex-grid-column header="資産(機器)名" binding="astName" [width]="250"></ea-flex-grid-column>
+        <ea-flex-grid-column header="申請者" binding="apStaffCode" [width]="170">
+          <ng-template wjFlexGridCellTemplate [cellType]="'Cell'" let-cell="cell">
+            {{cell.item.apStaffCode}}　{{cell.item.apStaffName}}
+          </ng-template>
+        </ea-flex-grid-column>
+        <ea-flex-grid-column header="申請者所属部署" binding="apCompanyName" [width]="270">
+          <ng-template wjFlexGridCellTemplate [cellType]="'Cell'" let-cell="cell">
+            {{cell.item.apCompanyName}}　{{cell.item.apSectionName}}
+          </ng-template>
+        </ea-flex-grid-column>
+        <ea-flex-grid-column header="申請者オフィス" binding="apOfficeName" [width]="200"></ea-flex-grid-column>
+        <ea-flex-grid-column header="申請日" binding="apDate" [width]="100" [format]="'yyyy/MM/dd'">
+        </ea-flex-grid-column>
+        <ea-flex-grid-column header="保有部署" binding="holCompanyName" [width]="270">
+          <ng-template wjFlexGridCellTemplate [cellType]="'Cell'" let-cell="cell">
+            {{cell.item.holCompanyName}}　{{cell.item.holSectionName}}
+          </ng-template>
+        </ea-flex-grid-column>
+        <ea-flex-grid-column header="資産管理担当者" binding="holStaffCode" [width]="170">
+          <ng-template wjFlexGridCellTemplate [cellType]="'Cell'" let-cell="cell">
+            {{cell.item.holStaffCode}}　{{cell.item.holStaffName}}
+          </ng-template>
+        </ea-flex-grid-column>
+        <ea-flex-grid-column header="設置（使用）場所" binding="holOfficeName" [width]="200">
+          <ng-template wjFlexGridCellTemplate [cellType]="'Cell'" let-cell="cell">
+            {{cell.item.holOfficeName }}　{{cell.item.holOfficeFloor}}F
+          </ng-template>
+        </ea-flex-grid-column>
+        <ea-flex-grid-column header="数量" binding="holQuantity" [width]="50"></ea-flex-grid-column>
+        <ea-flex-grid-column header="使用者" binding="useStaffCode" [width]="50">
+          <ng-template wjFlexGridCellTemplate [cellType]="'Cell'" let-cell="cell">
+            {{cell.item.useStaffCode }}　{{cell.item.useStaffName}}
+          </ng-template>
+        </ea-flex-grid-column>
+        <ea-flex-grid-column header="資産(機器)分類" binding="astCategory2Name" [width]="150"></ea-flex-grid-column>
+        <ea-flex-grid-column header="メーカー" binding="astMakerName" [width]="100"></ea-flex-grid-column>
+        <ea-flex-grid-column header="メーカー型番" binding="astMakerModel" [width]="120"></ea-flex-grid-column>
+        <ea-flex-grid-column binding="osNameOne" [width]="120">
+          <ng-template wjFlexGridCellTemplate cellType="ColumnHeader" let-cell="cell">
+            OS名<br>[代表]
+          </ng-template>
+        </ea-flex-grid-column>
+        <ea-flex-grid-column binding="netMacAddressOne" [width]="120">
+          <ng-template wjFlexGridCellTemplate cellType="ColumnHeader" let-cell="cell">
+            MACアドレス<br>[代表]
+          </ng-template>
+        </ea-flex-grid-column>
+        <ea-flex-grid-column binding="netIpAddressOne" [width]="100">
+          <ng-template wjFlexGridCellTemplate cellType="ColumnHeader" let-cel="cell">
+            IPアドレス<br>[代表]
+          </ng-template>
+        </ea-flex-grid-column>
+        <ea-flex-grid-column header="ホスト名" binding="netHostName" [width]="100"></ea-flex-grid-column>
+        <ea-flex-grid-column header="備考" binding="dscDescription" [width]="300"></ea-flex-grid-column>
+      </ea-flex-grid>
+    </div>
+  </div>
+</div>

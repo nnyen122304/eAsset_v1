@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<!--
+ *===================================================================
+ * ファイル名 : HistDAO_SqlMap.xml
+ * 概要説明   : 履歴用SQL文
+ * バージョン : 1.0
+ *===================================================================
+ * 修正履歴
+ * 日付       Ver. 担当者       修正内容
+ * －－－－－ －－ －－－－－－ －－－－－－－－－－－－－－－－－－
+ * 2010-10-25 1.0  リヨン       新規
+ *===================================================================
+ -->
+<sqlMap namespace="HistDAO" >
+
+  <!--
+    履歴一覧取得
+  -->
+  <select id="selectHistList_HIS" parameterClass="java.util.Map" resultClass="jp.co.ctcg.easset.dto.hist.Hist">
+    SELECT
+      UPDATE_DATE updateDate
+      , UPDATE_STAFF_CODE updateStaffCode
+      , NEA_UTIL_PKG.GET_STAFF_NAME_F(UPDATE_STAFF_CODE) updateStaffName
+      , OPERATION operation
+      <isNotEmpty property="statusCategoryCode">
+        , NEA_UTIL_PKG.GET_CN_VALUE1_F(#statusCategoryCode#, AP_STATUS) apStatusName
+      </isNotEmpty>
+      <isEmpty property="statusCategoryCode">
+        , TO_CHAR(NULL) apStatusName
+      </isEmpty>
+      , UPDATE_COLUMN_NAME updateColumnName
+      <isNotEmpty property="statusCategoryCode">
+        , NEA_UTIL_PKG.replace_enter_f(UPDATE_COMMENT, ' ') updateComment
+      </isNotEmpty>
+      <isEmpty property="statusCategoryCode">
+        , TO_CHAR(NULL) updateComment
+      </isEmpty>
+      , VERSION version
+      <iterate property="keyColValueList" open=", " close=" key " conjunction=" || ' ' || ">
+        $keyColValueList[].column$
+      </iterate>
+    FROM
+      $entityName$
+    WHERE
+      <iterate property="keyColValueList" conjunction=" AND ">
+        $keyColValueList[].column$ = #keyColValueList[].value#
+      </iterate>
+    ORDER BY
+      <iterate property="keyColValueList" conjunction=", ">
+        $keyColValueList[].column$
+      </iterate>
+      , VERSION DESC
+  </select>
+
+  <!--
+    履歴作成
+  -->
+  <parameterMap id="param_callCreateHistData_HIS" class="java.util.Map">
+    <parameter property="entityName" jdbcType="VARCHAR" javaType="String" mode="IN"/>
+    <parameter property="keyValue" jdbcType="VARCHAR" javaType="String" mode="IN"/>
+    <parameter property="operation" jdbcType="VARCHAR" javaType="String" mode="IN"/>
+    <parameter property="itemDefCategoryCode" jdbcType="VARCHAR" javaType="String" mode="IN"/>
+    <parameter property="lineUpdateColumnName" jdbcType="VARCHAR" javaType="String" mode="IN"/>
+  </parameterMap>
+  <procedure id="callCreateHistData_HIS" parameterMap="param_callCreateHistData_HIS">
+    { call NEA_UTIL_PKG.CREATE_HIST_DATA(?, ?, ?, ?, ?) }
+  </procedure>
+
+  <!--
+    共通操作ログ作成
+  -->
+  <insert id="insertComOp_HIS" parameterClass="java.util.Map">
+    <selectKey resultClass="java.lang.Long" keyProperty="logId">
+      SELECT
+        NEA_H_COM_OP_S.NEXTVAL logId
+      FROM
+        dual
+    </selectKey>
+    INSERT INTO NEA_H_COM_OP (
+      LOG_ID
+      , CREATE_DATE
+      , CREATE_STAFF_CODE
+      , UPDATE_DATE
+      , UPDATE_STAFF_CODE
+      , FUNCTION
+      , OPERATION
+      , DESCRIPTION
+    ) VALUES (
+      #logId:NUMERIC# /* LOG_ID*/
+      , #createDate:TIMESTAMP# /* CREATE_DATE*/
+      , #createStaffCode:VARCHAR# /* CREATE_STAFF_CODE*/
+      , #updateDate:TIMESTAMP# /* UPDATE_DATE*/
+      , #updateStaffCode:VARCHAR# /* UPDATE_STAFF_CODE*/
+      , SUBSTRB(#function:VARCHAR#, 1, 128) /* MODULE*/
+      , SUBSTRB(#operation:VARCHAR#, 1, 30) /* OPERATION*/
+      , SUBSTRB(#description:VARCHAR#, 1, 2048) /* DESCRIPTION*/
+    )
+  </insert>
+
+  <!--
+    一括更新ログ作成
+  -->
+  <insert id="insertBulkUpdateLog_HIS" parameterClass="java.util.Map">
+    <selectKey resultClass="java.lang.Long" keyProperty="logId">
+      SELECT
+        NEA_H_BULK_UPDATE_S.NEXTVAL logId
+      FROM
+        dual
+    </selectKey>
+    INSERT INTO NEA_H_BULK_UPDATE (
+      LOG_ID
+      , CREATE_DATE
+      , CREATE_STAFF_CODE
+      , UPDATE_DATE
+      , UPDATE_STAFF_CODE
+      , COMPANY_CODE
+      , FUNCTION
+      , EXEC_STATUS
+      , FILE_ID
+      , EXEC_COUNT
+      , SUCCESS_COUNT
+      , FAILURE_COUNT
+      , UPDATE_COLUMN
+      , UPDATE_COLUMN_NAME
+    ) VALUES (
+      #logId:NUMERIC# /* LOG_ID*/
+      , #createDate:TIMESTAMP# /* CREATE_DATE*/
+      , #createStaffCode:VARCHAR# /* CREATE_STAFF_CODE*/
+      , #updateDate:TIMESTAMP# /* UPDATE_DATE*/
+      , #updateStaffCode:VARCHAR# /* UPDATE_STAFF_CODE*/
+      , #companyCode:VARCHAR#
+      , SUBSTRB(#function:VARCHAR#, 1, 30)
+      , 'ファイル読込中'
+      , #fileId:VARCHAR#
+      , TO_NUMBER(NULL)
+      , TO_NUMBER(NULL)
+      , TO_NUMBER(NULL)
+      , SUBSTRB(#updateColumn:VARCHAR#, 1, 2048)
+      , SUBSTRB(#updateColumnName:VARCHAR#, 1, 2048)
+    )
+  </insert>
+
+  <!--
+    一括更新ログ更新
+  -->
+  <update id="updateBulkUpdateLog_HIS" parameterClass="java.util.Map">
+    UPDATE
+      NEA_H_BULK_UPDATE
+    SET
+      UPDATE_DATE = #updateDate:TIMESTAMP#
+      , UPDATE_STAFF_CODE =
+          CASE
+            WHEN #updateStaffCode:VARCHAR# IS NULL THEN
+              UPDATE_STAFF_CODE
+            WHEN EXEC_STATUS = '終了中' THEN
+              UPDATE_STAFF_CODE
+            ELSE #updateStaffCode:VARCHAR#
+          END
+      , EXEC_STATUS =
+          CASE
+            WHEN EXEC_STATUS = '終了中' AND #execStatus:VARCHAR# = '更新中' THEN
+              EXEC_STATUS
+            WHEN EXEC_STATUS = '終了中' AND #execStatus:VARCHAR# = 'ファイル読込中' THEN
+              EXEC_STATUS
+            WHEN EXEC_STATUS = '終了中' AND #execStatus:VARCHAR# = '終了' THEN
+              '強制終了'
+            ELSE #execStatus:VARCHAR#
+          END
+      , EXEC_COUNT = NVL(#execCount:NUMERIC#, EXEC_COUNT)
+      , SUCCESS_COUNT = NVL(#successCount:NUMERIC#, SUCCESS_COUNT)
+      , FAILURE_COUNT = NVL(#failureCount:NUMERIC#, FAILURE_COUNT)
+    WHERE
+      LOG_ID = #logId#
+  </update>
+
+  <!--
+    一括更新ログ取得
+  -->
+  <select id="selectBulkUpdateHistList_HIS" parameterClass="java.util.Map" resultClass="jp.co.ctcg.easset.dto.hist.BulkUpdateHist">
+    SELECT
+      *
+    FROM
+      (
+        SELECT
+          LOG_ID logId
+          , CREATE_DATE createDate
+          , CREATE_STAFF_CODE createStaffCode
+          , NEA_UTIL_PKG.GET_STAFF_NAME_F(CREATE_STAFF_CODE) createStaffName
+          , UPDATE_DATE updateDate
+          , UPDATE_STAFF_CODE updateStaffCode
+          , FUNCTION function
+          , EXEC_STATUS execStatus
+          , FILE_ID fileId
+          , EXEC_COUNT execCount
+          , SUCCESS_COUNT successCount
+          , FAILURE_COUNT failureCount
+          , UPDATE_COLUMN updateColumn
+          , UPDATE_COLUMN_NAME updateColumnName
+          <isEqual property="function" compareValue="INV">
+            , ROW_NUMBER() OVER (ORDER BY CREATE_DATE DESC) rnum
+          </isEqual>
+          <isNotEqual property="function" compareValue="INV">
+            , ROW_NUMBER() OVER (ORDER BY CREATE_STAFF_CODE, FUNCTION, CREATE_DATE DESC) rnum
+          </isNotEqual>
+        FROM
+          NEA_H_BULK_UPDATE
+        WHERE
+          1 = 1
+          <isNotEmpty property="companyCode">
+            AND COMPANY_CODE = #companyCode#
+          </isNotEmpty>
+          <isNotEmpty property="staffCode">
+            AND CREATE_STAFF_CODE = #staffCode#
+          </isNotEmpty>
+          <isNotEmpty property="function">
+            AND FUNCTION = #function#
+          </isNotEmpty>
+          <isNotEmpty property="logId">
+            AND LOG_ID = #logId#
+          </isNotEmpty>
+          <isNotEmpty property="createDateFrom">
+            AND CREATE_DATE <![CDATA[>]]>= #createDateFrom#
+          </isNotEmpty>
+          <isNotEmpty property="createDateTo">
+            AND CREATE_DATE <![CDATA[<]]>= (#createDateTo# + 1)
+          </isNotEmpty>
+          <isNotEmpty property="isExecOnly">
+            AND EXEC_STATUS NOT IN ('終了', '強制終了')
+          </isNotEmpty>
+      )
+    <isEqual property="function" compareValue="INV">
+      WHERE rnum <![CDATA[<]]>= 100
+    </isEqual>
+    ORDER BY
+      <isEqual property="function" compareValue="INV">
+          createDate DESC
+      </isEqual>
+      <isNotEqual property="function" compareValue="INV">
+          createStaffCode
+        , function
+        , createDate DESC
+      </isNotEqual>
+  </select>
+</sqlMap>

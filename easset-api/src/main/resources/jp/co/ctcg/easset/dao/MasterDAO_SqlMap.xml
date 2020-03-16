@@ -1,0 +1,2865 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<!--
+ *===================================================================
+ * ファイル名 : MasterDAO_SqlMap.xml
+ * 概要説明   : マスタ用SQL文
+ * バージョン : 1.0
+ *===================================================================
+ * 修正履歴
+ * 日付       Ver. 担当者       修正内容
+ * －－－－－ －－ －－－－－－ －－－－－－－－－－－－－－－－－－
+ * 2010-10-06 1.0  リヨン        新規
+ *===================================================================
+ -->
+<sqlMap namespace="MasterDAO" >
+
+  <!--
+    アカウントからユーザー取得
+  -->
+  <select id="selectUserByAccount_MST" parameterClass="java.util.Map" resultClass="jp.co.ctcg.easset.dto.User">
+    SELECT
+      U.STAFFCODE staffCode
+      , U.NAMEKANJI name
+      , U.ACCOUNT account
+      , UC.COMPANYCODE companyCode
+      , NEA_UTIL_PKG.GET_COMPANY_NAME_F(UC.COMPANYCODE) companyName
+      , UC.DIVISIONCODE sectionCode
+      , NEA_UTIL_PKG.GET_SECTION_NAME_F(UC.COMPANYCODE, UC.DIVISIONCODE) sectionName
+      , DECODE(UC.EXTENSION, null, UC.TEL1, UC.TEL1 || '(' || UC.EXTENSION || ')' ) tel1
+      , C.OFFICECODE officeCode
+      , C.OFFICENAMEKANJI officeName
+      , U.MAILADDRESS mailAddress
+    FROM
+      NEA_USERTABLE_V U
+      , NEA_USERCOMPANYTABLE_V UC
+      , NEA_COMPANYMASTERTABLE_V C
+    WHERE
+      U.ACCOUNT = #account#
+      AND U.USERID = UC.USERID
+      AND C.COMPANYCODE = UC.COMPANYCODE
+      AND C.OFFICECODE = UC.OFFICECODE
+      AND (U.RETIREDDAY IS NULL OR U.RETIREDDAY <![CDATA[>]]>= TO_CHAR(SYSDATE, 'YYYYMMDD'))
+      AND U.DOUBLESTAFFCODE IS NULL
+      AND UC.ADDITIONALFLG = '0'
+      AND (UC.ENDDATE IS NULL OR UC.ENDDATE <![CDATA[>]]>= TO_CHAR(SYSDATE, 'YYYYMMDD'))
+  </select>
+
+  <!--
+    社員番号からログイン可能な会社一覧取得
+  -->
+  <select id="selectUsableCompanyList_MST" parameterClass="java.util.Map" resultClass="jp.co.ctcg.easset.dto.CodeName">
+    SELECT
+      ALLC.*
+    FROM
+      (
+        /* 所属会社 */
+        SELECT
+          UC.COMPANYCODE
+        FROM
+          NEA_USERTABLE_V U
+          , NEA_USERCOMPANYTABLE_V UC
+        WHERE
+          U.STAFFCODE = #staffCode#
+          AND U.USERID = UC.USERID
+          AND (U.RETIREDDAY IS NULL OR U.RETIREDDAY <![CDATA[>]]>= TO_CHAR(SYSDATE, 'YYYYMMDD'))
+          AND (UC.ENDDATE IS NULL OR UC.ENDDATE <![CDATA[>]]>= TO_CHAR(SYSDATE, 'YYYYMMDD'))
+        UNION
+        /* 全社権限付与会社 */
+        SELECT
+          COMPANY_CODE
+        FROM
+          NEA_USER_ROLE_ADMIN
+        WHERE
+          STAFF_CODE = #staffCode#
+        UNION
+        /* 部署権限付与会社 */
+        SELECT
+          COMPANY_CODE
+        FROM
+          NEA_USER_ROLE_SECTION
+        WHERE
+          STAFF_CODE = #staffCode#
+      ) UC
+      , (
+        SELECT
+          INTERNAL_CODE internalCode
+          , VALUE1 value1
+          , VALUE2 value2
+          , VALUE3 value3
+          , VALUE4 value4
+        FROM
+          NEA_CODE_NAME
+        WHERE
+          CATEGORY_CODE = 'USE_COMPANY'
+          AND DELETE_FLAG = '0'
+      ) ALLC
+    WHERE
+      ALLC.internalCode = UC.COMPANYCODE
+    ORDER BY
+      internalCode
+  </select>
+
+  <!--
+    社員番号、会社から全社権限一覧取得
+  -->
+  <select id="selectRoleAdminList_MST" parameterClass="java.util.Map" resultClass="jp.co.ctcg.easset.dto.CodeName">
+    SELECT
+      ROLE_CODE internalCode
+      , NEA_UTIL_PKG.GET_CN_VALUE_F('ROLE', ROLE_CODE, 1) value1
+      , NEA_UTIL_PKG.GET_CN_VALUE_F('ROLE', ROLE_CODE, 2) value2
+    FROM
+      NEA_USER_ROLE_ADMIN
+    WHERE
+      STAFF_CODE = #staffCode#
+      AND COMPANY_CODE = #companyCode#
+    ORDER BY
+      ROLE_CODE
+  </select>
+
+  <!--
+    社員番号、会社から部署権限一覧取得
+  -->
+  <select id="selectRoleSectionList_MST" parameterClass="java.util.Map" resultClass="jp.co.ctcg.easset.dto.CodeName">
+    SELECT DISTINCT
+      ROLE_CODE internalCode
+      , NEA_UTIL_PKG.GET_CN_VALUE_F('ROLE', ROLE_CODE, 1) value1
+    FROM
+      NEA_USER_ROLE_SECTION_ALL_V
+    WHERE
+      STAFF_CODE = #staffCode#
+      AND COMPANY_CODE = #companyCode#
+    ORDER BY
+      ROLE_CODE
+  </select>
+
+
+  <!--
+    コードネーム一覧取得
+  -->
+  <select id="selectCodeNameList_MST" parameterClass="java.util.Map" resultClass="jp.co.ctcg.easset.dto.CodeName">
+    SELECT
+      CATEGORY_CODE categoryCode
+    , INTERNAL_CODE internalCode
+    , CREATE_DATE createDate
+    , CREATE_STAFF_CODE createStaffCode
+    , UPDATE_DATE updateDate
+    , UPDATE_STAFF_CODE updateStaffCode
+    , COMPANY_CODE companyCode
+    , PARENT_CATEGORY_CODE parentCategoryCode
+    , PARENT_INTERNAL_CODE parentInternalCode
+    , SORT_NUMBER sortNumber
+    , DELETE_FLAG deleteFlag
+    , DESCRIPTION description
+    , VALUE1 value1
+    , VALUE2 value2
+    , VALUE3 value3
+    , VALUE4 value4
+    , VALUE5 value5
+    , VALUE6 value6
+    , VALUE7 value7
+    , VALUE8 value8
+    , VALUE9 value9
+    , VALUE10 value10
+    , VALUE11 value11
+    , VALUE12 value12
+    , VALUE13 value13
+    , VALUE14 value14
+    , VALUE15 value15
+    , VALUE16 value16
+    , VALUE17 value17
+    , VALUE18 value18
+    , VALUE19 value19
+    , VALUE20 value20
+    , VALUE21 value21
+    , VALUE22 value22
+    , VALUE23 value23
+    , VALUE24 value24
+    , VALUE25 value25
+    , VALUE26 value26
+    , VALUE27 value27
+    , VALUE28 value28
+    , VALUE29 value29
+    , VALUE30 value30
+    , VALUE31 value31
+    , VALUE32 value32
+    , VALUE33 value33
+    , VALUE34 value34
+    , VALUE35 value35
+    , VALUE36 value36
+    , VALUE37 value37
+    , VALUE38 value38
+    , VALUE39 value39
+    , VALUE40 value40
+    , VALUE41 value41
+    , VALUE42 value42
+    , VALUE43 value43
+    , VALUE44 value44
+    , VALUE45 value45
+    , VALUE46 value46
+    , VALUE47 value47
+    , VALUE48 value48
+    , VALUE49 value49
+    , VALUE50 value50
+    , VALUE51 value51
+    , VALUE52 value52
+    , VALUE53 value53
+    , VALUE54 value54
+    , VALUE55 value55
+    , VALUE56 value56
+    , VALUE57 value57
+    , VALUE58 value58
+    , VALUE59 value59
+    , VALUE60 value60
+    FROM
+      NEA_CODE_NAME
+    WHERE
+      CATEGORY_CODE = #categoryCode#
+      AND (COMPANY_CODE = '000' OR COMPANY_CODE LIKE '%'|| #companyCode# || '%')
+      <isNotEmpty property="internalCode">
+        AND INTERNAL_CODE = #internalCode#
+      </isNotEmpty>
+      <isNotEmpty property="parentInternalCode">
+        AND PARENT_INTERNAL_CODE = #parentInternalCode#
+      </isNotEmpty>
+      <isNotEmpty property="value1">
+        AND VALUE1 = #value1#
+      </isNotEmpty>
+      <isNotEmpty property="value2">
+        AND VALUE2 = #value2#
+      </isNotEmpty>
+      <isNotEmpty property="value3">
+        AND VALUE3 = #value3#
+      </isNotEmpty>
+      <isNotEmpty property="value4">
+        AND VALUE4 = #value4#
+      </isNotEmpty>
+      <isNotEmpty property="value5">
+        AND VALUE5 = #value5#
+      </isNotEmpty>
+      <isNotEmpty property="value6">
+        AND VALUE6 = #value6#
+      </isNotEmpty>
+      <isNotEmpty property="value7">
+        AND VALUE7 = #value7#
+      </isNotEmpty>
+      <isNotEmpty property="value8">
+        AND VALUE8 = #value8#
+      </isNotEmpty>
+      <isNotEmpty property="value9">
+        AND VALUE9 = #value9#
+      </isNotEmpty>
+      <isNotEmpty property="value10">
+        AND VALUE10 = #value10#
+      </isNotEmpty>
+      <isNotEmpty property="value11">
+        AND VALUE11 = #value11#
+      </isNotEmpty>
+      <isNotEmpty property="value12">
+        AND VALUE12 = #value12#
+      </isNotEmpty>
+      <isNotEmpty property="value13">
+        AND VALUE13 = #value13#
+      </isNotEmpty>
+      <isNotEmpty property="value14">
+        AND VALUE14 = #value14#
+      </isNotEmpty>
+      <isNotEmpty property="value15">
+        AND VALUE15 = #value15#
+      </isNotEmpty>
+      <isNotEmpty property="value16">
+        AND VALUE16 = #value16#
+      </isNotEmpty>
+      <isNotEmpty property="value17">
+        AND VALUE17 = #value17#
+      </isNotEmpty>
+      <isNotEmpty property="value18">
+        AND VALUE18 = #value18#
+      </isNotEmpty>
+      <isNotEmpty property="value19">
+        AND VALUE19 = #value19#
+      </isNotEmpty>
+      <isNotEmpty property="value20">
+        AND VALUE20 = #value20#
+      </isNotEmpty>
+      <isNotEmpty property="value21">
+        AND VALUE21 = #value21#
+      </isNotEmpty>
+      <isNotEmpty property="value22">
+        AND VALUE22 = #value22#
+      </isNotEmpty>
+      <isNotEmpty property="value23">
+        AND VALUE23 = #value23#
+      </isNotEmpty>
+      <isNotEmpty property="value24">
+        AND VALUE24 = #value24#
+      </isNotEmpty>
+      <isNotEmpty property="value25">
+        AND VALUE25 = #value25#
+      </isNotEmpty>
+      <isNotEmpty property="value26">
+        AND VALUE26 = #value26#
+      </isNotEmpty>
+      <isNotEmpty property="value27">
+        AND VALUE27 = #value27#
+      </isNotEmpty>
+      <isNotEmpty property="value28">
+        AND VALUE28 = #value28#
+      </isNotEmpty>
+      <isNotEmpty property="value29">
+        AND VALUE29 = #value29#
+      </isNotEmpty>
+      <isNotEmpty property="value30">
+        AND VALUE30 = #value30#
+      </isNotEmpty>
+      <isNotEmpty property="value31">
+        AND VALUE31 = #value31#
+      </isNotEmpty>
+      <isNotEmpty property="value32">
+        AND VALUE32 = #value32#
+      </isNotEmpty>
+      <isNotEmpty property="value33">
+        AND VALUE33 = #value33#
+      </isNotEmpty>
+      <isNotEmpty property="value34">
+        AND VALUE34 = #value34#
+      </isNotEmpty>
+      <isNotEmpty property="value35">
+        AND VALUE35 = #value35#
+      </isNotEmpty>
+      <isNotEmpty property="value36">
+        AND VALUE36 = #value36#
+      </isNotEmpty>
+      <isNotEmpty property="value37">
+        AND VALUE37 = #value37#
+      </isNotEmpty>
+      <isNotEmpty property="value38">
+        AND VALUE38 = #value38#
+      </isNotEmpty>
+      <isNotEmpty property="value39">
+        AND VALUE39 = #value39#
+      </isNotEmpty>
+      <isNotEmpty property="value40">
+        AND VALUE40 = #value40#
+      </isNotEmpty>
+      <isNotEmpty property="value41">
+        AND VALUE41 = #value41#
+      </isNotEmpty>
+      <isNotEmpty property="value42">
+        AND VALUE42 = #value42#
+      </isNotEmpty>
+      <isNotEmpty property="value43">
+        AND VALUE43 = #value43#
+      </isNotEmpty>
+      <isNotEmpty property="value44">
+        AND VALUE44 = #value44#
+      </isNotEmpty>
+      <isNotEmpty property="value45">
+        AND VALUE45 = #value45#
+      </isNotEmpty>
+      <isNotEmpty property="value46">
+        AND VALUE46 = #value46#
+      </isNotEmpty>
+      <isNotEmpty property="value47">
+        AND VALUE47 = #value47#
+      </isNotEmpty>
+      <isNotEmpty property="value48">
+        AND VALUE48 = #value48#
+      </isNotEmpty>
+      <isNotEmpty property="value49">
+        AND VALUE49 = #value49#
+      </isNotEmpty>
+      <isNotEmpty property="value50">
+        AND VALUE50 = #value50#
+      </isNotEmpty>
+      <isNotEmpty property="value51">
+        AND VALUE51 = #value51#
+      </isNotEmpty>
+      <isNotEmpty property="value52">
+        AND VALUE52 = #value52#
+      </isNotEmpty>
+      <isNotEmpty property="value53">
+        AND VALUE53 = #value53#
+      </isNotEmpty>
+      <isNotEmpty property="value54">
+        AND VALUE54 = #value54#
+      </isNotEmpty>
+      <isNotEmpty property="value55">
+        AND VALUE55 = #value55#
+      </isNotEmpty>
+      <isNotEmpty property="value56">
+        AND VALUE56 = #value56#
+      </isNotEmpty>
+      <isNotEmpty property="value57">
+        AND VALUE57 = #value57#
+      </isNotEmpty>
+      <isNotEmpty property="value58">
+        AND VALUE58 = #value58#
+      </isNotEmpty>
+      <isNotEmpty property="value59">
+        AND VALUE59 = #value59#
+      </isNotEmpty>
+      <isNotEmpty property="value60">
+        AND VALUE60 = #value60#
+      </isNotEmpty>
+      <isNotEmpty property="deleteFlag">
+        AND DELETE_FLAG = #deleteFlag#
+      </isNotEmpty>
+    ORDER BY
+      SORT_NUMBER
+      , CATEGORY_CODE
+      , INTERNAL_CODE
+  </select>
+
+
+  <!--
+    権限から利用可能な機能へのアクセスレベルを取得
+  -->
+  <select id="selectAccessLevelList_MST" parameterClass="java.util.Map" resultClass="jp.co.ctcg.easset.dto.CodeName">
+    SELECT
+      SUBSTR(INTERNAL_CODE, 1, 5) internalCode
+      , MIN(VALUE1) value1
+      , MIN(VALUE2) value2
+      , NVL(MIN(DECODE(VALUE3, 'S', 'S')), MIN(VALUE3)) value3 /* (高) S, A, A*, B, C (低) */
+      , MIN(VALUE4) value4
+      , MIN(VALUE5) value5
+      , MIN(VALUE6) value6
+      , MIN(VALUE7) value7
+      , MIN(VALUE8) value8
+      , MIN(VALUE9) value9
+      , MIN(VALUE10) value10
+      , MIN(VALUE11) value11
+      , MIN(VALUE12) value12
+      , MIN(VALUE13) value13
+    FROM
+      NEA_CODE_NAME n
+    WHERE
+      CATEGORY_CODE = 'MENU_ACCESS_LEVEL'
+      AND (COMPANY_CODE = '000' OR COMPANY_CODE LIKE '%'|| #companyCode# || '%')
+      AND SUBSTR(INTERNAL_CODE, 7, 3) IN (
+        <iterate property="roleCodeList" conjunction=",">
+          #roleCodeList[]#
+        </iterate>
+      )
+      AND DELETE_FLAG = '0'
+      AND NOT EXISTS(
+        SELECT 'X'
+        FROM NEA_CODE_NAME n1
+        WHERE n1.CATEGORY_CODE = 'MENU_ACCESS_CONTROL'
+        AND n1.COMPANY_CODE = #companyCode#
+        AND n1.VALUE1 = n.INTERNAL_CODE
+        AND n1.VALUE2 = '0'
+        )
+    GROUP BY
+      SUBSTR(INTERNAL_CODE, 1, 5)
+    ORDER BY
+      MIN(SORT_NUMBER)
+  </select>
+
+  <!--
+    人事部課検索
+  -->
+  <select id="selectSectionList_MST" parameterClass="java.util.Map" resultClass="jp.co.ctcg.easset.dto.Section">
+    SELECT
+        D.COMPANYCODE companyCode
+      , D.DIVISIONCODE sectionCode
+      , D.PARENTDIVISIONCODE parentSectionCode
+      <isNotEmpty property="year">
+        , NEA_UTIL_PKG.GET_SECTION_NAME_F(D.COMPANYCODE, D.DIVISIONCODE, #year#) sectionName
+      </isNotEmpty>
+      <isEmpty property="year">
+        , NEA_UTIL_PKG.GET_SECTION_NAME_F(D.COMPANYCODE, D.DIVISIONCODE) sectionName
+      </isEmpty>
+      , D.DIVISIONKANJI sectionShortName
+      , D.NENDO sectionYear
+      , NEA_UTIL_PKG.GET_COMPANY_NAME_F(D.COMPANYCODE) companyName
+      , NEA_UTIL_PKG.GET_COMPANY_OFFICIAL_NAME_F(D.COMPANYCODE) companyOfficialName
+    FROM
+      NEA_NEWDIVISIONMASTERTABLE_V D
+    WHERE
+          COMPANYCODE = #companyCode#
+      <isNotEmpty property="year">
+        AND NENDO = #year#
+      </isNotEmpty>
+      <isEmpty property="year">
+        AND NENDO = (SELECT VALUE1 FROM NEA_CODE_NAME C WHERE C.CATEGORY_CODE = 'CURRENT_YEAR' AND DELETE_FLAG = '0')
+      </isEmpty>
+      <isNotEmpty property="sectionCode">
+        AND D.DIVISIONCODE = #sectionCode#
+      </isNotEmpty>
+      <isNotEmpty property="sectionName">
+        AND (NENDO, COMPANYCODE, DIVISIONCODE) IN (
+          SELECT
+              D.NENDO
+            , D.COMPANYCODE
+            , D.DIVISIONCODE
+          FROM
+            NEA_NEWDIVISIONMASTERTABLE_V D
+          START WITH
+                D.COMPANYCODE = #companyCode#
+           <isNotEmpty property="year">
+              AND NENDO = #year#
+           </isNotEmpty>
+           <isEmpty property="year">
+              AND D.NENDO = (SELECT VALUE1 FROM NEA_CODE_NAME C WHERE C.CATEGORY_CODE = 'CURRENT_YEAR' AND DELETE_FLAG = '0')
+            </isEmpty>
+            AND D.DIVISIONCODE = D.DIVISIONCODE
+            AND NEA_UTIL_PKG.TO_FUZZY_F(D.DIVISIONKANJI) LIKE '%' || NEA_UTIL_PKG.TO_FUZZY_F(#sectionName#) || '%'
+          CONNECT BY
+                PRIOR D.PARENTDIVISIONCODE = D.DIVISIONCODE
+            AND PRIOR D.COMPANYCODE = D.COMPANYCODE
+            AND PRIOR D.NENDO = D.NENDO
+        )
+      </isNotEmpty>
+    ORDER BY
+        DIVISIONCODE
+  </select>
+
+  <!--
+    資産(機器)分類検索
+  -->
+  <select id="selectAssetCategoryList_MST" parameterClass="java.util.Map" resultClass="jp.co.ctcg.easset.dto.AssetCategory">
+    SELECT NCN.CATEGORY_CODE as categorySegment
+         , NCN.INTERNAL_CODE as categoryCode
+         , NCN.VALUE1 as categoryName
+         , NCN.PARENT_INTERNAL_CODE as parentCategoryCode
+         , (SELECT VALUE1 FROM NEA_CODE_NAME WHERE CATEGORY_CODE = 'ASSET_CATEGORY1' AND INTERNAL_CODE = NCN.PARENT_INTERNAL_CODE) as parentCategoryName
+         , (SELECT VALUE2 FROM NEA_CODE_NAME WHERE CATEGORY_CODE = 'ASSET_CATEGORY2' AND INTERNAL_CODE = NCN.INTERNAL_CODE) as childCategoryValue2
+         , (SELECT VALUE3 FROM NEA_CODE_NAME WHERE CATEGORY_CODE = 'ASSET_CATEGORY2' AND INTERNAL_CODE = NCN.INTERNAL_CODE) as childCategoryValue3
+         , (SELECT VALUE4 FROM NEA_CODE_NAME WHERE CATEGORY_CODE = 'ASSET_CATEGORY2' AND INTERNAL_CODE = NCN.INTERNAL_CODE) as childCategoryValue4
+         , (SELECT VALUE5 FROM NEA_CODE_NAME WHERE CATEGORY_CODE = 'ASSET_CATEGORY2' AND INTERNAL_CODE = NCN.INTERNAL_CODE) as childCategoryValue5
+      FROM NEA_CODE_NAME NCN
+     WHERE NCN.DELETE_FLAG = '0'
+       AND NCN.CATEGORY_CODE IN( 'ASSET_CATEGORY1', 'ASSET_CATEGORY2')
+      <isNotEmpty property="categoryName">
+         AND NCN.INTERNAL_CODE IN (
+            SELECT
+               INTERNAL_CODE
+            FROM
+              NEA_CODE_NAME
+            START WITH
+                  CATEGORY_CODE IN( 'ASSET_CATEGORY1', 'ASSET_CATEGORY2')
+              AND NEA_UTIL_PKG.TO_FUZZY_F(VALUE1) LIKE '%' || NEA_UTIL_PKG.TO_FUZZY_F(#categoryName#) || '%'
+            CONNECT BY
+                  CATEGORY_CODE IN( 'ASSET_CATEGORY1', 'ASSET_CATEGORY2')
+              AND   PRIOR PARENT_INTERNAL_CODE = INTERNAL_CODE
+         )
+      </isNotEmpty>
+      <!-- 変更前資産大分類指定あり -->
+      <isNotEmpty property="selectedAssetCategory1">
+       AND EXISTS (
+         SELECT
+           'X'
+         FROM
+           NEA_CODE_NAME NCN2
+         WHERE
+           NCN2.VALUE2 = (
+             CASE
+               WHEN NCN.CATEGORY_CODE = 'ASSET_CATEGORY1' THEN
+                 NCN.VALUE2
+               ELSE
+                 (SELECT NCN3.VALUE2 FROM NEA_CODE_NAME NCN3 WHERE NCN3.CATEGORY_CODE = 'ASSET_CATEGORY1' AND NCN3.DELETE_FLAG = '0' AND NCN3.INTERNAL_CODE = NCN.PARENT_INTERNAL_CODE)
+             END
+           )
+           AND NCN2.INTERNAL_CODE = #selectedAssetCategory1#
+           AND NCN2.CATEGORY_CODE = 'ASSET_CATEGORY1'
+           AND NCN2.DELETE_FLAG = '0'
+       )
+      </isNotEmpty>
+     ORDER BY NCN.SORT_NUMBER, NCN.INTERNAL_CODE
+  </select>
+
+  <!--
+    社員検索
+  -->
+  <select id="selectStaffList_MST" parameterClass="java.util.Map" resultClass="jp.co.ctcg.easset.dto.User">
+     SELECT /*+ ORDERED */
+            U.ACCOUNT account
+          , U.STAFFCODE staffCode
+          , U.NAMEKANJI name
+          , UC.COMPANYCODE companyCode
+          , NEA_UTIL_PKG.GET_COMPANY_NAME_F(UC.COMPANYCODE) companyName
+          , UC.DIVISIONCODE sectionCode
+          , NEA_UTIL_PKG.GET_SECTION_NAME_F(UC.COMPANYCODE, UC.DIVISIONCODE) sectionName
+          , DECODE(UC.EXTENSION, null, UC.TEL1, UC.TEL1 || '(' || UC.EXTENSION || ')' ) tel1
+          , C.OFFICECODE officeCode
+          , C.OFFICENAMEKANJI officeName
+          , U.MAILADDRESS mailAddress
+          , CASE WHEN UC.ENDDATE IS NOT NULL THEN '（退職）' ELSE NEA_UTIL_PKG.GET_COMPANY_NAME_F(UC.COMPANYCODE) || '　' || D.DIVISIONKANJI END lovDispName
+          , UC.TEL1 tel
+          , UC.FAX fax
+          , C.ADDRESSKANJI1 || ' ' || C.ADDRESSKANJI2 || ' ' || C.ADDRESSKANJI3 address
+     FROM NEA_USERTABLE_V U
+        , NEA_USERCOMPANYTABLE_V UC
+        , NEA_DIVISIONMASTERTABLE_V D
+        , NEA_COMPANYMASTERTABLE_V C
+    WHERE U.USERID = UC.USERID
+      AND D.NENDO (+) = #currentYear#
+      AND D.COMPANYCODE (+) = UC.COMPANYCODE
+      AND D.DIVISIONCODE (+) = UC.DIVISIONCODE
+      AND C.COMPANYCODE = UC.COMPANYCODE
+      AND C.OFFICECODE = UC.OFFICECODE
+      <isNotEmpty property="enableStaffOnly">
+        AND (U.RETIREDDAY IS NULL OR U.RETIREDDAY <![CDATA[>]]>= TO_CHAR(SYSDATE, 'YYYYMMDD'))
+        AND (UC.ENDDATE IS NULL OR UC.ENDDATE <![CDATA[>]]>= TO_CHAR(SYSDATE, 'YYYYMMDD'))
+      </isNotEmpty>
+      <isNotEmpty property="companyCode">
+        AND UC.COMPANYCODE = #companyCode#
+      </isNotEmpty>
+      <isNotEmpty property="staffName">
+        AND (
+          NEA_UTIL_PKG.TO_FUZZY_F(U.NAMEKANJI) LIKE '%' || NEA_UTIL_PKG.TO_FUZZY_F(#staffName#) || '%'
+          OR NEA_UTIL_PKG.TO_FUZZY_F(U.NAMEKANA) LIKE '%' || NEA_UTIL_PKG.TO_FUZZY_F(#staffName#) || '%'
+          OR NEA_UTIL_PKG.TO_FUZZY_F(U.NAMEENG) LIKE '%' || NEA_UTIL_PKG.TO_FUZZY_F(#staffName#) || '%'
+        )
+      </isNotEmpty>
+      <isNotEmpty property="sectionName">
+        AND NEA_UTIL_PKG.TO_FUZZY_F(D.DIVISIONKANJI) LIKE '%' || NEA_UTIL_PKG.TO_FUZZY_F(#sectionName#) || '%'
+      </isNotEmpty>
+      <isEmpty property="titleCode">
+        AND UC.ADDITIONALFLG = '0'
+      </isEmpty>
+      <isNotEmpty property="titleCode">
+        AND UC.TITLECODE IN (
+              SELECT
+                INTERNAL_CODE
+              FROM
+                NEA_CODE_NAME
+              WHERE
+                CATEGORY_CODE = #titleCode#
+              AND
+                DELETE_FLAG = '0'
+        )
+      </isNotEmpty>
+      <isNotEmpty property="staffCode">
+        AND U.STAFFCODE = #staffCode#
+      </isNotEmpty>
+     ORDER BY U.STAFFCODE
+  </select>
+
+  <!--
+    課長検索 ※ MIの課長情報検索
+  -->
+  <select id="selectCostApproveStaffList_MST" parameterClass="java.util.Map" resultClass="jp.co.ctcg.easset.dto.User">
+    SELECT
+      A.EMPLOYEE_NUMBER staffCode
+      , U.NAMEKANJI name
+      , UC.DIVISIONCODE sectionCode
+    FROM
+      NEA_SAP_ASSIGNMENTS A
+      , NEA_USERTABLE_V U
+      , NEA_USERCOMPANYTABLE_V UC
+    WHERE
+      U.STAFFCODE = A.EMPLOYEE_NUMBER
+      <isNotEmpty property="costSectionCode">
+        AND A.DEPARTMENT_CODE = #costSectionCode#
+      </isNotEmpty>
+      <isNotEmpty property="staffCode">
+        AND A.EMPLOYEE_NUMBER = #staffCode#
+      </isNotEmpty>
+      AND A.POST_CODE IN (SELECT INTERNAL_CODE FROM NEA_CODE_NAME WHERE CATEGORY_CODE = 'TITLE_CODE_GL' AND DELETE_FLAG = '0')
+      AND SYSDATE BETWEEN A.EFFECTIVE_START_DATE AND A.EFFECTIVE_END_DATE
+      AND UC.USERID = U.USERID
+      AND UC.ADDITIONALFLG = '0'
+      AND (UC.ENDDATE IS NULL OR UC.ENDDATE <![CDATA[>]]>= TO_CHAR(SYSDATE, 'YYYYMMDD'))
+    ORDER BY
+      staffCode
+<!--
+    SELECT
+      P1.EMPLOYEE_NUMBER staffCode
+      , P1.PER_INFORMATION18 name
+      , UC.DIVISIONCODE sectionCode
+    FROM
+      PER_ALL_PEOPLE_F P1
+      , PER_ALL_ASSIGNMENTS_F A
+      , NEA_USERTABLE_V U
+      , NEA_USERCOMPANYTABLE_V UC
+    WHERE
+      P1.PERSON_ID = A.PERSON_ID
+      <isNotEmpty property="costSectionCode">
+        AND P1.ATTRIBUTE28 = #costSectionCode#
+      </isNotEmpty>
+      <isNotEmpty property="staffCode">
+        AND P1.EMPLOYEE_NUMBER = #staffCode#
+      </isNotEmpty>
+      AND A.ASS_ATTRIBUTE1 IN (SELECT INTERNAL_CODE FROM NEA_CODE_NAME WHERE CATEGORY_CODE = 'TITLE_CODE_GL' AND DELETE_FLAG = '0')
+      AND SYSDATE BETWEEN P1.EFFECTIVE_START_DATE AND P1.EFFECTIVE_END_DATE
+      AND SYSDATE BETWEEN A.EFFECTIVE_START_DATE AND A.EFFECTIVE_END_DATE
+      AND U.STAFFCODE = P1.EMPLOYEE_NUMBER
+      AND UC.USERID = U.USERID
+      AND UC.ADDITIONALFLG = '0'
+      AND (UC.ENDDATE IS NULL OR UC.ENDDATE <![CDATA[>]]>= TO_CHAR(SYSDATE, 'YYYYMMDD'))
+
+    ORDER BY
+      staffCode
+ -->
+  </select>
+
+  <!--
+    部長検索
+  -->
+  <select id="selectHolApproveStaffList_MST" parameterClass="java.util.Map" resultClass="jp.co.ctcg.easset.dto.User">
+    SELECT
+      U.STAFFCODE staffCode
+    , U.NAMEKANJI name
+    FROM
+      NEA_NEWDIVISIONMASTERTABLE_V NDM
+    , NEA_USERCOMPANYTABLE_V UC
+    , NEA_USERTABLE_V U
+    WHERE
+      UC.COMPANYCODE = NDM.COMPANYCODE
+    AND UC.DIVISIONCODE = NDM.DIVISIONCODE
+    AND NDM.NENDO = (SELECT VALUE1 FROM NEA_CODE_NAME C WHERE C.CATEGORY_CODE = 'CURRENT_YEAR' AND DELETE_FLAG = '0')
+    AND U.USERID = UC.USERID
+    AND UC.TITLECODE IN (SELECT INTERNAL_CODE FROM NEA_CODE_NAME WHERE CATEGORY_CODE = 'TITLE_CODE_SECTION_MANAGER' AND DELETE_FLAG = '0')
+    AND UC.COMPANYCODE = #companyCode#
+    <isNotEmpty property="holSectionCode">
+      AND UC.DIVISIONCODE = SUBSTRB(#holSectionCode#, 1, 4) || '00'
+    </isNotEmpty>
+    <isNotEmpty property="staffCode">
+      AND U.STAFFCODE = #staffCode#
+    </isNotEmpty>
+    AND (U.RETIREDDAY IS NULL OR U.RETIREDDAY <![CDATA[>]]>= TO_CHAR(SYSDATE, 'YYYYMMDD'))
+    AND U.DOUBLESTAFFCODE IS NULL
+    AND (UC.ENDDATE IS NULL OR UC.ENDDATE <![CDATA[>]]>= TO_CHAR(SYSDATE, 'YYYYMMDD'))
+    ORDER BY
+    <isNotEmpty property="holSectionCode">
+      UC.TITLECODE,
+      UC.DIVISIONCODE,
+    </isNotEmpty>
+      staffCode
+  </select>
+
+  <!--
+    アクセス可能部署検索
+  -->
+  <select id="selectAccessibleSectionList_MST" parameterClass="java.util.Map" resultClass="jp.co.ctcg.easset.dto.Section">
+    SELECT
+      COMPANY_CODE companyCode
+      , SECTION_CODE sectionCode
+      , SECTION_YEAR sectionYear
+    FROM
+      NEA_USER_ROLE_SECTION_ALL_V
+    WHERE
+      COMPANY_CODE = #companyCode#
+      AND STAFF_CODE = #staffCode#
+  </select>
+
+  <!--
+    階層部署検索
+  -->
+  <select id="selectHierarchySectionCodeList_MST" parameterClass="java.util.Map" resultClass="java.lang.String">
+    SELECT
+      ND.DIVISIONCODE
+    FROM
+      NEA_NEWDIVISIONMASTERTABLE_V ND
+    START WITH
+      ND.COMPANYCODE = #companyCode#
+      AND ND.DIVISIONCODE = #sectionCode#
+      AND ND.NENDO = #sectionYear#
+    CONNECT BY
+      PRIOR ND.COMPANYCODE = ND.COMPANYCODE
+      AND PRIOR ND.NENDO = ND.NENDO
+      AND PRIOR ND.DIVISIONCODE = ND.PARENTDIVISIONCODE
+  </select>
+
+  <!--
+    上位階層部署検索(所属部署基準)
+  -->
+  <select id="selectUpperHierarchySectionCodeList_MST" parameterClass="java.util.Map" resultClass="java.lang.String">
+    SELECT
+      ND.DIVISIONCODE
+    FROM
+      NEA_DIVISIONHIERARCHY_V ND
+    START WITH
+      ND.COMPANYCODE = #companyCode#
+      AND ND.DIVISIONCODE = #sectionCode#
+      AND ND.NENDO = #sectionYear#
+    CONNECT BY
+      PRIOR ND.COMPANYCODE = ND.COMPANYCODE
+      AND PRIOR ND.NENDO = ND.NENDO
+      AND PRIOR ND.PARENTDIVISIONCODE = ND.DIVISIONCODE
+  </select>
+
+  <!--
+    親部署コード検索
+  -->
+  <select id="selectParentSectionCodeList_MST" parameterClass="java.util.Map" resultClass="java.lang.String">
+    SELECT
+      ND.PARENTDIVISIONCODE
+    FROM
+      NEA_DIVISIONHIERARCHY_V ND
+    WHERE
+      COMPANYCODE = #companyCode#
+    AND DIVISIONCODE = #sectionCode#
+    AND NENDO = #sectionYear#
+  </select>
+
+  <!--
+    経費負担部署検索
+  -->
+  <select id="selectCostSectionList_MST" parameterClass="java.util.Map" resultClass="jp.co.ctcg.easset.dto.Section">
+    SELECT
+      DEPT_CD sectionCode
+      , DEPT_NAME sectionName
+      , COST_FLAG costFlag
+    FROM
+      NEA_SAP_EXP_DEPT D
+    WHERE
+      COMPANY_CD = (SELECT VALUE5 FROM NEA_CODE_NAME C WHERE C.CATEGORY_CODE = 'USE_COMPANY' AND C.INTERNAL_CODE = #companyCode# AND DELETE_FLAG = '0')
+      AND SUMMARY_FLAG = 'N'
+        AND ENABLED_FLAG = 'Y'
+      <isNotEmpty property="sectionCode">
+        AND DEPT_CD = #sectionCode#
+      </isNotEmpty>
+      <isNotEmpty property="sectionName">
+        AND NEA_UTIL_PKG.TO_FUZZY_F(D.DEPT_NAME) LIKE '%' || NEA_UTIL_PKG.TO_FUZZY_F(#sectionName#) || '%'
+      </isNotEmpty>
+      <isNotEmpty property="searchDateFrom">
+        AND (END_DATE IS NULL OR TRUNC(END_DATE, 'DD') <![CDATA[>]]>= TRUNC(#searchDateFrom#, 'DD'))
+      </isNotEmpty>
+      <isNotEmpty property="searchDateTo">
+        AND (START_DATE IS NULL OR TRUNC(START_DATE, 'DD') <![CDATA[<]]>= TRUNC(#searchDateTo#, 'DD'))
+      </isNotEmpty>
+  </select>
+
+  <!--
+    経費負担部署検索(旧年度)
+  -->
+  <select id="selectCostSectionYearList_MST" parameterClass="java.util.Map" resultClass="jp.co.ctcg.easset.dto.Section">
+    SELECT
+      DEPT_CD sectionCode
+      , DEPT_NAME sectionName
+      , COST_FLAG costFlag
+    FROM
+      NEA_SAP_EXP_DEPT_YEAR D
+    WHERE
+      COMPANY_CD = (SELECT VALUE5 FROM NEA_CODE_NAME C WHERE C.CATEGORY_CODE = 'USE_COMPANY' AND C.INTERNAL_CODE = #companyCode# AND DELETE_FLAG = '0')
+      AND SUMMARY_FLAG = 'N'
+      AND ENABLED_FLAG = 'Y'
+      <isNotEmpty property="year">
+        AND NENDO = #year#
+      </isNotEmpty>
+      <isNotEmpty property="sectionCode">
+        AND DEPT_CD = #sectionCode#
+      </isNotEmpty>
+      <isNotEmpty property="sectionName">
+        AND NEA_UTIL_PKG.TO_FUZZY_F(D.DEPT_NAME) LIKE '%' || NEA_UTIL_PKG.TO_FUZZY_F(#sectionName#) || '%'
+      </isNotEmpty>
+      <isNotEmpty property="searchDateFrom">
+        AND (END_DATE IS NULL OR TRUNC(END_DATE, 'DD') <![CDATA[>]]>= TRUNC(#searchDateFrom#, 'DD'))
+      </isNotEmpty>
+      <isNotEmpty property="searchDateTo">
+        AND (START_DATE IS NULL OR TRUNC(START_DATE, 'DD') <![CDATA[<]]>= TRUNC(#searchDateTo#, 'DD'))
+      </isNotEmpty>
+  </select>
+
+  <!--
+    NextMI経費負担部署検索
+  -->
+  <select id="selectMICostSectionList_MST" parameterClass="java.util.Map" resultClass="jp.co.ctcg.easset.dto.Section">
+    SELECT
+      DEPT_CD sectionCode
+      , DEPT_NAME sectionName
+      , COST_FLAG costFlag
+    FROM
+      XXCOM_IF_AFF_EXP_DEPT_V D
+    WHERE
+      COMPANY_CD = (SELECT VALUE6 FROM NEA_CODE_NAME C WHERE C.CATEGORY_CODE = 'USE_COMPANY' AND C.INTERNAL_CODE = #companyCode# AND DELETE_FLAG = '0')
+      AND SUMMARY_FLAG = 'N'
+      <isNotEmpty property="enableFlag">
+        AND ENABLED_FLAG = 'Y'
+      </isNotEmpty>
+      <isNotEmpty property="sectionCode">
+        AND DEPT_CD = #sectionCode#
+      </isNotEmpty>
+      <isNotEmpty property="sectionName">
+        AND NEA_UTIL_PKG.TO_FUZZY_F(D.DEPT_NAME) LIKE '%' || NEA_UTIL_PKG.TO_FUZZY_F(#sectionName#) || '%'
+      </isNotEmpty>
+      <isNotEmpty property="searchDateFrom">
+        AND (END_DATE IS NULL OR TRUNC(END_DATE, 'DD') <![CDATA[>]]>= TRUNC(#searchDateFrom#, 'DD'))
+      </isNotEmpty>
+      <isNotEmpty property="searchDateTo">
+        AND (START_DATE IS NULL OR TRUNC(START_DATE, 'DD') <![CDATA[<]]>= TRUNC(#searchDateTo#, 'DD'))
+      </isNotEmpty>
+  </select>
+
+  <!--
+    IDシーケンス取得
+  -->
+  <select id="selectIdSeq_MST" parameterClass="java.util.Map" resultClass="java.lang.Long">
+    SELECT
+      SEQ
+    FROM
+      NEA_ID_SEQ
+    WHERE
+      ID_PREFIX = #idPrefix#
+      AND YEAR = #year#
+    FOR UPDATE
+  </select>
+
+  <!--
+    IDシーケンス作成
+  -->
+  <insert id="insertIdSeq_MST" parameterClass="java.util.Map">
+    INSERT INTO NEA_ID_SEQ (
+      ID_PREFIX
+      , YEAR
+      , CREATE_DATE
+      , CREATE_STAFF_CODE
+      , UPDATE_DATE
+      , UPDATE_STAFF_CODE
+      , SEQ
+    ) VALUES (
+      #idPrefix:VARCHAR# /* ID_PREFIX*/
+      , #year:NUMERIC# /* YEAR*/
+      , SYSDATE /* CREATE_DATE*/
+      , 'eAsset' /* CREATE_STAFF_CODE*/
+      , SYSDATE /* UPDATE_DATE*/
+      , 'eAsset' /* UPDATE_STAFF_CODE*/
+      , 1 /* SEQ*/
+    )
+  </insert>
+
+  <!--
+    IDシーケンス更新
+  -->
+  <update id="updateIdSeq_MST" parameterClass="java.util.Map">
+    UPDATE
+      NEA_ID_SEQ
+    SET
+      UPDATE_DATE = SYSDATE
+      , UPDATE_STAFF_CODE = 'eAsset'
+      , SEQ = SEQ + 1
+    WHERE
+      ID_PREFIX = #idPrefix#
+      AND YEAR = #year#
+  </update>
+
+  <!--
+    Oracleシーケンスのnextval取得
+  -->
+  <select id="selectNextVal_MST" parameterClass="java.util.Map" resultClass="java.lang.Long">
+    SELECT
+      $seqName$.nextval
+    FROM
+      DUAL
+  </select>
+
+  <!--
+    旧eAsset連携用セッション作成
+  -->
+  <insert id="insertSession_MST" parameterClass="java.util.Map">
+    <selectKey resultClass="java.lang.String" keyProperty="sessionId">
+      SELECT
+        rawtohex(DBMS_CRYPTO.hash(TO_CHAR(NEA_SESSION_S.NEXTVAL), 3)) sessionId
+      FROM
+        dual
+    </selectKey>
+    INSERT INTO NEA_SESSION (
+      SESSION_ID
+      , CREATE_DATE
+      , CREATE_STAFF_CODE
+      , UPDATE_DATE
+      , UPDATE_STAFF_CODE
+      , ACCOUNT
+      , COMPANY_CODE
+      , ROLE_CODE
+      , URL
+    )
+    SELECT
+      #sessionId:VARCHAR# /* SESSION_ID*/
+      , SYSDATE /* CREATE_DATE*/
+      , '-1' /* CREATE_STAFF_CODE*/
+      , SYSDATE /* UPDATE_DATE*/
+      , '-1' /* UPDATE_STAFF_CODE*/
+      , #account:VARCHAR# /* ACCOUNT*/
+      , #companyCode:VARCHAR# /* COMPANY_CODE*/
+      , #oldRoleCode:VARCHAR# /* ROLE_CODE*/
+      , #url:VARCHAR# /* URL*/
+    FROM
+      DUAL
+  </insert>
+
+  <!--
+    ダウンロード項目取得
+  -->
+  <select id="selectDownloadItemList_MST" parameterClass="java.util.Map" resultClass="jp.co.ctcg.easset.dto.CodeName">
+    SELECT
+        CATEGORY_CODE categoryCode
+      , DESCRIPTION description
+      , INTERNAL_CODE internalCode
+      , VALUE1 value1
+      , VALUE3 value3
+      , VALUE5 value5
+      , VALUE7 value7
+      , VALUE16 value16
+      , VALUE17 value17
+    FROM
+      NEA_CODE_NAME
+    WHERE
+      <isEmpty property="itemDefName2">
+        CATEGORY_CODE = #itemDefName#
+      </isEmpty>
+      <isNotEmpty property="itemDefName2">
+        CATEGORY_CODE IN (#itemDefName#, #itemDefName2#)
+      </isNotEmpty>
+      AND VALUE7 IS NOT NULL
+      <isEmpty property="lineItem">
+        AND VALUE1 NOT LIKE '%LINE%'
+      </isEmpty>
+      <isNotEmpty property="lineItem">
+        AND VALUE1 = #lineItem#
+      </isNotEmpty>
+      AND DELETE_FLAG = '0'
+    ORDER BY
+        CATEGORY_CODE
+      , SORT_NUMBER
+      , INTERNAL_CODE
+  </select>
+
+  <!--
+    ユーザー権限_全社権限検索
+  -->
+  <select id="selectRoleAdmin_MST" parameterClass="java.util.Map" resultClass="jp.co.ctcg.easset.dto.RoleAdmin">
+    SELECT
+      STAFF_CODE staffCode
+    , ROLE_CODE roleCode
+    , COMPANY_CODE companyCode
+    , CREATE_DATE createDate
+    , CREATE_STAFF_CODE createStaffCode
+    , UPDATE_DATE updateDate
+    , UPDATE_STAFF_CODE updateStaffCode
+    , NEA_UTIL_PKG.get_staff_name_f(STAFF_CODE) staffName
+    , NEA_UTIL_PKG.get_staff_name_f(CREATE_STAFF_CODE) createStaffName
+    , NEA_UTIL_PKG.get_staff_name_f(UPDATE_STAFF_CODE) updateStaffName
+    , NEA_UTIL_PKG.get_email_f(STAFF_CODE) mailAddress
+    FROM
+      NEA_USER_ROLE_ADMIN
+    WHERE
+      ROLE_CODE = #roleCode#
+    AND
+      COMPANY_CODE = #companyCode#
+    <isNotEmpty property="staffCode">
+      AND STAFF_CODE = #staffCode#
+    </isNotEmpty>
+    ORDER BY
+      STAFF_CODE
+  </select>
+
+  <!--
+    ユーザー権限_全社権限作成
+  -->
+  <insert id="insertRoleAdmin_MST" parameterClass="java.util.Map">
+    INSERT INTO NEA_USER_ROLE_ADMIN(
+      STAFF_CODE
+    , ROLE_CODE
+    , COMPANY_CODE
+    , CREATE_DATE
+    , CREATE_STAFF_CODE
+    , UPDATE_DATE
+    , UPDATE_STAFF_CODE
+    ) VALUES (
+      #obj.staffCode:VARCHAR# /* STAFF_CODE*/
+    , #obj.roleCode:VARCHAR# /* ROLE_CODE*/
+    , #obj.companyCode:VARCHAR# /* COMPANY_CODE*/
+    , #obj.createDate:TIMESTAMP# /* CREATE_DATE*/
+    , #obj.createStaffCode:VARCHAR# /* CREATE_STAFF_CODE*/
+    , #obj.updateDate:TIMESTAMP# /* UPDATE_DATE*/
+    , #obj.updateStaffCode:VARCHAR# /* UPDATE_STAFF_CODE*/
+    )
+  </insert>
+  <!--
+    ユーザー権限_全社権限削除
+  -->
+  <delete id="deleteRoleAdmin_MST" parameterClass="java.util.Map">
+    DELETE FROM
+      NEA_USER_ROLE_ADMIN
+    WHERE
+      STAFF_CODE = #staffCode#
+      AND ROLE_CODE = #roleCode#
+      AND COMPANY_CODE = #companyCode#
+  </delete>
+
+  <!--
+    ユーザー権限_部署(資産管理担当者)権限検索
+  -->
+  <select id="selectRoleSection_MST" parameterClass="java.util.Map" resultClass="jp.co.ctcg.easset.dto.RoleSection">
+    SELECT
+      STAFF_CODE staffCode
+    , COMPANY_CODE companyCode
+    , SECTION_CODE sectionCode
+    , SECTION_YEAR sectionYear
+    , CREATE_DATE createDate
+    , CREATE_STAFF_CODE createStaffCode
+    , UPDATE_DATE updateDate
+    , UPDATE_STAFF_CODE updateStaffCode
+    , PUBLIC_FLAG publicFlag
+    , PUBLIC_COMMENT publicComment
+    , NEA_UTIL_PKG.get_section_name_f(COMPANY_CODE, SECTION_CODE, SECTION_YEAR) sectionName
+    , NEA_UTIL_PKG.get_staff_name_f(STAFF_CODE) staffName
+    , NEA_UTIL_PKG.get_staff_name_f(CREATE_STAFF_CODE) createStaffName
+    , NEA_UTIL_PKG.get_staff_name_f(UPDATE_STAFF_CODE) updateStaffName
+    , DECODE(PUBLIC_FLAG, '1', 'する', '0', 'しない', NULL) publicFlagName
+    , NEA_UTIL_PKG.get_email_f(STAFF_CODE) mailAddress
+    FROM
+      NEA_USER_ROLE_SECTION
+    WHERE
+      COMPANY_CODE = #companyCode#
+    <isNotEmpty property="sectionCode">
+      AND SECTION_CODE = #sectionCode#
+    </isNotEmpty>
+    <isNotEmpty property="staffCode">
+      AND STAFF_CODE = #staffCode#
+    </isNotEmpty>
+
+    <isNotEmpty property="accessLevelSection">
+       AND $accessLevelSection$
+    </isNotEmpty>
+
+    <isEmpty property="isDownload">
+      AND ROWNUM <![CDATA[<]]>= (SELECT TO_NUMBER(VALUE1) FROM NEA_CODE_NAME WHERE CATEGORY_CODE = 'MAX_SEARCH_ROW_COUNT' AND DELETE_FLAG = '0')
+    </isEmpty>
+    ORDER BY
+      STAFF_CODE
+
+      <isNotEmpty property="lockFlag">
+        FOR UPDATE
+      </isNotEmpty>
+
+  </select>
+
+  <!--
+    ユーザー権限_部署(資産管理担当者)権限作成
+  -->
+  <insert id="insertRoleSection_MST" parameterClass="java.util.Map">
+    INSERT INTO NEA_USER_ROLE_SECTION(
+      STAFF_CODE
+    , COMPANY_CODE
+    , SECTION_CODE
+    , SECTION_YEAR
+    , CREATE_DATE
+    , CREATE_STAFF_CODE
+    , UPDATE_DATE
+    , UPDATE_STAFF_CODE
+    , PUBLIC_FLAG
+    , PUBLIC_COMMENT
+    ) VALUES (
+      #obj.staffCode:VARCHAR# /* STAFF_CODE*/
+    , #obj.companyCode:VARCHAR# /* COMPANY_CODE*/
+    , #obj.sectionCode:VARCHAR# /* SECTION_CODE*/
+    , #obj.sectionYear:NUMERIC# /* SECTION_YEAR*/
+    , #obj.createDate:TIMESTAMP# /* CREATE_DATE*/
+    , #obj.createStaffCode:VARCHAR# /* CREATE_STAFF_CODE*/
+    , #obj.updateDate:TIMESTAMP# /* UPDATE_DATE*/
+    , #obj.updateStaffCode:VARCHAR# /* UPDATE_STAFF_CODE*/
+    , #obj.publicFlag:CHAR# /* PUBLIC_FLAG*/
+    , #obj.publicComment:VARCHAR# /* PUBLIC_COMMENT*/
+    )
+  </insert>
+  <!--
+    ユーザー権限_部署(資産管理担当者)権限削除
+  -->
+  <delete id="deleteRoleSection_MST" parameterClass="java.util.Map">
+    DELETE FROM
+      NEA_USER_ROLE_SECTION
+    WHERE
+      COMPANY_CODE = #companyCode#
+      AND SECTION_CODE = #sectionCode#
+      AND STAFF_CODE = #staffCode#
+  </delete>
+
+  <!--
+    資産管理担当者プロファイル検索更新
+  -->
+  <update id="updateSectionRoleProfile_MST" parameterClass="java.util.Map">
+    UPDATE
+      NEA_USER_ROLE_SECTION
+    SET
+      UPDATE_DATE = #obj.updateDate:TIMESTAMP#
+    , UPDATE_STAFF_CODE = #obj.updateStaffCode:VARCHAR#
+    , PUBLIC_FLAG = #obj.publicFlag:CHAR#
+    , PUBLIC_COMMENT = #obj.publicComment:VARCHAR#
+    WHERE
+      COMPANY_CODE = #obj.companyCode:VARCHAR#
+      AND SECTION_CODE = #obj.sectionCode:VARCHAR#
+      AND STAFF_CODE = #obj.staffCode:VARCHAR#
+      AND SECTION_YEAR = #obj.sectionYear:VARCHAR#
+  </update>
+
+  <!--
+    ユーザの指定機能・会社・部署でのアクセスレベル取得
+  -->
+  <select id="selectAccessLevel_MST" parameterClass="java.util.Map" resultClass="java.lang.String">
+    SELECT
+      DECODE(MIN(VALUE3), '1', 'S', MIN(VALUE3))
+    FROM
+      (
+        <isEmpty property="sectionCode">
+          SELECT
+            DECODE(CN.VALUE3, 'S', '1', CN.VALUE3) VALUE3
+          FROM
+            NEA_USER_ROLE_ADMIN R
+            , NEA_CODE_NAME CN
+          WHERE
+            CN.CATEGORY_CODE = 'MENU_ACCESS_LEVEL'
+            AND CN.INTERNAL_CODE = #menuId# || '_' || R.ROLE_CODE
+            AND R.STAFF_CODE = #staffCode#
+            AND R.COMPANY_CODE = #companyCode#
+            AND CN.VALUE3 IN ('S', 'A', 'A*')
+            AND CN.DELETE_FLAG = '0'
+        </isEmpty>
+        <isNotEmpty property="sectionCode">
+          SELECT
+            CN.VALUE3
+          FROM
+            NEA_USER_ROLE_SECTION_ALL_V R
+            , NEA_CODE_NAME CN
+          WHERE
+            CN.CATEGORY_CODE = 'MENU_ACCESS_LEVEL'
+            AND CN.INTERNAL_CODE = #menuId# || '_' || R.ROLE_CODE
+            AND R.STAFF_CODE = #staffCode#
+            AND R.COMPANY_CODE = #companyCode#
+            AND R.SECTION_CODE = #sectionCode#
+            AND R.SECTION_YEAR = #sectionYear#
+            AND CN.VALUE3 IN ('B')
+            AND CN.DELETE_FLAG = '0'
+        </isNotEmpty>
+      )
+  </select>
+
+
+  <!--
+    プロジェクト情報取得
+  -->
+  <select id="selectProject_MST" parameterClass="java.util.Map" resultClass="jp.co.ctcg.easset.dto.Project">
+    SELECT
+      PRJ_CD projectCode
+      , PRJ_NM projectName
+      , PRJ_TYP_NM projectType
+    FROM
+      PJ_PRJ_V
+    WHERE
+      CO_SEG = NEA_UTIL_PKG.GET_CN_VALUE_F('USE_COMPANY', #companyCode#, 5)
+      AND PRJ_CD = #code#
+      AND ROWNUM <![CDATA[<]]> 2
+<!--
+    SELECT
+      ppj.SEGMENT1 projectCode
+      , ppj.NAME projectName
+      , ppj.PROJECT_TYPE projectType
+      , ppt.NAME projectTemplate
+    FROM
+      PA_PROJECTS_ALL ppj
+      , PA_PROJECTS_ALL ppt
+    WHERE
+      ppj.CREATED_FROM_PROJECT_ID = ppt.PROJECT_ID
+      AND ppj.SEGMENT1 = #projectCode#
+-->
+  </select>
+
+  <!--
+    コードネーム更新
+  -->
+  <update id="updateCodeName_MST" parameterClass="java.util.Map">
+    UPDATE
+      NEA_CODE_NAME
+    SET
+      UPDATE_DATE = SYSDATE
+      , UPDATE_STAFF_CODE = #loginStaffCode:VARCHAR#
+      , VALUE1 = #obj.value1:VARCHAR#
+      , VALUE2 = #obj.value2:VARCHAR#
+      , VALUE3 = #obj.value3:VARCHAR#
+      , VALUE4 = #obj.value4:VARCHAR#
+      , VALUE5 = #obj.value5:VARCHAR#
+      , VALUE6 = #obj.value6:VARCHAR#
+      , VALUE7 = #obj.value7:VARCHAR#
+      , VALUE8 = #obj.value8:VARCHAR#
+      , VALUE9 = #obj.value9:VARCHAR#
+      , VALUE10 = #obj.value10:VARCHAR#
+      , VALUE11 = #obj.value11:VARCHAR#
+      , VALUE12 = #obj.value12:VARCHAR#
+      , VALUE13 = #obj.value13:VARCHAR#
+      , VALUE14 = #obj.value14:VARCHAR#
+      , VALUE15 = #obj.value15:VARCHAR#
+      , VALUE16 = #obj.value16:VARCHAR#
+      , VALUE17 = #obj.value17:VARCHAR#
+      , VALUE18 = #obj.value18:VARCHAR#
+      , VALUE19 = #obj.value19:VARCHAR#
+      , VALUE20 = #obj.value20:VARCHAR#
+      , VALUE21 = #obj.value21:VARCHAR#
+      , VALUE22 = #obj.value22:VARCHAR#
+      , VALUE23 = #obj.value23:VARCHAR#
+      , VALUE24 = #obj.value24:VARCHAR#
+      , VALUE25 = #obj.value25:VARCHAR#
+      , VALUE26 = #obj.value26:VARCHAR#
+      , VALUE27 = #obj.value27:VARCHAR#
+      , VALUE28 = #obj.value28:VARCHAR#
+      , VALUE29 = #obj.value29:VARCHAR#
+      , VALUE30 = #obj.value30:VARCHAR#
+      , VALUE31 = #obj.value31:VARCHAR#
+      , VALUE32 = #obj.value32:VARCHAR#
+      , VALUE33 = #obj.value33:VARCHAR#
+      , VALUE34 = #obj.value34:VARCHAR#
+      , VALUE35 = #obj.value35:VARCHAR#
+      , VALUE36 = #obj.value36:VARCHAR#
+      , VALUE37 = #obj.value37:VARCHAR#
+      , VALUE38 = #obj.value38:VARCHAR#
+      , VALUE39 = #obj.value39:VARCHAR#
+      , VALUE40 = #obj.value40:VARCHAR#
+      , VALUE41 = #obj.value41:VARCHAR#
+      , VALUE42 = #obj.value42:VARCHAR#
+      , VALUE43 = #obj.value43:VARCHAR#
+      , VALUE44 = #obj.value44:VARCHAR#
+      , VALUE45 = #obj.value45:VARCHAR#
+      , VALUE46 = #obj.value46:VARCHAR#
+      , VALUE47 = #obj.value47:VARCHAR#
+      , VALUE48 = #obj.value48:VARCHAR#
+      , VALUE49 = #obj.value49:VARCHAR#
+      , VALUE50 = #obj.value50:VARCHAR#
+      , VALUE51 = #obj.value51:VARCHAR#
+      , VALUE52 = #obj.value52:VARCHAR#
+      , VALUE53 = #obj.value53:VARCHAR#
+      , VALUE54 = #obj.value54:VARCHAR#
+      , VALUE55 = #obj.value55:VARCHAR#
+      , VALUE56 = #obj.value56:VARCHAR#
+      , VALUE57 = #obj.value57:VARCHAR#
+      , VALUE58 = #obj.value58:VARCHAR#
+      , VALUE59 = #obj.value59:VARCHAR#
+      , VALUE60 = #obj.value60:VARCHAR#
+    WHERE
+      CATEGORY_CODE = #obj.categoryCode:VARCHAR#
+      AND INTERNAL_CODE = #obj.internalCode:VARCHAR#
+  </update>
+
+  <!--
+    汎用マスタ設定検索
+  -->
+  <select id="selectCodeNameSet_MST" parameterClass="java.util.Map" resultClass="jp.co.ctcg.easset.dto.CodeNameSet">
+    SELECT
+      cns.CATEGORY_CODE categoryCode
+    , cns.CREATE_DATE createDate
+    , cns.CREATE_STAFF_CODE createStaffCode
+    , cns.USE_COMPANY_CODE useCompanyCode
+    , cns.SET_COMPANY_CODE setCompanyCode
+    , cns.SET_ROLE_CODE setRoleCode
+    , cns.PARENT_CATEGORY_CODE parentCategoryCode
+    , cns.LINE_ADD_ENABLE_FLAG lineAddEnableFlag
+    , cns.LINE_DEL_ENABLE_FLAG lineDelEnableFlag
+    , cns.DESCRIPTION description
+    , NEA_UTIL_PKG.GET_COMPANY_NAME_F(cns.SET_COMPANY_CODE) setCompanyName
+    , NEA_UTIL_PKG.get_staff_name_f(cns.CREATE_STAFF_CODE) createStaffName
+    , (SELECT max(UPDATE_STAFF_CODE)
+       FROM NEA_CODE_NAME ncn
+       WHERE ncn.CATEGORY_CODE = cns.CATEGORY_CODE
+       AND (ncn.COMPANY_CODE = '000' OR ncn.COMPANY_CODE LIKE '%'|| #companyCode# || '%')
+      ) updateStaffCode
+    , (SELECT max(UPDATE_DATE)
+       FROM NEA_CODE_NAME ncn
+       WHERE ncn.CATEGORY_CODE = cns.CATEGORY_CODE
+       AND (ncn.COMPANY_CODE = '000' OR ncn.COMPANY_CODE LIKE '%'|| #companyCode# || '%')
+      ) updateDate
+    , (SELECT NEA_UTIL_PKG.get_staff_name_f(max(UPDATE_STAFF_CODE))
+       FROM NEA_CODE_NAME ncn
+       WHERE ncn.CATEGORY_CODE = cns.CATEGORY_CODE
+       AND (ncn.COMPANY_CODE = '000' OR ncn.COMPANY_CODE LIKE '%'|| #companyCode# || '%')
+      ) updateStaffName
+    FROM
+      NEA_CODE_NAME_SET cns
+    WHERE
+      (SET_COMPANY_CODE = '000' OR SET_COMPANY_CODE = #companyCode#)
+    AND EXISTS (
+          SELECT
+            'X'
+          FROM
+            NEA_USER_ROLE_ADMIN URA
+          WHERE
+            cns.SET_ROLE_CODE LIKE '%' || URA.ROLE_CODE || '%'
+          AND URA.STAFF_CODE = #loginStaffCode#
+          AND URA.COMPANY_CODE = #companyCode#
+          AND URA.ROLE_CODE IN (
+            <iterate property="roleCodeList" conjunction=",">
+              #roleCodeList[]#
+            </iterate>
+          )
+        )
+    <isNotEmpty property="categoryName">
+       AND NEA_UTIL_PKG.TO_FUZZY_F(DESCRIPTION) LIKE '%' || NEA_UTIL_PKG.TO_FUZZY_F(#categoryName#) || '%'
+    </isNotEmpty>
+    ORDER BY
+      DESCRIPTION
+  </select>
+
+  <!--
+    汎用マスタ設定項目検索
+  -->
+  <select id="selectCodeNameSetItem_MST" parameterClass="java.util.Map" resultClass="jp.co.ctcg.easset.dto.CodeNameSetItem">
+    SELECT
+      CATEGORY_CODE categoryCode
+    , ITEM_SEQ itemSeq
+    , CREATE_DATE createDate
+    , CREATE_STAFF_CODE createStaffCode
+    , UPDATE_DATE updateDate
+    , UPDATE_STAFF_CODE updateStaffCode
+    , ITEM_NAME itemName
+    , ITEM_INPUT_TYPE itemInputType
+    , ITEM_COMMENT itemComment
+    , WIDTH width
+    , HEIGHT height
+    , DISPLAY_ONLY displayOnly
+    , READ_ONLY readOnly
+    , REQUIRED required
+    , MAX_CHARS maxChars
+    , RESTRICT restrict
+    , EDIT_LOCK editLock
+    , NUM_SEPARATOR numSeparator
+    , CMB_DATA cmbData
+    , CMB_LABEL cmbLabel
+    FROM
+      NEA_CODE_NAME_SET_ITEM
+    WHERE
+      CATEGORY_CODE = #categoryCode#
+  </select>
+
+  <!--
+    汎用マスタ検索
+  -->
+  <select id="selectCodeNameItemList_MST" parameterClass="java.util.Map" resultClass="jp.co.ctcg.easset.dto.CodeName">
+    SELECT
+      ncn1.CATEGORY_CODE categoryCode
+    , ncn1.INTERNAL_CODE internalCode
+    , ncn1.CREATE_DATE createDate
+    , ncn1.CREATE_STAFF_CODE createStaffCode
+    , ncn1.UPDATE_DATE updateDate
+    , ncn1.UPDATE_STAFF_CODE updateStaffCode
+    , ncn1.COMPANY_CODE companyCode
+    , ncn1.PARENT_CATEGORY_CODE parentCategoryCode
+    , ncn1.PARENT_INTERNAL_CODE parentInternalCode
+    , ncn1.SORT_NUMBER sortNumber
+    , ncn1.DELETE_FLAG deleteFlag
+    , ncn1.DESCRIPTION description
+   <isEmpty property="isValue">
+    , ncn1.VALUE1 value1
+    , ncn1.VALUE2 value2
+    , ncn1.VALUE3 value3
+    , ncn1.VALUE4 value4
+    , ncn1.VALUE5 value5
+    , ncn1.VALUE6 value6
+    , ncn1.VALUE7 value7
+    , ncn1.VALUE8 value8
+    , ncn1.VALUE9 value9
+    , ncn1.VALUE10 value10
+    , ncn1.VALUE11 value11
+    , ncn1.VALUE12 value12
+    , ncn1.VALUE13 value13
+    , ncn1.VALUE14 value14
+    , ncn1.VALUE15 value15
+    , ncn1.VALUE16 value16
+    , ncn1.VALUE17 value17
+    , ncn1.VALUE18 value18
+    , ncn1.VALUE19 value19
+    , ncn1.VALUE20 value20
+    , ncn1.VALUE21 value21
+    , ncn1.VALUE22 value22
+    , ncn1.VALUE23 value23
+    , ncn1.VALUE24 value24
+    , ncn1.VALUE25 value25
+    , ncn1.VALUE26 value26
+    , ncn1.VALUE27 value27
+    , ncn1.VALUE28 value28
+    , ncn1.VALUE29 value29
+    , ncn1.VALUE30 value30
+    , ncn1.VALUE31 value31
+    , ncn1.VALUE32 value32
+    , ncn1.VALUE33 value33
+    , ncn1.VALUE34 value34
+    , ncn1.VALUE35 value35
+    , ncn1.VALUE36 value36
+    , ncn1.VALUE37 value37
+    , ncn1.VALUE38 value38
+    , ncn1.VALUE39 value39
+    , ncn1.VALUE40 value40
+    , ncn1.VALUE41 value41
+    , ncn1.VALUE42 value42
+    , ncn1.VALUE43 value43
+    , ncn1.VALUE44 value44
+    , ncn1.VALUE45 value45
+    , ncn1.VALUE46 value46
+    , ncn1.VALUE47 value47
+    , ncn1.VALUE48 value48
+    , ncn1.VALUE49 value49
+    , ncn1.VALUE50 value50
+    , ncn1.VALUE51 value51
+    , ncn1.VALUE52 value52
+    , ncn1.VALUE53 value53
+    , ncn1.VALUE54 value54
+    , ncn1.VALUE55 value55
+    , ncn1.VALUE56 value56
+    , ncn1.VALUE57 value57
+    , ncn1.VALUE58 value58
+    , ncn1.VALUE59 value59
+    , ncn1.VALUE60 value60
+   </isEmpty>
+   <isNotEmpty property="isValue">
+    , NEA_UTIL_PKG.GET_CN_SET_ITEM_VALUE_F(ncn1.CATEGORY_CODE, 1, VALUE1) value1
+    , NEA_UTIL_PKG.GET_CN_SET_ITEM_VALUE_F(ncn1.CATEGORY_CODE, 2, VALUE2) value2
+    , NEA_UTIL_PKG.GET_CN_SET_ITEM_VALUE_F(ncn1.CATEGORY_CODE, 3, VALUE3) value3
+    , NEA_UTIL_PKG.GET_CN_SET_ITEM_VALUE_F(ncn1.CATEGORY_CODE, 4, VALUE4) value4
+    , NEA_UTIL_PKG.GET_CN_SET_ITEM_VALUE_F(ncn1.CATEGORY_CODE, 5, VALUE5) value5
+    , NEA_UTIL_PKG.GET_CN_SET_ITEM_VALUE_F(ncn1.CATEGORY_CODE, 6, VALUE6) value6
+    , NEA_UTIL_PKG.GET_CN_SET_ITEM_VALUE_F(ncn1.CATEGORY_CODE, 7, VALUE7) value7
+    , NEA_UTIL_PKG.GET_CN_SET_ITEM_VALUE_F(ncn1.CATEGORY_CODE, 8, VALUE8) value8
+    , NEA_UTIL_PKG.GET_CN_SET_ITEM_VALUE_F(ncn1.CATEGORY_CODE, 9, VALUE9) value9
+    , NEA_UTIL_PKG.GET_CN_SET_ITEM_VALUE_F(ncn1.CATEGORY_CODE, 10, VALUE10) value10
+    , NEA_UTIL_PKG.GET_CN_SET_ITEM_VALUE_F(ncn1.CATEGORY_CODE, 11, VALUE11) value11
+    , NEA_UTIL_PKG.GET_CN_SET_ITEM_VALUE_F(ncn1.CATEGORY_CODE, 12, VALUE12) value12
+    , NEA_UTIL_PKG.GET_CN_SET_ITEM_VALUE_F(ncn1.CATEGORY_CODE, 13, VALUE13) value13
+    , NEA_UTIL_PKG.GET_CN_SET_ITEM_VALUE_F(ncn1.CATEGORY_CODE, 14, VALUE14) value14
+    , NEA_UTIL_PKG.GET_CN_SET_ITEM_VALUE_F(ncn1.CATEGORY_CODE, 15, VALUE15) value15
+    , NEA_UTIL_PKG.GET_CN_SET_ITEM_VALUE_F(ncn1.CATEGORY_CODE, 16, VALUE16) value16
+    , NEA_UTIL_PKG.GET_CN_SET_ITEM_VALUE_F(ncn1.CATEGORY_CODE, 17, VALUE17) value17
+    , NEA_UTIL_PKG.GET_CN_SET_ITEM_VALUE_F(ncn1.CATEGORY_CODE, 18, VALUE18) value18
+    , NEA_UTIL_PKG.GET_CN_SET_ITEM_VALUE_F(ncn1.CATEGORY_CODE, 19, VALUE19) value19
+    , NEA_UTIL_PKG.GET_CN_SET_ITEM_VALUE_F(ncn1.CATEGORY_CODE, 20, VALUE20) value20
+    , NEA_UTIL_PKG.GET_CN_SET_ITEM_VALUE_F(ncn1.CATEGORY_CODE, 21, VALUE21) value21
+    , NEA_UTIL_PKG.GET_CN_SET_ITEM_VALUE_F(ncn1.CATEGORY_CODE, 22, VALUE22) value22
+    , NEA_UTIL_PKG.GET_CN_SET_ITEM_VALUE_F(ncn1.CATEGORY_CODE, 23, VALUE23) value23
+    , NEA_UTIL_PKG.GET_CN_SET_ITEM_VALUE_F(ncn1.CATEGORY_CODE, 24, VALUE24) value24
+    , NEA_UTIL_PKG.GET_CN_SET_ITEM_VALUE_F(ncn1.CATEGORY_CODE, 25, VALUE25) value25
+    , NEA_UTIL_PKG.GET_CN_SET_ITEM_VALUE_F(ncn1.CATEGORY_CODE, 26, VALUE26) value26
+    , NEA_UTIL_PKG.GET_CN_SET_ITEM_VALUE_F(ncn1.CATEGORY_CODE, 27, VALUE27) value27
+    , NEA_UTIL_PKG.GET_CN_SET_ITEM_VALUE_F(ncn1.CATEGORY_CODE, 28, VALUE28) value28
+    , NEA_UTIL_PKG.GET_CN_SET_ITEM_VALUE_F(ncn1.CATEGORY_CODE, 29, VALUE29) value29
+    , NEA_UTIL_PKG.GET_CN_SET_ITEM_VALUE_F(ncn1.CATEGORY_CODE, 30, VALUE30) value30
+    , NEA_UTIL_PKG.GET_CN_SET_ITEM_VALUE_F(ncn1.CATEGORY_CODE, 31, VALUE31) value31
+    , NEA_UTIL_PKG.GET_CN_SET_ITEM_VALUE_F(ncn1.CATEGORY_CODE, 32, VALUE32) value32
+    , NEA_UTIL_PKG.GET_CN_SET_ITEM_VALUE_F(ncn1.CATEGORY_CODE, 33, VALUE33) value33
+    , NEA_UTIL_PKG.GET_CN_SET_ITEM_VALUE_F(ncn1.CATEGORY_CODE, 34, VALUE34) value34
+    , NEA_UTIL_PKG.GET_CN_SET_ITEM_VALUE_F(ncn1.CATEGORY_CODE, 35, VALUE35) value35
+    , NEA_UTIL_PKG.GET_CN_SET_ITEM_VALUE_F(ncn1.CATEGORY_CODE, 36, VALUE36) value36
+    , NEA_UTIL_PKG.GET_CN_SET_ITEM_VALUE_F(ncn1.CATEGORY_CODE, 37, VALUE37) value37
+    , NEA_UTIL_PKG.GET_CN_SET_ITEM_VALUE_F(ncn1.CATEGORY_CODE, 38, VALUE38) value38
+    , NEA_UTIL_PKG.GET_CN_SET_ITEM_VALUE_F(ncn1.CATEGORY_CODE, 39, VALUE39) value39
+    , NEA_UTIL_PKG.GET_CN_SET_ITEM_VALUE_F(ncn1.CATEGORY_CODE, 40, VALUE40) value40
+    , NEA_UTIL_PKG.GET_CN_SET_ITEM_VALUE_F(ncn1.CATEGORY_CODE, 41, VALUE41) value41
+    , NEA_UTIL_PKG.GET_CN_SET_ITEM_VALUE_F(ncn1.CATEGORY_CODE, 42, VALUE42) value42
+    , NEA_UTIL_PKG.GET_CN_SET_ITEM_VALUE_F(ncn1.CATEGORY_CODE, 43, VALUE43) value43
+    , NEA_UTIL_PKG.GET_CN_SET_ITEM_VALUE_F(ncn1.CATEGORY_CODE, 44, VALUE44) value44
+    , NEA_UTIL_PKG.GET_CN_SET_ITEM_VALUE_F(ncn1.CATEGORY_CODE, 45, VALUE45) value45
+    , NEA_UTIL_PKG.GET_CN_SET_ITEM_VALUE_F(ncn1.CATEGORY_CODE, 46, VALUE46) value46
+    , NEA_UTIL_PKG.GET_CN_SET_ITEM_VALUE_F(ncn1.CATEGORY_CODE, 47, VALUE47) value47
+    , NEA_UTIL_PKG.GET_CN_SET_ITEM_VALUE_F(ncn1.CATEGORY_CODE, 48, VALUE48) value48
+    , NEA_UTIL_PKG.GET_CN_SET_ITEM_VALUE_F(ncn1.CATEGORY_CODE, 49, VALUE49) value49
+    , NEA_UTIL_PKG.GET_CN_SET_ITEM_VALUE_F(ncn1.CATEGORY_CODE, 50, VALUE50) value50
+    , NEA_UTIL_PKG.GET_CN_SET_ITEM_VALUE_F(ncn1.CATEGORY_CODE, 51, VALUE51) value51
+    , NEA_UTIL_PKG.GET_CN_SET_ITEM_VALUE_F(ncn1.CATEGORY_CODE, 52, VALUE52) value52
+    , NEA_UTIL_PKG.GET_CN_SET_ITEM_VALUE_F(ncn1.CATEGORY_CODE, 53, VALUE53) value53
+    , NEA_UTIL_PKG.GET_CN_SET_ITEM_VALUE_F(ncn1.CATEGORY_CODE, 54, VALUE54) value54
+    , NEA_UTIL_PKG.GET_CN_SET_ITEM_VALUE_F(ncn1.CATEGORY_CODE, 55, VALUE55) value55
+    , NEA_UTIL_PKG.GET_CN_SET_ITEM_VALUE_F(ncn1.CATEGORY_CODE, 56, VALUE56) value56
+    , NEA_UTIL_PKG.GET_CN_SET_ITEM_VALUE_F(ncn1.CATEGORY_CODE, 57, VALUE57) value57
+    , NEA_UTIL_PKG.GET_CN_SET_ITEM_VALUE_F(ncn1.CATEGORY_CODE, 58, VALUE58) value58
+    , NEA_UTIL_PKG.GET_CN_SET_ITEM_VALUE_F(ncn1.CATEGORY_CODE, 59, VALUE59) value59
+    , NEA_UTIL_PKG.GET_CN_SET_ITEM_VALUE_F(ncn1.CATEGORY_CODE, 60, VALUE60) value60
+   </isNotEmpty>
+    , DECODE(ncn1.DELETE_FLAG, '0', 'No', '1', 'Yes', null) deleteFlagName
+    , (SELECT ncn2.VALUE1
+       FROM NEA_CODE_NAME ncn2
+       WHERE ncn2.CATEGORY_CODE = ncn1.PARENT_CATEGORY_CODE
+       AND ncn2.INTERNAL_CODE = ncn1.PARENT_INTERNAL_CODE) parentInternalName
+    , (SELECT ncn2.SORT_NUMBER
+       FROM NEA_CODE_NAME ncn2
+       WHERE ncn2.CATEGORY_CODE = ncn1.PARENT_CATEGORY_CODE
+       AND ncn2.INTERNAL_CODE = ncn1.PARENT_INTERNAL_CODE) parentSortNumber
+    , NEA_UTIL_PKG.get_cn_company_name_f(ncn1.COMPANY_CODE) companyName
+    FROM
+      NEA_CODE_NAME ncn1
+    WHERE
+      ncn1.CATEGORY_CODE = #categoryCode#
+      <isNotEmpty property="companyCode">
+        AND ncn1.COMPANY_CODE = #companyCode#
+      </isNotEmpty>
+      <isNotEmpty property="parentCompanyCode">
+        AND (ncn1.COMPANY_CODE = '000' OR ncn1.COMPANY_CODE LIKE '%'|| #parentCompanyCode# || '%')
+      </isNotEmpty>
+      <isNotEmpty property="internalCode">
+        AND ncn1.INTERNAL_CODE = #internalCode#
+      </isNotEmpty>
+      <isNotEmpty property="searchValue1">
+        AND NEA_UTIL_PKG.TO_FUZZY_F(ncn1.VALUE1) LIKE '%' || NEA_UTIL_PKG.TO_FUZZY_F(#searchValue1#) || '%'
+      </isNotEmpty>
+      <isNotEmpty property="value1">
+        AND ncn1.VALUE1 = #value1#
+      </isNotEmpty>
+      <isNotEmpty property="value2">
+        AND ncn1.VALUE2 = #value2#
+      </isNotEmpty>
+      <isNotEmpty property="value3">
+        AND ncn1.VALUE3 = #value3#
+      </isNotEmpty>
+      <isNotEmpty property="value4">
+        AND ncn1.VALUE4 = #value4#
+      </isNotEmpty>
+      <isNotEmpty property="value5">
+        AND ncn1.VALUE5 = #value5#
+      </isNotEmpty>
+      <isNotEmpty property="value6">
+        AND ncn1.VALUE6 = #value6#
+      </isNotEmpty>
+      <isNotEmpty property="value7">
+        AND ncn1.VALUE7 = #value7#
+      </isNotEmpty>
+      <isNotEmpty property="value8">
+        AND ncn1.VALUE8 = #value8#
+      </isNotEmpty>
+      <isNotEmpty property="value9">
+        AND ncn1.VALUE9 = #value9#
+      </isNotEmpty>
+      <isNotEmpty property="value10">
+        AND ncn1.VALUE10 = #value10#
+      </isNotEmpty>
+      <isNotEmpty property="value11">
+        AND ncn1.VALUE11 = #value11#
+      </isNotEmpty>
+      <isNotEmpty property="value12">
+        AND ncn1.VALUE12 = #value12#
+      </isNotEmpty>
+      <isNotEmpty property="value13">
+        AND ncn1.VALUE13 = #value13#
+      </isNotEmpty>
+      <isNotEmpty property="value14">
+        AND ncn1.VALUE14 = #value14#
+      </isNotEmpty>
+      <isNotEmpty property="value15">
+        AND ncn1.VALUE15 = #value15#
+      </isNotEmpty>
+      <isNotEmpty property="value16">
+        AND ncn1.VALUE16 = #value16#
+      </isNotEmpty>
+      <isNotEmpty property="value17">
+        AND ncn1.VALUE17 = #value17#
+      </isNotEmpty>
+      <isNotEmpty property="value18">
+        AND ncn1.VALUE18 = #value18#
+      </isNotEmpty>
+      <isNotEmpty property="value19">
+        AND ncn1.VALUE19 = #value19#
+      </isNotEmpty>
+      <isNotEmpty property="value20">
+        AND ncn1.VALUE20 = #value20#
+      </isNotEmpty>
+      <isNotEmpty property="value21">
+        AND ncn1.VALUE21 = #value21#
+      </isNotEmpty>
+      <isNotEmpty property="value22">
+        AND ncn1.VALUE22 = #value22#
+      </isNotEmpty>
+      <isNotEmpty property="value23">
+        AND ncn1.VALUE23 = #value23#
+      </isNotEmpty>
+      <isNotEmpty property="value24">
+        AND ncn1.VALUE24 = #value24#
+      </isNotEmpty>
+      <isNotEmpty property="value25">
+        AND ncn1.VALUE25 = #value25#
+      </isNotEmpty>
+      <isNotEmpty property="value26">
+        AND ncn1.VALUE26 = #value26#
+      </isNotEmpty>
+      <isNotEmpty property="value27">
+        AND ncn1.VALUE27 = #value27#
+      </isNotEmpty>
+      <isNotEmpty property="value28">
+        AND ncn1.VALUE28 = #value28#
+      </isNotEmpty>
+      <isNotEmpty property="value29">
+        AND ncn1.VALUE29 = #value29#
+      </isNotEmpty>
+      <isNotEmpty property="value30">
+        AND ncn1.VALUE30 = #value30#
+      </isNotEmpty>
+      <isNotEmpty property="value31">
+        AND ncn1.VALUE31 = #value31#
+      </isNotEmpty>
+      <isNotEmpty property="value32">
+        AND ncn1.VALUE32 = #value32#
+      </isNotEmpty>
+      <isNotEmpty property="value33">
+        AND ncn1.VALUE33 = #value33#
+      </isNotEmpty>
+      <isNotEmpty property="value34">
+        AND ncn1.VALUE34 = #value34#
+      </isNotEmpty>
+      <isNotEmpty property="value35">
+        AND ncn1.VALUE35 = #value35#
+      </isNotEmpty>
+      <isNotEmpty property="value36">
+        AND ncn1.VALUE36 = #value36#
+      </isNotEmpty>
+      <isNotEmpty property="value37">
+        AND ncn1.VALUE37 = #value37#
+      </isNotEmpty>
+      <isNotEmpty property="value38">
+        AND ncn1.VALUE38 = #value38#
+      </isNotEmpty>
+      <isNotEmpty property="value39">
+        AND ncn1.VALUE39 = #value39#
+      </isNotEmpty>
+      <isNotEmpty property="value40">
+        AND ncn1.VALUE40 = #value40#
+      </isNotEmpty>
+      <isNotEmpty property="value41">
+        AND ncn1.VALUE41 = #value41#
+      </isNotEmpty>
+      <isNotEmpty property="value42">
+        AND ncn1.VALUE42 = #value42#
+      </isNotEmpty>
+      <isNotEmpty property="value43">
+        AND ncn1.VALUE43 = #value43#
+      </isNotEmpty>
+      <isNotEmpty property="value44">
+        AND ncn1.VALUE44 = #value44#
+      </isNotEmpty>
+      <isNotEmpty property="value45">
+        AND ncn1.VALUE45 = #value45#
+      </isNotEmpty>
+      <isNotEmpty property="value46">
+        AND ncn1.VALUE46 = #value46#
+      </isNotEmpty>
+      <isNotEmpty property="value47">
+        AND ncn1.VALUE47 = #value47#
+      </isNotEmpty>
+      <isNotEmpty property="value48">
+        AND ncn1.VALUE48 = #value48#
+      </isNotEmpty>
+      <isNotEmpty property="value49">
+        AND ncn1.VALUE49 = #value49#
+      </isNotEmpty>
+      <isNotEmpty property="value50">
+        AND ncn1.VALUE50 = #value50#
+      </isNotEmpty>
+      <isNotEmpty property="value51">
+        AND ncn1.VALUE51 = #value51#
+      </isNotEmpty>
+      <isNotEmpty property="value52">
+        AND ncn1.VALUE52 = #value52#
+      </isNotEmpty>
+      <isNotEmpty property="value53">
+        AND ncn1.VALUE53 = #value53#
+      </isNotEmpty>
+      <isNotEmpty property="value54">
+        AND ncn1.VALUE54 = #value54#
+      </isNotEmpty>
+      <isNotEmpty property="value55">
+        AND ncn1.VALUE55 = #value55#
+      </isNotEmpty>
+      <isNotEmpty property="value56">
+        AND ncn1.VALUE56 = #value56#
+      </isNotEmpty>
+      <isNotEmpty property="value57">
+        AND ncn1.VALUE57 = #value57#
+      </isNotEmpty>
+      <isNotEmpty property="value58">
+        AND ncn1.VALUE58 = #value58#
+      </isNotEmpty>
+      <isNotEmpty property="value59">
+        AND ncn1.VALUE59 = #value59#
+      </isNotEmpty>
+      <isNotEmpty property="value60">
+        AND ncn1.VALUE60 = #value60#
+      </isNotEmpty>
+      <isNotEmpty property="deleteFlag">
+        AND ncn1.DELETE_FLAG = #deleteFlag#
+      </isNotEmpty>
+    ORDER BY
+        ncn1.SORT_NUMBER
+      , ncn1.CATEGORY_CODE
+      , ncn1.INTERNAL_CODE
+  </select>
+
+  <!--
+    汎用マスタ作成
+  -->
+  <insert id="insertNeaCodeName_MST" parameterClass="java.util.Map">
+    INSERT INTO NEA_CODE_NAME (
+      CATEGORY_CODE
+    , INTERNAL_CODE
+    , CREATE_DATE
+    , CREATE_STAFF_CODE
+    , UPDATE_DATE
+    , UPDATE_STAFF_CODE
+    , COMPANY_CODE
+    , PARENT_CATEGORY_CODE
+    , PARENT_INTERNAL_CODE
+    , SORT_NUMBER
+    , DELETE_FLAG
+    , DESCRIPTION
+    , VALUE1
+    , VALUE2
+    , VALUE3
+    , VALUE4
+    , VALUE5
+    , VALUE6
+    , VALUE7
+    , VALUE8
+    , VALUE9
+    , VALUE10
+    , VALUE11
+    , VALUE12
+    , VALUE13
+    , VALUE14
+    , VALUE15
+    , VALUE16
+    , VALUE17
+    , VALUE18
+    , VALUE19
+    , VALUE20
+    , VALUE21
+    , VALUE22
+    , VALUE23
+    , VALUE24
+    , VALUE25
+    , VALUE26
+    , VALUE27
+    , VALUE28
+    , VALUE29
+    , VALUE30
+    , VALUE31
+    , VALUE32
+    , VALUE33
+    , VALUE34
+    , VALUE35
+    , VALUE36
+    , VALUE37
+    , VALUE38
+    , VALUE39
+    , VALUE40
+    , VALUE41
+    , VALUE42
+    , VALUE43
+    , VALUE44
+    , VALUE45
+    , VALUE46
+    , VALUE47
+    , VALUE48
+    , VALUE49
+    , VALUE50
+    , VALUE51
+    , VALUE52
+    , VALUE53
+    , VALUE54
+    , VALUE55
+    , VALUE56
+    , VALUE57
+    , VALUE58
+    , VALUE59
+    , VALUE60
+    ) VALUES (
+      #obj.categoryCode:VARCHAR# /* CATEGORY_CODE*/
+    , #obj.internalCode:VARCHAR# /* INTERNAL_CODE*/
+    , #obj.createDate:TIMESTAMP# /* CREATE_DATE*/
+    , #obj.createStaffCode:VARCHAR# /* CREATE_STAFF_CODE*/
+    , #obj.updateDate:TIMESTAMP# /* UPDATE_DATE*/
+    , #obj.updateStaffCode:VARCHAR# /* UPDATE_STAFF_CODE*/
+    , #obj.companyCode:VARCHAR# /* COMPANY_CODE*/
+    , #obj.parentCategoryCode:VARCHAR# /* PARENT_CATEGORY_CODE*/
+    , #obj.parentInternalCode:VARCHAR# /* PARENT_INTERNAL_CODE*/
+    , #obj.sortNumber:NUMERIC# /* SORT_NUMBER*/
+    , #obj.deleteFlag:CHAR# /* DELETE_FLAG*/
+    , #obj.description:VARCHAR# /* DESCRIPTION*/
+    , #obj.value1:VARCHAR# /* VALUE1*/
+    , #obj.value2:VARCHAR# /* VALUE2*/
+    , #obj.value3:VARCHAR# /* VALUE3*/
+    , #obj.value4:VARCHAR# /* VALUE4*/
+    , #obj.value5:VARCHAR# /* VALUE5*/
+    , #obj.value6:VARCHAR# /* VALUE6*/
+    , #obj.value7:VARCHAR# /* VALUE7*/
+    , #obj.value8:VARCHAR# /* VALUE8*/
+    , #obj.value9:VARCHAR# /* VALUE9*/
+    , #obj.value10:VARCHAR# /* VALUE10*/
+    , #obj.value11:VARCHAR# /* VALUE11*/
+    , #obj.value12:VARCHAR# /* VALUE12*/
+    , #obj.value13:VARCHAR# /* VALUE13*/
+    , #obj.value14:VARCHAR# /* VALUE14*/
+    , #obj.value15:VARCHAR# /* VALUE15*/
+    , #obj.value16:VARCHAR# /* VALUE16*/
+    , #obj.value17:VARCHAR# /* VALUE17*/
+    , #obj.value18:VARCHAR# /* VALUE18*/
+    , #obj.value19:VARCHAR# /* VALUE19*/
+    , #obj.value20:VARCHAR# /* VALUE20*/
+    , #obj.value21:VARCHAR# /* VALUE21*/
+    , #obj.value22:VARCHAR# /* VALUE22*/
+    , #obj.value23:VARCHAR# /* VALUE23*/
+    , #obj.value24:VARCHAR# /* VALUE24*/
+    , #obj.value25:VARCHAR# /* VALUE25*/
+    , #obj.value26:VARCHAR# /* VALUE26*/
+    , #obj.value27:VARCHAR# /* VALUE27*/
+    , #obj.value28:VARCHAR# /* VALUE28*/
+    , #obj.value29:VARCHAR# /* VALUE29*/
+    , #obj.value30:VARCHAR# /* VALUE30*/
+    , #obj.value31:VARCHAR# /* VALUE31*/
+    , #obj.value32:VARCHAR# /* VALUE32*/
+    , #obj.value33:VARCHAR# /* VALUE33*/
+    , #obj.value34:VARCHAR# /* VALUE34*/
+    , #obj.value35:VARCHAR# /* VALUE35*/
+    , #obj.value36:VARCHAR# /* VALUE36*/
+    , #obj.value37:VARCHAR# /* VALUE37*/
+    , #obj.value38:VARCHAR# /* VALUE38*/
+    , #obj.value39:VARCHAR# /* VALUE39*/
+    , #obj.value40:VARCHAR# /* VALUE40*/
+    , #obj.value41:VARCHAR# /* VALUE41*/
+    , #obj.value42:VARCHAR# /* VALUE42*/
+    , #obj.value43:VARCHAR# /* VALUE43*/
+    , #obj.value44:VARCHAR# /* VALUE44*/
+    , #obj.value45:VARCHAR# /* VALUE45*/
+    , #obj.value46:VARCHAR# /* VALUE46*/
+    , #obj.value47:VARCHAR# /* VALUE47*/
+    , #obj.value48:VARCHAR# /* VALUE48*/
+    , #obj.value49:VARCHAR# /* VALUE49*/
+    , #obj.value50:VARCHAR# /* VALUE50*/
+    , #obj.value51:VARCHAR# /* VALUE51*/
+    , #obj.value52:VARCHAR# /* VALUE52*/
+    , #obj.value53:VARCHAR# /* VALUE53*/
+    , #obj.value54:VARCHAR# /* VALUE54*/
+    , #obj.value55:VARCHAR# /* VALUE55*/
+    , #obj.value56:VARCHAR# /* VALUE56*/
+    , #obj.value57:VARCHAR# /* VALUE57*/
+    , #obj.value58:VARCHAR# /* VALUE58*/
+    , #obj.value59:VARCHAR# /* VALUE59*/
+    , #obj.value60:VARCHAR# /* VALUE60*/
+    )
+  </insert>
+
+  <!--
+    汎用マスタデータ削除
+  -->
+  <delete id="deleteNeaCodeName_MST" parameterClass="java.util.Map">
+    DELETE FROM
+      NEA_CODE_NAME
+    WHERE
+      CATEGORY_CODE = #categoryCode:VARCHAR#
+    <isNotEmpty property="companyCode">
+      AND COMPANY_CODE = #companyCode:VARCHAR#
+    </isNotEmpty>
+  </delete>
+
+  <!--
+    汎用マスタ設定更新
+  -->
+  <update id="updateCodeNameSet_MST" parameterClass="java.util.Map">
+    UPDATE
+      NEA_CODE_NAME_SET
+    SET
+      UPDATE_DATE = SYSDATE /* UPDATE_DATE*/
+    , UPDATE_STAFF_CODE = #loginStaffCode:VARCHAR#
+    WHERE
+      CATEGORY_CODE = #categoryCode:VARCHAR#
+  </update>
+
+  <!--
+    汎用マスタ設定バリデーション取得
+  -->
+  <select id="selectCodeNameSetValid_MST" parameterClass="java.util.Map" resultClass="jp.co.ctcg.easset.dto.CodeNameSetValid">
+    SELECT
+      CATEGORY_CODE categoryCode
+    , VALID_TABLE validTable
+    , VALID_COLUMN validColumn
+    , CREATE_DATE createDate
+    , CREATE_STAFF_CODE createStaffCode
+    , UPDATE_DATE updateDate
+    , UPDATE_STAFF_CODE updateStaffCode
+    , VALID_TABLE_NAME validTableName
+    , VALID_COLUMN_NAME validColumnName
+    FROM
+      NEA_CODE_NAME_SET_VALID
+    WHERE
+      CATEGORY_CODE = #categoryCode:VARCHAR#
+  </select>
+
+  <select id="selectCodeNameSetValidCheck_MST" parameterClass="java.util.Map" resultClass="java.lang.Integer">
+    SELECT
+      ROWNUM
+    FROM
+      $validTable$
+    WHERE
+      $validColumn$
+    AND
+      ROWNUM <![CDATA[<]]> 2
+  </select>
+
+  <!--
+    会計年月取得(eAsset取込分)
+  -->
+  <select id="selectPpfsCurrentPeriod_MST" parameterClass="java.util.Map" resultClass="java.lang.String">
+    SELECT
+      MAX(PERIOD)
+    FROM
+      NEA_PPFS_STAT
+    WHERE
+      COMPANY_CODE = #companyCode#
+      AND DATA_TYPE IN ('1', '2')
+      AND LAST_SUCCESS_CREATE_DATE IS NOT NULL
+  </select>
+
+  <!--
+    部署長・資産管理担当者情報取得
+  -->
+  <select id="selectUserRoleSectionAll_MST" parameterClass="java.util.Map" resultClass="jp.co.ctcg.easset.dto.RoleSection">
+    SELECT
+      r.STAFF_CODE staffCode
+    , r.COMPANY_CODE companyCode
+    , NEA_UTIL_PKG.get_staff_name_f(r.STAFF_CODE) staffName
+    , NEA_UTIL_PKG.get_email_f(r.STAFF_CODE) mailAddress
+    , r.ROLE_CODE roleCode
+    , (SELECT UC.DOMAINID
+       FROM  NEA_USERCOMPANYTABLE_V UC, NEA_USERTABLE_V U
+       WHERE U.USERID = UC.USERID
+       AND U.DOUBLESTAFFCODE IS NULL
+       AND (U.RETIREDDAY IS NULL OR U.RETIREDDAY <![CDATA[>]]>= TO_CHAR(SYSDATE, 'YYYYMMDD'))
+       AND UC.ADDITIONALFLG = '0'
+       AND (UC.ENDDATE IS NULL OR UC.ENDDATE <![CDATA[>]]>= TO_CHAR(SYSDATE, 'YYYYMMDD'))
+       AND U.STAFFCODE = r.STAFF_CODE
+       ) domainId
+    , (SELECT U.RETIREDDAY
+       FROM  NEA_USERCOMPANYTABLE_V UC, NEA_USERTABLE_V U
+       WHERE U.USERID = UC.USERID
+       AND U.DOUBLESTAFFCODE IS NULL
+       AND UC.ADDITIONALFLG = '0'
+       AND U.STAFFCODE = r.STAFF_CODE
+       ) retiredDay
+    FROM
+      NEA_USER_ROLE_SECTION_ALL_V r
+    WHERE
+        r.COMPANY_CODE = #companyCode#
+    AND r.SECTION_CODE = #sectionCode#
+    AND r.SECTION_YEAR = #sectionYear#
+    ORDER BY
+      r.ROLE_CODE, r.STAFF_CODE
+  </select>
+
+  <!--
+    注文書-資産(機器)名検索
+  -->
+  <select id="selectAstName_LOV" parameterClass="java.util.Map" resultClass="jp.co.ctcg.easset.dto.LovDataEx">
+    SELECT
+        VALUE1 value1
+      , NEA_UTIL_PKG.get_cn_internal_f('ASSET_MAKER', VALUE1, 1) value1code
+      , VALUE2 value2
+      , VALUE3 value3
+      , VALUE4 value4
+      , VALUE5 value5
+      , NEA_UTIL_PKG.get_cn_internal_f('ASSET_CATEGORY1', VALUE5, 1) value5code
+      , VALUE6 value6
+      , NEA_UTIL_PKG.get_cn_internal_f('ASSET_CATEGORY2', VALUE6, 1, 'ASSET_CATEGORY1', VALUE5) value6code
+      , VALUE7 value7
+      , NEA_UTIL_PKG.get_cn_internal_f('ASSET_SHAPE', VALUE7, 1) value7code
+      , VALUE8 value8
+      , VALUE9 value9
+      , VALUE10 value10
+      , VALUE11 value11
+      , VALUE12 value12
+      , VALUE13 value13
+      , VALUE14 value14
+      , VALUE15 value15
+      , (SELECT VALUE2 FROM NEA_CODE_NAME c2 WHERE c2.CATEGORY_CODE = 'ASSET_CATEGORY2' AND c2.INTERNAL_CODE = NEA_UTIL_PKG.get_cn_internal_f('ASSET_CATEGORY2', c1.VALUE6, 1, 'ASSET_CATEGORY1', c1.VALUE5)) as value16
+      , (SELECT VALUE3 FROM NEA_CODE_NAME c2 WHERE c2.CATEGORY_CODE = 'ASSET_CATEGORY2' AND c2.INTERNAL_CODE = NEA_UTIL_PKG.get_cn_internal_f('ASSET_CATEGORY2', c1.VALUE6, 1, 'ASSET_CATEGORY1', c1.VALUE5)) as value17
+      , (SELECT VALUE4 FROM NEA_CODE_NAME c2 WHERE c2.CATEGORY_CODE = 'ASSET_CATEGORY2' AND c2.INTERNAL_CODE = NEA_UTIL_PKG.get_cn_internal_f('ASSET_CATEGORY2', c1.VALUE6, 1, 'ASSET_CATEGORY1', c1.VALUE5)) as value18
+      , (SELECT VALUE5 FROM NEA_CODE_NAME c2 WHERE c2.CATEGORY_CODE = 'ASSET_CATEGORY2' AND c2.INTERNAL_CODE = NEA_UTIL_PKG.get_cn_internal_f('ASSET_CATEGORY2', c1.VALUE6, 1, 'ASSET_CATEGORY1', c1.VALUE5)) as value19
+    FROM
+      NEA_CODE_NAME c1
+    WHERE
+      CATEGORY_CODE = 'REO_AST'
+      AND DELETE_FLAG = '0'
+      AND PARENT_CATEGORY_CODE = #parentCategoryCode#
+      AND PARENT_INTERNAL_CODE = #parentInternalCode#
+
+      <isNotEmpty property="companyCode">
+        AND COMPANY_CODE LIKE '%' || #companyCode# || '%'
+      </isNotEmpty>
+
+      <isNotEmpty property="makerName">
+        AND NEA_UTIL_PKG.TO_FUZZY_F(VALUE1) LIKE '%' || NEA_UTIL_PKG.TO_FUZZY_F( #makerName#) || '%'
+      </isNotEmpty>
+
+      <isNotEmpty property="astName">
+        AND NEA_UTIL_PKG.TO_FUZZY_F(VALUE2) LIKE '%' || NEA_UTIL_PKG.TO_FUZZY_F( #astName#) || '%'
+      </isNotEmpty>
+
+      <isNotEmpty property="sysdate">
+        AND (VALUE13 <![CDATA[<]]>= TO_CHAR(#sysdate#, 'YYYY/MM/DD') OR VALUE13 IS NULL)
+      </isNotEmpty>
+      <isNotEmpty property="sysdate">
+        AND (VALUE14 <![CDATA[>]]>= TO_CHAR(#sysdate#, 'YYYY/MM/DD') OR VALUE14 IS NULL)
+      </isNotEmpty>
+
+   ORDER BY
+     SORT_NUMBER
+     , CATEGORY_CODE
+     , INTERNAL_CODE
+  </select>
+
+  <!--
+    メニュー制御表示/非表示更新
+  -->
+  <update id="updateAccessControl_MST" parameterClass="java.util.Map">
+    UPDATE NEA_CODE_NAME
+    SET
+      UPDATE_DATE = SYSDATE
+    , UPDATE_STAFF_CODE = #loginStaffCode:VARCHAR#
+    , VALUE2 = #publicCode:VARCHAR#
+    WHERE
+      CATEGORY_CODE = 'MENU_ACCESS_CONTROL'
+    AND
+      COMPANY_CODE = #companyCode:VARCHAR#
+    AND
+      VALUE3 = #menuCode:VARCHAR#
+  </update>
+
+  <!--
+    マスタデータ全件削除
+  -->
+  <delete id="deleteMasterData_MST" parameterClass="java.util.Map">
+    DELETE FROM $tableName$
+  </delete>
+
+  <!--
+    会社マスタデータ登録
+  -->
+  <insert id="insertCompanyMaster_MST" parameterClass="java.util.Map">
+    INSERT INTO COMPANYMASTERTABLE (
+      OFFICECODE
+    , COMPANYCODE
+    , OFFICENAMEKANJI
+    , OFFICENAMEKANA
+    , OFFICENAMEENG
+    , COMPANYNAMEKANJI
+    , COMPANYPOPKANJI
+    , COMPANYNAMEKANA
+    , COMPANYPOPKANA
+    , COMPANYNAMEENG
+    , COMPANYPOPENG
+    , ZIPCODE
+    , ADDRESSKANJI1
+    , ADDRESSKANJI2
+    , ADDRESSKANJI3
+    , ADDRESSKANA1
+    , ADDRESSKANA2
+    , ADDRESSKANA3
+    , ADDRESSENG1
+    , ADDRESSENG2
+    , ADDRESSENG3
+    , TELREPRESENTATIVE
+    , REPRESENTATIVEKANJI
+    , REPRESENTATIVEKANA
+    , REPRESENTATIVEENG
+    , USEFLG
+    , EDITDATE
+     ) VALUES (
+     #obj.officeCode:CHAR#
+    , #obj.companyCode:CHAR#
+    , #obj.officeNameKanji:VARCHAR#
+    , #obj.officeNameKana:VARCHAR#
+    , #obj.officeNameEng:VARCHAR#
+    , #obj.companyNameKanji:VARCHAR#
+    , #obj.companyPopKanji:VARCHAR#
+    , #obj.companyNameKana:VARCHAR#
+    , #obj.companyPopKana:VARCHAR#
+    , #obj.companyNameEng:VARCHAR#
+    , #obj.companyPopEng:VARCHAR#
+    , #obj.zipCode:CHAR#
+    , #obj.addressKanji1:VARCHAR#
+    , #obj.addressKanji2:VARCHAR#
+    , #obj.addressKanji3:VARCHAR#
+    , #obj.addressKana1:VARCHAR#
+    , #obj.addressKana2:VARCHAR#
+    , #obj.addressKana3:VARCHAR#
+    , #obj.addressEng1:VARCHAR#
+    , #obj.addressEng2:VARCHAR#
+    , #obj.addressEng3:VARCHAR#
+    , #obj.telRepresentative:VARCHAR#
+    , #obj.representativeKanji:VARCHAR#
+    , #obj.representativeKana:VARCHAR#
+    , #obj.representativeEng:VARCHAR#
+    , #obj.useFlg:CHAR#
+    , #obj.editDate:TIMESTAMP#
+       )
+  </insert>
+
+  <!--
+    部署マスタデータ登録
+  -->
+  <insert id="insertDivisionMaster_MST" parameterClass="java.util.Map">
+    INSERT INTO DIVISIONMASTERTABLE (
+      COMPANYCODE
+    , DIVISIONCODE
+    , DIVISIONKANJI
+    , DIVISIONKANA
+    , DIVISIONENG
+    , DISPORDER
+    , EDITDATE
+     ) VALUES (
+     #obj.companyCode:CHAR#
+    , #obj.divisionCode:CHAR#
+    , #obj.divisionKanji:VARCHAR#
+    , #obj.divisionKana:VARCHAR#
+    , #obj.divisionEng:VARCHAR#
+    , #obj.disporder:NUMERIC#
+    , #obj.editDate:TIMESTAMP#
+       )
+  </insert>
+
+  <!--
+    組織マスタデータ登録
+  -->
+  <insert id="insertNewDivisionMaster_MST" parameterClass="java.util.Map">
+    INSERT INTO NEWDIVISIONMASTERTABLE (
+      COMPANYCODE
+    , DIVISIONCODE
+    , PARENTDIVISIONCODE
+    , DIVISIONKANJI
+    , VIEWFLG
+     ) VALUES (
+     #obj.companyCode:CHAR#
+    , #obj.divisionCode:CHAR#
+    , #obj.parentDivisionCode:CHAR#
+    , #obj.divisionKanji:VARCHAR#
+    , #obj.viewFlg:CHAR#
+       )
+  </insert>
+
+  <!--
+    ユーザー所属マスタデータ登録
+  -->
+  <insert id="insertUserCompany_MST" parameterClass="java.util.Map">
+    INSERT INTO USERCOMPANYTABLE (
+      USERID
+    , STARTDATE
+    , OFFICECODE
+    , COMPANYCODE
+    , DIVISIONCODE
+    , TITLECODE
+    , TEL1
+    , TEL2
+    , FAX
+    , EXTENSION
+    , DOMAINID
+    , TRANSFERCOMPANY
+    , POSTCODE
+    , JOBTYPECODE
+    , ADDITIONALFLG
+    , FLOORINFO
+    , ENDDATE
+    , UPDATEUSERID
+    , EDITDATE
+     ) VALUES (
+     #obj.userId:NUMERIC#
+    , #obj.startDate:CHAR#
+    , #obj.officeCode:CHAR#
+    , #obj.companyCode:CHAR#
+    , #obj.divisionCode:CHAR#
+    , #obj.titleCode:CHAR#
+    , #obj.tel1:VARCHAR#
+    , #obj.tel2:VARCHAR#
+    , #obj.fax:VARCHAR#
+    , #obj.extension:VARCHAR#
+    , #obj.domainId:CHAR#
+    , #obj.transferCompany:CHAR#
+    , #obj.postCode:CHAR#
+    , #obj.jobtypeCode:CHAR#
+    , #obj.additionalFlg:CHAR#
+    , #obj.floorInfo:VARCHAR#
+    , #obj.endDate:CHAR#
+    , #obj.updateUserId:NUMERIC#
+    , #obj.editDate:TIMESTAMP#
+       )
+  </insert>
+
+
+  <!--
+    ユーザー所属マスタ追加データリスト取得
+  -->
+  <select id="selectUserCompanyOtherList_MST" parameterClass="java.util.Map" resultClass="jp.co.ctcg.easset.dto.master.UserCompanyMasterData">
+    SELECT USERID userId
+         , STARTDATE startDate
+         , OFFICECODE officeCode
+         , COMPANYCODE companyCode
+         , DIVISIONCODE divisionCode
+         , TITLECODE titleCode
+         , TEL1 tel1
+         , TEL2 tel2
+         , FAX fax
+         , EXTENSION extension
+         , DOMAINID domainId
+         , TRANSFERCOMPANY transferCompany
+         , POSTCODE postCode
+         , JOBTYPECODE jobtypeCode
+         , ADDITIONALFLG additionalFlg
+         , FLOORINFO floorInfo
+         , ENDDATE endDate
+         , UPDATEUSERID updateUserId
+         , EDITDATE editDate
+      FROM USERCOMPANYTABLE_OTHER
+  </select>
+
+  <!--
+    ユーザー所属マスタ検索
+  -->
+  <select id="selectUserCompanyList_MST" parameterClass="java.util.Map" resultClass="jp.co.ctcg.easset.dto.master.UserCompanyMasterData">
+    SELECT USERID userId
+         , STARTDATE startDate
+         , OFFICECODE officeCode
+         , COMPANYCODE companyCode
+         , DIVISIONCODE divisionCode
+         , TITLECODE titleCode
+         , TEL1 tel1
+         , TEL2 tel2
+         , FAX fax
+         , EXTENSION extension
+         , DOMAINID domainId
+         , TRANSFERCOMPANY transferCompany
+         , POSTCODE postCode
+         , JOBTYPECODE jobtypeCode
+         , ADDITIONALFLG additionalFlg
+         , FLOORINFO floorInfo
+         , ENDDATE endDate
+         , UPDATEUSERID updateUserId
+         , EDITDATE editDate
+      FROM NEA_USERCOMPANYTABLE_V
+     WHERE 1 = 1
+      <isNotEmpty property="userId">
+        AND USERID = #userId#
+      </isNotEmpty>
+      <isNotEmpty property="startDate">
+        AND STARTDATE = #startDate#
+      </isNotEmpty>
+      <isNotEmpty property="officeCode">
+        AND OFFICECODE = RTRIM(#officeCode#)
+      </isNotEmpty>
+      <isNotEmpty property="companyCode">
+        AND COMPANYCODE = RTRIM(#companyCode#)
+      </isNotEmpty>
+      <isNotEmpty property="divisionCode">
+        AND DIVISIONCODE = RTRIM(#divisionCode#)
+      </isNotEmpty>
+      <isNotEmpty property="titleCode">
+        AND TITLECODE = RTRIM(#titleCode#)
+      </isNotEmpty>
+      <isNotEmpty property="additionalFlg">
+        AND ADDITIONALFLG = #additionalFlg#
+      </isNotEmpty>
+  </select>
+
+  <!--
+    ユーザーマスタデータ登録
+  -->
+  <insert id="insertUser_MST" parameterClass="java.util.Map">
+    INSERT INTO USERTABLE (
+      USERID
+    , STAFFCODE
+    , NAMEKANJI
+    , NAMEKANA
+    , NAMEENG
+    , MAILADDRESS
+    , NICKNAME
+    , ACCOUNT
+    , FULLNAME
+    , PASSWORD
+    , RETIREPLANDAY
+    , RETIREDDAY
+    , COMPANYCODE
+    , STAFFATTRIBUTE
+    , REGISTRATIONDAY
+    , TELDIVCODE
+    , MANUALDIVCODE
+    , MESSAGE
+    , UPDATEUSERID
+    , EDITDATE
+    , GAIJIFLG
+    , MAILDIVCODE
+    , DOUBLESTAFFCODE
+    , QUESTION
+    , ANSWER
+    , PASSPHRASE1
+    , PASSPHRASE2
+    , AUTOFORWARD
+    , EIPACCESS
+    , WEBMAIL
+    , TELSEARCH
+    , TELPROTECTFLG
+    , ACCESSFLG
+     ) VALUES (
+     #obj.userId:NUMERIC#
+    , #obj.staffCode:CHAR#
+    , #obj.nameKanji:VARCHAR#
+    , #obj.nameKana:VARCHAR#
+    , #obj.nameEng:VARCHAR#
+    , #obj.mailAddress:VARCHAR#
+    , #obj.nickName:VARCHAR#
+    , #obj.account:VARCHAR#
+    , #obj.fullName:VARCHAR#
+    , #obj.password:VARCHAR#
+    , #obj.retireplanDay:CHAR#
+    , #obj.retiredDay:CHAR#
+    , #obj.companyCode:CHAR#
+    , #obj.staffAttribute:CHAR#
+    , #obj.registrationDay:CHAR#
+    , #obj.teldivCode:CHAR#
+    , #obj.manualdivCode:CHAR#
+    , #obj.message:VARCHAR#
+    , #obj.updateUserId:NUMERIC#
+    , #obj.editDate:TIMESTAMP#
+    , #obj.gaijiFlg:CHAR#
+    , #obj.maildivCode:CHAR#
+    , #obj.doubleStaffCode:CHAR#
+    , #obj.question:VARCHAR#
+    , #obj.answer:VARCHAR#
+    , #obj.passphrase1:VARCHAR#
+    , #obj.passphrase2:VARCHAR#
+    , #obj.autoForward:CHAR#
+    , #obj.eipaccess:CHAR#
+    , #obj.webMail:CHAR#
+    , #obj.telSearch:CHAR#
+    , #obj.telProtectFlg:CHAR#
+    , #obj.accessFlg:CHAR#
+       )
+  </insert>
+
+  <!--
+    ユーザーマスタ追加データリスト取得
+  -->
+  <select id="selectUserOtherList_MST" parameterClass="java.util.Map" resultClass="jp.co.ctcg.easset.dto.master.UserMasterData">
+    SELECT USERID userId
+         , STAFFCODE staffCode
+         , NAMEKANJI nameKanji
+         , NAMEKANA nameKana
+         , NAMEENG nameEng
+         , MAILADDRESS mailAddress
+         , NICKNAME nickName
+         , ACCOUNT account
+         , FULLNAME fullName
+         , PASSWORD password
+         , RETIREPLANDAY retireplanDay
+         , RETIREDDAY retiredDay
+         , COMPANYCODE companyCode
+         , STAFFATTRIBUTE staffAttribute
+         , REGISTRATIONDAY registrationDay
+         , TELDIVCODE teldivCode
+         , MANUALDIVCODE manualdivCode
+         , MESSAGE message
+         , UPDATEUSERID updateUserId
+         , EDITDATE editDate
+         , GAIJIFLG gaijiFlg
+         , MAILDIVCODE maildivCode
+         , DOUBLESTAFFCODE doubleStaffCode
+         , QUESTION question
+         , ANSWER answer
+         , PASSPHRASE1 passphrase1
+         , PASSPHRASE2 passphrase2
+         , AUTOFORWARD autoForward
+         , EIPACCESS eipaccess
+         , WEBMAIL webMail
+         , TELSEARCH telSearch
+         , TELPROTECTFLG telProtectFlg
+         , ACCESSFLG accessFlg
+      FROM USERTABLE_OTHER
+  </select>
+
+  <!--
+    ユーザーマスタ検索
+  -->
+  <select id="selectUserList_MST" parameterClass="java.util.Map" resultClass="jp.co.ctcg.easset.dto.master.UserMasterData">
+    SELECT USERID userId
+         , STAFFCODE staffCode
+         , NAMEKANJI nameKanji
+         , NAMEKANA nameKana
+         , NAMEENG nameEng
+         , MAILADDRESS mailAddress
+         , NICKNAME nickName
+         , ACCOUNT account
+         , FULLNAME fullName
+         , PASSWORD password
+         , RETIREPLANDAY retireplanDay
+         , RETIREDDAY retiredDay
+         , COMPANYCODE companyCode
+         , STAFFATTRIBUTE staffAttribute
+         , REGISTRATIONDAY registrationDay
+         , TELDIVCODE teldivCode
+         , MANUALDIVCODE manualdivCode
+         , MESSAGE message
+         , UPDATEUSERID updateUserId
+         , EDITDATE editDate
+         , GAIJIFLG gaijiFlg
+         , MAILDIVCODE maildivCode
+         , DOUBLESTAFFCODE doubleStaffCode
+         , QUESTION question
+         , ANSWER answer
+         , PASSPHRASE1 passphrase1
+         , PASSPHRASE2 passphrase2
+         , AUTOFORWARD autoForward
+         , EIPACCESS eipaccess
+         , WEBMAIL webMail
+         , TELSEARCH telSearch
+         , TELPROTECTFLG telProtectFlg
+         , ACCESSFLG accessFlg
+      FROM NEA_USERTABLE_V
+     WHERE 1 = 1
+      <isNotEmpty property="userId">
+        AND USERID = #userId#
+      </isNotEmpty>
+  </select>
+
+  <!--
+    検索用TEMPデータ登録
+  -->
+  <insert id="insertTempSearch_MST" parameterClass="java.util.Map">
+    INSERT INTO NEA_TEMP_SEARCH (
+      SEARCH_KEY
+      , SEQ
+      , VARCHAR_VALUE
+      , NUMERIC_VALUE
+    ) VALUES (
+      #searchKey:VARCHAR#
+      , #seq:NUMERIC#
+      , #varcharValue:VARCHAR#
+      , #numericValue:NUMERIC#
+    )
+  </insert>
+
+  <!--
+    従業員所属データ取得
+  -->
+  <select id="selectSapAssignments_MST" parameterClass="java.util.Map" resultClass="jp.co.ctcg.easset.dto.master.SapAssignmentsMasterData">
+    SELECT
+        ASSIGNMENT_ID assignmentId
+      , COMPANY_CODE companyCode
+      , EMPLOYEE_NUMBER employeeNumber
+      , DEPARTMENT_CODE departmentCode
+      , PRIMARY_FLAG primaryFlag
+      , POST_CODE postCode
+      , SUPERVISOR_CODE supervisorCode
+      , EFFECTIVE_START_DATE effectiveStartDate
+      , EFFECTIVE_END_DATE effectiveEndDate
+      , UPDAT updat
+      , CRDAT crdat
+      , OTHER_FLAG otherFlag
+    FROM
+      NEA_SAP_ASSIGNMENTS
+    WHERE
+      ASSIGNMENT_ID = #obj.assignmentId:VARCHAR#
+      AND TO_CHAR(EFFECTIVE_START_DATE, 'YYYY/MM/DD HH24:MI:SS') = TO_CHAR(#obj.effectiveStartDate:TIMESTAMP#, 'YYYY/MM/DD HH24:MI:SS')
+  </select>
+
+  <!--
+    従業員所属データ登録
+  -->
+  <insert id="insertSapAssignments_MST" parameterClass="java.util.Map">
+    INSERT INTO NEA_SAP_ASSIGNMENTS (
+        ASSIGNMENT_ID
+      , COMPANY_CODE
+      , EMPLOYEE_NUMBER
+      , DEPARTMENT_CODE
+      , SECTION_CODE
+      , PRIMARY_FLAG
+      , POST_CODE
+      , SUPERVISOR_CODE
+      , EFFECTIVE_START_DATE
+      , EFFECTIVE_END_DATE
+      , UPDAT
+      , CRDAT
+      , OTHER_FLAG
+    ) VALUES (
+      #obj.assignmentId:VARCHAR#
+      , #obj.companyCode:VARCHAR#
+      , #obj.employeeNumber:VARCHAR#
+      , #obj.departmentCode:VARCHAR#
+      , #obj.sectionCode:VARCHAR#
+      , #obj.primaryFlag:VARCHAR#
+      , #obj.postCode:VARCHAR#
+      , #obj.supervisorCode:VARCHAR#
+      , #obj.effectiveStartDate:TIMESTAMP#
+      , #obj.effectiveEndDate:TIMESTAMP#
+      , #obj.updat:TIMESTAMP#
+      , #obj.crdat:TIMESTAMP#
+      , #obj.otherFlag:VARCHAR#
+    )
+  </insert>
+
+  <!--
+    従業員所属データ更新
+  -->
+  <update id="updateSapAssignments_MST" parameterClass="java.util.Map">
+    UPDATE NEA_SAP_ASSIGNMENTS
+    SET
+      COMPANY_CODE = #obj.companyCode:VARCHAR#
+    , EMPLOYEE_NUMBER = #obj.employeeNumber:VARCHAR#
+    , DEPARTMENT_CODE = #obj.departmentCode:VARCHAR#
+    , SECTION_CODE = #obj.sectionCode:VARCHAR#
+    , PRIMARY_FLAG = #obj.primaryFlag:VARCHAR#
+    , POST_CODE = #obj.postCode:VARCHAR#
+    , SUPERVISOR_CODE = #obj.supervisorCode:VARCHAR#
+    , EFFECTIVE_END_DATE = #obj.effectiveEndDate:TIMESTAMP#
+    , UPDAT = #obj.updat:TIMESTAMP#
+    , CRDAT = #obj.crdat:TIMESTAMP#
+    , OTHER_FLAG = #obj.otherFlag:VARCHAR#
+    WHERE
+      ASSIGNMENT_ID = #obj.assignmentId:VARCHAR#
+      AND TO_CHAR(EFFECTIVE_START_DATE, 'YYYY/MM/DD HH24:MI:SS') = TO_CHAR(#obj.effectiveStartDate:TIMESTAMP#, 'YYYY/MM/DD HH24:MI:SS')
+  </update>
+
+  <!--
+    勘定科目データ取得
+  -->
+  <select id="selectSapAccount_MST" parameterClass="java.util.Map" resultClass="jp.co.ctcg.easset.dto.master.SapAccountMasterData">
+    SELECT
+        ACCOUNT_CD accountCD
+      , ACCOUNT_NAME accountName
+      , ENABLED_FLAG enabledFlag
+      , LAST_UPDATE_DATE lastUpdateDate
+    FROM
+      NEA_SAP_ACCOUNT
+    WHERE
+      ACCOUNT_CD = #obj.accountCD:VARCHAR#
+  </select>
+
+  <!--
+    勘定科目データ登録
+  -->
+  <insert id="insertSapAccount_MST" parameterClass="java.util.Map">
+    INSERT INTO NEA_SAP_ACCOUNT (
+        ACCOUNT_CD
+      , ACCOUNT_NAME
+      , ENABLED_FLAG
+      , LAST_UPDATE_DATE
+    ) VALUES (
+      #obj.accountCD:VARCHAR#
+      , #obj.accountName:VARCHAR#
+      , #obj.enabledFlag:VARCHAR#
+      , TO_CHAR(SYSDATE, 'YYYYMMDD')
+    )
+  </insert>
+
+  <!--
+    勘定科目データ更新
+  -->
+  <update id="updateSapAccount_MST" parameterClass="java.util.Map">
+    UPDATE NEA_SAP_ACCOUNT
+    SET
+      ACCOUNT_NAME = #obj.accountName:VARCHAR#
+    , ENABLED_FLAG = #obj.enabledFlag:VARCHAR#
+    , LAST_UPDATE_DATE = TO_CHAR(SYSDATE, 'YYYYMMDD')
+    WHERE
+      ACCOUNT_CD = #obj.accountCD:VARCHAR#
+  </update>
+
+  <!--
+    顧客データ取得
+  -->
+  <select id="selectSapCustAccounts_MST" parameterClass="java.util.Map" resultClass="jp.co.ctcg.easset.dto.master.SapCustAccountsMasterData">
+    SELECT
+        CUST_ID custID
+      , CUST_GROUP custGroup
+      , ACCOUNT_GROUP accountGroup
+      , CUST_NAME custName
+      , COMPANY_CD companyCD
+      , CUST_STATUS custStatus
+      , CREATE_DATE createDate
+      , LAST_UPDATE_DATE lastUpdateDate
+      , ENABLED_FLAG enabledFlag
+    FROM
+      NEA_SAP_CUST_ACCOUNTS
+    WHERE
+      CUST_ID = #obj.custID:VARCHAR#
+      AND COMPANY_CD = #obj.companyCD:VARCHAR#
+  </select>
+
+  <!--
+    顧客データ登録
+  -->
+  <insert id="insertSapCustAccounts_MST" parameterClass="java.util.Map">
+    INSERT INTO NEA_SAP_CUST_ACCOUNTS (
+        CUST_ID
+      , CUST_GROUP
+      , ACCOUNT_GROUP
+      , CUST_NAME
+      , COMPANY_CD
+      , CUST_STATUS
+      , CREATE_DATE
+      , LAST_UPDATE_DATE
+      , ENABLED_FLAG
+    ) VALUES (
+      #obj.custID:VARCHAR#
+      , #obj.custGroup:VARCHAR#
+      , #obj.accountGroup:VARCHAR#
+      , #obj.custName:VARCHAR#
+      , #obj.companyCD:VARCHAR#
+      , #obj.custStatus:VARCHAR#
+      , #obj.createDate:TIMESTAMP#
+      , #obj.lastUpdateDate:TIMESTAMP#
+      , #obj.enabledFlag:VARCHAR#
+    )
+  </insert>
+
+  <!--
+    顧客データ更新
+  -->
+  <update id="updateSapCustAccounts_MST" parameterClass="java.util.Map">
+    UPDATE NEA_SAP_CUST_ACCOUNTS
+    SET
+      CUST_GROUP = #obj.custGroup:VARCHAR#
+    , ACCOUNT_GROUP = #obj.accountGroup:VARCHAR#
+    , CUST_NAME = #obj.custName:VARCHAR#
+    , COMPANY_CD = #obj.companyCD:VARCHAR#
+    , CUST_STATUS = #obj.custStatus:VARCHAR#
+    , CREATE_DATE = #obj.createDate:TIMESTAMP#
+    , LAST_UPDATE_DATE = #obj.lastUpdateDate:TIMESTAMP#
+    , ENABLED_FLAG = #obj.enabledFlag:VARCHAR#
+    WHERE
+      CUST_ID = #obj.custID:VARCHAR#
+      AND COMPANY_CD = #obj.companyCD:VARCHAR#
+  </update>
+
+  <!--
+    仕入先データ取得
+  -->
+  <select id="selectSapVendors_MST" parameterClass="java.util.Map" resultClass="jp.co.ctcg.easset.dto.master.SapVendorsMasterData">
+    SELECT
+        VENDOR_ID vendorID
+      , VENDOR_GROUP vendorGroup
+      , ACCOUNT_GROUP accountGroup
+      , VENDOR_NAME vendorName
+      , COMPANY_CD companyCD
+      , VENDOR_STATUS vendorStatus
+      , CREATE_DATE createDate
+      , LAST_UPDATE_DATE lastUpdateDate
+      , ENABLED_FLAG enabledFlag
+    FROM
+      NEA_SAP_VENDORS
+    WHERE
+      VENDOR_ID = #obj.vendorID:VARCHAR#
+      AND COMPANY_CD = #obj.companyCD:VARCHAR#
+  </select>
+
+  <!--
+    仕入先データ登録
+  -->
+  <insert id="insertSapVendors_MST" parameterClass="java.util.Map">
+    INSERT INTO NEA_SAP_VENDORS (
+        VENDOR_ID
+      , VENDOR_GROUP
+      , ACCOUNT_GROUP
+      , VENDOR_NAME
+      , COMPANY_CD
+      , VENDOR_STATUS
+      , CREATE_DATE
+      , LAST_UPDATE_DATE
+      , ENABLED_FLAG
+    ) VALUES (
+      #obj.vendorID:VARCHAR#
+      , #obj.vendorGroup:VARCHAR#
+      , #obj.accountGroup:VARCHAR#
+      , #obj.vendorName:VARCHAR#
+      , #obj.companyCD:VARCHAR#
+      , #obj.vendorStatus:VARCHAR#
+      , #obj.createDate:TIMESTAMP#
+      , #obj.lastUpdateDate:TIMESTAMP#
+      , #obj.enabledFlag:VARCHAR#
+    )
+  </insert>
+
+  <!--
+    仕入先データ更新
+  -->
+  <update id="updateSapVendors_MST" parameterClass="java.util.Map">
+    UPDATE NEA_SAP_VENDORS
+    SET
+      VENDOR_GROUP = #obj.vendorGroup:VARCHAR#
+    , ACCOUNT_GROUP = #obj.accountGroup:VARCHAR#
+    , VENDOR_NAME = #obj.vendorName:VARCHAR#
+    , COMPANY_CD = #obj.companyCD:VARCHAR#
+    , VENDOR_STATUS = #obj.vendorStatus:VARCHAR#
+    , CREATE_DATE = #obj.createDate:TIMESTAMP#
+    , LAST_UPDATE_DATE = #obj.lastUpdateDate:TIMESTAMP#
+    , ENABLED_FLAG = #obj.enabledFlag:VARCHAR#
+    WHERE
+      VENDOR_ID = #obj.vendorID:VARCHAR#
+      AND COMPANY_CD = #obj.companyCD:VARCHAR#
+  </update>
+
+  <!--
+    経費負担部課データ取得（開始日が過去のデータ）
+  -->
+  <select id="selectSapExpDept_MST" parameterClass="java.util.Map" resultClass="jp.co.ctcg.easset.dto.master.SapExpDeptMasterData">
+    SELECT
+        COMPANY_CD companyCD
+      , DEPT_CD deptCD
+      , DEPT_NAME deptName
+      , SUMMARY_FLAG summaryFlag
+      , COST_FLAG costFlag
+      , START_DATE startDate
+      , END_DATE endDate
+      , ENABLED_FLAG enabledFlag
+      , SORT_KEY sortKey
+      , LAST_UPDATE_DATE lastUpdateDate
+      , SECTION_FLAG sectionFlag
+      , CATEGORY_CODE categoryCode
+    FROM
+      NEA_SAP_EXP_DEPT
+    WHERE
+      COMPANY_CD = #obj.companyCD:VARCHAR#
+      AND DEPT_CD = #obj.deptCD:VARCHAR#
+  </select>
+
+  <!--
+    経費負担部課データ登録
+  -->
+  <insert id="insertSapExpDept_MST" parameterClass="java.util.Map">
+    INSERT INTO NEA_SAP_EXP_DEPT (
+        COMPANY_CD
+      , DEPT_CD
+      , DEPT_NAME
+      , SUMMARY_FLAG
+      , COST_FLAG
+      , START_DATE
+      , END_DATE
+      , ENABLED_FLAG
+      , SORT_KEY
+      , LAST_UPDATE_DATE
+      , SECTION_FLAG
+      , CATEGORY_CODE
+    ) VALUES (
+      #obj.companyCD:VARCHAR#
+      , #obj.deptCD:VARCHAR#
+      , #obj.deptName:VARCHAR#
+      , #obj.summaryFlag:VARCHAR#
+      , #obj.costFlag:VARCHAR#
+      , #obj.startDate:TIMESTAMP#
+      , #obj.endDate:TIMESTAMP#
+      , #obj.enabledFlag:VARCHAR#
+      , #obj.sortKey:VARCHAR#
+      , #obj.lastUpdateDate:TIMESTAMP#
+      , #obj.sectionFlag:VARCHAR#
+      , #obj.categoryCode:VARCHAR#
+    )
+  </insert>
+
+  <!--
+    経費負担部課データ更新
+  -->
+  <update id="updateSapExpDept_MST" parameterClass="java.util.Map">
+    UPDATE NEA_SAP_EXP_DEPT
+    SET
+      DEPT_NAME = #obj.deptName:VARCHAR#
+    , SUMMARY_FLAG = #obj.summaryFlag:VARCHAR#
+    , COST_FLAG = #obj.costFlag:VARCHAR#
+    , START_DATE = #obj.startDate:TIMESTAMP#
+    , END_DATE = #obj.endDate:TIMESTAMP#
+    , ENABLED_FLAG = #obj.enabledFlag:VARCHAR#
+    , SORT_KEY = #obj.sortKey:VARCHAR#
+    , LAST_UPDATE_DATE = #obj.lastUpdateDate:TIMESTAMP#
+    , SECTION_FLAG = #obj.sectionFlag:VARCHAR#
+    , CATEGORY_CODE = #obj.categoryCode:VARCHAR#
+    WHERE
+      COMPANY_CD = #obj.companyCD:VARCHAR#
+      AND DEPT_CD = #obj.deptCD:VARCHAR#
+  </update>
+</sqlMap>

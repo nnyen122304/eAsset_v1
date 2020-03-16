@@ -1,0 +1,46 @@
+/* ボディ*/
+.body {
+  border-left: outset 1px black;
+  border-right: outset 1px black;
+  border-bottom: outset 1px black;
+  border-radius: 0px 0px 2px 2px/0px 0px 2px 2px;
+  box-shadow: 0.5px 0.5px;
+//  min-width: 1300px;
+  min-height: 99vh;
+}
+.body-no-frame {
+  border: none;
+  box-shadow: none;
+}
+
+/* コンテンツ */
+.body-content {
+  padding: 5px;
+}
+
+.popup-login-selection {
+  width: 430px;
+  .modal-title {
+    padding: 3px 0;
+    font-size: 12px;
+  }
+}
+
+.section-login {
+  padding: 0 30px;
+}
+
+.grid-login-list {
+  width: 100%;
+  min-height: 0;
+  height: auto;
+}
+
+.row-company {
+  margin-bottom: 15px;
+  margin-left: -30px;
+  .input-company {
+    width: 100px;
+    margin-left: 10px;
+  }
+}

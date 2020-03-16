@@ -1,0 +1,87 @@
+<div class="grid-common-wrap">
+  <div class="grid-common-count">
+    【件数：{{ gridDataList && gridDataList.rows ? (gridDataList.rows.length | number) : 0 }} 件】
+  </div>
+  <div class="wp-grid-data-list" id="wp-grid-data-list">
+    <ea-flex-grid #gridDataList class="grid-common-list grid-data-list grid-inventory-list"
+                  [itemsSource]="dataList" (initialized)="onGridInitialized(gridDataList)" [allowSorting]="false"
+                  [isReadOnly]="false">
+      <ea-flex-grid-column [hidden]="true" header="Sel" binding="sel" [allowDragging]="'None'" [allowMerging]="false"
+                           [width]="30"
+                           [isReadOnly]="false"></ea-flex-grid-column>
+      <ea-flex-grid-column header="取得申請書番号" binding="applicationId" [width]="100"></ea-flex-grid-column>
+      <ea-flex-grid-column header="Ver." binding="applicationVersion" [width]="50"></ea-flex-grid-column>
+      <ea-flex-grid-column header="ステータス" binding="apStatusName" [width]="80">
+      </ea-flex-grid-column>
+      <ea-flex-grid-column header="取得形態" binding="apGetTypeName" [width]="150">
+      </ea-flex-grid-column>
+      <ea-flex-grid-column header="取得金額" binding="getTotalAmount" [width]="100">
+      </ea-flex-grid-column>
+      <ea-flex-grid-column header="資産計上予定額" [wordWrap]="true" binding="astTotalAmount" [width]="100">
+        <ng-template wjFlexGridCellTemplate cellType="ColumnHeader" let-cell="cell">
+          <span>資産計上</span><br>
+          <span>予定額</span>
+        </ng-template>
+      </ea-flex-grid-column>
+      <ea-flex-grid-column header="資産名" binding="astName" [width]="200">
+      </ea-flex-grid-column>
+      <ea-flex-grid-column header="申請日" binding="apDate" [width]="100">
+      </ea-flex-grid-column>
+      <ea-flex-grid-column header="社員番号" binding="apStaffCode" [width]="70">
+      </ea-flex-grid-column>
+      <ea-flex-grid-column header="氏名" binding="apStaffName" [width]="100">
+      </ea-flex-grid-column>
+      <ea-flex-grid-column header="申請部署" binding="apSectionName" [width]="200">
+      </ea-flex-grid-column>
+      <ea-flex-grid-column header="ﾘﾘｰｽ/検収(納品)予定日" [wordWrap]="true" binding="astCompletePlanDate" [width]="120">
+        <ng-template wjFlexGridCellTemplate cellType="ColumnHeader" let-cell="cell">
+          <span>ﾘﾘｰｽ/検収(納品)</span><br>
+          <span>予定日</span>
+        </ng-template>
+      </ea-flex-grid-column>
+      <ea-flex-grid-column header="リース督促日" binding="reminderDate" [width]="100">
+      </ea-flex-grid-column>
+      <ea-flex-grid-column header="リリース日" binding="releaseDate" [width]="100">
+      </ea-flex-grid-column>
+      <ea-flex-grid-column header="収益獲得/費用削減効果(万円)" [wordWrap]="true" binding="astEffectAmount" [width]="160">
+        <ng-template wjFlexGridCellTemplate cellType="ColumnHeader" let-cell="cell">
+          <span>収益獲得</span><br>
+          <span>/費用削減効果(万円)</span>
+        </ng-template>
+      </ea-flex-grid-column>
+      <ea-flex-grid-column header="計上区分" binding="addUpTypeName" [width]="70">
+      </ea-flex-grid-column>
+      <ea-flex-grid-column header="サービス提供開始報告" [wordWrap]="true" binding="reportCompleteFlagName" [width]="100">
+        <ng-template wjFlexGridCellTemplate cellType="ColumnHeader" let-cell="cell">
+          <span>サービス提供</span><br>
+          <span>開始報告</span>
+        </ng-template>
+      </ea-flex-grid-column>
+      <ea-flex-grid-column header="会社" binding="holCompanyName" [width]="70"></ea-flex-grid-column>
+      <ea-flex-grid-column header="部署" binding="holSectionName" [width]="200"></ea-flex-grid-column>
+      <ea-flex-grid-column header="社員番号" binding="holStaffCode" [width]="70"></ea-flex-grid-column>
+      <ea-flex-grid-column header="氏名" binding="holStaffName" [width]="100"></ea-flex-grid-column>
+      <ea-flex-grid-column header="代表設置場所" binding="holRepOfficeName" [width]="150"></ea-flex-grid-column>
+      <ea-flex-grid-column header="販管/原価" binding="costTypeName" [width]="100"></ea-flex-grid-column>
+      <ea-flex-grid-column header="減価償却プロジェクト" binding="costDepPrjName" [width]="150"></ea-flex-grid-column>
+      <ea-flex-grid-column header="経費負担部課" binding="costSectionDistName" [width]="200"></ea-flex-grid-column>
+      <ea-flex-grid-column header="資産計上部課" binding="costSectionCode" [width]="200"></ea-flex-grid-column>
+      <ea-flex-grid-column header="申請者記入" binding="descriptionAp" [width]="200"></ea-flex-grid-column>
+      <ea-flex-grid-column header="受付担当者・管理者記入" binding="descriptionAdmin" [wordWrap]="true"
+                           [width]="200"></ea-flex-grid-column>
+      <ea-flex-grid-column header="ﾗｲｾﾝｽ &#013;登録数" binding="licenseRegistCount" [wordWrap]="true"
+                           [width]="70">
+        <ng-template wjFlexGridCellTemplate cellType="ColumnHeader" let-cell="cell">
+          <span>ﾗｲｾﾝｽ</span><br>
+          <span>登録数</span>
+        </ng-template>
+      </ea-flex-grid-column>
+      <ea-flex-grid-column header="前Ver.からの変更項目" binding="verUpColumnName" [width]="200"></ea-flex-grid-column>
+      <ea-flex-grid-column header="e申請書類ID" binding="eappId" [width]="100">
+        <ng-template wjFlexGridCellTemplate [cellType]="'Cell'" let-cell="cell">
+          <span>{{cell.item?.eappId}}</span>
+        </ng-template>
+      </ea-flex-grid-column>
+    </ea-flex-grid>
+  </div>
+</div>

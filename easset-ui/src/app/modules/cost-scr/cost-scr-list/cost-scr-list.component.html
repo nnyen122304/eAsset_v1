@@ -1,0 +1,264 @@
+<div class="page-container page-cost-scr-list">
+  <div class="section-cost-scr-form">
+    <form class="form-search" [formGroup]="searchForm">
+      <div class="block-frame-border">
+        <h2 class="frame-title">検索条件</h2>
+        <div class="container-fluid container-fluid-content">
+          <div class="row row-content">
+            <div class="col-5">
+              <div class="row">
+                <div class="col-label pr-1 text-right">会計年月:</div>
+                <div class="col p-0">
+                  <div class="form-group bt">
+                    <ea-input-mask #fieldPeriod class="wm-combo wm-tab-element wm-100 bg-gray" formControlName="period"
+                                   mask="0000-00" [isReadOnly]="true"></ea-input-mask>
+                    <ng-container *ngIf="itemLastSuccessCreateEndDate">
+                      <span class="text-inline">(集計日:<ng-container *ngIf="itemLastSuccessCreateEndDate">
+                          {{
+                        itemLastSuccessCreateEndDate
+                          | date: 'yyyy/MM/dd HH:mm'
+                        }}</ng-container>)</span>
+                    </ng-container>
+                  </div>
+                </div>
+              </div>
+              <div class="row mb-scrutiny">
+                <div class="col-label pr-1 text-right">精査担当部署:</div>
+                <div class="col p-0 scrutiny--select">
+                  <div class="form-group bt wm-combo wm-250">
+                    <app-section-selection [sectionForm]="sectionForm"
+                                           [sectionCodeControlName]="'sectionCode'"
+                                           [sectionNameControlName]="'sectionName'"
+                                           [sectionYearControlName]="'sectionYear'">
+                    </app-section-selection>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-label text-right"></div>
+                <div class="col p-0">
+                  <div class="form-check form-check-inline mb-0">
+                    <input type="checkbox" class="form-check-input wm-checkbox" [value]="true"
+                           id="item-list-hierarchy-flag" formControlName="includeSectionHierarchyFlag"/>
+                    <label class="form-check-label" for="item-list-hierarchy-flag">指定部署の配下部署も検索に含める。</label>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-label text-right">経費負担部課コード:</div>
+                <div class="col p-0">
+                  <div class="d-flex content--cost-input">
+                    <div class="d-flex">
+                      <label class="col-label-sub">当年度</label>
+                      <app-cost-section-selection [sectionForm]="costSectionForm" [searchDateFrom]="costSectionCodeLov"
+                                                  [searchDateTo]="costSectionCodeLov"
+                                                  [staffCode]="sessionInfo.loginUser.companyCode"
+                                                  [costSectionCodeControlName]="'costSectionCode'"
+                                                  [costSectionNameControlName]="'costSectionName'">
+                      </app-cost-section-selection>
+                    </div>
+                    <div class="d-flex">
+                      <label class="col-label-sub">前年度</label>
+                      <app-cost-section-selection [sectionForm]="costSectionForm"
+                                                  [searchDateFrom]="costSectionCodeOldLov"
+                                                  [searchDateTo]="costSectionCodeOldLov"
+                                                  [staffCode]="sessionInfo.loginUser.companyCode"
+                                                  [costSectionCodeControlName]="'costSectionCodeOld'"
+                                                  [costSectionNameControlName]="'costSectionNameOld'"></app-cost-section-selection>
+                    </div>
+
+                  </div>
+
+                </div>
+              </div>
+            </div>
+            <div class="col-5">
+              <div class="row">
+                <div class="col-label pr-1 text-right">精査種別:</div>
+                <div class="col p-0 m-scrutiny">
+                  <div class="form-check form-check-inline mb-2" *ngFor="let item of costScrType; let i = index"
+                       formArrayName="scrType" [ngClass]="{ 'd-block': i === 6 }">
+                    <input type="checkbox" class="form-check-input wm-checkbox" [id]="'item-list-scr-Type-' + i"
+                           [formControlName]="i"/>
+                    <label class="form-check-label" [for]="'item-list-scr-Type-' + i">{{ item }}</label>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-label pr-1 text-right">精査状況:</div>
+                <div class="col p-0">
+                  <div class="form-check form-check-inline mb-2"
+                       *ngFor="let item of costScrImplementation; let i = index" formArrayName="scrImplementation"
+                       [ngClass]="{ 'd-block': i === 6 }">
+                    <input type="checkbox" class="form-check-input wm-checkbox"
+                           [id]="'item-list-scr-implementation-' + i" [formControlName]="i"/>
+                    <label class="form-check-label" [for]="'item-list-scr-implementation-' + i">{{ item }}</label>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-label pr-1 text-right">移動申請状況:</div>
+                <div class="col p-0">
+                  <div class="form-check form-check-inline mb-2"
+                       *ngFor="let item of costScrApChangeStatus; let i = index" formArrayName="apChangeStatus"
+                       [ngClass]="{ 'd-block': i === 6 }">
+                    <input type="checkbox" class="form-check-input wm-checkbox"
+                           [id]="'item-list-scr-ap-change-status-' + i" [formControlName]="i"/>
+                    <label class="form-check-label" [for]="'item-list-scr-ap-change-status-' + i">{{ item }}</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-2 col-form-buttons d-flex align-items-center content-input">
+              <button type="button" class="wm-btn" (click)="search()">
+                検索
+              </button>
+              <button type="button" class="wm-btn" (click)="download()">
+                ダウンロード
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <div class="section-cost-scr-list">
+
+    <div class="grid-common-wrap" id="grid-cont">
+          <!--  -->
+    <div class="wm-buttons section-cost-scr-buttons">
+      <div class="buttons-left">
+        <ng-container *ngIf="isShow && costScrList">
+          <button type="button" class="wm-btn" (click)="report()">
+            <span class="ico"><img src="assets/images/button/save.png" alt="精査完了"/></span><span class="txt">精査完了</span>
+          </button>
+          <button type="button" class="wm-btn" (click)="cancel()">
+            <span class="ico"><img src="assets/images/button/save.png" alt="精査完了取消"/></span><span
+            class="txt">精査完了取消</span>
+          </button>
+
+          <!-- 全社権限ときのみ表示 -->
+          <button *ngIf="
+              sessionInfo.currentAccessLevel === 'B'
+                ? false
+                : sessionInfo.currentAccessLevel === 'C'
+                ? false
+                : true
+            " type="button" class="wm-btn" (click)="sendReminderMail()">
+            <span class="ico"><img src="assets/images/button/save.png" alt="督促メール送信"/></span><span
+            class="txt">督促メール送信</span>
+          </button>
+
+          <button type="button" class="wm-btn" (click)="lineDownload()">
+            <span class="txt">明細ダウンロード</span>
+          </button>
+          <!-- 全社権限ときのみ表示 -->
+          <button type="button" class="wm-btn" (click)="editSection()">
+            <span class="txt">精査担当部署編集</span>
+          </button>
+          <button type="button" class="wm-btn" (click)="requestSend()">
+            <span class="txt">依頼メール送信</span>
+          </button>
+        </ng-container>
+        <!--  -->
+        <ng-container *ngIf="sectionEditFlag">
+          <button type="button" class="wm-btn" (click)="inputSection($event.currentTarget)">
+            <span class="txt">入力</span>
+          </button>
+          <button type="button" class="wm-btn" (click)="updateSection()">
+            <span class="ico"><img src="assets/images/button/save.png" alt="精査完了取消"/></span><span class="txt">更新</span>
+          </button>
+          <button type="button" class="wm-btn" (click)="endEdit()">
+            <span class="txt">編集終了</span>
+          </button>
+
+          <label>
+            ※
+            変更する行をチェックして入力ボタンにて部署を指定後、更新ボタンを押してください。</label>
+        </ng-container>
+      </div>
+
+      <ng-container *ngIf="costScrList.length">
+        <div class="buttons-right">
+          <span>
+            【件数:
+            {{
+            gridCostScrList && gridCostScrList.rows
+              ? (gridCostScrList.rows.length | number)
+              : 0
+            }}
+            件】
+          </span>
+        </div>
+      </ng-container>
+    </div>
+      <div class="wp-grid-cost-scr-list" id="wp-grid-cost-scr-list">
+        <ea-flex-grid #gridCostScrList class="grid-common-list grid-cost-scr-list" [allowSorting]="true"
+                      [isReadOnly]="false" (initialized)="onGridInitialized(gridCostScrList)"
+                      [(itemsSource)]="costScrList">
+          <ea-flex-grid-column header="Sel" binding="sel" [allowDragging]="'None'" [allowMerging]="false"
+                               [isReadOnly]="false" [width]="30">
+          </ea-flex-grid-column>
+          <ea-flex-grid-column header="精査担当部署" binding="scrSectionName" [width]="150"></ea-flex-grid-column>
+          <!--経費負担部課-->
+          <ea-flex-grid-column header="当年度" binding="costSectionName" [width]="200">
+            <ng-template wjFlexGridCellTemplate [cellType]="'Cell'" let-cell="cell">
+              {{ cell.item.costSectionCode }} {{ cell.item.costSectionName }}
+            </ng-template>
+          </ea-flex-grid-column>
+          <ea-flex-grid-column header="前年度" binding="costSectionNameOld" [width]="200">
+            <ng-template wjFlexGridCellTemplate [cellType]="'Cell'" let-cell="cell">
+              {{ cell.item.costSectionCodeOld }}
+              {{ cell.item.costSectionNameOld }}
+            </ng-template>
+          </ea-flex-grid-column>
+
+          <ea-flex-grid-column header="精査種別" binding="scrTypeName" [width]="100"></ea-flex-grid-column>
+          <ea-flex-grid-column header="操作" [width]="100">
+            <ng-template wjFlexGridCellTemplate [cellType]="'Cell'" let-cell="cell">
+              <span class="cell-link">精査実施/確認</span>
+            </ng-template>
+          </ea-flex-grid-column>
+          <ea-flex-grid-column header="精査完了" binding="compFlagName" [width]="50">
+            <ng-template wjFlexGridCellTemplate cellType="ColumnHeader" let-cell="cell">
+              精査<br/>完了
+            </ng-template>
+            <ng-template wjFlexGridCellTemplate [cellType]="'Cell'" let-cell="cell">
+              {{ cell.item.compFlagName }}
+            </ng-template>
+          </ea-flex-grid-column>
+          <!--精査状況(資産件数)-->
+          <ea-flex-grid-column header="未" binding="costScrCountUndecided" [width]="50" [aggregate]="'Sum'"
+                               [format]="'n0'"></ea-flex-grid-column>
+          <ea-flex-grid-column header="OK" binding="costScrCountOK" [width]="50" [aggregate]="'Sum'" [format]="'n0'">
+          </ea-flex-grid-column>
+          <ea-flex-grid-column header="要対応" binding="costScrCountNG" [width]="50" [aggregate]="'Sum'" [format]="'n0'">
+          </ea-flex-grid-column>
+          <ea-flex-grid-column header="計" binding="costScrCountTotal" [width]="50" [aggregate]="'Sum'" [format]="'n0'">
+          </ea-flex-grid-column>
+          <!--移動申請状況：要対応分-->
+          <ea-flex-grid-column header="未" binding="apChangeCountUnApply" [width]="50" [aggregate]="'Sum'"
+                               [format]="'n0'"></ea-flex-grid-column>
+          <ea-flex-grid-column header="申請中" binding="apChangeCountApply" [width]="50" [aggregate]="'Sum'"
+                               [format]="'n0'"></ea-flex-grid-column>
+          <ea-flex-grid-column header="承認済" binding="apChangeCountApprove" [width]="50" [aggregate]="'Sum'"
+                               [format]="'n0'"></ea-flex-grid-column>
+          <ea-flex-grid-column header="計" binding="apChangeCountTotal" [width]="50" [aggregate]="'Sum'" [format]="'n0'">
+          </ea-flex-grid-column>
+          <!--精査完了(取消)処理-->
+          <ea-flex-grid-column header="処理日" binding="compExecDate" [width]="150"></ea-flex-grid-column>
+          <ea-flex-grid-column header="処理者" binding="compExecStaffName" [width]="150">
+            <ng-template wjFlexGridCellTemplate [cellType]="'Cell'" let-cell="cell">
+              {{ cell.item.compExecStaffCode }} {{ cell.item.compExecStaffName }}
+            </ng-template>
+          </ea-flex-grid-column>
+        </ea-flex-grid>
+      </div>
+    </div>
+  </div>
+
+</div>
+<app-confirm-popup #confirmPopup></app-confirm-popup>
+<app-cost-scr-input-section (select)="selectedListInputSection($event)"></app-cost-scr-input-section>

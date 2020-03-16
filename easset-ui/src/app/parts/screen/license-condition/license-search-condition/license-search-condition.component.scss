@@ -1,0 +1,76 @@
+.section-search {
+  overflow-x: hidden;
+  .width-body {
+    margin-left: 20px;
+    width: 520px;
+  }
+  .col-label-search {
+    width: 150px;
+  }
+  .col-label {
+    width: 110px;
+  }
+  .block-frame-border {
+    padding: 5px;
+    margin: 10px 0 0 0;
+  }
+  .col-label-toggle {
+    a {
+      cursor: pointer;
+      color: blue;
+      font-weight: bold;
+      text-decoration: underline;
+      padding: 3px;
+      margin-bottom: 0px;
+    }
+    a:hover {
+      border-radius: 4px;
+      background: #add8e6;
+      color: black !important;
+    }
+  }
+}
+.label-date {
+  margin: 0 5px;
+}
+.button-bottom-container {
+  .button-bottom {
+    position: fixed;
+    bottom: 0px;
+    left: 1px;
+    width: 99.5%;
+    border-top: 1px solid #fff;
+    height: 55px;
+    padding-top: 5px;
+    margin: 1px 0px 0px 2px;
+    z-index: 1000;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+  }
+}
+.wm-120 {
+  width: 120px;
+}
+label.form-check-label {
+  margin-left: 3px;
+}
+
+.e-link {
+  white-space: nowrap;
+  font-weight: bold;
+  text-decoration: underline;
+}
+.text-inline {
+  padding: 0 10px;
+}
+.col-form {
+  display: block;
+  flex-wrap: wrap;
+  width: 250px;
+  padding: 0;
+}
+.label-attribute {
+  width: 40px;
+  text-align: center;
+}

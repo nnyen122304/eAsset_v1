@@ -1,0 +1,48 @@
+<div class="col form-list-selection">
+  <form class="form-staff row row-selection" [formGroup]="softwareForm">
+    <ea-input-mask [ngClass]="selectOnly ? '' : nameClass" class="input-display wm-combo wm-200"
+      formControlName="{{softwareNameControlName}}" [required]="required" [maxLength]="10" [pattern]="'a-zA-Z0-9'"
+      [capitalize]="true" [isReadOnly]="true"></ea-input-mask>
+    <button type="button" class="wm-btn wm-sm btn-icon btn-tooltip" (click)="clear()" [hidden]="selectOnly">
+      <span class="ico"><img src="assets/images/button/clear.gif"></span>
+      <span class="tooltip-text">クリア</span>
+    </button>
+    <button [hidden]="!isShowStatus" type="button" class="wm-btn wm-sm" (click)="open($event.currentTarget)">
+      <span class="ico"><img src="assets/images/button/popup.png"></span>
+    </button>
+    <span class="e-link col-label-toggle" [hidden]="selectOnly">
+        <a class="link" (click)="selectOnly = true">手入力</a>
+    </span>
+  </form>
+</div>
+<ea-popup #apPopup class="popup-common-sel section-selection" [hideTrigger]="'None'" (hidden)="close()">
+  <form class="form-tree-selection" [formGroup]="searchForm">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">ソフトウェアメーカー選択</h5>
+        <button type="button" tabindex="-1" class="close bt-close wj-hide">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="row row-filter">
+          <label class="ml-2 col-label">メーカー名(あいまい)：</label>
+          <ea-input-mask class="wm-combo field-filter-text" formControlName="filterText"></ea-input-mask>
+          <div class="col col-3 col-button">
+            <button type="button" class="wm-btn wm-sm" (click)="init()">検索</button>
+          </div>
+        </div>
+        <div class="col">
+          <div class="grid-section-list" *ngIf="dataList">
+            <ea-flex-grid #gridSelectionList class="grid-common-list grid-parent-list" [itemsSource]="dataList"
+              [allowSorting]="true" (initialized)="onGridInitialized()" (dblclick)="submit()">
+              <ea-flex-grid-column header="メーカー" binding="name" width="*"></ea-flex-grid-column>
+            </ea-flex-grid>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="wm-btn" (click)="submit()">選択</button>
+        <button type="button" class="wm-btn wj-hide">閉じる</button>
+      </div>
+    </div>
+  </form>
+</ea-popup>

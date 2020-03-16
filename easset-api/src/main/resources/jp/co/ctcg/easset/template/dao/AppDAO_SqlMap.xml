@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+
+<!--
+ *===================================================================
+ * ファイル名 : AppDAO_SqlMap.xml
+ * 概要説明   : iBATISライブラリ用SQL文設定ファイル（テンプレート）
+ 				※開発者変更不可
+ * バージョン : 1.0
+ *===================================================================
+ * 修正履歴
+ * 日付       Ver. 担当者       修正内容
+ * －－－－－ －－ －－－－－－ －－－－－－－－－－－－－－－－－－
+ * 2010-01-14 1.0  リヨン       新規
+ *===================================================================
+ -->
+
+<sqlMap namespace="AppDAO" >
+
+  <!--
+    ユーザー情報
+  -->
+  <parameterMap id="userInfoMap" class="java.util.Map">
+    <parameter property="sessionId" jdbcType="VARCHAR" javaType="String" mode="IN"/>
+    <parameter property="result"    jdbcType="VARCHAR" javaType="String" mode="OUT"/>
+    <parameter property="userId"    jdbcType="VARCHAR" javaType="String" mode="OUT"/>
+    <parameter property="userName"  jdbcType="VARCHAR" javaType="String" mode="OUT"/>
+    <parameter property="respId"    jdbcType="VARCHAR" javaType="String" mode="OUT"/>
+    <parameter property="respName"  jdbcType="VARCHAR" javaType="String" mode="OUT"/>
+    <parameter property="applId"    jdbcType="VARCHAR" javaType="String" mode="OUT"/>
+  </parameterMap>
+  <procedure id="selectUserInfo" parameterMap="userInfoMap" >
+    { call APPS.XXSCM050401_PKG.getLoginInfo_p(?,?,?,?,?,?,?) }
+  </procedure>
+
+  <!--
+    擬似ログイン
+  -->
+  <parameterMap id="ebsInitialMap" class="java.util.Map">
+    <parameter property="userId"        jdbcType="VARCHAR" javaType="String" mode="IN"/>
+    <parameter property="respId"        jdbcType="VARCHAR" javaType="String" mode="IN"/>
+    <parameter property="applicationId" jdbcType="VARCHAR" javaType="String" mode="IN"/>
+  </parameterMap>
+  <procedure id="ebsInitial" parameterMap="ebsInitialMap" >
+    { call APPS.XXSCM050401_PKG.appsInitialize(?,?,?) }
+  </procedure>
+
+  <!--
+    EBSホームURL
+  -->
+  <select id="ebsHomeURL" resultClass="java.lang.String">
+    select apps.xxcom_getcom_pkg.xxcom_getprof_f('XXSCM_NEXTMI_HOME') ebsHome
+      from dual
+  </select>
+
+</sqlMap>

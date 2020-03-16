@@ -1,0 +1,129 @@
+<div class="form-os">
+  <div *ngIf="btnAddNetwork">
+    <button type="button" class="wm-btn wm-sm" (click)="addLineNetwork()">
+      行追加
+    </button>
+  </div>
+  <div [ngClass]="btnAddNetwork ? 'collapse' : 'collapse show'">
+    <div class="block-frame-border">
+      <h2 class="frame-title horizontal-tb">明細入力</h2>
+      <div class="col p-0">
+        <form [formGroup]="lineNetworkForm">
+          <div class="col p-0">
+            <div class="form-group">
+              <label class="wm-combo col-4 pr-1">No:</label>
+              <wj-input-number class="input-display col-2 wm-combo bg-gray" id="lineSeq"
+                               formControlName="lineSeq"
+                               name="lineSeq"></wj-input-number>
+            </div>
+            <div class="form-group">
+              <label class="wm-combo col-4 pr-1">MACアドレス:</label>
+              <div class="d-inline-block">
+                <ea-input-number id="netMacAddress1" maxlength="2" (keyup)="changeNetworkIpt($event, 'netMacAddress1')"
+                                 formControlName="netMacAddress1" class="wm-combo wm-25">
+                </ea-input-number>
+                <label>－</label>
+                <ea-input-number id="netMacAddress2" maxlength="2" (keyup)="changeNetworkIpt($event,'netMacAddress2')"
+                                 formControlName="netMacAddress2" class="wm-combo wm-25">
+                </ea-input-number>
+                <label>－</label>
+                <ea-input-number id="netMacAddress3" maxlength="2" (keyup)="changeNetworkIpt($event, 'netMacAddress3')"
+                                 formControlName="netMacAddress3" class="wm-combo wm-25">
+                </ea-input-number>
+                <label>－</label>
+                <ea-input-number id="netMacAddress4" maxlength="2" (keyup)="changeNetworkIpt($event, 'netMacAddress4')"
+                                 formControlName="netMacAddress4" class="wm-combo wm-25">
+                </ea-input-number>
+                <label>－</label>
+                <ea-input-number id="netMacAddress5" maxlength="2" (keyup)="changeNetworkIpt($event,'netMacAddress5')"
+                                 formControlName="netMacAddress5" class="wm-combo wm-25">
+                </ea-input-number>
+                <label>－</label>
+                <ea-input-number id="netMacAddress6" maxlength="2" (keyup)="changeNetworkIpt($event, 'netMacAddress6')"
+                                 formControlName="netMacAddress6" class="wm-combo wm-25">
+                </ea-input-number>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="wm-combo col-4 pr-1">IPアドレス:</label>
+              <div class="d-inline-block">
+                <ea-input-number id="netIpAddress1" maxlength="3" formControlName="netIpAddress1" class="wm-combo wm-35"
+                                 (keyup)="changeNetworkIpt($event,'netIpAddress1')">
+                </ea-input-number>
+                <label>.</label>
+                <ea-input-number id="netIpAddress2" maxlength="3" formControlName="netIpAddress2" class="wm-combo wm-35"
+                                 (keyup)="changeNetworkIpt($event, 'netIpAddress2')">
+                </ea-input-number>
+                <label>.</label>
+                <ea-input-number id="netIpAddress3" maxlength="3" formControlName="netIpAddress3" class="wm-combo wm-35"
+                                 (keyup)="changeNetworkIpt($event, 'netIpAddress3')">
+                </ea-input-number>
+                <label>.</label>
+                <ea-input-number id="netIpAddress4" maxlength="3" formControlName="netIpAddress4" class="wm-combo wm-35"
+                                 (keyup)="changeNetworkIpt($event, 'netIpAddress4')">
+                </ea-input-number>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="wm-combo col-3 pr-1">コメント:</label>
+              <wj-input-mask class="input-display wm-combo wm-100 required" id="netDescription"
+                             formControlName="netDescription"
+                             name="netDescription"></wj-input-mask>
+            </div>
+          </div>
+        </form>
+        <hr class="e-line">
+        <div class="col p-0">
+          <div class="form-group e-group-btn">
+            <button type="button" class="wm-btn wm-sm" (click)="saveLineNetwork()">
+              OK
+            </button>
+            <button type="button" class="wm-btn wm-sm" (click)="goToNextLineNetwork()">
+              次行入力
+            </button>
+            <button type="button" class="wm-btn wm-sm" (click)="cancelLineNetwork()">
+              キャンセル
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="grid-common-wrap u-top">
+  <div class="grid-common-count">
+                    <span>【件数：{{gridLineNetwork && gridLineNetwork.rows ? (gridLineNetwork.rows.length | number) : 0}}
+                      件】</span>
+  </div>
+  <div class="wm-grid-list" id="wp-grid-data-list">
+    <ea-flex-grid #gridLineNetwork class="grid-common-list grid-list"
+                  (initialized)="initGridLineNetwork()"
+                  [allowAddNew]="true"
+                  [itemsSource]="lineNetworkList">
+      <ea-flex-grid-column [width]="25" header="">
+        <ng-template wjFlexGridCellTemplate [cellType]="'Cell'" let-cell="cell" let-row="row">
+          <a *ngIf="this.btnAddNetwork" name="btnDel" id="btnDel" class="btn-del"></a>
+        </ng-template>
+      </ea-flex-grid-column>
+      <ea-flex-grid-column [width]="75" binding="lineSeq" header="No">
+      </ea-flex-grid-column>
+      <ea-flex-grid-column binding="netMacAddress1" [width]="200" header="MACアドレス">
+        <ng-template wjFlexGridCellTemplate [cellType]="'Cell'" let-cell="cell" let-row="row">
+          <span *ngIf="cell.item.netMacAddress1 != ''">
+                      {{cell.item?.netMacAddress1 + '－' + cell.item?.netMacAddress2 + '－' + cell.item?.netMacAddress3 + '－'
+          + cell.item?.netMacAddress4 + '－' + cell.item?.netMacAddress5 + '－' + cell.item?.netMacAddress6}}
+          </span>
+        </ng-template>
+      </ea-flex-grid-column>
+      <ea-flex-grid-column binding="netIpAddress1" [width]="200" header="MACアドレス">
+        <ng-template wjFlexGridCellTemplate [cellType]="'Cell'" let-cell="cell" let-row="row">
+           <span *ngIf="cell.item.netIpAddress1 != ''">
+                      {{cell.item?.netIpAddress1 + '.' + cell.item?.netIpAddress2 + '.'
+           + cell.item?.netIpAddress3 + '.' + cell.item?.netIpAddress4 }}
+          </span>
+        </ng-template>
+      </ea-flex-grid-column>
+      <ea-flex-grid-column binding="netDescription" [width]="300" header="コメント"></ea-flex-grid-column>
+    </ea-flex-grid>
+  </div>
+</div>

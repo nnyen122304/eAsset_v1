@@ -1,0 +1,33 @@
+<ea-popup #fldDownloadOptionPopup class="popup-common-sel download-option" [hideTrigger]="'None'" (hidden)="close()">
+  <form class="form-print-popup" [formGroup]="fldDownloadForm">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">ダウンロードオプション</h5>
+        <button type="button" tabindex="-1" class="close bt-close wj-hide">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <label class="opt-label">出力単位：</label>
+          <div class="col">
+            <div class="row">
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" id="down01" formControlName="downloadOption" [value]="1">
+                <label class="form-check-label" for="down01">資産単位</label>
+              </div>
+            </div>
+            <div class="row pt-3">
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" id="down02" formControlName="downloadOption" [value]="2">
+                <label class="form-check-label" for="down02">取得申請書単位(一括更新用)</label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer fld-download-modal-footer">
+        <button type="button" class="wm-btn" (click)="submit()">OK</button>
+        <button type="button" class="wm-btn wj-hide">キャンセル</button>
+      </div>
+    </div>
+  </form>
+</ea-popup>

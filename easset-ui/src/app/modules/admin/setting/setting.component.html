@@ -1,0 +1,158 @@
+<div class="page-container page-admin-setting" [ngClass]="{'is-role-user': selectedRole === 'user', 'is-privilege-show': !isAddPrivilegesButtonShown}">
+  <div class="section-role">
+    <div class="sec-message">管理者を設定する権限を選択してください。</div>
+    <form class="row" [formGroup]="privilegeForm">
+      <div class="col col-inputs col-inputs-company">
+        <span class="label">会社：</span>
+        <ea-input-mask class="wm-combo bg-gray input-company" formControlName="company" [isReadOnly]="true"></ea-input-mask>
+      </div>
+      <div class="col col-inputs col-inputs-privilege">
+        <span>管理者権限：</span>
+        <ea-input-mask class="wm-combo bg-yellow input-privilege" formControlName="privilegeName" [isReadOnly]="true" [required]="true"></ea-input-mask>
+      </div>
+      <div class="col col-buttons">
+        <button type="button" class="wm-btn wm-sm" (click)="selectPrivilegePopup.open($event.currentTarget)"><span class="ico"><img src="assets/images/button/popup.png"></span></button>
+      </div>
+        <app-privilege-selection [sqlName]="'selectAdmin_LOV'" [paramMap]="{companyCode: sessionInfo.loginCompanyCode, staffCode: sessionInfo.loginUser.staffCode, accessLevel: sessionInfo.currentAccessLevel}" (select)="onPrivilegeSelected($event)" ></app-privilege-selection>
+    </form>
+  </div>
+
+  <div [hidden]="selectedRole !== 'admin'">
+
+    <div class="section-setting-search">
+      <div class="block-frame-border">
+        <h2 class="frame-title">検索</h2>
+        <form class="row">
+          <div class="col-8 col-inputs">
+            <div class="row">
+              <div class="col col-label">
+                <span>権限者：</span>
+              </div>
+              <div class="col col-form">
+                <app-staff-selection (select)="selectStaff($event)" [staffForm]="staffForm" [staffCodeControlName]="'staffCode'" [staffNameControlName]="'staffName'" [usableDataOnly]="true"></app-staff-selection>
+              </div>
+            </div>
+          </div>
+          <div class="col-4 col-buttons has-border d-flex align-items-center">
+            <button type="button" class="wm-btn" (click)="search()">検索</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+  </div>
+
+  <div [hidden]="selectedRole !== 'user'">
+
+    <div class="section-setting-search">
+      <div class="block-frame-border">
+        <h2 class="frame-title">検索</h2>
+        <form class="row">
+          <div class="col-8 col-inputs">
+            <div class="row">
+              <div class="col col-label">
+                <span>権限部署：</span>
+              </div>
+              <div class="col col-form">
+                <app-section-selection (select)="selectSection($event)" [sectionForm]="sectionForm" [sectionCodeControlName]="'sectionCode'" [sectionNameControlName]="'sectionName'" [sectionYearControlName]="'sectionYear'"></app-section-selection>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col col-label">
+                <span>権限者：</span>
+              </div>
+              <div class="col col-form">
+                <app-staff-selection (select)="selectStaff($event)" [staffForm]="staffForm" [staffCodeControlName]="'staffCode'" [staffNameControlName]="'staffName'" [usableDataOnly]="true" [companyOnly]="true"></app-staff-selection>
+              </div>
+            </div>
+          </div>
+          <div class="col-4 col-buttons has-border d-flex align-items-center">
+            <button type="button" class="wm-btn" (click)="search()">検索</button>
+            <button type="button" class="wm-btn" (click)="getCSV()">ダウンロード</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="section-buttons" *ngIf="isAddPrivilegesButtonShown && selectedRole">
+    <button type="button" class="wm-btn" (click)="showAddPrivileges()">権限追加</button>
+  </div>
+
+  <div class="section-add-privileges">
+    <app-add-privileges [role]="selectedRole" [staffForm]="privilegeForm" [staffCodeControlName]="'staffCode'" [staffNameControlName]="'staffName'" (add)="onPrivilegeAdded($event['data'])" (cancel)="removeAddPrivileges($event)"></app-add-privileges>
+  </div>
+  <div class="section-search-list">
+
+    <div *ngIf="selectedRole === 'admin'">
+      <div class="grid-common-wrap admin">
+        <div class="grid-common-count">【件数：{{gridAdminList && gridAdminList.rows ? (gridAdminList.rows.length | number) : 0}} 件】</div>
+        <div class="wp-grid-setting" id="wp-grid-setting">
+          <ea-flex-grid
+            #gridAdminList
+            class="grid-common-list grid-setting"
+            [itemsSource]="adminList"
+          >
+            <ea-flex-grid-column [allowMerging]=true [width]="30">
+              <ng-template wjFlexGridCellTemplate [cellType]="'Cell'" let-cell="cell">
+                <a class="button-delete" (click)="removePrivileges()"></a>
+              </ng-template>
+            </ea-flex-grid-column>
+            <ea-flex-grid-column header="権限者" binding="staffCode" [allowMerging]=true [width]="235">
+              <ng-template wjFlexGridCellTemplate [cellType]="'Cell'" let-cell="cell">
+                {{cell.item.staffCode}}　{{cell.item.staffName}}
+              </ng-template>
+            </ea-flex-grid-column>
+            <ea-flex-grid-column header="設定日" binding="createDate" [allowMerging]=true [width]="100"></ea-flex-grid-column>
+            <ea-flex-grid-column header="設定者" binding="createStaffCode" [allowMerging]=true [width]="235">
+              <ng-template wjFlexGridCellTemplate [cellType]="'Cell'" let-cell="cell">
+                {{cell.item.createStaffCode}}　{{cell.item.createStaffName}}
+              </ng-template>
+            </ea-flex-grid-column>
+          </ea-flex-grid>
+        </div>
+      </div>
+
+    </div>
+
+    <div *ngIf="selectedRole === 'user'">
+
+      <div class="grid-common-wrap">
+        <div class="grid-common-count">【件数：{{gridUserList && gridUserList.rows ? (gridUserList.rows.length | number) : 0}} 件】</div>
+          <div class="wp-grid-setting" id="wp-grid-setting">
+            <ea-flex-grid
+              #gridUserList
+              class="grid-common-list grid-setting"
+              [itemsSource]="userList"
+            >
+              <ea-flex-grid-column [allowMerging]=true [width]="30">
+                <ng-template wjFlexGridCellTemplate [cellType]="'Cell'" let-cell="cell">
+                  <a class="button-delete" (click)="removePrivileges()"></a>
+                </ng-template>
+              </ea-flex-grid-column>
+              <ea-flex-grid-column header="権限部署" binding="sectionName" [allowMerging]=true [width]="235"></ea-flex-grid-column>
+              <ea-flex-grid-column header="権限者" binding="staffCode" [allowMerging]=true [width]="235">
+                <ng-template wjFlexGridCellTemplate [cellType]="'Cell'" let-cell="cell">
+                  {{cell.item.staffCode}}　{{cell.item.staffName}}
+                </ng-template>
+              </ea-flex-grid-column>
+              <ea-flex-grid-column header="公開" binding="publicFlagName" [allowMerging]=true [width]="100"></ea-flex-grid-column>
+              <ea-flex-grid-column header="公開コメント" binding="publicComment" [allowMerging]=true [width]="100"></ea-flex-grid-column>
+              <ea-flex-grid-column header="設定日" binding="createDate" [allowMerging]=true [width]="100"></ea-flex-grid-column>
+              <ea-flex-grid-column header="設定者" binding="createStaffCode" [allowMerging]=true [width]="235">
+                <ng-template wjFlexGridCellTemplate [cellType]="'Cell'" let-cell="cell">
+                  {{cell.item.createStaffCode}}　{{cell.item.createStaffName}}
+                </ng-template>
+              </ea-flex-grid-column>
+            </ea-flex-grid>
+          </div>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+<app-confirm-popup #confirmPopupDelete (confirm)="removePrivileges(true)"></app-confirm-popup>

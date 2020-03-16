@@ -1,0 +1,18 @@
+<div class="ap-get-tan-search">
+  <header class="header">
+    <label>コピー元の申請書を検索してください。</label>
+  </header>
+  <div class="body">
+    <app-ap-get-tan-search-condition></app-ap-get-tan-search-condition>
+  </div>
+  <footer class="footer">
+    <div class="button-bottom">
+      <button type="button" class="wm-btn wm-tab-element ml-3" (click)="search()">検索</button>
+      <button type="button" class="wm-btn wm-tab-element ml-3" (click)="popupDownload.open($event.currentTarget)"
+        [hidden]="currentMenuId === MENU_ID_AP_GET_CREATE_COPY">ダウンロード
+      </button>
+      <button type="button" class="wm-btn wm-tab-element ml-3" (click)="resetSearch()">クリア</button>
+    </div>
+  </footer>
+</div>
+<app-download-option (select)="downloadCSV($event)" [optText2]="'明細単位'"></app-download-option>

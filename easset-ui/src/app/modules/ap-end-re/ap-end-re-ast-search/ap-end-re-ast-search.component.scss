@@ -1,0 +1,22 @@
+.ap-end-re-ast-search-container {
+  height: calc(100vh - 120px);
+  .ap-end-re-ast-search-header {
+    label.ap-end-re-ast-search-label {
+      color: #0000ff;
+    }
+  }
+  .ap-end-re-ast-search-main {
+    width: 100%;
+    height: calc(100vh - 140px);
+    overflow: auto;
+  }
+}
+
+.ap-end-re-ast-search-footer-line {
+  background-color: white;
+  width: 100%;
+  margin-bottom: 3px;
+}
+.ap-end-re-ast-search-footer {
+  width: 100%;
+}

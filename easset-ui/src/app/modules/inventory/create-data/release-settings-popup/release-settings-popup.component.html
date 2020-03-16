@@ -1,0 +1,219 @@
+<ea-popup class="popup-release-settings" #releaseSettingsPopup [hideTrigger]="'None'" (hidden)="close()">
+  <form class="form-release-setting" [formGroup]="updateForm">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">棚卸データ公開設定</h5>
+        <button type="button" tabindex="-1" class="close bt-close wj-hide">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="modal-date">
+          会計年月：
+          <ea-input-mask class="wm-combo bg-gray input-date" formControlName="periodFormated" tabIndex="-1" readonly></ea-input-mask>
+        </div>
+        <div class="table-wrapper">
+          <table class="table table-bordered table-release-setting">
+            <thead>
+              <tr>
+                <th class="align-middle" scope="col" rowspan="2" width="140">資産区分</th>
+                <th class="align-middle" scope="col" rowspan="2" width="120">公開設定</th>
+                <th class="align-middle" scope="col" rowspan="2" width="80">依頼メール<br>送信設定</th>
+                <th class="align-middle" scope="col" colspan="3" width="270">依頼メール送信状況</th>
+              </tr>
+              <tr>
+                <th class="align-middle" scope="col" width="70">ステータス</th>
+                <th class="align-middle" scope="col" width="100">送信開始日</th>
+                <th class="align-middle" scope="col" width="100">送信終了日</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>有形固定資産</td>
+                <td>
+                  <ng-container *ngIf="updateForm.controls.fldTanPublicTypeName.value !== 'データ無し'">
+                    <div class="form-check form-check-inline">
+                      <input class="form-check-input" type="radio" id="fe11" formControlName="fldTanPublicType" [value]="'1'">
+                      <label class="form-check-label" for="fe11">非公開</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                      <input class="form-check-input" type="radio" id="fe12" formControlName="fldTanPublicType" [value]="'2'">
+                      <label class="form-check-label" for="fe12">公開</label>
+                    </div>
+                  </ng-container>
+                  <ng-container *ngIf="updateForm.controls.fldTanPublicTypeName.value === 'データ無し'">
+                    <div class="form-check form-check-inline">
+                      <input class="form-check-input" type="radio" id="fe13" formControlName="fldTanPublicType" [value]="'3'" [attr.disabled]="true">
+                      <label class="form-check-label" for="fe13">データ無し</label>
+                    </div>
+                  </ng-container>
+                </td>
+                <td>
+                  <div class="form-check form-check-inline" [hidden]="updateForm.controls.fldTanPublicType.value !== '2'">
+                    <input class="form-check-input wm-checkbox" type="checkbox" id="fe14" formControlName="fldTanMail" [value]="true">
+                    <label class="form-check-label" for="fe14">送信する</label>
+                  </div>
+                </td>
+                <td>{{updateForm.controls.fldTanSendStatusName.value}}</td>
+                <td>{{updateForm.controls.fldTanSendStartDate.value | date:'yyyy/MM/dd HH:mm'}}</td>
+                <td>{{updateForm.controls.fldTanSendEndDate.value | date:'yyyy/MM/dd HH:mm'}}</td>
+              </tr>
+              <tr>
+                <td>資産除去費用</td>
+                <td>
+                  <ng-container *ngIf="updateForm.controls.fldRoPublicTypeName.value !== 'データ無し'">
+                    <div class="form-check form-check-inline">
+                      <input class="form-check-input" type="radio" id="fe21" formControlName="fldRoPublicType" [value]="'1'">
+                      <label class="form-check-label" for="fe21">非公開</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                      <input class="form-check-input" type="radio" id="fe22" formControlName="fldRoPublicType" [value]="'2'">
+                      <label class="form-check-label" for="fe22">公開</label>
+                    </div>
+                  </ng-container>
+                  <ng-container *ngIf="updateForm.controls.fldRoPublicTypeName.value === 'データ無し'">
+                    <div class="form-check form-check-inline">
+                      <input class="form-check-input" type="radio" id="fe23" formControlName="fldRoPublicType" [value]="'3'" [attr.disabled]="true">
+                      <label class="form-check-label" for="fe23">データ無し</label>
+                    </div>
+                  </ng-container>
+                </td>
+                <td>
+                  <div class="form-check form-check-inline" [hidden]="updateForm.controls.fldRoPublicType.value !== '2'">
+                    <input class="form-check-input wm-checkbox" type="checkbox" id="fe24" formControlName="fldRoMail" [value]="true">
+                    <label class="form-check-label" for="fe24">送信する</label>
+                  </div>
+                </td>
+                <td>{{updateForm.controls.fldRoSendStatusName.value}}</td>
+                <td>{{updateForm.controls.fldRoSendStartDate.value | date:'yyyy/MM/dd HH:mm'}}</td>
+                <td>{{updateForm.controls.fldRoSendEndDate.value | date:'yyyy/MM/dd HH:mm'}}</td>
+              </tr>
+              <tr>
+                <td>無形固定資産</td>
+                <td>
+                  <ng-container *ngIf="updateForm.controls.fldIntPublicTypeName.value !== 'データ無し'">
+                    <div class="form-check form-check-inline">
+                      <input class="form-check-input" type="radio" id="fe31" formControlName="fldIntPublicType" [value]="'1'">
+                      <label class="form-check-label" for="fe31">非公開</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                      <input class="form-check-input" type="radio" id="fe32" formControlName="fldIntPublicType" [value]="'2'">
+                      <label class="form-check-label" for="fe32">公開</label>
+                    </div>
+                  </ng-container>
+                  <ng-container *ngIf="updateForm.controls.fldIntPublicTypeName.value === 'データ無し'">
+                    <div class="form-check form-check-inline">
+                      <input class="form-check-input" type="radio" id="fe33" formControlName="fldIntPublicType" [value]="'3'" [attr.disabled]="true">
+                      <label class="form-check-label" for="fe33">データ無し</label>
+                    </div>
+                  </ng-container>
+                </td>
+                <td>
+                  <div class="form-check form-check-inline" [hidden]="updateForm.controls.fldIntPublicType.value !== '2'">
+                    <input class="form-check-input wm-checkbox" type="checkbox" id="fe34" formControlName="fldIntMail" [value]="true">
+                    <label class="form-check-label" for="fe34">送信する</label>
+                  </div>
+                </td>
+                <td>{{updateForm.controls.fldIntSendStatusName.value}}</td>
+                <td>{{updateForm.controls.fldIntSendStartDate.value | date:'yyyy/MM/dd HH:mm'}}</td>
+                <td>{{updateForm.controls.fldIntSendEndDate.value | date:'yyyy/MM/dd HH:mm'}}</td>
+              </tr>
+              <tr>
+                <td>リース</td>
+                <td>
+                  <ng-container *ngIf="updateForm.controls.lePublicTypeName.value !== 'データ無し'">
+                    <div class="form-check form-check-inline">
+                      <input class="form-check-input" type="radio" id="fe41" formControlName="lePublicType" [value]="'1'">
+                      <label class="form-check-label" for="fe41">非公開</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                      <input class="form-check-input" type="radio" id="fe42" formControlName="lePublicType" [value]="'2'">
+                      <label class="form-check-label" for="fe42">公開</label>
+                    </div>
+                  </ng-container>
+                  <ng-container *ngIf="updateForm.controls.lePublicTypeName.value === 'データ無し'">
+                    <div class="form-check form-check-inline">
+                      <input class="form-check-input" type="radio" id="fe43" formControlName="lePublicType" [value]="'3'" [attr.disabled]="true">
+                      <label class="form-check-label" for="fe43">データ無し</label>
+                    </div>
+                  </ng-container>
+                </td>
+                <td>
+                  <div class="form-check form-check-inline" [hidden]="updateForm.controls.lePublicType.value !== '2'">
+                    <input class="form-check-input wm-checkbox" type="checkbox" id="fe44" formControlName="leMail" [value]="true">
+                    <label class="form-check-label" for="fe44">送信する</label>
+                  </div>
+                </td>
+                <td>{{updateForm.controls.leSendStatusName.value}}</td>
+                <td>{{updateForm.controls.leSendStartDate.value | date:'yyyy/MM/dd HH:mm'}}</td>
+                <td>{{updateForm.controls.leSendEndDate.value | date:'yyyy/MM/dd HH:mm'}}</td>
+              </tr>
+              <tr>
+                <td>レンタル</td>
+                <td>
+                  <ng-container *ngIf="updateForm.controls.rePublicTypeName.value !== 'データ無し'">
+                    <div class="form-check form-check-inline">
+                      <input class="form-check-input" type="radio" id="fe51" formControlName="rePublicType" [value]="'1'">
+                      <label class="form-check-label" for="fe51">非公開</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                      <input class="form-check-input" type="radio" id="fe52" formControlName="rePublicType" [value]="'2'">
+                      <label class="form-check-label" for="fe52">公開</label>
+                    </div>
+                  </ng-container>
+                  <ng-container *ngIf="updateForm.controls.rePublicTypeName.value === 'データ無し'">
+                    <div class="form-check form-check-inline">
+                      <input class="form-check-input" type="radio" id="fe53" formControlName="rePublicType" [value]="'3'" [attr.disabled]="true">
+                      <label class="form-check-label" for="fe53">データ無し</label>
+                    </div>
+                  </ng-container>
+                </td>
+                <td>
+                  <div class="form-check form-check-inline" [hidden]="updateForm.controls.rePublicType.value !== '2'">
+                    <input class="form-check-input wm-checkbox" type="checkbox" id="fe54" formControlName="reMail" [value]="true">
+                    <label class="form-check-label" for="fe54">送信する</label>
+                  </div>
+                </td>
+                <td>{{updateForm.controls.reSendStatusName.value}}</td>
+                <td>{{updateForm.controls.reSendStartDate.value | date:'yyyy/MM/dd HH:mm'}}</td>
+                <td>{{updateForm.controls.reSendEndDate.value | date:'yyyy/MM/dd HH:mm'}}</td>
+              </tr>
+              <tr>
+                <td>備品等</td>
+                <td>
+                  <ng-container *ngIf="updateForm.controls.equipPublicTypeName.value !== 'データ無し'">
+                    <div class="form-check form-check-inline">
+                      <input class="form-check-input" type="radio" id="fe61" formControlName="equipPublicType" [value]="'1'">
+                      <label class="form-check-label" for="fe61">非公開</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                      <input class="form-check-input" type="radio" id="fe62" formControlName="equipPublicType" [value]="'2'">
+                      <label class="form-check-label" for="fe62">公開</label>
+                    </div>
+                  </ng-container>
+                  <ng-container *ngIf="updateForm.controls.equipPublicTypeName.value === 'データ無し'">
+                    <div class="form-check form-check-inline">
+                      <input class="form-check-input" type="radio" id="fe63" formControlName="equipPublicType" [value]="'3'" [attr.disabled]="true">
+                      <label class="form-check-label" for="fe63">データ無し</label>
+                    </div>
+                  </ng-container>
+                </td>
+                <td>
+                  <div class="form-check form-check-inline" [hidden]="updateForm.controls.equipPublicType.value !== '2'">
+                    <input class="form-check-input wm-checkbox" type="checkbox" id="fe64" formControlName="equipMail" [value]="true">
+                    <label class="form-check-label" for="fe64">送信する</label>
+                  </div>
+                </td>
+                <td>{{updateForm.controls.equipSendStatusName.value}}</td>
+                <td>{{updateForm.controls.equipSendStartDate.value | date:'yyyy/MM/dd HH:mm'}}</td>
+                <td>{{updateForm.controls.equipSendEndDate.value | date:'yyyy/MM/dd HH:mm'}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="wm-btn" (click)="sendChanges()"><span class="ico"><img src="assets/images/button/save.png" alt="実行"></span><span class="txt">実行</span></button>
+        <button type="button" class="wm-btn wj-hide">キャンセル</button>
+      </div>
+    </div>
+  </form>
+</ea-popup>

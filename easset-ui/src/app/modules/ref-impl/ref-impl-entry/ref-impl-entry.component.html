@@ -1,0 +1,68 @@
+<div [fxLayout]="'column'">
+  <div [fxLayout]="'column'">
+    <form name="entryForm">
+      <fieldset>
+        <legend>項目グループ1</legend>
+        <div [fxLayout]="'row'">
+          <div  class="form-group">
+            <label for="applicationId">取得申請書番号：</label>
+            <ea-input-mask id="applicationId" name="applicationId" [(ngModel)]="apGetTan.applicationId" [isReadOnly]="true"></ea-input-mask>
+          </div>
+          <div class="form-group">
+            <label for="apDateFrom">申請日：</label>
+            <wj-input-date id="apDateFrom" name="apDateFrom" [(ngModel)]="apGetTan.apDate" [isRequired]="false"></wj-input-date>
+          </div>
+        </div>
+      </fieldset>
+      <fieldset>
+        <legend>ファイルアップロード実装</legend>
+        <div [fxLayout]="'row'">
+          <div class="form-group">
+            <label for="testFile">ファイル：</label>
+            <input type="file" #testFile id="testFile" name="testFile" (change)="this.upload(testFile.files)">
+          </div>
+        </div>
+      </fieldset>
+      <fieldset>
+        <legend>項目グループ2</legend>
+        <div [fxLayout]="'column'">
+          <div  class="form-group">
+            <label for="getTotalAmount">取得金額：</label>
+            <ea-input-number id="getTotalAmount" name="getTotalAmount" [(ngModel)]="apGetTan.getTotalAmount"></ea-input-number>
+          </div>
+          <div class="form-group">
+            <label for="apDateFrom">取得理由と効果：</label>
+            <textarea id="getReason" name="getReason" [(ngModel)]="apGetTan.getReason"></textarea>
+          </div>
+          <div class="form-group">
+            <label for="specialApproveFlag">課長/GL承認不要：</label>
+            <input type="checkbox" id="apSkipApproveFlag" name="apSkipApproveFlag" value="" [checked]="apGetTan.apSkipApproveFlag === '1'"  (change)="apGetTan.apSkipApproveFlag = (apGetTan.apSkipApproveFlag === '1' ? '0': '1')">
+          </div>
+          <div class="form-group">
+            <label for="specialApproveFlag">クラウド区分：</label>
+            <input type="radio" id="getItemCloudType1" name="getItemCloudType" value="1" [(ngModel)]="apGetTan.getItemCloudType"><span>クラウド以外</span>
+            <input type="radio" id="getItemCloudType1" name="getItemCloudType" value="2" [(ngModel)]="apGetTan.getItemCloudType"><span>クラウド</span>
+          </div>
+          <div  class="form-group">
+            <label for="apTel">申請者TEL：</label>
+            <ea-input-mask id="apTel" name="apTel" [(ngModel)]="apGetTan.apTel" [mask]="'00-0000-0000'" [promptChar]="' '"></ea-input-mask>
+            <span>※　実際のマスクとは異なる</span>
+          </div>
+        </div>
+      </fieldset>
+      <fieldset>
+        <legend>項目グループ…</legend>
+        <div style="height:700px">
+          …
+        </div>
+      </fieldset>
+      <div class="button-bar-container" *ngIf="this.openAction === 'detail'">
+        <div class="button-bar">
+          <button type="button" (click)="this.save()"><img src="assets/images/button/save.png">保存</button>
+          <button type="button" (click)="this.print()">印刷</button>
+          <button type="button" (click)="this.goBack()">戻る</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

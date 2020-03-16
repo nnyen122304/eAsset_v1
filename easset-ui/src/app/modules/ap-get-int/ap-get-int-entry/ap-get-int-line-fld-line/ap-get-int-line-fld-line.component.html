@@ -1,0 +1,218 @@
+<div class="form-os">
+  <div class="btn-form mt-2" *ngIf="btnAddLineFldLine">
+    <button type="button" class="wm-btn wm-sm pt"  (click)="addFldLine()">
+      行追加
+    </button>
+  </div>
+  <div  [ngClass]="btnAddLineFldLine ? 'collapse' : 'collapse show'">
+    <div class="block-frame-border fld-line-seq">
+      <h2 class="frame-title horizontal-tb">明細入力</h2>
+      <div class="col p-0">
+        <form [formGroup]="FldLineForm">
+          <div class="col p-0 fld-line">
+            <div class="row pl-0">
+              <div class="col-8 pr-0">
+                <div class="form-group">
+                  <label class="wm-combo wm-120">No:</label>
+                  <div class="col-8 pl-0">
+                    <wj-input-number class="input-display wm-30 wm-combo bg-gray" id="lineSeq"
+                      name="lineSeq" formControlName="lineSeq"></wj-input-number>
+                  </div>
+                </div>
+                <div class="form-group">
+                    <label class="wm-combo wm-120">分類:</label>
+                    <app-code-name-selection (select)="astCategoryType($event)" [formExportSearch]="formAssetsEquipment" [modalTitle]="'分類選択'"
+                    [extClass]="'wm-150'" [statusCodeControlName]="'astCategoryType'" [required]="true"
+                    [statusNameControlName]="'astCategoryName'" [headerGrid]="'分類'" [modalLabelTitle]="'分類'"
+                    [sqlName]="'selectCodeName_LOV'" [paramMap]="{categoryCode: 'AP_GET_INT_AST_CATEGORY', whereClause: 'value3 = 1'}" [isShowButtonClear]="false" [hidenSearch]="true">
+                    </app-code-name-selection>
+                </div>
+              </div>
+            </div>
+            <div class="row pl-0">
+              <div class="col-8 pr-0">
+                <div class="form-group">
+                  <label class="wm-combo wm-120"></label>
+                  <label [hidden]="astCategoryTypeLef != ''">※　分類を選択してください</label>
+                  <div class="col-8"  [hidden]="astCategoryTypeLef != '1'">
+                    <div class="row">
+                      <div class="col-5 pr-0">
+                        <input class="form-check-input mr-2" type="checkbox" id="astTermFlag" formControlName="astTermFlag">
+                        <label class="form-check-label" for="astTermFlag">期間ライセンス</label>
+                      </div>
+                      <div class="col-7 pl-0" [hidden]="!this.FldLineForm.controls.astTermFlag.value">
+                        <label class="mr-2">期間(年):</label>
+                        <ea-input-number class="input-display wm-combo wm-50 required" id="apStaffName" name="apStaffName" formControlName="astTermYear">
+                        </ea-input-number>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group" [hidden]="astCategoryTypeLef == '' || astCategoryTypeLef == '2'">
+                  <label class="wm-combo wm-120">名称:</label>
+                  <div class="col-8 pl-0">
+                    <ea-input-mask class="input-display wm-combo wm-350 required" id="astName" name="astName" formControlName="astName">
+                    </ea-input-mask>
+                  </div>
+                </div>
+                <div class="form-group" [hidden]="astCategoryTypeLef == '' || astCategoryTypeLef == '2'">
+                  <div class="col">
+                    <app-name-pur-company-selection [title]="'仕入先:'" [styleTitle]="'wm-combo wm-120'" [namePurCompanyForm]="formAstPurCompanyName" [modalTitle]="'仕入先選択'"
+                    [extClass]="'wm-combo wm-320'" [namePurCompanyCode]="'astPurCompanyCode'" [required]="true" [isReadOnly]="false"
+                    [namePurCompanyName]="'astPurCompanyName'" [headerGrid]="'会社'" [modalLabelTitle]="'会社名(あいまい)：'"
+                    [sqlName]="'selectPurCompany_LOV'" [paramMap]="{companyCode: sessionInfo.loginCompanyCode}" [isShowButtonClear]="false" [hidenSearch]="false">
+                    </app-name-pur-company-selection>
+                  </div>
+                </div>
+                <div class="form-group" [hidden]="astCategoryTypeLef != '2'">
+                  <div class="col">
+                    <app-project-selection [title]="'資産ﾌﾟﾛｼﾞｪｸﾄｺｰﾄﾞ:'" [extClass]="'wm-80'" [extClassName]="'wm-230'" [extClassType]="'wm-350'"
+                                           [projectForm]="astPrjCodeForm"
+                                           [paramMap]="{prjCategory:'2'}"
+                                           [projectCodeControlName]="'astPrjCode'"
+                                           [projectNameControlName]="'astPrjName'"
+                                           [projectTypeControlName]="'astPrjType'"
+                                           [sqlName]="'selectProject_LOV'"
+                                           (select)="selectProject($event)"></app-project-selection>
+                  </div>
+                </div>
+                <div class="form-group" [hidden]="astCategoryTypeLef == '' || astCategoryTypeLef == '2'">
+                  <label class="wm-combo wm-120">見積番号:</label>
+                  <div class="col-8 pl-0">
+                    <ea-input-mask class="input-display wm-combo wm-150" id="astEstimateNumber"
+                      name="astEstimateNumber" formControlName="astEstimateNumber"></ea-input-mask>
+                  </div>
+                </div>
+                <div class="form-group" [hidden]="astCategoryTypeLef == ''">
+                  <label class="wm-combo wm-120">コメント:</label>
+                  <div class="col-8 pl-0">
+                    <ea-input-mask class="input-display wm-combo wm-350" id="astName" name="astName" formControlName="astComment">
+                    </ea-input-mask>
+                  </div>
+                </div>
+              </div>
+              <div class="col-4 pl-0" [hidden]="astCategoryTypeLef == ''">
+                <div class="form-group">
+                  <label class="col-5 pr-1">単価:</label>
+                  <div class="col-7 pl-0">
+                    <ea-input-number class="input-display wm-combo wm-100 required" value="" id="astUnitAmount_LEF"
+                      name="astUnitAmount_LEF" formControlName="astUnitAmount" (change)="changeValueLine()"></ea-input-number>
+                  </div>
+                </div>
+                <div class="form-group" [hidden]="astCategoryTypeLef == ''">
+                  <label class="col-5 pr-1">数量/人月:</label>
+                  <div class="col-7 pl-0">
+                    <ea-input-number class="input-display wm-combo wm-100 required" id="astQuantity_LEF"
+                      name="astQuantity_LEF" formControlName="astQuantity" (change)="changeValueLine()"></ea-input-number>
+                  </div>
+                </div>
+                <div class="form-group" [hidden]="astCategoryTypeLef == ''">
+                  <label class="col-5 pr-1">取得金額:</label>
+                  <div class="col-7 pl-0">
+                    <ea-input-number class="input-display wm-combo wm-100 required" id="astGetAmount_LEF"
+                      name="astGetAmount_LEF" formControlName="astGetAmount"></ea-input-number>
+                  </div>
+                </div>
+                <div class="form-group" [hidden]="astCategoryTypeLef == ''">
+                  <label class="col-5 pr-1"></label>
+                  <div class="col-7 pl-0">
+                    <div class="form-check form-check-inline">
+                      <input class="form-check-input mt-0 required" type="radio" id="astAddUpType_LEF1" [value]="'1'"
+                        required formControlName="astAddUpType">
+                      <label class="form-check-label" for="astAddUpType_LEF1">資産</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                      <input class="form-check-input mt-0 required" type="radio" id="astAddUpType_LEF2" [value]="'2'"
+                        required formControlName="astAddUpType">
+                      <label class="form-check-label" for="astAddUpType_LEF2">費用</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+        <hr class="e-line">
+        <div class="col p-0">
+          <div class="form-group e-group-btn mt-2">
+            <button type="button" class="wm-btn wm-sm" (click)="saveLineFldLine()">
+              OK
+            </button>
+            <button type="button" class="wm-btn wm-sm" (click)="goToNextLineFldLine()">
+              次行入力
+            </button>
+            <button type="button" class="wm-btn wm-sm" (click)="cancelFldLine()">
+              キャンセル
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="grid-common-wrap u-top">
+  <div class="grid-common-count">
+    <span>【件数：{{gridApGetIntLineFldLine && gridApGetIntLineFldLine.rows ? (gridApGetIntLineFldLine.rows.length | number) : 0}}
+      件】</span>
+  </div>
+  <div class="wm-grid-list" id="wp-grid-data-list">
+    <ea-flex-grid #gridApGetIntLineFldLine
+    [itemsSource]="apGetIntLineFldList"
+    (initialized)="onGridInitialized()"
+    class="grid-common-list grid-list" [allowAddNew]="true">
+      <ea-flex-grid-column [width]="25" header="">
+        <ng-template wjFlexGridCellTemplate [cellType]="'Cell'" let-cell="cell" let-row="row">
+          <a *ngIf="this.btnAddLineFldLine" name="btnDel" id="btnDel" class="btn-del"></a>
+        </ng-template>
+      </ea-flex-grid-column>
+      <ea-flex-grid-column [width]="30" binding="lineSeq" header="No">
+      </ea-flex-grid-column>
+      <ea-flex-grid-column binding="astCategoryName" [width]="100"
+        header="分類"></ea-flex-grid-column>
+      <ea-flex-grid-column binding="astName" [width]="150"
+        header="名称"></ea-flex-grid-column>
+      <ea-flex-grid-column binding="astUnitAmount" [width]="80" [dataType]="'Number'"
+        header="単価"></ea-flex-grid-column>
+      <ea-flex-grid-column binding="astQuantity" [width]="80" [dataType]="'Number'"
+        header="数量/人月"></ea-flex-grid-column>
+      <ea-flex-grid-column binding="astGetAmount" [width]="100" [dataType]="'Number'" [aggregate]="'Sum'"
+      header="取得金額"></ea-flex-grid-column>
+      <ea-flex-grid-column header="資産" binding="astAddUpType1Flag" [allowSorting]="false" [allowDragging]="'None'" [width]="40">
+        <ng-template wjFlexGridCellTemplate [cellType]="'Cell'" let-cell="cell">
+          <input type="checkbox" name="astAddUpType1Flag" [disabled]="cell.item.type1FlagChecked == true"  id="{{'type1Flag_' + cell.item.lineSeq}}" [(ngModel)]="cell.item.type1FlagChecked" tabindex="-1">
+          </ng-template>
+      </ea-flex-grid-column>
+      <ea-flex-grid-column header="費用" binding="astAddUpType2Flag" [allowSorting]="false" [allowDragging]="'None'" [width]="40">
+        <ng-template wjFlexGridCellTemplate [cellType]="'Cell'" let-cell="cell">
+          <input type="checkbox"  name="astAddUpType2Flag" [disabled]="cell.item.type2FlagChecked == true" id="{{'type2Flag_' + cell.item.lineSeq}}" [(ngModel)]="cell.item.type2FlagChecked" tabindex="-1">
+          </ng-template>
+      </ea-flex-grid-column>
+      <ea-flex-grid-column binding="astAccountName" [width]="250" header="処理科目(財経入力)">
+        <ng-template wjFlexGridCellTemplate [cellType]="'Cell'" let-cell="cell">
+          <wj-combo-box
+          class="wm-combo wm-dropdown wm-tab-element wm-240"
+          id="{{'astAccountName' + cell.item.lineSeq}}"
+          [itemsSource]="astAccountName[cell.item.lineSeq]"
+          [displayMemberPath]="'label'"
+          [selectedValuePath]="'data'"
+          [selectedIndex]="astAccountNameNumber[cell.item.lineSeq]"
+          ></wj-combo-box>
+        </ng-template>
+    </ea-flex-grid-column>
+      <ea-flex-grid-column binding="astPurCompanyName" [width]="150"
+      header="仕入先"></ea-flex-grid-column>
+      <ea-flex-grid-column binding="astEstimateNumber" [width]="100"
+      header="見積番号"></ea-flex-grid-column>
+      <ea-flex-grid-column binding="astTermYear" [width]="100"  [dataType]="'Number'"
+      header="期間ﾗｲｾﾝｽ(年)"></ea-flex-grid-column>
+      <ea-flex-grid-column binding="astPrjCode" [width]="100"
+      header="資産PRJコード"></ea-flex-grid-column>
+      <ea-flex-grid-column binding="astPrjName" [width]="150"
+      header="資産PRJ名"></ea-flex-grid-column>
+      <ea-flex-grid-column binding="astPrjType" [width]="100" [allowDragging]="'None'" [allowMerging]="false"
+      header="資産PRJタイプ"></ea-flex-grid-column>
+      <ea-flex-grid-column binding="astComment" [width]="250" header="コメント">
+      </ea-flex-grid-column>
+    </ea-flex-grid>
+  </div>
+</div>

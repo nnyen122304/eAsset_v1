@@ -1,0 +1,32 @@
+<header class="header header-border-bottom">
+  <div>
+    <a class="head-search" href="javascript: void(0)" (click)="goBack()">
+      <img src="assets/images/button/to_search.gif">
+      <span>検索条件画面へ戻る</span>
+    </a>
+  </div>
+</header>
+<div class="body">
+  <div class="block-frame-border block-frame-border-radio">
+    <h2 class="frame-title">登録申請作成オプション</h2>
+    <div class="col col-form">
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" name="createOption" id="radioApAsset1" [(ngModel)]="createOption"
+          [checked]="true" value="1" type="radio" (change)="change(1)">
+        <label class="form-check-label" for="radioApAsset1">資産(機器)明細を指定して個別に作成</label>
+      </div>
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" name="createOption" id="radioApAsset2" [(ngModel)]="createOption" value="2"
+          type="radio" (change)="change(2)">
+        <label class="form-check-label" for="radioApAsset2">一括作成(CSV入力)</label>
+      </div>
+    </div>
+  </div>
+  <div class="label-btn">
+    <label *ngIf="createOption == '1'">※　申請対象の取得申請を選択(ダブルクリック)してください。</label>
+    <button *ngIf="createOption == '2'" type="button" (click)="applicationTarget()">申請対象として選択</button>
+  </div>
+</div>
+<div class="list">
+  <app-ap-get-tan-result-list (select)="clickRow($event)" [dataList]="listApGetTanSR"></app-ap-get-tan-result-list>
+</div>

@@ -1,0 +1,83 @@
+.e-link {
+  white-space: nowrap;
+  font-weight: bold;
+  text-decoration: underline;
+}
+
+.section-header {
+  border-bottom: 1px solid #fff;
+  margin-bottom: 5px;
+  padding-bottom: 5px;
+}
+
+.form-tree-selection {
+  padding: 0 !important;
+  border: 1px solid #aaa;
+  border-radius: 8px 8px 0 0;
+  width: 100%;
+  margin-bottom: 8px;
+  box-shadow: 0.5px 1px 0 grey;
+  // -webkit-box-shadow: 1px 2px 0px 0px grey;
+  .frame-title {
+    padding: 4px;
+    background: rgb(170, 170, 170);
+    background: linear-gradient(0deg, rgba(170, 170, 170, 1) 0%, rgba(255, 255, 255, 1) 100%);
+    width: 100%;
+    border-radius: 10px 10px 0 0;
+
+    .text {
+      font-weight: bold;
+      padding-left: 10px;
+    }
+  }
+
+  .modal-body {
+    padding: 0px;
+    border: 4px solid #E5E1E0;
+    background-color: #fff;
+  }
+}
+
+.tree-wrapper {
+  .wj-treeview {
+    &.wj-node {
+      padding: 1px 10px !important;
+    }
+
+    .wj-state-empty {
+      .wj-node-text {
+        text-decoration: underline;
+        color: rgb(2, 92, 209);
+      }
+    }
+  }
+
+
+  &.height-8 {
+    .wj-treeview {
+      height: 76vh;
+    }
+  }
+
+  &.height-4 {
+    .wj-treeview {
+      height: 145px;
+    }
+  }
+
+  &.height-2 {
+    .wj-treeview {
+      height: 240px;
+    }
+  }
+}
+
+.box1 {
+  width: 280px;
+  padding: 0 10px 0 10px;
+}
+
+.box2 {
+  width: 400px;
+  padding: 0 10px 0 10px;
+}

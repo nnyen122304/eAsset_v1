@@ -1,0 +1,45 @@
+<div class="page-container page-eapplication">
+  <div class="section-eview-buttons wm-buttons">
+    <button type="button" class="wm-btn" (click)="downloadDetails()">明細ダウンロード</button>
+    <button type="button" class="wm-btn" (click)="printFactSheet()">実査表印刷</button>
+    <p class="text-desc">※棚卸完了報告は、部長以下のメンバで実施いただくようお願いします。</p>
+  </div>
+  <div class="section-eview-list">
+    <div class="grid-common-wrap">
+      <div class="grid-common-count">【件数：{{gridApplicationList && gridApplicationList.rows ? (gridApplicationList.rows.length | number) : 0}} 件】</div>
+      <div class="wp-grid-application-list" id="wp-grid-application-list">
+        <ea-flex-grid #gridApplicationList
+          class="grid-common-list grid-application-list"
+          [(itemsSource)]="applicationInventoryList"
+          [isReadOnly]="false"
+          (initialized)="onGridInitialized(gridApplicationList)"
+        >
+          <ea-flex-grid-column header="Sel" binding="sel" [allowSorting]="false" [allowDragging]="'None'" [allowMerging]="false" [width]="30" [isReadOnly]="false"></ea-flex-grid-column>
+          <ea-flex-grid-column header="保有部署" binding="holSectionName" [width]="240"></ea-flex-grid-column>
+          <ea-flex-grid-column header="資産区分" binding="invAssetTypeName" [width]="150"></ea-flex-grid-column>
+          <ea-flex-grid-column header="操作" [width]="80">
+            <ng-template wjFlexGridCellTemplate cellType="ColumnHeader" let-cell="cell">
+              操作
+              <span class="wj-glyph-up" *ngIf="cell.col.currentSort==='+'"></span>
+              <span class="wj-glyph-down" *ngIf="cell.col.currentSort==='-'"></span>
+            </ng-template>
+            <ng-template wjFlexGridCellTemplate [cellType]="'Cell'" let-cell="cell">
+              <a class="cell-link" (click)="showDetails(cell.row.index)">詳細確認</a>
+            </ng-template>
+          </ea-flex-grid-column>
+          <ea-flex-grid-column header="未" binding="invCountUndecided" [width]="60" [aggregate]="'Sum'"></ea-flex-grid-column>
+          <ea-flex-grid-column header="済：有" binding="invCountOwn" [width]="60" [aggregate]="'Sum'"></ea-flex-grid-column>
+          <ea-flex-grid-column header="済：無" binding="invCountNotOwn" [width]="60" [aggregate]="'Sum'"></ea-flex-grid-column>
+          <ea-flex-grid-column header="計" binding="invCountTotal" [width]="60" [aggregate]="'Sum'"></ea-flex-grid-column>
+          <ea-flex-grid-column header="資産件数" binding="assetCount" [width]="60" [aggregate]="'Sum'">
+            <ng-template wjFlexGridCellTemplate cellType="ColumnHeader" let-cell="cell">
+              資産<br>件数
+              <span class="wj-glyph-up" *ngIf="cell.col.currentSort==='+'"></span>
+              <span class="wj-glyph-down" *ngIf="cell.col.currentSort==='-'"></span>
+            </ng-template>
+          </ea-flex-grid-column>
+        </ea-flex-grid>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,29 @@
+<ea-popup #printOptionsPopup class="popup-common-sel print-option" [hideTrigger]="'None'" (hidden)="close()">
+  <form class="form-print-popup" [formGroup]="printForm">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">印刷オプション</h5>
+        <button type="button" tabindex="-1" class="close bt-close wj-hide">&times;</button>
+      </div>
+      <div class="modal-body print-modal-body">
+        <div class="row">
+          <label class="opt-label">{{label}}</label>
+          <div class="col col-form">
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" id="opt1" formControlName="printOption" [value]="1">
+              <label class="form-check-label" for="opt1">する</label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" id="opt2" formControlName="printOption" [value]="2">
+              <label class="form-check-label" for="opt2">しない</label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer print-modal-footer">
+        <button type="button" class="wm-btn" (click)="okBtnClickHandler()">OK</button>
+        <button type="button" class="wm-btn wj-hide">キャンセル</button>
+      </div>
+    </div>
+  </form>
+</ea-popup>

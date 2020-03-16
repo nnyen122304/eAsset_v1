@@ -1,0 +1,68 @@
+<div class="grid-common-wrap grid-common-wrap-result">
+  <div class="grid-common-count">
+    【件数:{{gridApGetTanResultList && gridApGetTanResultList.rows ? (gridApGetTanResultList.rows.length | number) : 0}}
+    件】
+  </div>
+  <div class="grid-inventory-list wp-grid-ap-get-tan-result" id="wp-grid-ap-get-tan-result-list">
+    <ea-flex-grid #gridApGetTanResultList class="grid-common-list grid-asset-list grid-inventory-list"
+      [allowSorting]="true" [isReadOnly]="false" [itemsSource]="dataList"
+      (initialized)="onGridInitialized(gridApGetTanResultList)">
+      <ea-flex-grid-column header="Sel" binding="sel" [fxHide]="true" [allowDragging]="'None'" [allowMerging]="false"
+        [isReadOnly]="false" [width]="30">
+      </ea-flex-grid-column>
+      <ea-flex-grid-column header="取得申請書番号" binding="applicationId" [width]="100"></ea-flex-grid-column>
+      <ea-flex-grid-column header="ステータス" binding="apStatusName" [width]="80"></ea-flex-grid-column>
+      <ea-flex-grid-column header="取得形態" binding="apGetTypeName" [width]="150"></ea-flex-grid-column>
+      <ea-flex-grid-column header="取得金額" binding="getTotalAmount" [width]="100"></ea-flex-grid-column>
+      <ea-flex-grid-column header="取得先" binding="getCompanyName" [width]="200"></ea-flex-grid-column>
+      <ea-flex-grid-column header="申請日" binding="apDate" [width]="100"></ea-flex-grid-column>
+      <ea-flex-grid-column header="社員番号" binding="apStaffCode" [width]="70"></ea-flex-grid-column>
+      <ea-flex-grid-column header="氏名" binding="apStaffName" [width]="100"></ea-flex-grid-column>
+      <ea-flex-grid-column header="申請部署" binding="apSectionName" [width]="200"></ea-flex-grid-column>
+      <ea-flex-grid-column header="会社" binding="holCompanyName" [width]="70"></ea-flex-grid-column>
+      <ea-flex-grid-column header="部署" binding="holSectionName" [width]="200"></ea-flex-grid-column>
+      <ea-flex-grid-column header="社員番号" binding="holStaffCode" [width]="70"></ea-flex-grid-column>
+      <ea-flex-grid-column header="氏名" binding="holStaffName" [width]="100"></ea-flex-grid-column>
+      <ea-flex-grid-column header="設置(使用)場所" binding="holOfficeName" [width]="200"></ea-flex-grid-column>
+      <ea-flex-grid-column header="設置階" binding="holOfficeFloor" [width]="50"></ea-flex-grid-column>
+      <ea-flex-grid-column header="販管/原価" binding="costTypeName" [width]="100"></ea-flex-grid-column>
+      <ea-flex-grid-column header="減価償却プロジェクト" binding="costDepPrjName" [width]="150"></ea-flex-grid-column>
+      <ea-flex-grid-column header="経費負担部課" binding="costSectionDistName" [width]="200"></ea-flex-grid-column>
+      <ea-flex-grid-column header="資産計上部課" binding="costSectionCode" [width]="200">
+        <ng-template wjFlexGridCellTemplate [cellType]="'Cell'" let-cell="cell">
+          {{cell.item.costSectionCode}} {{cell.item.costSectionName}}
+        </ng-template>
+      </ea-flex-grid-column>
+      <ea-flex-grid-column header="資産(機器)名" binding="astNameOne" [width]="200"></ea-flex-grid-column>
+      <ea-flex-grid-column header="メーカー" binding="astMakerNameOne" [width]="150"></ea-flex-grid-column>
+      <ea-flex-grid-column header="メーカー型番" binding="astMakerModelOne" [width]="200"></ea-flex-grid-column>
+      <ea-flex-grid-column header="資産プロジェクト" binding="astPrjNameOne" [width]="150"></ea-flex-grid-column>
+      <ea-flex-grid-column header="明細数" binding="astLineCount" [width]="70"></ea-flex-grid-column>
+      <ea-flex-grid-column header="取得数" binding="astQuantitySum" [width]="70"></ea-flex-grid-column>
+      <ea-flex-grid-column header="登録数" binding="astRegistQuantitySum" [width]="70"></ea-flex-grid-column>
+      <ea-flex-grid-column header="登録不要" binding="astNoRegistQuantitySum" [width]="70"></ea-flex-grid-column>
+      <ea-flex-grid-column header="メーカー" binding="softwareMakerNameOne" [width]="150"></ea-flex-grid-column>
+      <ea-flex-grid-column header="ソフトウェア" binding="softwareNameOne" [width]="200"></ea-flex-grid-column>
+      <ea-flex-grid-column header="明細数" binding="licLineCount" [width]="70"></ea-flex-grid-column>
+      <ea-flex-grid-column header="取得数" binding="licQuantitySum" [width]="70"></ea-flex-grid-column>
+      <ea-flex-grid-column header="登録数" binding="licRegistQuantitySum" [width]="70"></ea-flex-grid-column>
+      <ea-flex-grid-column binding="failureAssetIdOne" [width]="100">
+        <ng-template wjFlexGridCellTemplate cellType="ColumnHeader" let-cel="cell">
+          <div class="label-column">
+            故障交換機器<br>管理番号[代表]
+          </div>
+        </ng-template>
+      </ea-flex-grid-column>
+      <ea-flex-grid-column header="申請者記入" binding="descriptionAp" [width]="200"></ea-flex-grid-column>
+      <ea-flex-grid-column header="受付担当者・管理者記入" binding="descriptionAdmin" [width]="200"></ea-flex-grid-column>
+      <ea-flex-grid-column binding="reoOrderFlagName" [width]="100">
+        <ng-template wjFlexGridCellTemplate cellType="ColumnHeader" let-cel="cell">
+          <div class="label-column">
+            eAsset<br>レンタル発注
+          </div>
+        </ng-template>
+      </ea-flex-grid-column>
+      <ea-flex-grid-column header="e申請書類ID" binding="eappId" [width]="100"></ea-flex-grid-column>
+    </ea-flex-grid>
+  </div>
+</div>

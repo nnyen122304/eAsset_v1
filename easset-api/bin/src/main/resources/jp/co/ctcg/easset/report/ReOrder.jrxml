@@ -1,0 +1,1100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ReOrder" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<property name="ireport.zoom" value="1.815000000000065"/>
+	<property name="ireport.x" value="334"/>
+	<property name="ireport.y" value="998"/>
+	<style name="BaseFont" isDefault="true" isBlankWhenNull="true" pdfFontName="HeiseiMin-W3" pdfEncoding="UniJIS-UCS2-HW-H" isPdfEmbedded="false"/>
+	<style name="Cell" isDefault="false" style="BaseFont" mode="Transparent" isBlankWhenNull="true">
+		<box leftPadding="2" rightPadding="1">
+			<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineStyle="Solid"/>
+			<bottomPen lineWidth="0.5" lineStyle="Solid"/>
+			<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="CellTitle" isDefault="false" style="Cell" mode="Opaque" backcolor="#C0C0C0" isBlankWhenNull="true">
+		<pen lineWidth="0.5"/>
+	</style>
+	<style name="Cell2" isDefault="false" style="BaseFont" mode="Transparent" isBlankWhenNull="true">
+		<box leftPadding="0" rightPadding="1">
+			<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineStyle="Solid"/>
+			<bottomPen lineWidth="0.5" lineStyle="Solid"/>
+			<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+		</box>
+	</style>
+	<subDataset name="ContractAmountSum">
+		<parameter name="applicationId" class="java.lang.String"/>
+		<parameter name="tablePrefix" class="java.lang.String"/>
+		<parameter name="versionWhere" class="java.lang.String"/>
+		<queryString>
+			<![CDATA[SELECT
+  sum(a.ast_Get_Le_Month_Amount * a.quantity) * nagt.GET_LE_RE_COUNT totalContractAmount
+FROM
+   NEA_AP_GET_TAN_LINE_AST a
+ , NEA_AP_GET_TAN nagt
+where
+ nagt.application_id = a.application_id(+)
+and
+  nagt.application_id = $P{applicationId}
+group by nagt.GET_LE_RE_COUNT]]>
+		</queryString>
+		<field name="TOTALCONTRACTAMOUNT" class="java.math.BigDecimal"/>
+	</subDataset>
+	<parameter name="applicationId" class="java.lang.String"/>
+	<parameter name="versionWhere" class="java.lang.String">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="tablePrefix" class="java.lang.String">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="fromImage" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[SELECT
+  nagt.APPLICATION_ID applicationId
+, nagt.GET_DELIVERY_DATE getDeliveryDate
+, nagt.GET_LE_RE_COUNT getLeReCount
+, nagt.GET_TOTAL_AMOUNT getTotalAmount
+, NEA_UTIL_PKG.get_cn_value1_f('LEASE_RENTAL_CUSTOMER', nagt.GET_LE_RE_COMPANY_CODE, nagt.AP_COMPANY_CODE) getLeReCompanyName
+, nagt.GET_LE_RE_ESTIMATE_NUMBER getLeReEstimateNumber
+, NEA_UTIL_PKG.GET_CN_VALUE_F('REO_ORDER_SET', nagt.REO_ORDER_TYPE, 4, nagt.AP_COMPANY_CODE) reOrderTitle
+, NEA_UTIL_PKG.get_cn_value_f('REO_ORDER_SET', nagt.REO_ORDER_TYPE, 5, nagt.AP_COMPANY_CODE) toSectionName
+, NEA_UTIL_PKG.get_cn_value_f('REO_ORDER_SET', nagt.REO_ORDER_TYPE, 6, nagt.AP_COMPANY_CODE) fromSectionName
+, nagt.REO_RECEPT_NUMBER reoReceptNumber
+, nagt.REO_ORDER_DATE reoOrderDate
+, nagt.REO_AST_STAFF_CODE reoAstStaffCode
+, nagt.REO_AST_COMPANY_CODE reoAstCompanyCode
+, NEA_UTIL_PKG.GET_COMPANY_OFFICIAL_NAME_F(nagt.REO_AST_COMPANY_CODE) reoAstCompanyOfficialName
+, nagt.REO_AST_SECTION_CODE reoAstSectionCode
+, nagt.REO_AST_SECTION_YEAR reoAstSectionYear
+, nagt.REO_AST_TEL reoAstTel
+, nagt.REO_AST_FAX reoAstFax
+, nagt.REO_AST_MAIL_ADDRESS reoAstMailAddress
+, nagt.REO_USE_HOPE_START_DATE reoUseHopeStartDate
+, REO_INV_COMPANY_OFFICAIL_NAME reoInvCompanyOfficialName
+, nagt.REO_INV_ADDRESS reoInvAddress
+, nagt.REO_INV_TEL reoInvTel
+, nagt.REO_INV_FAX reoInvFax
+, nagt.REO_INV_MAIL_ADDRESS reoInvMailAddress
+, nagt.REO_DLV_STAFF_CODE reoDlvStaffCode
+, nagt.REO_DLV_COMPANY_CODE reoDlvCompanyCode
+, NEA_UTIL_PKG.GET_COMPANY_OFFICIAL_NAME_F(nagt.REO_DLV_COMPANY_CODE) reoDlvCompanyOfficialName
+, nagt.REO_DLV_SECTION_CODE reoDlvSectionCode
+, nagt.REO_DLV_SECTION_YEAR reoDlvSectionYear
+, nagt.REO_DLV_ADDRESS reoDlvAddress
+, nagt.REO_DLV_TEL reoDlvTel
+, nagt.REO_DLV_FAX reoDlvFax
+, nagt.REO_DLV_MAIL_ADDRESS reoDlvMailAddress
+, nagt.REO_DESCRIPTION reoDescription
+, nagt.REO_INV_STAFF_INPUT_TYPE reoInvStaffInputType
+, nagt.REO_INV_STAFF_NAME reoInvStaffName
+, nagt.REO_INV_COMPANY_NAME reoInvCompanyName
+, nagt.REO_INV_SECTION_NAME reoInvSectionName
+, NEA_UTIL_PKG.get_staff_name_f(nagt.REO_AST_STAFF_CODE) reoAstStaffName
+, NEA_UTIL_PKG.get_staff_name_f(nagt.REO_DLV_STAFF_CODE) reoDlvStaffName
+, NEA_UTIL_PKG.get_company_name_f(nagt.REO_AST_COMPANY_CODE) reoAstCompanyName
+, NEA_UTIL_PKG.get_company_name_f(nagt.REO_DLV_COMPANY_CODE) reoDlvCompanyName
+, NEA_UTIL_PKG.get_section_name_f(nagt.REO_AST_COMPANY_CODE, nagt.REO_AST_SECTION_CODE, nagt.REO_AST_SECTION_YEAR) reoAstSectionName
+, NEA_UTIL_PKG.get_section_name_f(nagt.REO_DLV_COMPANY_CODE, nagt.REO_DLV_SECTION_CODE, nagt.REO_DLV_SECTION_YEAR) reoDlvSectionName
+, nagtl.*
+, nagtl.astGetLeMonthAmount * quantity mounthAmount
+, (nagtl.astGetLeMonthAmount * quantity) * nagt.GET_LE_RE_COUNT contractAmount
+, nagt.GET_LE_RE_TOTAL_AMOUNT getLeReTotalAmount
+, (SELECT SUM(NVL(c.GET_OTR_AMOUNT, 0)) FROM NEA_AP_GET_TAN_LINE_OTR_COST c WHERE c.APPLICATION_ID = nagt.APPLICATION_ID  ) totalCostAmount
+, NEA_UTIL_PKG.GET_CN_VALUE_F('REO_ORDER_SET', nagt.REO_ORDER_TYPE, 7, nagt.AP_COMPANY_CODE) quoteFlag
+, (SELECT REO_AGREEMENT FROM NEA_AP_GET_TAN_LINE_AST a WHERE a.APPLICATION_ID = nagt.APPLICATION_ID AND LINE_SEQ = 1 ) reoAgreement
+, (SELECT REO_PRICE_LIST FROM NEA_AP_GET_TAN_LINE_AST a WHERE a.APPLICATION_ID = nagt.APPLICATION_ID AND LINE_SEQ = 1 ) reoPriceList
+, nagt.REO_AST_OIR reoAstOir
+FROM
+  NEA_$P!{tablePrefix}AP_GET_TAN nagt
+  , (
+    SELECT
+      APPLICATION_ID applicationId
+    , '1' LINE_TYPE
+    , LINE_SEQ lineSeq
+    , AST_MODEL_CODE || ' ' || REO_AST_NAME || ' ' || AST_MAKER_MODEL astName
+    , QUANTITY quantity
+    , AST_MAKER_NAME astMakerName
+    , AST_GET_LE_MONTH_AMOUNT astGetLeMonthAmount
+    , TO_NUMBER(NULL) getOtrAmount
+    , TO_CHAR(NULL) getOtrComment
+    FROM
+      NEA_$P!{tablePrefix}AP_GET_TAN_LINE_AST
+    WHERE
+      1 = 1
+    $P!{versionWhere}
+    UNION ALL
+    SELECT
+      APPLICATION_ID
+    , '2' LINE_TYPE
+    , LINE_SEQ
+    , TO_CHAR(NULL)
+    , TO_NUMBER(NULL)
+    , TO_CHAR(NULL)
+    , TO_NUMBER(NULL)
+    , GET_OTR_AMOUNT
+    , GET_OTR_COMMENT
+    FROM
+      NEA_$P!{tablePrefix}AP_GET_TAN_LINE_OTR_COST
+    WHERE
+      1 = 1
+    $P!{versionWhere}
+  ) nagtl
+WHERE
+  nagt.application_id = $P{applicationId}
+    $P!{versionWhere}
+AND nagt.APPLICATION_ID = nagtl.applicationId(+)]]>
+	</queryString>
+	<field name="APPLICATIONID" class="java.lang.String"/>
+	<field name="GETDELIVERYDATE" class="java.sql.Timestamp"/>
+	<field name="GETLERECOUNT" class="java.math.BigDecimal"/>
+	<field name="GETTOTALAMOUNT" class="java.math.BigDecimal"/>
+	<field name="GETLERECOMPANYNAME" class="java.lang.String"/>
+	<field name="GETLEREESTIMATENUMBER" class="java.lang.String"/>
+	<field name="REORDERTITLE" class="java.lang.String"/>
+	<field name="TOSECTIONNAME" class="java.lang.String"/>
+	<field name="FROMSECTIONNAME" class="java.lang.String"/>
+	<field name="REORECEPTNUMBER" class="java.lang.String"/>
+	<field name="REOORDERDATE" class="java.sql.Timestamp"/>
+	<field name="REOASTSTAFFCODE" class="java.lang.String"/>
+	<field name="REOASTCOMPANYCODE" class="java.lang.String"/>
+	<field name="REOASTCOMPANYOFFICIALNAME" class="java.lang.String"/>
+	<field name="REOASTSECTIONCODE" class="java.lang.String"/>
+	<field name="REOASTSECTIONYEAR" class="java.math.BigDecimal"/>
+	<field name="REOASTTEL" class="java.lang.String"/>
+	<field name="REOASTFAX" class="java.lang.String"/>
+	<field name="REOASTMAILADDRESS" class="java.lang.String"/>
+	<field name="REOUSEHOPESTARTDATE" class="java.sql.Timestamp"/>
+	<field name="REOINVCOMPANYOFFICIALNAME" class="java.lang.String"/>
+	<field name="REOINVADDRESS" class="java.lang.String"/>
+	<field name="REOINVTEL" class="java.lang.String"/>
+	<field name="REOINVFAX" class="java.lang.String"/>
+	<field name="REOINVMAILADDRESS" class="java.lang.String"/>
+	<field name="REODLVSTAFFCODE" class="java.lang.String"/>
+	<field name="REODLVCOMPANYCODE" class="java.lang.String"/>
+	<field name="REODLVCOMPANYOFFICIALNAME" class="java.lang.String"/>
+	<field name="REODLVSECTIONCODE" class="java.lang.String"/>
+	<field name="REODLVSECTIONYEAR" class="java.math.BigDecimal"/>
+	<field name="REODLVADDRESS" class="java.lang.String"/>
+	<field name="REODLVTEL" class="java.lang.String"/>
+	<field name="REODLVFAX" class="java.lang.String"/>
+	<field name="REODLVMAILADDRESS" class="java.lang.String"/>
+	<field name="REODESCRIPTION" class="java.lang.String"/>
+	<field name="REOINVSTAFFINPUTTYPE" class="java.lang.String"/>
+	<field name="REOINVSTAFFNAME" class="java.lang.String"/>
+	<field name="REOINVCOMPANYNAME" class="java.lang.String"/>
+	<field name="REOINVSECTIONNAME" class="java.lang.String"/>
+	<field name="REOASTSTAFFNAME" class="java.lang.String"/>
+	<field name="REODLVSTAFFNAME" class="java.lang.String"/>
+	<field name="REOASTCOMPANYNAME" class="java.lang.String"/>
+	<field name="REODLVCOMPANYNAME" class="java.lang.String"/>
+	<field name="REOASTSECTIONNAME" class="java.lang.String"/>
+	<field name="REODLVSECTIONNAME" class="java.lang.String"/>
+	<field name="LINE_TYPE" class="java.lang.String"/>
+	<field name="LINESEQ" class="java.math.BigDecimal"/>
+	<field name="ASTNAME" class="java.lang.String"/>
+	<field name="QUANTITY" class="java.math.BigDecimal"/>
+	<field name="ASTMAKERNAME" class="java.lang.String"/>
+	<field name="ASTGETLEMONTHAMOUNT" class="java.math.BigDecimal"/>
+	<field name="GETOTRAMOUNT" class="java.math.BigDecimal"/>
+	<field name="GETOTRCOMMENT" class="java.lang.String"/>
+	<field name="MOUNTHAMOUNT" class="java.math.BigDecimal"/>
+	<field name="CONTRACTAMOUNT" class="java.math.BigDecimal"/>
+	<field name="GETLERETOTALAMOUNT" class="java.math.BigDecimal"/>
+	<field name="TOTALCOSTAMOUNT" class="java.math.BigDecimal"/>
+	<field name="QUOTEFLAG" class="java.lang.String"/>
+	<field name="REOAGREEMENT" class="java.lang.String"/>
+	<field name="REOPRICELIST" class="java.lang.String"/>
+	<field name="REOASTOIR" class="java.lang.String"/>
+	<variable name="CONTRACTAMOUNT_1" class="java.math.BigDecimal" resetType="Group" resetGroup="LINE_TYPE3" calculation="Sum">
+		<variableExpression><![CDATA[$F{CONTRACTAMOUNT}]]></variableExpression>
+	</variable>
+	<group name="APPRICATION_ID">
+		<groupExpression><![CDATA[$F{APPLICATIONID}]]></groupExpression>
+		<groupHeader>
+			<band height="432">
+				<textField>
+					<reportElement style="Cell" x="355" y="187" width="193" height="14"/>
+					<box leftPadding="2"/>
+					<textElement>
+						<font size="9"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{REOINVFAX}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="97" y="159" width="451" height="14"/>
+					<box leftPadding="2" rightPadding="1">
+						<pen lineWidth="1.0"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement>
+						<font size="9"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{REOINVSTAFFNAME}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="100" y="65" width="448" height="14"/>
+					<box leftPadding="2" rightPadding="1">
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement>
+						<font size="9"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{REOASTSTAFFNAME}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement style="CellTitle" mode="Opaque" x="266" y="79" width="89" height="14" backcolor="#C0C0C0"/>
+					<box leftPadding="2" rightPadding="1">
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement>
+						<font size="9"/>
+					</textElement>
+					<text><![CDATA[FAX番号]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="CellTitle" mode="Opaque" x="268" y="295" width="89" height="14" backcolor="#C0C0C0"/>
+					<box leftPadding="2"/>
+					<textElement>
+						<font size="9"/>
+					</textElement>
+					<text><![CDATA[FAX番号]]></text>
+				</staticText>
+				<textField>
+					<reportElement style="Cell" x="99" y="187" width="168" height="14"/>
+					<box leftPadding="2"/>
+					<textElement>
+						<font size="9"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{REOINVTEL}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement style="Cell" x="99" y="281" width="449" height="14"/>
+					<box leftPadding="2"/>
+					<textElement>
+						<font size="9"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{REODLVADDRESS}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement style="Cell" x="98" y="295" width="170" height="14"/>
+					<box leftPadding="2"/>
+					<textElement>
+						<font size="9"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{REODLVTEL}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement style="Cell" x="1" y="361" width="547" height="17"/>
+					<box topPadding="2" leftPadding="2" bottomPadding="2" rightPadding="2"/>
+					<textElement/>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{REODESCRIPTION}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="99" y="145" width="449" height="14"/>
+					<box leftPadding="2" rightPadding="1">
+						<pen lineWidth="1.0"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement>
+						<font size="9"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{REOINVSECTIONNAME}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement style="Cell" x="99" y="201" width="449" height="14"/>
+					<box leftPadding="2"/>
+					<textElement>
+						<font size="9"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{REOINVMAILADDRESS}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement stretchType="RelativeToBandHeight" x="308" y="413" width="137" height="19"/>
+					<box>
+						<bottomPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Bottom">
+						<font size="12"/>
+					</textElement>
+					<text><![CDATA[レンタル注文総額：]]></text>
+				</staticText>
+				<textField>
+					<reportElement x="99" y="253" width="449" height="14"/>
+					<box leftPadding="2" rightPadding="1">
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement>
+						<font size="9"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{REODLVSECTIONNAME}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement style="Cell" x="99" y="173" width="449" height="14"/>
+					<box leftPadding="2"/>
+					<textElement>
+						<font size="9"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{REOINVADDRESS}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement style="Cell" x="99" y="79" width="167" height="14"/>
+					<box leftPadding="2">
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement>
+						<font size="9"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{REOASTTEL}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement style="CellTitle" mode="Opaque" x="9" y="323" width="90" height="14" backcolor="#C0C0C0"/>
+					<box leftPadding="2" rightPadding="1"/>
+					<textElement>
+						<font size="9"/>
+					</textElement>
+					<text><![CDATA[使用希望開始日]]></text>
+				</staticText>
+				<textField>
+					<reportElement style="Cell" x="357" y="295" width="191" height="14"/>
+					<box leftPadding="2"/>
+					<textElement>
+						<font size="9"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{REODLVFAX}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement style="CellTitle" mode="Opaque" x="266" y="187" width="89" height="14" backcolor="#C0C0C0"/>
+					<box leftPadding="2"/>
+					<textElement>
+						<font size="9"/>
+					</textElement>
+					<text><![CDATA[FAX番号]]></text>
+				</staticText>
+				<textField>
+					<reportElement x="98" y="267" width="450" height="14"/>
+					<box leftPadding="2" rightPadding="1">
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement>
+						<font size="9"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{REODLVSTAFFNAME}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement style="Cell" x="100" y="93" width="448" height="14"/>
+					<box leftPadding="2" rightPadding="1">
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement>
+						<font size="9"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{REOASTMAILADDRESS}]]></textFieldExpression>
+				</textField>
+				<textField pattern="yyyy年MM月dd日">
+					<reportElement x="99" y="323" width="77" height="14"/>
+					<box leftPadding="2" rightPadding="1">
+						<topPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+					</box>
+					<textElement>
+						<font size="9"/>
+					</textElement>
+					<textFieldExpression class="java.sql.Timestamp"><![CDATA[$F{GETDELIVERYDATE}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="-1" y="115" width="100" height="16"/>
+					<textElement/>
+					<text><![CDATA[■請求書送付先]]></text>
+				</staticText>
+				<textField>
+					<reportElement style="Cell" x="99" y="309" width="449" height="14"/>
+					<box leftPadding="2"/>
+					<textElement>
+						<font size="9"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{REODLVMAILADDRESS}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="-1" y="223" width="100" height="16"/>
+					<textElement/>
+					<text><![CDATA[■納品先]]></text>
+				</staticText>
+				<textField>
+					<reportElement style="Cell" x="355" y="79" width="193" height="14"/>
+					<box leftPadding="2" rightPadding="1">
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement>
+						<font size="9"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{REOASTFAX}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="176" y="323" width="12" height="14"/>
+					<box leftPadding="2" rightPadding="1">
+						<topPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+					</box>
+					<textElement>
+						<font size="9"/>
+					</textElement>
+					<text><![CDATA[～]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="1" y="345" width="100" height="16"/>
+					<textElement/>
+					<text><![CDATA[備考]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="1" y="21" width="100" height="16"/>
+					<textElement/>
+					<text><![CDATA[■資産管理担当者]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="-1" y="107" width="100" height="8"/>
+					<box leftPadding="2"/>
+					<textElement/>
+					<text><![CDATA[Static text]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="2" y="215" width="100" height="8"/>
+					<textElement/>
+					<text><![CDATA[Static text]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="-1" y="337" width="100" height="8"/>
+					<textElement/>
+					<text><![CDATA[Static text]]></text>
+				</staticText>
+				<textField pattern="#,##0">
+					<reportElement x="188" y="323" width="23" height="14"/>
+					<box leftPadding="2" rightPadding="1">
+						<topPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Right">
+						<font size="9"/>
+					</textElement>
+					<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{GETLERECOUNT}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="211" y="323" width="337" height="14"/>
+					<box leftPadding="2" rightPadding="1">
+						<topPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement>
+						<font size="9"/>
+					</textElement>
+					<text><![CDATA[ヶ月間]]></text>
+				</staticText>
+				<textField pattern="¤ #,##0">
+					<reportElement stretchType="RelativeToBandHeight" x="445" y="413" width="104" height="19"/>
+					<box rightPadding="2">
+						<bottomPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Bottom">
+						<font size="12"/>
+					</textElement>
+					<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{GETTOTALAMOUNT}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="1" y="0" width="64" height="20">
+						<printWhenExpression><![CDATA[$F{REOORDERDATE} != null]]></printWhenExpression>
+					</reportElement>
+					<textElement/>
+					<text><![CDATA[依　頼　日：]]></text>
+				</staticText>
+				<staticText>
+					<reportElement stretchType="RelativeToTallestObject" x="211" y="408" width="344" height="5"/>
+					<textElement/>
+					<text><![CDATA[Static text]]></text>
+				</staticText>
+				<textField pattern="yyyy年MM月dd日">
+					<reportElement x="65" y="0" width="100" height="20">
+						<printWhenExpression><![CDATA[$F{REOORDERDATE} != null && $F{REOORDERDATE} != ""]]></printWhenExpression>
+					</reportElement>
+					<textElement/>
+					<textFieldExpression class="java.sql.Timestamp"><![CDATA[$F{REOORDERDATE}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement style="Cell" x="100" y="37" width="448" height="14"/>
+					<box leftPadding="2">
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement>
+						<font size="9"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{REOASTCOMPANYOFFICIALNAME}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement style="Cell" x="99" y="131" width="449" height="14"/>
+					<box leftPadding="2"/>
+					<textElement>
+						<font size="9"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{REOINVCOMPANYOFFICIALNAME}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement style="Cell" x="99" y="239" width="449" height="14"/>
+					<box leftPadding="2"/>
+					<textElement>
+						<font size="9"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{REODLVCOMPANYOFFICIALNAME}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement style="CellTitle" x="10" y="79" width="90" height="14"/>
+					<textElement>
+						<font size="9"/>
+					</textElement>
+					<text><![CDATA[電話番号]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="CellTitle" x="10" y="51" width="90" height="14"/>
+					<textElement>
+						<font size="9"/>
+					</textElement>
+					<text><![CDATA[部課名]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="CellTitle" mode="Opaque" x="10" y="37" width="90" height="14" backcolor="#C0C0C0"/>
+					<box leftPadding="2" rightPadding="1"/>
+					<textElement>
+						<font size="9"/>
+					</textElement>
+					<text><![CDATA[会社名]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="CellTitle" x="10" y="93" width="90" height="14"/>
+					<textElement>
+						<font size="9"/>
+					</textElement>
+					<text><![CDATA[メールアドレス]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="CellTitle" x="9" y="187" width="90" height="14"/>
+					<textElement>
+						<font size="9"/>
+					</textElement>
+					<text><![CDATA[電話番号]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="CellTitle" x="9" y="159" width="90" height="14"/>
+					<textElement>
+						<font size="9"/>
+					</textElement>
+					<text><![CDATA[担当者]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="CellTitle" mode="Opaque" x="9" y="131" width="90" height="14" backcolor="#C0C0C0"/>
+					<box leftPadding="2" rightPadding="1"/>
+					<textElement>
+						<font size="9"/>
+					</textElement>
+					<text><![CDATA[会社名]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="CellTitle" x="9" y="201" width="90" height="14"/>
+					<textElement>
+						<font size="9"/>
+					</textElement>
+					<text><![CDATA[メールアドレス]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="CellTitle" mode="Opaque" x="9" y="173" width="90" height="14" backcolor="#C0C0C0"/>
+					<box leftPadding="2" rightPadding="1"/>
+					<textElement>
+						<font size="9"/>
+					</textElement>
+					<text><![CDATA[住所]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="CellTitle" x="9" y="267" width="90" height="14"/>
+					<textElement>
+						<font size="9"/>
+					</textElement>
+					<text><![CDATA[担当者]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="CellTitle" x="9" y="295" width="90" height="14"/>
+					<textElement>
+						<font size="9"/>
+					</textElement>
+					<text><![CDATA[電話番号]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="CellTitle" mode="Opaque" x="9" y="281" width="90" height="14" backcolor="#C0C0C0"/>
+					<box leftPadding="2" rightPadding="1"/>
+					<textElement>
+						<font size="9"/>
+					</textElement>
+					<text><![CDATA[住所]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="CellTitle" x="9" y="309" width="90" height="14"/>
+					<textElement>
+						<font size="9"/>
+					</textElement>
+					<text><![CDATA[メールアドレス]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="CellTitle" mode="Opaque" x="9" y="239" width="90" height="14" backcolor="#C0C0C0"/>
+					<box leftPadding="2" rightPadding="1"/>
+					<textElement>
+						<font size="9"/>
+					</textElement>
+					<text><![CDATA[会社名]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="CellTitle" x="10" y="65" width="90" height="14"/>
+					<textElement>
+						<font size="9"/>
+					</textElement>
+					<text><![CDATA[担当者]]></text>
+				</staticText>
+				<textField>
+					<reportElement style="Cell" x="100" y="51" width="448" height="14"/>
+					<box leftPadding="2" rightPadding="1">
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement>
+						<font size="9"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{REOASTSECTIONNAME}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement style="CellTitle" x="9" y="145" width="90" height="14"/>
+					<textElement>
+						<font size="9"/>
+					</textElement>
+					<text><![CDATA[部課名]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="CellTitle" x="9" y="253" width="90" height="14"/>
+					<textElement>
+						<font size="9"/>
+					</textElement>
+					<text><![CDATA[部課名]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="true">
+					<reportElement positionType="Float" x="2" y="393" width="546" height="15"/>
+					<box leftPadding="1" rightPadding="1">
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement verticalAlignment="Bottom"/>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{REOASTOIR}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement positionType="Float" mode="Transparent" x="1" y="378" width="78" height="15" backcolor="#FFFFFF"/>
+					<box leftPadding="1" rightPadding="1">
+						<topPen lineWidth="0.0"/>
+						<leftPen lineWidth="0.0"/>
+						<bottomPen lineWidth="0.0"/>
+						<rightPen lineWidth="0.0"/>
+					</box>
+					<textElement verticalAlignment="Bottom"/>
+					<text><![CDATA[現機種OIR番号]]></text>
+				</staticText>
+			</band>
+		</groupHeader>
+	</group>
+	<group name="LINE_TYPE4" minHeightToStartNewPage="50">
+		<groupExpression><![CDATA[$F{LINE_TYPE}]]></groupExpression>
+		<groupHeader>
+			<band height="30" splitType="Stretch">
+				<printWhenExpression><![CDATA[$F{LINE_TYPE}.equals("1")]]></printWhenExpression>
+				<staticText>
+					<reportElement x="0" y="0" width="100" height="15"/>
+					<textElement/>
+					<text><![CDATA[レンタル物件一覧]]></text>
+				</staticText>
+				<staticText>
+					<reportElement stretchType="RelativeToBandHeight" x="345" y="6" width="100" height="20" isRemoveLineWhenBlank="true"/>
+					<box>
+						<bottomPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Bottom"/>
+					<text><![CDATA[レンタル料 計：]]></text>
+				</staticText>
+				<staticText>
+					<reportElement stretchType="RelativeToBandHeight" x="11" y="15" width="100" height="15" isRemoveLineWhenBlank="true">
+						<printWhenExpression><![CDATA[$F{QUOTEFLAG} != null &&  $F{QUOTEFLAG}.equals("1")]]></printWhenExpression>
+					</reportElement>
+					<box leftPadding="2"/>
+					<textElement/>
+					<text><![CDATA[※見積書参照。]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="332" y="26" width="217" height="4"/>
+					<textElement/>
+					<text><![CDATA[Static text]]></text>
+				</staticText>
+				<textField pattern="¤ #,##0">
+					<reportElement x="445" y="6" width="105" height="20"/>
+					<box rightPadding="2">
+						<bottomPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Bottom"/>
+					<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{GETLERETOTALAMOUNT}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+	</group>
+	<group name="LINE_TYPE" isReprintHeaderOnEachPage="true">
+		<groupExpression><![CDATA[$F{LINE_TYPE}]]></groupExpression>
+		<groupHeader>
+			<band height="14">
+				<printWhenExpression><![CDATA[$F{LINE_TYPE}.equals("1")
+&&
+ ($F{QUOTEFLAG} == null
+     || ($F{QUOTEFLAG} != null && $F{QUOTEFLAG}.equals("0"))
+)]]></printWhenExpression>
+				<staticText>
+					<reportElement style="CellTitle" mode="Opaque" x="0" y="0" width="21" height="14" backcolor="#C0C0C0"/>
+					<box leftPadding="2" rightPadding="0"/>
+					<textElement textAlignment="Center"/>
+					<text><![CDATA[]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="CellTitle" mode="Opaque" x="21" y="0" width="57" height="14" backcolor="#C0C0C0"/>
+					<textElement textAlignment="Center"/>
+					<text><![CDATA[メーカー]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="CellTitle" mode="Opaque" x="78" y="0" width="206" height="14" backcolor="#C0C0C0"/>
+					<textElement textAlignment="Center" markup="none"/>
+					<text><![CDATA[物件名]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="Cell" mode="Opaque" x="284" y="0" width="32" height="14" backcolor="#C0C0C0"/>
+					<textElement textAlignment="Center"/>
+					<text><![CDATA[数量]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="CellTitle" mode="Opaque" x="316" y="0" width="62" height="14" backcolor="#C0C0C0"/>
+					<box leftPadding="0" rightPadding="0"/>
+					<textElement textAlignment="Center"/>
+					<text><![CDATA[月額単価]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="CellTitle" mode="Opaque" x="378" y="0" width="85" height="14" backcolor="#C0C0C0"/>
+					<textElement textAlignment="Center"/>
+					<text><![CDATA[月額料金]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="CellTitle" mode="Opaque" x="463" y="0" width="87" height="14" backcolor="#C0C0C0"/>
+					<box leftPadding="0" rightPadding="0"/>
+					<textElement textAlignment="Center"/>
+					<text><![CDATA[契約金額]]></text>
+				</staticText>
+			</band>
+		</groupHeader>
+	</group>
+	<group name="LINE_TYPE3" minHeightToStartNewPage="70">
+		<groupExpression><![CDATA[$F{LINE_TYPE}]]></groupExpression>
+		<groupHeader>
+			<band height="28">
+				<printWhenExpression><![CDATA[$F{LINE_TYPE}.equals("2")]]></printWhenExpression>
+				<staticText>
+					<reportElement x="1" y="3" width="100" height="15"/>
+					<textElement/>
+					<text><![CDATA[その他費用]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="346" y="4" width="100" height="20"/>
+					<box>
+						<bottomPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Bottom"/>
+					<text><![CDATA[その他費用 計：]]></text>
+				</staticText>
+				<textField pattern="¤ #,##0">
+					<reportElement x="446" y="4" width="104" height="20"/>
+					<box rightPadding="2">
+						<bottomPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Bottom"/>
+					<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{TOTALCOSTAMOUNT}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="336" y="24" width="217" height="4"/>
+					<textElement/>
+					<text><![CDATA[Static text]]></text>
+				</staticText>
+			</band>
+		</groupHeader>
+	</group>
+	<group name="LINE_TYPE2" isReprintHeaderOnEachPage="true" minHeightToStartNewPage="40">
+		<groupExpression><![CDATA[$F{LINE_TYPE}]]></groupExpression>
+		<groupHeader>
+			<band height="14">
+				<printWhenExpression><![CDATA[$F{LINE_TYPE}.equals("2")]]></printWhenExpression>
+				<staticText>
+					<reportElement style="CellTitle" mode="Opaque" x="463" y="0" width="87" height="14" backcolor="#C0C0C0"/>
+					<textElement textAlignment="Center"/>
+					<text><![CDATA[金額]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="CellTitle" mode="Opaque" x="0" y="0" width="463" height="14" backcolor="#C0C0C0"/>
+					<box leftPadding="0" rightPadding="0"/>
+					<textElement textAlignment="Center"/>
+					<text><![CDATA[コメント]]></text>
+				</staticText>
+			</band>
+		</groupHeader>
+	</group>
+	<pageHeader>
+		<band height="52">
+			<staticText>
+				<reportElement x="357" y="0" width="89" height="15"/>
+				<textElement textAlignment="Right">
+					<font size="11"/>
+				</textElement>
+				<text><![CDATA[注文番号：]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="446" y="0" width="96" height="15"/>
+				<textElement>
+					<font size="11"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{APPLICATIONID}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement stretchType="RelativeToBandHeight" x="446" y="15" width="96" height="15" isRemoveLineWhenBlank="true"/>
+				<textElement>
+					<font size="11"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{REORECEPTNUMBER}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="358" y="30" width="89" height="15" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{QUOTEFLAG} != null &&  $F{QUOTEFLAG}.equals("1")]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Right">
+					<font size="11" isStrikeThrough="false"/>
+				</textElement>
+				<text><![CDATA[見積番号：]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToBandHeight" x="445" y="30" width="96" height="15" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{QUOTEFLAG} != null &&  $F{QUOTEFLAG}.equals("1")]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font size="11"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{GETLEREESTIMATENUMBER}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement stretchType="RelativeToBandHeight" x="357" y="15" width="89" height="15" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{REORECEPTNUMBER} != null && $F{REORECEPTNUMBER} != ""]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Right">
+					<font size="11"/>
+				</textElement>
+				<text><![CDATA[受付番号：]]></text>
+			</staticText>
+			<staticText>
+				<reportElement stretchType="RelativeToBandHeight" x="0" y="20" width="123" height="20"/>
+				<textElement>
+					<font size="15" isBold="false"/>
+				</textElement>
+				<text><![CDATA[レンタル注文書]]></text>
+			</staticText>
+			<textField isBlankWhenNull="false">
+				<reportElement x="0" y="0" width="308" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[($F{REORDERTITLE} != null && $F{REORDERTITLE} != ""
+    ? "〔" + $F{REORDERTITLE} + "〕"
+    : ""
+)]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="79">
+			<printWhenExpression><![CDATA[$V{PAGE_NUMBER} == 1]]></printWhenExpression>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToBandHeight" x="1" y="27" width="264" height="16">
+					<printWhenExpression><![CDATA[$V{PAGE_NUMBER} == 1]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Top"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[($F{TOSECTIONNAME} != null ? $F{TOSECTIONNAME} + "御中" : "")]]></textFieldExpression>
+			</textField>
+			<image>
+				<reportElement x="308" y="15" width="247" height="64"/>
+				<imageExpression class="java.lang.String"><![CDATA[$P{fromImage}]]></imageExpression>
+				<anchorNameExpression><![CDATA[$P{fromImage}]]></anchorNameExpression>
+			</image>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="15" splitType="Prevent">
+			<printWhenExpression><![CDATA[$F{LINE_TYPE}.equals("1")
+&&
+ ($F{QUOTEFLAG} == null
+     || ($F{QUOTEFLAG} != null && $F{QUOTEFLAG}.equals("0"))
+)]]></printWhenExpression>
+			<textField pattern="#,##0">
+				<reportElement style="Cell" stretchType="RelativeToTallestObject" x="0" y="0" width="21" height="15"/>
+				<box leftPadding="2" rightPadding="2"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{LINESEQ}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement style="Cell" stretchType="RelativeToTallestObject" x="78" y="0" width="206" height="15"/>
+				<box leftPadding="2" rightPadding="1"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{ASTNAME}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Cell" stretchType="RelativeToTallestObject" x="21" y="0" width="57" height="15"/>
+				<box leftPadding="2" rightPadding="1"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{ASTMAKERNAME}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement style="Cell" stretchType="RelativeToTallestObject" x="284" y="0" width="32" height="15"/>
+				<box leftPadding="2" rightPadding="2"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{QUANTITY}]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0">
+				<reportElement style="Cell" stretchType="RelativeToTallestObject" x="316" y="0" width="62" height="15"/>
+				<box leftPadding="2" rightPadding="2"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{ASTGETLEMONTHAMOUNT}]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0">
+				<reportElement style="Cell" stretchType="RelativeToTallestObject" x="378" y="0" width="85" height="15"/>
+				<box leftPadding="0" rightPadding="2"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{MOUNTHAMOUNT}]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0">
+				<reportElement style="Cell" stretchType="RelativeToTallestObject" x="463" y="0" width="87" height="15"/>
+				<box leftPadding="0" rightPadding="2"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{CONTRACTAMOUNT}]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="15" splitType="Prevent">
+			<printWhenExpression><![CDATA[$F{LINE_TYPE}.equals("2")]]></printWhenExpression>
+			<textField isStretchWithOverflow="true">
+				<reportElement style="Cell" stretchType="RelativeToTallestObject" x="0" y="0" width="463" height="15"/>
+				<box leftPadding="2"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{GETOTRCOMMENT}]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0">
+				<reportElement style="Cell" stretchType="RelativeToTallestObject" x="463" y="0" width="87" height="15"/>
+				<box rightPadding="2"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{GETOTRAMOUNT}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="15">
+			<staticText>
+				<reportElement x="515" y="0" width="15" height="15"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[/]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="495" y="0" width="20" height="15"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="429" y="0" width="66" height="15"/>
+				<textElement textAlignment="Right"/>
+				<text><![CDATA[ページ　：]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1" y="0" width="32" height="15">
+					<printWhenExpression><![CDATA[$V{PAGE_NUMBER} == 1
+&& $F{REOAGREEMENT} != null
+&& $F{REOAGREEMENT} != ""]]></printWhenExpression>
+				</reportElement>
+				<textElement/>
+				<text><![CDATA[約款：]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="33" y="0" width="67" height="15">
+					<printWhenExpression><![CDATA[$V{PAGE_NUMBER} == 1]]></printWhenExpression>
+				</reportElement>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{REOAGREEMENT}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="99" y="0" width="42" height="15">
+					<printWhenExpression><![CDATA[$V{PAGE_NUMBER} == 1
+&& $F{REOPRICELIST} != null
+&& $F{REOPRICELIST} != ""]]></printWhenExpression>
+				</reportElement>
+				<textElement/>
+				<text><![CDATA[価格表：]]></text>
+			</staticText>
+			<textField evaluationTime="Group" evaluationGroup="APPRICATION_ID">
+				<reportElement x="530" y="0" width="20" height="15"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="141" y="0" width="61" height="15">
+					<printWhenExpression><![CDATA[$V{PAGE_NUMBER} == 1]]></printWhenExpression>
+				</reportElement>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{REOPRICELIST}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+</jasperReport>

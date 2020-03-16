@@ -1,0 +1,41 @@
+.section-status {
+  border: none;
+}
+.modal-body--search {
+  padding-top: 5px !important;
+  .form-search {
+    padding: 2px;
+  }
+}
+
+.grid-status-selection-list {
+  display: block;
+  width: auto;
+  height: auto;
+  min-height: 0;
+  max-height: 300px;
+}
+
+.non-rounded{
+  border-radius: unset !important;
+}
+
+.wm-100 {
+  width: 100px;
+}
+
+.wm-150 {
+  width: 150px;
+}
+
+.wm-200 {
+  width: 200px;
+}
+
+.wm-250 {
+  width: 250px;
+}
+
+.h-300 {
+  height: 300px;
+}

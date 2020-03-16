@@ -1,0 +1,37 @@
+<div class="asset-result">
+  <div class="asset-head">
+    <div>
+      <a class="head-search" href="javascript: void(0)" (click)="goBack()">
+        <img src="assets/images/button/to_search.gif">
+        <span>検索条件画面へ戻る</span>
+      </a>
+    </div>
+    <hr>
+    <div class="block-frame-border">
+      <h2 class="frame-title">登録申請作成オプション</h2>
+      <div class="col col-form">
+        <form [formGroup]="radioApAssetVmForm">
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" name="createOption" formControlName="createOption" id="radioApAsset1"
+              value="1" type="radio" [checked]="true" (change)="testchange(1)">
+            <label class="form-check-label" for="radioApAsset1">個別に作成</label>
+          </div>
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" name="createOption" formControlName="createOption" id="radioApAsset2"
+              value="2" type="radio" (change)="testchange(2)">
+            <label class="form-check-label" for="radioApAsset2">一括作成(CSV入力)</label>
+          </div>
+        </form>
+      </div>
+    </div>
+    <div class="label-btn">
+      <label *ngIf="this.radioApAssetVmForm.controls.createOption.value == 1">※　申請対象の実機を選択(ダブルクリック)してください。</label>
+      <button *ngIf="this.radioApAssetVmForm.controls.createOption.value == 2" type="button"
+        (click)="selectedeAssetItem()">申請対象として選択</button>
+    </div>
+  </div>
+  <div class="asset-list">
+    <app-asset-result-list (select)="clickRow($event)" [dataList]="assetSRList" [checkBoxVisible]='true'>
+    </app-asset-result-list>
+  </div>
+</div>

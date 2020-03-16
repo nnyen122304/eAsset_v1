@@ -1,0 +1,35 @@
+<ea-popup class="popup-common-sel popup-open-close-switching" #openCloseSwitchingPopup [hideTrigger]="'None'" (hidden)="close()">
+  <form class="form-open-close-switching"  [formGroup]="openCloseForm">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">各部メニューOPEN/CLOSE切替</h5>
+        <button type="button" tabindex="-1" class="close bt-close wj-hide">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <label class="col-label">各部メニュー：</label>
+          <div class="col col-form">
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" id="fe01" formControlName="value2" [value]="'0'" (change)='onCheckboxChange()'>
+              <label class="form-check-label" for="fe01">CLOSE</label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" id="fe02" formControlName="value2" [value]="'1'">
+              <label class="form-check-label" for="fe02">OPEN</label>
+            </div>
+          </div>
+          <div class="form-check form-check-inline form-check-box">
+            <input class="form-check-input wm-checkbox" type="checkbox" id="fe03" formControlName="isSendMail" [attr.disabled] ="openCloseForm.controls.value2.value === '0' ? '' : null"  [checked]='openCloseForm.controls.isSendMail.value'>
+            <label class="form-check-label" for="fe03">精査担当部署へ依頼メール送信する</label>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="wm-btn" (click)="sendChanges()"><span class="ico"><img src="assets/images/button/save.png" alt="実行"></span><span class="txt">実行</span></button>
+        <button type="button" class="wm-btn wj-hide">キャンセル</button>
+      </div>
+    </div>
+  </form>
+</ea-popup>
+
+

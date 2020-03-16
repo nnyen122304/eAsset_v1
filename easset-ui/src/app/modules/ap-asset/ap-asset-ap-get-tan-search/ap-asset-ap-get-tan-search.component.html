@@ -1,0 +1,14 @@
+<div class="ap-get-tan-search">
+  <header class="header">
+    <label>登録対象の資産(機器)を申請した取得申請を検索してください。</label>
+  </header>
+  <div class="body">
+    <app-ap-get-tan-search-condition [currentState]="'AP_ASSET'"></app-ap-get-tan-search-condition>
+  </div>
+  <footer class="footer">
+    <div class="button-bottom">
+      <button type="button" class="wm-btn wm-tab-element ml-3" (click)="search()">検索</button>
+      <button type="button" class="wm-btn wm-tab-element ml-3" (click)="resetSearch()">クリア</button>
+    </div>
+  </footer>
+</div>

@@ -1,0 +1,186 @@
+<!-- 検索対象レイアウト -->
+<div id="searchScopeTypeLayout">
+  <form class="px-5" [formGroup]="formSearchScopeTypeLayout" [hidden]="!isSearchScopeTypeShow">
+    <div class="d-inline">
+      <label>検索対象：</label>
+      <div class="form-check form-check-inline">
+        <input type="radio" class="form-check-input" id="searchScopeType1" (change)="dataEditChanged($event)"
+          [checked]="true" formControlName="searchScopeType" name="searchScopeType" value="1" />
+        <label class="form-check-label" for="searchScopeType1">自分が使用者となっている資産(機器)</label>
+      </div>
+      <div class="form-check form-check-inline">
+        <input type="radio" class="form-check-input" id="searchScopeType2" (change)="dataEditChanged($event)"
+          formControlName="searchScopeType" name="searchScopeType" value="2" />
+        <label class="form-check-label" for="searchScopeType2">全ての資産(機器)</label>
+      </div>
+    </div>
+    <hr />
+  </form>
+</div>
+<div class="asset-search-condition-header">
+  <section>
+    <form class="asset-search-condition-form-header" [formGroup]="formSearchCondition">
+      <div fxLayout="row" fxLayoutGap="40px">
+        <div>
+          <div class="asset-group-control d-flex flex-row">
+            <label class="label-col text-right">情報機器管理番号:</label>
+            <div class="d-flex flex-column">
+              <div class="d-inline-block">
+                <ea-input-mask id="assetId" [hidden]="!isAssetId" [pattern]="'0-9A-Z'" [maxlength]="9"
+                  formControlName="assetId" class="wm-combo wm-100">
+                </ea-input-mask>
+                <ng-container *ngIf="isAssetId">
+                  <label class="mx-2">(あいまい)</label>
+                  <a class="cell-link" id="assetId_LNK" (click)="linkBtnClick($event)">複数指定</a>
+                </ng-container>
+              </div>
+              <div class="d-flex flex-column">
+                <ea-input-mask id="assetIdPlural" [hidden]="isAssetId" [pattern]="'0-9A-Z'"
+                  formControlName="assetIdPlural" class="wm-combo wm-300"></ea-input-mask>
+                <div class="d-inline" *ngIf="!isAssetId">
+                  <label class="mx-2">(スペース区切で複数指定可)</label>
+                  <a class="cell-link" id="assetIdPlural_LNK" (click)="linkBtnClick($event)">あいまい検索</a>
+                </div>
+              </div>
+              <div class="form-check form-check-inline">
+                <input type="checkbox" class="form-check-input" formControlName="levelAssetFlag" id="levelAssetFlag" />
+                <label class="form-check-label mx-2" for="searchScopeType2">関連(親子)データも同時に検索する</label>
+              </div>
+            </div>
+          </div>
+          <div class="asset-group-control d-flex flex-row">
+            <label class="label-col text-right">契約番号:</label>
+            <div class="d-inline-block">
+              <ea-input-mask id="contractNum" [hidden]="!isContractNum" formControlName="contractNum" [maxlength]="30"
+                class="wm-combo wm-200"></ea-input-mask>
+              <ng-container *ngIf="isContractNum">
+                <label class="mx-2">(あいまい)</label>
+                <a class="cell-link" id="contractNum_LNK" (click)="linkBtnClick($event)">複数指定</a>
+              </ng-container>
+            </div>
+            <div class="d-flex flex-column">
+              <ea-input-mask id="contractNumPlural" [hidden]="isContractNum" formControlName="contractNumPlural"
+                class="wm-combo wm-300">
+              </ea-input-mask>
+              <div class="d-inline" *ngIf="!isContractNum">
+                <label class="mx-2">(スペース区切で複数指定可)</label>
+                <a class="cell-link" id="contractNumPlural_LNK" (click)="linkBtnClick($event)">あいまい検索</a>
+              </div>
+            </div>
+          </div>
+          <div class="asset-group-control d-flex flex-row">
+            <label class="label-col text-right">契約枝番:</label>
+            <div class="d-inline-block">
+              <ea-input-mask id="contractEda" [hidden]="!isContractEda" formControlName="contractEda" [maxlength]="30"
+                class="wm-combo wm-200"></ea-input-mask>
+              <ng-container *ngIf="isContractEda">
+                <label class="mx-2">(あいまい)</label>
+                <a class="cell-link" id="contractEda_LNK" (click)="linkBtnClick($event)">複数指定</a>
+              </ng-container>
+            </div>
+            <div class="d-flex flex-column">
+              <ea-input-mask id="contractEdaPlural" [hidden]="isContractEda" formControlName="contractEdaPlural"
+                class="wm-combo wm-300">
+              </ea-input-mask>
+              <div class="d-inline" *ngIf="!isContractEda">
+                <label class="mx-2">(スペース区切で複数指定可)</label>
+                <a class="cell-link" id="contractEdaPlural_LNK" (click)="linkBtnClick($event)">あいまい検索</a>
+              </div>
+            </div>
+          </div>
+          <div class="asset-group-control d-flex flex-row">
+            <label class="label-col text-right">資産番号:</label>
+            <div class="d-flex flex-column">
+              <div class="d-inline-block">
+                <ea-input-mask id="shisanNum" [hidden]="!isShisanNum" [pattern]="'0-9A-Z-_'" [maxlength]="18"
+                  formControlName="shisanNum" class="wm-combo wm-200"></ea-input-mask>
+                <ng-container *ngIf="isShisanNum">
+                  <label class="mx-2">(あいまい)</label>
+                  <a class="cell-link" id="shisanNum_LNK" (click)="linkBtnClick($event)">複数指定</a>
+                </ng-container>
+              </div>
+              <div class="d-flex flex-column">
+                <ea-input-mask id="shisanNumPlural" [hidden]="isShisanNum" [pattern]="'0-9A-Z-'"
+                  formControlName="shisanNumPlural" class="wm-combo wm-300">
+                </ea-input-mask>
+                <div class="d-inline" *ngIf="!isShisanNum">
+                  <label class="mx-2">(スペース区切で複数指定可)</label>
+                  <a class="cell-link" id="shisanNumPlural_LNK" (click)="linkBtnClick($event)">あいまい検索</a>
+                </div>
+              </div>
+              <div class="form-check form-check-inline">
+                <input type="checkbox" class="form-check-input" [pattern]="'0-9A-Z'"
+                  formControlName="relationShisanNumFlag" id="relationShisanNumFlag" />
+                <label class="form-check-label" for="searchScopeType2">関連資産も同時に検索する</label>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="asset-group-control d-flex flex-row">
+            <label class="label-col text-right">取得申請書番号:</label>
+            <div class="d-inline-block">
+              <ea-input-mask id="getApplicationId" [hidden]="!isGetApplicationId" [pattern]="'0-9A-Z'" [maxLength]="9"
+                formControlName="getApplicationId" class="wm-combo wm-100">
+              </ea-input-mask>
+              <ng-container *ngIf="isGetApplicationId">
+                <label class="mx-2">(あいまい)</label>
+                <a class="cell-link" id="getApplicationId_LNK" (click)="linkBtnClick($event)">複数指定</a>
+              </ng-container>
+            </div>
+            <div class="d-flex flex-column">
+              <ea-input-mask id="getApplicationIdPlural" [hidden]="isGetApplicationId" [pattern]="'0-9A-Z'"
+                formControlName="getApplicationIdPlural" class="wm-combo wm-300"></ea-input-mask>
+              <div class="d-inline" *ngIf="!isGetApplicationId">
+                <label class="mx-2">(スペース区切で複数指定可)</label>
+                <a class="cell-link" id="getApplicationIdPlural_LNK" (click)="linkBtnClick($event)">あいまい検索</a>
+              </div>
+            </div>
+          </div>
+          <div class="asset-group-control d-flex flex-row">
+            <label class="label-col text-right">登録申請番号:</label>
+            <div class="d-inline-block">
+              <ea-input-mask id="registApplicationId" [hidden]="!isRegistApplicationId" [pattern]="'0-9A-Z'"
+                [maxLength]="9" formControlName="registApplicationId" class="wm-combo wm-100">
+              </ea-input-mask>
+              <ng-container *ngIf="isRegistApplicationId">
+                <label class="mx-2">(あいまい)</label>
+                <a class="cell-link" id="registApplicationId_LNK" (click)="linkBtnClick($event)">複数指定</a>
+              </ng-container>
+            </div>
+            <div class="d-flex flex-column">
+              <ea-input-mask id="registApplicationIdPlural" [hidden]="isRegistApplicationId" [pattern]="'0-9A-Z'"
+                formControlName="registApplicationIdPlural" class="wm-combo wm-300"></ea-input-mask>
+              <div class="d-inline" *ngIf="!isRegistApplicationId">
+                <label class="mx-2">(スペース区切で複数指定可)</label>
+                <a class="cell-link" id="registApplicationIdPlural_LNK" (click)="linkBtnClick($event)">あいまい検索</a>
+              </div>
+            </div>
+          </div>
+          <div class="asset-group-control d-flex flex-row">
+            <label class="label-col text-right">登録日:</label>
+            <div class="d-inline-block">
+              <wj-input-date id="registDateFrom" formControlName="registDateFrom" class="wm-combo wm-120"
+                [format]="'yyyy/MM/dd'" [maxlength]="10" [isRequired]="false"></wj-input-date>
+              <label class="mx-2">～</label>
+              <wj-input-date id="registDateTo" formControlName="registDateTo" class="wm-combo wm-120"
+                [format]="'yyyy/MM/dd'" [maxlength]="10" [isRequired]="false"></wj-input-date>
+            </div>
+          </div>
+          <div class="asset-group-control d-flex flex-row">
+            <label class="label-col text-right">抹消済みオプション:</label>
+            <div class="form-check form-check-inline">
+              <input type="checkbox" formControlName="deleteFlag" class="form-check-input" id="deleteFlag" />
+              <label class="form-check-label" for="searchScopeType2">抹消済みを含む</label>
+            </div>
+          </div>
+        </div>
+        <div></div>
+      </div>
+    </form>
+  </section>
+
+  <!-- ボディレイアウト -->
+  <app-com-asset-search-condition #comAssetSearchConditionComponent>
+  </app-com-asset-search-condition>
+</div>

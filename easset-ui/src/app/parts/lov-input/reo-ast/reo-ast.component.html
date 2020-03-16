@@ -1,0 +1,65 @@
+<div class="row row-tree-selection">
+    <div class="col-2 col-tree-form pr-2">
+      <form [formGroup]="reoAstForm">
+        <ea-input-mask #reoAstName class="input-display wm-combo is-rounded" formControlName="{{reoAstNameControlName}}" [isReadOnly]="true" [required]="required"></ea-input-mask>
+      </form>
+    </div>
+    <div class="col-5 col-tree-buttons p-0 wm-buttons">
+      <button type="button" class="wm-btn wm-sm" (click)="open($event.currentTarget)"><span class="ico"><img src="assets/images/button/popup.png"></span></button>
+    </div>
+  </div>
+
+  <ea-popup #reoAstPopup class="popup-staff-selection" [hideTrigger]="'None'" (hidden)="close()">
+    <div class="form-select-staff">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">資産(機器)明細選択</h5>
+          <button type="button" tabindex="-1" class="close bt-close wj-hide">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div class="section-search">
+            <form class="row" [formGroup]="searchForm">
+              <div class="col-7 mb-3">
+                <div class="row row-search">
+                  <div class="col-6 text-right">メーカー名(あいまい)：</div>
+                  <div class="col-6">
+                    <ea-input-mask formControlName="searchParamMakerName"></ea-input-mask>
+                  </div>
+                </div>
+                <div class="row row-search">
+                  <div class="col-6 text-right">資産(機器)名(あいまい)：</div>
+                  <div class="col-6">
+                    <ea-input-mask formControlName="searchParamAstName"></ea-input-mask>
+                  </div>
+                </div>
+              </div>
+              <div class="col-buttons pt-3">
+                <button type="button" class="wm-btn" (click)="init()">検索</button>
+              </div>
+            </form>
+          </div>
+          <div class="section-data">
+            <ea-flex-grid
+              #gridReoAstList
+              class="grid-common-list grid-staff-selection-list"
+              [itemsSource]="reoAstList"
+              [allowResizing]="'None'"
+              [allowSorting]="false"
+              [headersVisibility]="'Column'"
+              (dblclick)="submit()"
+            >
+              <ea-flex-grid-column header="メーカー" binding="value1" [allowResizing]="false" [allowMerging]=true [width]="110"></ea-flex-grid-column>
+              <ea-flex-grid-column header="資産(機器)名" binding="value2" [allowResizing]="false" [allowMerging]=true [width]="200"></ea-flex-grid-column>
+              <ea-flex-grid-column header="メーカー型番" binding="value3" [allowResizing]="false" [allowMerging]=true [width]="110"></ea-flex-grid-column>
+              <ea-flex-grid-column header="契約月数(ヶ月)" binding="value8" [allowResizing]="false" [allowMerging]=true [width]="120"></ea-flex-grid-column>
+              <ea-flex-grid-column header="金額" binding="value9" [allowResizing]="false" [allowMerging]=true [width]="110"></ea-flex-grid-column>
+            </ea-flex-grid>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="wm-btn" (click)="submit()">選択</button>
+          <button type="button" class="wm-btn wj-hide">閉じる</button>
+        </div>
+      </div>
+    </div>
+  </ea-popup>

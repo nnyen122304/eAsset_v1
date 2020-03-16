@@ -1,0 +1,690 @@
+<div fxFlexFill>
+  <form [formGroup]="apGetIntForm">
+    <div fxLayout="row" class="e-header" [hidden]="accessMenu == 'menuIdApGetIntEapp'">
+      <div class="block-frame-border header w-100 m-0">
+        <div class="row col block-component">
+          <div fxLayout="row" class="row col-6">
+            <div class="form-group">
+              <label class="col-label wm-100">取得申請書番号:</label>
+              <span class="e-link">
+                <ea-input-mask class="input-display wm-combo wm-80 bg-gray" readonly></ea-input-mask>
+              </span>
+            </div>
+            <div class="form-group">
+              <label>Ver.</label>
+              <ea-input-mask class="input-display wm-combo wm-40 bg-gray" readonly></ea-input-mask>
+            </div>
+            <div class="form-group">
+              <label class="wm-combo wm-100">ステータス:</label>
+              <div class="wm-buttons">
+                <ea-input-mask class="input-display wm-combo is-rounded wm-80 required" id="apStatusName"
+                  formControlName="apStatusName" name="apStatusName" readonly></ea-input-mask>
+                <button type="button" class="wm-btn wm-sm btn-status-popup"
+                  (click)="popupStatus.open($event.currentTarget)">
+                  <span class="ico"><img src="assets/images/button/popup.png" /></span>
+                </button>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="wm-100">取得形態:</label>
+              <span class="e-link">
+                <ea-input-mask class="input-display wm-combo is-rounded wm-200 required" formControlName="apGetTypeName" readonly></ea-input-mask>
+              </span>
+            </div>
+            <div class="form-group"
+              [hidden]="apGetIntForm.controls.eappId.value === '' || apGetIntForm.controls.eappId.value === null">
+              <label class="wm-80">e申請書類ID:</label>
+              <span class="e-link">
+                <a class="link">{{apGetIntForm.controls.eappId.value}}</a>
+              </span>
+            </div>
+          </div>
+          <div fxLayout="row" class="row col-3 p-0 apGetIntDate">
+            <div class="form-group">
+              <label class="col-label wm-85">申請日:</label>
+              <wj-input-date class="wm-combo wm-120 required" id="apDate" maxlength="10" name="apDate"
+                [isRequired]="false"></wj-input-date>
+            </div>
+            <div class="form-group">
+              <app-ap-get-int-amount-range-selection [title]="'取得金額範囲:'" [styleTitle]="'col-label wm-85'"
+                [titlePopup]="'取得金額範囲選択'" [extClass]="'wm-160 required ml-1'" [apGetAmountRange]="apGetAmountRange"
+                [apGetAmountRangeName]="'apGetAmountRangeName'" [sqlName]="'selectCodeName_LOV'" [paramMap]="{ categoryCode: 'AP_GET_INT_AMOUNT_RANGE',
+                                                                   parentCategoryCode: 'AP_GET_INT_TYPE',
+                                                                   companyCode: sessionInfo.loginCompanyCode,
+                                                                   parentInternalCode: '1'}"
+                (select)="selectApGetAmountRange($event)">
+
+              </app-ap-get-int-amount-range-selection>
+            </div>
+          </div>
+          <div fxLayout="row" class="row col-3 p-0">
+            <div class="form-group form-check form-check-inline">
+              <input class="form-check-input wm-checkbox wm-tab-element" [(ngModel)]="searchParamSC.specialApproveFlag"
+                [ngModelOptions]="{standalone: true}" type="checkbox" id="specialApproveFlag">
+              <label class="form-check-label" for="specialApproveFlag">稟議書・経営会議等承認済</label>
+            </div>
+            <div class="form-group" [hidden]="!searchParamSC.specialApproveFlag">
+              <label class="col-label wm-70">申請日:</label>
+              <wj-input-date class="wm-combo wm-120 required" id="specialApproveDate" maxlength="10"
+                name="specialApproveDate" [isRequired]="false" [value]="searchParamSC.specialApproveDate"
+                [(ngModel)]="searchParamSC.specialApproveDate"
+                [ngModelOptions]="{standalone: true}"></wj-input-date>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- ボディレイアウト -->
+    <div class="e-body">
+      <!-- 表示制御：e申請インラインでのみ表示 -->
+      <div class="section-inventory-buttons wm-buttons" *ngIf="accessMenu == 'menuIdApGetIntEapp'">
+        <button type="button" class="wm-btn wm-sm">
+          <span class="ico"><img src="assets/images/button/save.png" /></span>
+          <span class="save">印刷</span>
+        </button>
+        <button type="button" class="wm-btn wm-sm">
+          <span class="ico"><img src="assets/images/button/save.png" /></span>
+          <span class="save">eAssetで開く</span>
+        </button>
+      </div>
+      <!-- 申請者情報 ここから -->
+      <!-- 表示制御：e申請インラインでは非表示 -->
+      <div class="section-form" *ngIf="accessMenu == 'menuIdApGetIntCreate1'">
+        <div class="block-frame">
+          <h2 class="frame-title bg-green">申　請　者</h2>
+          <div class="frame-body bd-none">
+            <div class="block-frame-border">
+              <h2 class="frame-title horizontal-tb">起票者</h2>
+              <div fxLayout="row" class="frame-content">
+                <div class="form-group wr-14">
+                  <label for="apCreateStaffCode">社員番号:</label>
+                  <ea-input-mask [isReadOnly]="true" class="input-display wm-combo wm-60 bg-gray"
+                    id="apCreateStaffCode" name="apCreateStaffCode" formControlName="apCreateStaffCode"></ea-input-mask>
+                </div>
+                <div class="form-group">
+                  <label for="apCreateStaffName">氏名:</label>
+                  <ea-input-mask [isReadOnly]="true" class="input-display wm-combo wm-100 wr-10 bg-gray"
+                    id="apCreateStaffName" name="apCreateStaffName" formControlName="apCreateStaffName"></ea-input-mask>
+                </div>
+                <div class="form-group">
+                  <label for="apCreateCompanyName">会社:</label>
+                  <ea-input-mask [isReadOnly]="true" class="input-display wm-combo wm-70 bg-gray"
+                    id="apCreateCompanyName" name="apCreateCompanyName" formControlName="apCreateCompanyName"></ea-input-mask>
+                </div>
+                <div class="form-group wr-25">
+                  <label for="apCreateSectionName">所属部署:</label>
+                  <ea-input-mask [isReadOnly]="true" class="input-display wm-combo wm-220 bg-gray"
+                    id="apCreateSectionName" name="apCreateSectionName" formControlName="apCreateSectionName"></ea-input-mask>
+                </div>
+                <div class="form-group">
+                  <label for="apCreateTel">連絡先TEL:</label>
+                  <ea-input-mask [isReadOnly]="true" class="input-display wm-combo wm-110 bg-gray" id="apCreateTel"
+                    name="apCreateTel" formControlName="apCreateTel"></ea-input-mask>
+                  <button type="button" class="wm-btn wm-sm" (click)="mailApCreateMailTo()">
+                    <span class="ico"><img src="assets/images/button/mail.png" /></span>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="block-frame-border">
+              <h2 class="frame-title horizontal-tb">申請者</h2>
+              <div fxLayout="row" class="frame-content">
+                <div class="form-group wr-14">
+                  <app-staff-selection [title]="'社員番号:'" [staffForm]="staffForm" [onlyStaffCode]="true" extClass="wr-5"
+                    [staffCodeControlName]="'staffCode'" [staffNameControlName]="'staffName'" [usableDataOnly]="true"
+                    [required]="true" [companyOnly]="true"  (select)="changeStaffSelection($event)"></app-staff-selection>
+                </div>
+                <div class="form-group">
+                  <label for="apStaffName">氏名:</label>
+                  <ea-input-mask [isReadOnly]="true" class="input-display wm-combo wr-10 bg-gray" id="apStaffName"
+                    name="apStaffName" formControlName="apStaffName" ></ea-input-mask>
+                </div>
+                <div class="form-group">
+                  <label for="apCompanyName">会社:</label>
+                  <ea-input-mask [isReadOnly]="true" class="input-display wm-combo wm-70 bg-gray" id="apCompanyName"
+                    name="apCompanyName" formControlName="apCompanyName"></ea-input-mask>
+                </div>
+                <div class="form-group wr-25">
+                  <app-ap-section-selection [sectionForm]="sectionForm" [apSectionCodeControlName]="'apSectionCode'"
+                    [apSectionNameControlName]="'apSectionName'" [title]="'申請部署:'" [sqlName]="'selectApSection_LOV'"
+                    [paramMap]="{staffCode: this.staffForm.controls.staffCode.value}">
+                  </app-ap-section-selection>
+                </div>
+                <div>
+                  <div class="form-group">
+                    <label for="apTel">連絡先TEL:</label>
+                    <div>
+                      <ea-input-mask class="input-display wm-combo wm-110 bg-gray required" id="apTel" name="apTel" formControlName="apTel">
+                      </ea-input-mask>
+                      <button type="button" class="wm-btn wm-sm" (click)="mailApMailTo()">
+                        <span class="ico"><img src="assets/images/button/mail.png" /></span>
+                      </button>
+                    </div>
+                  </div>
+                  <div class="form-group pt-2">
+                    <div class="form-group form-check form-check-inline">
+                      <input class="form-check-input wm-checkbox wm-tab-element" type="checkbox" id="apSkipApproveFlag">
+                      <label class="form-check-label" for="apSkipApproveFlag">課長/GL承認不要</label>
+                    </div>
+                    <div class="form-group form-check form-check-inline">
+                      <input class="form-check-input wm-checkbox wm-tab-element" type="checkbox"
+                        id="apNeedCioJudgeFlag" formControlName="apNeedCioJudgeFlag" (change)="toggleApNeedCioJudgeFlag()">
+                      <label class="form-check-label" for="apNeedCioJudgeFlag">要CIO審査</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- 申請者情報 ここまで -->
+
+      <!-- 分類情報 ここから -->
+      <!-- 表示制御：市販目的ソフトウェアは表示 -->
+      <div class="section-form" *ngIf="accessMenu == 'menuIdApGetIntCreate2'">
+        <div class="block-frame">
+          <h2 class="frame-title bg-gray">分　類</h2>
+          <div class="frame-body bd-none">
+            <div class="block-frame-border">
+              <h2 class="frame-title horizontal-tb">分類</h2>
+              <div class="frame-content">
+                <div class="form-group">
+                  <label class="col-label wm-110">分類:</label>
+                  <ea-input-mask class="input-display wm-combo wm-400 required" id="apStaffName" name="apStaffName">
+                  </ea-input-mask>
+                </div>
+                <div class="form-group">
+                  <label class="col-label wm-110">タスク:</label>
+                  <ea-input-mask [isReadOnly]="true" class="input-display wm-combo wm-200 bg-gray"
+                    id="mktCatTaskName" name="mktCatTaskName"></ea-input-mask>
+                    <label>(会計計上区分)</label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- 申請者情報 ここまで -->
+      <!-- 資産概要情報 ここから -->
+      <div class="section-form">
+        <div class="block-frame">
+          <h2 class="frame-title bg-violet">資　産　概　要</h2>
+          <div class="frame-body bd-none">
+            <div class="block-frame-border">
+              <h2 class="frame-title horizontal-tb">資産概要</h2>
+              <div class="frame-content">
+                <div class="form-group" [hidden]="accessMenu != 'menuIdApGetIntCreate1'">
+                  <label class="col-label wm-110">取得時期:</label>
+                  <div class="form-group form-check form-check-inline">
+                    <input class="form-check-input wm-checkbox wm-tab-element" type="checkbox" id="apGetType">
+                    <label class="form-check-label" for="apGetType">先行申請</label>
+                  </div>
+                </div>
+                <div class="form-group"  [hidden]="accessMenu == 'menuIdApGetIntCreate2'">
+                  <label class="col-label wm-110">資産名:</label>
+                  <ea-input-mask class="input-display wm-combo wm-350 required" id="apStaffName" name="apStaffName">
+                  </ea-input-mask>
+                </div>
+                <!-- 表示制御：市販目的ソフトウェアの場合は非表示 -->
+                <div class="form-group col col-form" [hidden]="accessMenu == 'menuIdApGetIntCreate2'">
+                  <label class="wm-100 col-label"></label>
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input mt-0 required" type="radio" id="astCloudType1" [value]="'1'" required
+                    formControlName="astCloudType">
+                    <label class="form-check-label" for="astCloudType1">クラウド以外</label>
+                  </div>
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input mt-0 required" type="radio" id="astCloudType2" [value]="'2'" required
+                      formControlName="astCloudType">
+                    <label class="form-check-label" for="astCloudType2">クラウド</label>
+                  </div>
+                </div>
+                <!-- 表示制御：市販目的ソフトウェアの場合は非表示 -->
+                <!-- 入力制御：クラウドの場合は必須-->
+                <div class="form-group" [hidden]="accessMenu == 'menuIdApGetIntCreate2'">
+                  <div class="col">
+                    <app-ppfs-group-selection [title]="'案件グループ:'" [styleTitle]="'wm-combo wm-110'"
+                      [ppfsGroupCodeStyle]="this.apGetIntForm.controls.astCloudType.value === '2' ? 'wm-100 required': 'wm-100'" [ppfsGroupNameStyle]="'wm-250'" [ppfsGroupForm]="astGroup"
+                      [ppfsGroupCodeControlName]="'astGroupCode'" [ppfsGroupNameControlName]="'astGroupName'"
+                      [sqlName]="'selectPpfs_Group_LOV'" [paramMap]="{companyCode: sessionInfo.loginCompanyCode}">
+                    </app-ppfs-group-selection>
+                  </div>
+                </div>
+                <div class="form-group" [hidden]="accessMenu == 'menuIdApGetIntCreate2'">
+                  <label class="col-label wm-110 ">取得(再申請)理由:</label>
+                  <textarea class="text-required" [required]="'true'" style="width: 550px" name="astGetReason"></textarea>
+                </div>
+                <!-- 表示制御：市販目的ソフトウェアの場合は表示 -->
+                <div class="form-group" [hidden]="accessMenu != 'menuIdApGetIntCreate2'">
+                  <label class="col-label wm-110">資産ﾌﾟﾛｼﾞｪｸﾄｺｰﾄﾞ:</label>
+                  <ea-input-mask class="input-display wm-combo wm-350 required" id="apStaffName" name="apStaffName">
+                  </ea-input-mask>
+                </div>
+
+                <!-- 入力制御：市販目的ソフトウェア以外は必須-->
+                <div class="form-group">
+                  <label class="col-label wm-110">{{astCompletePlanDateLabel}}</label>
+                  <wj-input-date class="wm-combo wm-120 required" id="apDate" maxlength="10" name="apDate"
+                    [isRequired]="true"></wj-input-date>
+                </div>
+
+                <!-- 表示制御：長期前払費用/その他無形固定資産の場合は表示 -->
+                <div class="form-group" [hidden]="accessMenu != 'menuIdApGetIntCreate3'">
+                  <label class="col-label wm-110"></label>
+                  <div class="form-group form-check form-check-inline">
+                    <input class="form-check-input wm-checkbox wm-tab-element" type="checkbox" id="astRentFlag" formControlName="astRentFlag">
+                    <label class="form-check-label" for="astRentFlag">賃借物件据付費用</label>
+                  </div>
+                </div>
+                <!-- 表示制御：市販目的ソフトウェアの場合は表示 -->
+                <div class="form-group mt-3" [hidden]="accessMenu != 'menuIdApGetIntCreate2'">
+                  <label class="col-label wm-110"></label>
+                  <div class="form-group form-check form-check-inline">
+                    <label class="form-check-label"> ※ システムの性能、機能、構成要素、他社より購入するライセンス、自社開発部分等</label>
+                  </div>
+                </div>
+                <div class="form-group" [hidden]="accessMenu != 'menuIdApGetIntCreate2'">
+                  <label class="col-label wm-110">製品の概要:</label>
+                  <textarea class="text-required" [required]="true" style="width: 550px" name="mktAstProductOutline"></textarea>
+                </div>
+                <div class="form-group mt-3" [hidden]="accessMenu != 'menuIdApGetIntCreate2'">
+                  <label class="col-label wm-110"></label>
+                  <div class="form-group form-check form-check-inline">
+                    <label class="form-check-label"> ※ 対象市場セグメント、市場が要求する品質、性能、市場の規模、将来性、競合関係等</label>
+                  </div>
+                </div>
+                <div class="form-group" [hidden]="accessMenu != 'menuIdApGetIntCreate2'">
+                  <label class="col-label wm-110">市場性:</label>
+                  <textarea class="text-required" [required]="true" style="width: 550px" name="mktAstMarket"></textarea>
+                </div>
+                <div class="form-group mt-3" [hidden]="accessMenu != 'menuIdApGetIntCreate2'">
+                  <label class="col-label wm-110"></label>
+                  <div class="form-group form-check form-check-inline">
+                    <label class="form-check-label"> ※ 発売開始時期、販売体制、サービス体制、ユーザー等</label>
+                  </div>
+                </div>
+                <div class="form-group" [hidden]="accessMenu != 'menuIdApGetIntCreate2'">
+                  <label class="col-label wm-110">ﾏｰｹﾃｨﾝｸﾞ方針:</label>
+                  <textarea class="text-required" [required]="true" style="width: 550px" name="mktAstPolicy"></textarea>
+                </div>
+              </div>
+            </div>
+            <!-- 表示制御：社内使用ソフトウェアの場合は表示 -->
+            <div class="block-frame-border" [hidden]="accessMenu != 'menuIdApGetIntCreate1' || apGetAmountRangeUseCostType != '1'">
+              <h2 class="frame-title horizontal-tb">費用削減／収益獲得効果</h2>
+              <div class="frame-content">
+                <!-- 表示制御：市販目的ソフトウェアの場合は非表示 -->
+                <div class="form-group">
+                  <div class="ast-fect-typle">
+                    <label class="wm-160 col-label">費用削減／収益獲得効果:</label>
+                    <div class="form-check form-check-inline">
+                      <input class="form-check-input mt-0 required" type="radio" id="astEffectType1" [value]="'1'"
+                        required formControlName="astEffectType">
+                      <label class="form-check-label" for="astEffectType1">有</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                      <input class="form-check-input mt-0 required" type="radio" id="astEffectType2" [value]="'2'"
+                        required formControlName="astEffectType">
+                      <label class="form-check-label" for="astEffectType2">無</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                      <input class="form-check-input mt-0 required" type="radio" id="astEffectType3" [value]="'3'"
+                        required formControlName="astEffectType">
+                      <label class="form-check-label" for="astEffectType3">不明</label>
+                    </div>
+                  </div>
+                  <div class="ast-fect-typle" [hidden]="this.apGetIntForm.controls.astEffectType.value != '1'">
+                    <div class="form-group">
+                      <label class="wm-155 col-label">費用削減／収益獲得効果:</label>
+                      <ea-input-number class="input-display wm-combo wm-50 required" id="apStaffName"
+                        name="apStaffName">
+                      </ea-input-number>
+                      <label class="ml-1">百万円</label>
+                    </div>
+                    <div class="form-group">
+                      <label class="wm-160 ml-4">※ 費用削減／収益獲得金額の算出根拠資料を申請書に別途添付のこと。</label>
+                    </div>
+                  </div>
+                </div>
+                <!-- 入力制御：費用削減／収益獲得効果が無、不明の場合は必須-->
+                <div class="form-group">
+                  <label class="wm-160 col-label">備考:</label>
+                  <textarea [ngClass]="this.apGetIntForm.controls.astEffectType.value != '1' ? 'text-required' : ''" [required]="this.apGetIntForm.controls.astEffectType.value != '1'" style="width: 550px" name="astGetReason"></textarea>
+                </div>
+                <div class="form-group">
+                  <label class="wm-160"></label>
+                  <label class="ml-5">※ 費用削減／収益獲得効果が「無」、又は「不明」の場合、上記備考欄に理由明記のこと。</label>
+                </div>
+              </div>
+            </div>
+            <!-- 表示制御：長期前払費用/その他無形固定資産で賃借物件据付費用チェックの場合は表示 -->
+            <div class="block-frame-border" [hidden]="accessMenu != 'menuIdApGetIntCreate3' || !this.apGetIntForm.controls.astRentFlag.value">
+              <h2 class="frame-title horizontal-tb">賃借物件据付費用</h2>
+              <div class="frame-content">
+                <div class="form-group">
+                  <label class="wm-160">ﾘｰｽ・ﾚﾝﾀﾙ取得申請書番号:</label>
+                  <div class="col">
+                    <div class="row">
+                      <ea-input-mask #inputDisplay class="input-display wm-combo wm-80 is-rounded" [isReadOnly]="true"
+                                      ></ea-input-mask>
+                      <button type="button" class="wm-btn wm-sm btn-icon btn-tooltip"><span
+                        class="ico"><img src="assets/images/button/clear.gif"></span><span class="tooltip-text">クリア</span></button>
+                      <button type="button" class="wm-btn wm-sm"><span class="ico"><img
+                        src="assets/images/button/popup.png"></span></button>
+                    </div>
+                  </div>
+               </div>
+              <div class="form-group">
+                <div class="ast-rent-month">
+                  <label class="wm-160 col-label">契約月数:</label>
+                  <wj-input-number class="input-display wm-combo wm-50" id="astRentMonth" name="astRentMonth"></wj-input-number>
+                  <label class="ml-1"> ヶ月</label>
+                </div>
+                <div class="ast-rent-description">
+                  <label class="wm-100 col-label">賃貸予定期間:</label>
+                  <wj-input-date class="wm-combo wm-120" id="astRentDateFrom" maxlength="10"
+                      name="astRentDateFrom" [isRequired]="false"></wj-input-date>
+                  <label class="ml-1 mr-1"> ～ </label>
+                  <wj-input-date class="wm-combo wm-120" id="astRentDateTo" maxlength="10"
+                      name="astRentDateTo" [isRequired]="false"></wj-input-date>
+                  </div>
+                </div>
+                <div class="form-group">
+                    <label class="wm-160 col-label">備考:</label>
+                    <textarea style="width: 550px" name="astRentDescription"></textarea>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- 資産概要情報 ここまで -->
+
+      <!-- 資産明細情報 ここから -->
+      <!-- 表示制御：市販目的ソフトウェアの場合は非表示 -->
+      <div class="section-form" [hidden]="accessMenu == 'menuIdApGetIntCreate2'" >
+        <div class="block-frame">
+          <h2 class="frame-title bg-black">資　産　明　細</h2>
+          <div class="frame-body bd-none">
+            <div class="block-frame-border">
+              <h2 class="frame-title horizontal-tb">資産明細</h2>
+              <div class="frame-content">
+                <app-ap-get-int-line-fld-line></app-ap-get-int-line-fld-line>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- 資産明細情報 ここまで -->
+
+      <!-- 開発スケジュール/開発要員計画情報 ここから -->
+      <!-- 表示制御：市販目的ソフトウェアの場合のみ表示 -->
+      <div class="section-form" [hidden]="accessMenu != 'menuIdApGetIntCreate2'" >
+        <div class="block-frame">
+          <h2 class="frame-title bg-brown">開発スケジュ│ル/開発要員計画</h2>
+          <div class="frame-body bd-none">
+            <div class="block-frame-border">
+              <h2 class="frame-title horizontal-tb">開発スケジュール/開発要員計画</h2>
+              <div class="frame-content">
+                <div class="grid-common-wrap grip-top">
+                  <div class="wm-grid-list" id="wp-grid-data-list">
+                    <ea-flex-grid #gridApGetIntLineDevSchAC
+                    [(itemsSource)]="apGetIntLineDevSchAC"
+                    [allowSorting]="false"
+                    [isReadOnly]="false"
+                    class="grid-common-list grid-list"
+                    (initialized)="onGridInitApGetIntLineDevSchADG(gridApGetIntLineDevSchAC)"
+                    >
+                      <ea-flex-grid-column [width]="150" binding="levelName" header="フェーズ" [isReadOnly]="true">
+                      </ea-flex-grid-column>
+                      <ea-flex-grid-column binding="devPeriodFrom" [width]="120"
+                        header="開始日"  [format]="'d'" [isRequired]="false" [isReadOnly]="false" value = "devPeriodFrom">
+
+                      </ea-flex-grid-column>
+                      <ea-flex-grid-column binding="devPeriodTo" [width]="120"
+                        header="終了日"  [isReadOnly]="false">
+                      </ea-flex-grid-column>
+                      <ea-flex-grid-column binding="devProperCount" [width]="72"
+                        header="社員" [aggregate]="'Sum'">
+                        <ng-template wjFlexGridCellTemplate [cellType]="'Cell'" let-cell="cell">
+                          <ea-input-number [format]="'g5'" [(value)]="cell.item.devProperCount" (focusout)="fnFocusOut(cell.item, $event)" id="devProperCount" class="wj-grid-editor wj-grid-editor-input wj-form-control cell-input-text"></ea-input-number>
+                        </ng-template>
+                      </ea-flex-grid-column>
+                      <ea-flex-grid-column binding="devEntrustCount" [width]="72"
+                        header="業務委託" [aggregate]="'Sum'">
+                        <ng-template wjFlexGridCellTemplate [cellType]="'Cell'" let-cell="cell">
+                          <ea-input-number id="devEntrustCount" (focusout)="fnFocusOut(cell.item, $event, 'devEntrustCount')"
+                          class="wj-grid-editor wj-grid-editor-input wj-form-control cell-input-text" [format]="'g5'" [(value)]="cell.item.devEntrustCount"
+                          ></ea-input-number>
+                        </ng-template>
+                      </ea-flex-grid-column>
+                      <ea-flex-grid-column binding="totalPeopleCount" [width]="72"  [format]="'g5'"
+                        header="合計" [aggregate]="'Sum'">
+                      </ea-flex-grid-column>
+                      <ea-flex-grid-column binding="devAmount" [width]="100"
+                        header="開発経費(円)" [aggregate]="'Sum'">
+                        <ng-template wjFlexGridCellTemplate [cellType]="'Cell'" let-cell="cell">
+                          <ea-input-number [ngClass]="cell.item.devAmount ? 'required' : ''" id="index" [(value)]="cell.item.devAmount" class="wj-grid-editor wj-grid-editor-input wj-form-control cell-input-text"  (focusout)="this.gridApGetIntLineDevSchAC.collectionView.refresh()"
+                          ></ea-input-number>
+                        </ng-template>
+                      </ea-flex-grid-column>
+                    </ea-flex-grid>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="block-frame-border">
+              <h2 class="frame-title horizontal-tb">その他費用</h2>
+              <div class="frame-content">
+                <app-ap-get-int-line-otr-cost></app-ap-get-int-line-otr-cost>
+              </div>
+            </div>
+            <div class="block-frame-border">
+              <h2 class="frame-title horizontal-tb">取得金額合計</h2>
+              <div class="frame-content">
+              <div>取得金額合計</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- 資産明細情報 ここまで -->
+      <!-- 添付情報 ここから -->
+      <div class="section-form">
+        <div class="block-frame">
+          <h2 class="frame-title bg-orange">添　付</h2>
+          <div class="frame-body bd-none">
+            <div class="block-frame-border">
+              <h2 class="frame-title horizontal-tb">添付ファイル</h2>
+              <div class="frame-content">
+                <div class="upload">
+                  <app-file-upload-selection [btnText]="'添付ファイル追加'"
+                  (select)="uploadFile($event)"></app-file-upload-selection>
+                </div>
+                <div class="grid-common-wrap u-top">
+                  <div class="grid-common-count">
+                    <span>【件数：1 件】</span>
+                  </div>
+                  <div class="wm-grid-list">
+                    <ea-flex-grid #gridApGetIntLineAtt
+                    [itemsSource]="apGetIntLineAttList"
+                    (initialized)="initGridApGetIntLineAttList(gridApGetIntLineAtt)"
+                    class="grid-common-list grid-list ">
+                      <ea-flex-grid-column [width]="25" header=" ">
+                        <ng-template wjFlexGridCellTemplate [cellType]="'Cell'" let-cell="cell">
+                          <a name="btnDel" id="btnDel" class="btn-del"></a>
+                        </ng-template>
+                      </ea-flex-grid-column>
+                      <ea-flex-grid-column binding="lineSeq" [width]="30" header="No"></ea-flex-grid-column>
+                      <ea-flex-grid-column binding="attFileName" [width]="350" header="添付ファイル">
+                        <ng-template wjFlexGridCellTemplate [cellType]="'Cell'" let-cell="cell">
+                          <a class="link" href="javascript:void(0)"
+                             (click)="downloadFile(cell.item)">{{cell.item?.attFileName}}</a>
+                      </ng-template>
+                      </ea-flex-grid-column>
+                      <ea-flex-grid-column binding="createStaffCode" [width]="140" header="添付者">
+
+                      </ea-flex-grid-column>
+                      <ea-flex-grid-column binding="createDate" [width]="120" [format]="'yyyy/MM/dd HH:mm'"
+                        header="添付日"></ea-flex-grid-column>
+                      <ea-flex-grid-column binding="attComment" [width]="200" header="コメント">
+                        <ng-template wjFlexGridCellTemplate [cellType]="'Cell'" let-cell="cell">
+                          <ea-input-mask class="wj-form-control" [(ngModel)]="cell.item.attComment"
+                            [ngModelOptions]="{standalone: true}"></ea-input-mask>
+                        </ng-template>
+                      </ea-flex-grid-column>
+                    </ea-flex-grid>
+                  </div>
+                  <div class="form-group">
+                    <label class="wm-combo wm-100">補足:</label>
+                    <textarea style="width: 550px" name="attDescription"></textarea>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- 備考情報 ここから -->
+      <div class="section-form">
+        <div class="block-frame">
+          <h2 class="frame-title bg-blue">保　有</h2>
+          <div class="frame-body bd-none">
+            <div class="block-frame-border">
+              <h2 class="frame-title horizontal-tb">保有部署</h2>
+              <div fxLayout="row" class="frame-content">
+                <div class="form-group">
+                  <label for="holCompanyCode">会社:</label>
+                  <ea-input-mask [isReadOnly]="true" class="input-display wm-combo wm-100 bg-gray"
+                    id="holCompanyCode" name="holCompanyName" formControlName="holCompanyName"></ea-input-mask>
+                </div>
+                <div class="form-group">
+                    <app-section-selection [selectOnly]="true" [sectionForm]="holSectionForm"
+                    [extClass]="'required wm-200'" [title]="'保有部署:'"
+                    [sectionYearControlName]="'holSectionYear'"
+                    [sectionCodeControlName]="'holSectionCode'"
+                    [sectionNameControlName]="'holSectionName'"
+                    (select)="changeHolSection($event)"></app-section-selection>
+                </div>
+                <div class="form-group">
+                  <label>部署年度:</label>
+                  <wj-input-number  [format]="'g5'" [isReadOnly]="true" class="input-display wm-combo wr-5 bg-gray" id="holSectionYear"
+                    name="holSectionYear" formControlName="holSectionYear"></wj-input-number>
+                </div>
+              </div>
+            </div>
+            <div class="block-frame-border">
+              <h2 class="frame-title horizontal-tb">無形管理担当者</h2>
+              <div fxLayout="row" class="frame-content">
+                <div class="form-group">
+                    <app-staff-selection (select)="changeHolSectionStaff($event)"
+                    [staffForm]="holSectionStaffForm"
+                    [staffCodeControlName]="'holStaffCode'"
+                    [staffNameControlName]="'holStaffName'"
+                    [onlyStaffCode]="true" [usableDataOnly]="true" [required]="true"
+                    [title]="'社員番号:'" [companyOnly]="true"></app-staff-selection>
+                </div>
+                <div class="form-group">
+                  <label for="holStaffName">氏名:</label>
+                  <ea-input-mask [isReadOnly]="true" class="input-display wm-combo wm-100 bg-gray" id="holStaffName"
+                    name="holStaffName" formControlName="holStaffName"></ea-input-mask>
+                </div>
+                <div class="form-group">
+                  <label for="holStaffCompanyName" class="wm-combo wm-50">会社:</label>
+                  <ea-input-mask [isReadOnly]="true" class="input-display wm-combo wr-6 bg-gray"
+                    id="holStaffCompanyName" name="holStaffCompanyName" formControlName="holStaffCompanyName"></ea-input-mask>
+                </div>
+                <div class="form-group wm-300">
+                  <label for="holStaffSectionName">所属部署:</label>
+                  <ea-input-mask [isReadOnly]="true" class="input-display wm-combo wr-20 bg-gray"
+                    id="holStaffSectionName" name="holStaffSectionName" formControlName="holStaffSectionName"></ea-input-mask>
+                </div>
+              </div>
+              <div class="col pt-2">
+                <label style="color: #FF0000;">※　当該無形資産の実査を担当する方を記入ください。（ソフトウェアの場合には、サービス提供開始報告を行う担当も兼ねます。）</label>
+              </div>
+            </div>
+            <div class="block-frame-border">
+              <h2 class="frame-title horizontal-tb">代表設置場所</h2>
+              <div class="col row">
+                <div class="form-group">
+                  <label class="wm-combo wm-100">代表設置場所:</label>
+                  <app-ppfs-setchi-selection [ppfsForm]="holRepOfficeForm"
+                    [nameControlName]="'holRepOfficeName'"
+                    [sqlName]="'selectSetchi_LOV'"
+                    [paramMap]="{companyCode: sessionInfo.loginCompanyCode}"
+                    [codeControlName]="'holRepOfficeCode'"
+                    [isReadOnly]="true"></app-ppfs-setchi-selection>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- 経費負担情報 ここまで -->
+
+      <!-- 備考情報 ここから -->
+      <div class="section-form">
+        <div class="block-frame">
+          <h2 class="frame-title bg-brown">備　考</h2>
+          <div class="frame-body bd-none">
+            <div class="block-frame-border">
+              <h2 class="frame-title horizontal-tb">申請者記入欄</h2>
+              <div class="col">
+                <textarea style="width: 550px;" id="descriptionAp" name="descriptionAp"></textarea>
+              </div>
+            </div>
+            <div class="block-frame-border">
+              <h2 class="frame-title horizontal-tb">受付担当者・管理者記入欄</h2>
+              <div class="col">
+                <textarea style="width: 550px;" name="descriptionAdmin" id="descriptionAdmin"></textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- 備考情報 ここまで -->
+    </div>
+  </form>
+  <div class="footer mt-1" *ngIf="accessMenu != 'menuIdApGetIntEapp'">
+    <!-- 表示制御：全社権限もしくは、部署/一般権限でステータスが"未申請"、"申請中"、"差戻し"の場合は表示 -->
+    <button type="button" class="wm-btn wm-sm" *ngIf="accessMenu != 'menuIdApGetIntEapp' && accessLevel === 'admin'">
+      <span class="ico"><img src="assets/images/button/save.png" /></span>
+      <span class="save">保存</span>
+    </button>
+    <!-- 表示制御：ステータスが"未申請"、"差戻し"の場合は表示 -->
+    <button type="button" class="wm-btn wm-sm">
+      <span class="ico"><img src="assets/images/button/save.png" /></span>
+      <span class="apply">申請</span>
+    </button>
+    <!-- 表示制御：更新フラグがON且つステータスが"未申請"、"差戻し"の場合は表示 -->
+    <button type="button" class="wm-btn wm-sm">
+      <span class="ico"><img src="assets/images/button/save.png" /></span>
+      <span class="del">削除</span>
+    </button>
+    <button type="button" class="wm-btn wm-sm">
+      <span class="ico"><img src="assets/images/button/save.png" /></span>
+      <span class="print">印刷</span>
+    </button>
+    <button type="button" class="wm-btn wm-sm">
+      <span class="ico"><img src="assets/images/button/save.png" /></span>
+      <span class="mailTo">定型メール</span>
+    </button>
+    <button type="button" class="wm-btn wm-sm">
+      <span class="ico"><img src="assets/images/button/save.png" /></span>
+      <span class="hist">更新履歴照会</span>
+    </button>
+    <button type="button" class="wm-btn wm-sm" *ngIf="backToIndex != '-1'">
+      <span class="ico"><img src="assets/images/button/save.png" /></span>
+      <span class="backToIndex">戻る</span>
+    </button>
+  </div>
+</div>
+
+<app-status-selection [sqlName]="'selectCodeName_LOV'" [paramMap]="{ categoryCode: 'AP_STATUS_BGN_INT'}"
+(select)="changeApStatus($event)"></app-status-selection>
+
+<app-confirm-popup (confirm)="confirm(true)"></app-confirm-popup>

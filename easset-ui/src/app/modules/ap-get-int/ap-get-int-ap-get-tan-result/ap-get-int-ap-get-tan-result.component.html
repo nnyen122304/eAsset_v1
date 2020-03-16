@@ -1,0 +1,14 @@
+<header class="header header-border-bottom">
+  <div>
+    <a class="head-search" href="javascript: void(0)" (click)="goBack()">
+      <img src="assets/images/button/to_search.gif">
+      <span>検索条件画面へ戻る</span>
+    </a>
+  </div>
+</header>
+<div class="body">
+  <label>※　取得申請を選択(ダブルクリック)してください。</label>
+</div>
+<div class="list">
+  <app-ap-get-tan-result-list (select)="clickRow($event)" [dataList]="listApGetTanSR"></app-ap-get-tan-result-list>
+</div>

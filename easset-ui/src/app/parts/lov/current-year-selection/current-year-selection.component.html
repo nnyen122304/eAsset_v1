@@ -1,0 +1,35 @@
+
+<form class="d-block" [formGroup]="form">
+  <ea-input-mask #inputDisplay class="input-display wm-combo is-rounded" formControlName="{{ chgSchedulePeriodName }}"
+    [ngClass]="extClass" [required]="required" [isReadOnly]="isReadOnly"></ea-input-mask>
+  <button type="button" class="wm-btn wm-sm" (click)="open($event.currentTarget)" [hidden]="!visibleStatus">
+    <span class="ico"><img src="assets/images/button/popup.png" /></span>
+  </button>
+</form>
+
+<ea-popup #statusSelectionPopup class="popup-status-selection" [hideTrigger]="'None'" (hidden)="close()">
+  <div class="form-select-status">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">年月度選択</h5>
+        <button type="button" tabindex="-1" class="close bt-close wj-hide">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="section-status">
+          <ea-flex-grid
+            #gridStatusSelectionList
+            class="grid-common-list grid-status-selection-list"
+            [itemsSource]="dateList"
+            (dblclick)="onRowSelecting($event)"
+          >
+            <ea-flex-grid-column header="年月" binding="name" [width]="'*'"></ea-flex-grid-column>
+          </ea-flex-grid>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="wm-btn" (click)="sendChanges()">選択</button>
+        <button type="button" class="wm-btn wj-hide">閉じる</button>
+      </div>
+    </div>
+  </div>
+</ea-popup>

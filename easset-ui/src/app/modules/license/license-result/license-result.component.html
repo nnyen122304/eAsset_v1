@@ -1,0 +1,61 @@
+<div class="license-result">
+    <div class="license-head">
+      <div>
+        <a class="head-search" href="javascript: void(0)" (click)="goBack()">
+          <img src="assets/images/button/to_search.gif">
+          <span>検索条件画面へ戻る</span>
+        </a>
+      </div>
+      <hr>
+      <div class="row">
+        <div class="col-left col-8" *ngIf="sessionInfo.currentMenuId === '02050'">
+          <div class="display">
+            <div class="block-frame-border">
+              <div class="row">
+                <span class="label">抹消日:</span>
+                <wj-input-date class="wm-combo wm-100 required date" [isRequired]="false"
+                  [(ngModel)]="deleteObj.deleteDate" id="deleteDate" maxlength="10" name="deleteDate"></wj-input-date>
+                <span class="label">抹消理由:</span>
+                <ea-input-mask class="wm-combo wm-230 required" id="deleteReason" [(ngModel)]="deleteObj.deleteReason">
+                </ea-input-mask>
+                <button type="button" class="wm-btn wm-sm" (click)="delete()"><img src="assets/images/button/save.png">
+                  抹消</button>
+              </div>
+            </div>
+            <label class="label-btn px-2">※ 行をダブルクリックすると詳細が表示されます。</label>
+          </div>
+        </div>
+        <div class="col-left col-7" *ngIf="sessionInfo.currentMenuId !== '02050'">
+          <div *ngIf="sessionInfo.currentMenuId !== '02050'" class="download">
+            <button type="button" class="wm-btn wm-sm" id="download"
+              (click)="openOptionDownload($event.currentTarget)">ダウンロード</button>
+            <label class="px-2">※ 行をダブルクリックすると詳細が表示されます。</label>
+          </div>
+        </div>
+        <!-- 表示制御：全社権限の場合表示 -->
+        <div class="col-right" *ngIf="getAccessLevel() === 'admin' && sessionInfo.currentMenuId!=='02050'">
+          <div class="block-frame-border">
+            <h2 class="frame-title">簡易検索</h2>
+            <div class="row">
+              <span class="label">管理番号:</span>
+              <ea-input-mask class="input-display wm-combo wm-70 bg-white" id="licenseId" name="licenseId"
+                [(ngModel)]="searchLicenseId" [maxLength]="8" [pattern]="'A-Z0-9'">
+              </ea-input-mask>
+              <label>(あいまい)</label>
+              <button type="button" class="wm-btn wm-sm" (click)="search()">検索</button>
+              <span class="label">保有会社:</span>
+              <ea-input-mask class="input-display wm-combo wm-70 bg-gray" [value]="sessionInfo.loginCompanyName">
+              </ea-input-mask>
+              <span *ngIf="licenseSCSearch.deleteFlag === '1'" class="label">抹消済も含む</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  <div class="asset-list">
+    <app-license-result-list (select)="clickRow($event)" [dataList]="licenseSRList"></app-license-result-list>
+  </div>
+</div>
+<app-download-option-prop #appDownloadOptionProd [paramObj]="{itemDefName: 'ITEM_DEF_LICENSE'}"
+  (select)="download($event)">
+</app-download-option-prop>

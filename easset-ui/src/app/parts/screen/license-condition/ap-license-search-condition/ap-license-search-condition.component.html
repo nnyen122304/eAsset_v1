@@ -1,0 +1,144 @@
+<div class="section-search">
+  <form [formGroup]="searchForm">
+    <div class="row">
+      <div class="width-body">
+        <div class="row">
+          <label class="col-label-search text-right">登録申請番号:</label>
+          <div class="col-8">
+            <div class="row">
+              <div class="form-group" [hidden]="!isLicense">
+                <ea-input-mask id="licenseId" class="wm-combo wm-tab-element wm-100" formControlName="licenseId">
+                </ea-input-mask>
+                <label class="text-inline">(あいまい)</label>
+                <span class="e-link col-label-toggle">
+                  <a class="link " (click)="linkBtnClickEvent('licenseId')">複数指定</a>
+                </span>
+              </div>
+              <div class="form-group pb-2" [hidden]="isLicense">
+                <ea-input-mask id="licenseIdPlural" class="wm-combo wm-tab-element wm-300"
+                  formControlName="licenseIdPlural">
+                </ea-input-mask>
+              </div>
+            </div>
+            <div class="row" [hidden]="isLicense">
+              <label class="text-inline">(スペース区切で複数指定可)</label>
+              <span class="e-link col-label-toggle">
+                <a class="link" (click)="linkBtnClickEvent('licenseIdPlural')">あいまい検索</a>
+              </span>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <label class="col-label-search text-right">e申請書類ID:</label>
+          <div class="col-8">
+            <div class="row">
+              <div class="form-group" [hidden]="!isEappId">
+                <ea-input-mask id="eappId" class="wm-combo wm-tab-element wm-100" formControlName="eappId">
+                </ea-input-mask>
+                <label class="text-inline">(あいまい)</label>
+                <span class="e-link col-label-toggle">
+                  <a class="link " (click)="linkBtnClickEvent('eappId')">複数指定</a>
+                </span>
+              </div>
+              <div class="form-group pb-2" [hidden]="isEappId">
+                <ea-input-mask id="eappIdPlural" class="wm-combo wm-tab-element wm-300" formControlName="eappIdPlural">
+                </ea-input-mask>
+              </div>
+            </div>
+            <div class="row" [hidden]="isEappId">
+              <label class="text-inline">(スペース区切で複数指定可)</label>
+              <span class="e-link col-label-toggle">
+                <a class="link" (click)="linkBtnClickEvent('eappIdPlural')">あいまい検索</a>
+              </span>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <label class="col-label-search text-right">ステータス:</label>
+          <div class="col-8 ml-2">
+            <div class="row ml-1">
+              <div class="form-check form-check-inline mb-2" *ngFor="let item of apStatus; let i = index"
+                formArrayName="apStatus">
+                <input *ngIf="i !== 3" type="checkbox" class="form-check-input wm-checkbox" [id]="'apStatus' + i" [formControlName]="i">
+                <label *ngIf="i !== 3" class="form-check-label mr-3" [for]="'apStatus' + i">{{item}}</label>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <label class="col-label-search text-right">申請日:</label>
+          <div class="col-8">
+            <div class="row">
+              <wj-input-date id="apDateFrom" formControlName="apDateFrom" name="apDateFrom" [isRequired]="false"
+                class="wm-120 ml-1"></wj-input-date>
+              <span class="label-date">～</span>
+              <wj-input-date id="apDateTo" formControlName="apDateTo" name="apDateTo" [isRequired]="false"
+                class="wm-120"></wj-input-date>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <label class="col-label-search text-right">起票/申請者:</label>
+          <div>
+            <app-staff-selection [staffForm]="searchForm" [staffCodeControlName]="'apStaffCode'"
+              [staffNameControlName]="'apStaffName'" [extNameClass]="'wm-150'" [visibleStatus]="isShow" [readOnly]="isReadOnly"></app-staff-selection>
+          </div>
+        </div>
+      </div>
+      <div class="width-body">
+        <div class="row">
+          <label class="col-label-search text-right">取得申請書番号:</label>
+          <div class="col-8">
+            <div class="row" [ngClass]="isGetApplicationId ? 'mb-25' : ''">
+              <div class="form-group" [hidden]="!isGetApplicationId">
+                <ea-input-mask id="getApplicationId" class="wm-combo wm-tab-element wm-100"
+                  formControlName="getApplicationId">
+                </ea-input-mask>
+                <label class="text-inline">(あいまい)</label>
+                <span class="e-link col-label-toggle">
+                  <a class="link " (click)="linkBtnClickEvent('getApplicationId')">複数指定</a>
+                </span>
+              </div>
+              <div class="form-group pb-2" [hidden]="isGetApplicationId">
+                <ea-input-mask id="getApplicationIdPlural" class="wm-combo wm-tab-element wm-300"
+                  formControlName="getApplicationIdPlural">
+                </ea-input-mask>
+              </div>
+            </div>
+            <div class="row" [hidden]="isGetApplicationId">
+              <label class="text-inline">(スペース区切で複数指定可)</label>
+              <span class="e-link col-label-toggle">
+                <a class="link" (click)="linkBtnClickEvent('getApplicationIdPlural')">あいまい検索</a>
+              </span>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <label class="col-label-search text-right">登録完了日:</label>
+          <div class="col-8">
+            <div class="row">
+              <wj-input-date id="apDateFrom" formControlName="registDateFrom" name="registDateFrom" [isRequired]="false"
+                class="wm-120 ml-1"></wj-input-date>
+              <span class="label-date">～</span>
+              <wj-input-date id="apDateTo" formControlName="registDateTo" name="registDateTo" [isRequired]="false"
+                class="wm-120"></wj-input-date>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <label class="col-label-search text-right">登録済オプション:</label>
+          <div class="col-8">
+            <div class="row">
+              <div class="form-check form-check-inline ml-2">
+                <input class="form-check-input wm-checkbox" type="checkbox" id="notCompleteFlag"
+                  formControlName="notCompleteFlag">
+                <label class="form-check-label" for="notCompleteFlag">登録が完了している申請書を除外</label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+  <app-com-license-search-condition [statesStatus]="statesStatus"></app-com-license-search-condition>
+</div>

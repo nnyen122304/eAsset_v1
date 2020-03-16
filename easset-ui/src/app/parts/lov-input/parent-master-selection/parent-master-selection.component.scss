@@ -1,0 +1,28 @@
+.parent-master-selection-input {
+  .input-display {
+    width: 100%;
+  }
+  .col-tree-form {
+    width: 100%;
+  }
+  .col-tree-buttons {
+    flex: 0 0 40px;
+  }
+  .col-tree-buttons.has-delete {
+    flex: 0 0 75px;
+  }
+}
+
+.row-filter {
+  margin-bottom: 10px;
+}
+
+.grid-parent-list {
+  display: block;
+  width: 100%;
+  max-height: 300px;
+}
+
+.popup-status-selection {
+  width: auto;
+}

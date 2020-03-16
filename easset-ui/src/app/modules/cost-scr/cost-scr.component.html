@@ -1,0 +1,27 @@
+<wj-tab-panel #viewStack class="view-stack" (selectedIndexChange)="this.selectedIndexChangeHandler($event)">
+    <ea-view-stack-tab [keepViewState]="false"> <!-- 画面切替後も状態を維持する画面：true、維持しない画面:false-->
+      <a>経費負担部課精査データ作成</a>
+      <div>
+        <app-cost-scr-create-data [parent]="this" #childViewCreate *ngIf="this.isLoaded.get(this.viewIndexCreate)">
+          {{this.changeChildSubject.set(this.viewIndexCreate, childViewCreate.changeChildSubject)}}
+        </app-cost-scr-create-data>
+      </div>
+    </ea-view-stack-tab>
+  <ea-view-stack-tab [keepViewState]="true">  <!-- 画面切替後も状態を維持する画面：true、維持しない画面:false-->
+    <a>経費負担部課精査</a>
+    <div>
+      <app-cost-scr-list [parent]="this" #childViewList *ngIf="this.isLoaded.get(this.viewIndexList)">
+        {{this.changeChildSubject.set(this.viewIndexList, childViewList.changeChildSubject)}}
+      </app-cost-scr-list>
+    </div>
+  </ea-view-stack-tab>
+  <ea-view-stack-tab [keepViewState]="false">  <!-- 画面切替後も状態を維持する画面：true、維持しない画面:false-->
+    <a>経費負担部課精査明細</a>
+    <div>
+      <app-cost-scr-line [parent]="this" #childViewLine *ngIf="this.isLoaded.get(this.viewIndexLine)">
+        {{this.changeChildSubject.set(this.viewIndexLine, childViewLine.changeChildSubject)}}
+      </app-cost-scr-line>
+    </div>
+  </ea-view-stack-tab>
+</wj-tab-panel>
+<app-confirm-popup #confirmPopup (confirm)="onConfirm()"></app-confirm-popup>

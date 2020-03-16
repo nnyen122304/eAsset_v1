@@ -1,0 +1,59 @@
+<div class="page-container page-asset-result-list">
+  <div class="grid-common-wrap grid-common-wrap-asset-result-list">
+    <div class="grid-common-count">
+      【{{ gridAssetResultList && gridAssetResultList.rows ? (gridAssetResultList.rows.length | number) : 0 }}件】
+    </div>
+    <div class="grid-inventory-list wp-grid-asset-result-list">
+      <ea-flex-grid #gridAssetResultList class="grid-common-list grid-asset-list grid-inventory-list"
+        [itemsSource]="searchParamSR" (initialized)="onGridInitialized(gridAssetResultList)" [allowSorting]="false"
+        [isReadOnly]="false">
+        <ea-flex-grid-column header="情報機器管理番号" binding="assetAssetId" [width]="120"></ea-flex-grid-column>
+        <ea-flex-grid-column header="取得申請書番号" binding="getApplicationId" [width]="100"></ea-flex-grid-column>
+        <ea-flex-grid-column header="シリアル番号" binding="astSerialCode" [width]="120"></ea-flex-grid-column>
+        <ea-flex-grid-column header="OIR" binding="astOir" [width]="70"></ea-flex-grid-column>
+        <ea-flex-grid-column header="管理区分" binding="astManageTypeName" [width]="150"></ea-flex-grid-column>
+        <ea-flex-grid-column header="資産区分" binding="astAssetTypeName" [width]="100"></ea-flex-grid-column>
+        <ea-flex-grid-column header="資産保有者" binding="astHolderName" [width]="150"></ea-flex-grid-column>
+        <ea-flex-grid-column header="e申請書類ID" binding="eappId" [width]="100"></ea-flex-grid-column>
+        <ea-flex-grid-column header="登録申請番号" binding="assetId" [width]="100"></ea-flex-grid-column>
+        <ea-flex-grid-column header="ステータス" binding="apStatusName" [width]="80"></ea-flex-grid-column>
+        <ea-flex-grid-column header="資産(機器)名" binding="astName" [width]="250"></ea-flex-grid-column>
+        <ea-flex-grid-column header="申請者" binding="adgApStaff" [width]="170"></ea-flex-grid-column>
+        <ea-flex-grid-column header="申請者所属部署" binding="adgApSection" [width]="270"></ea-flex-grid-column>
+        <ea-flex-grid-column header="申請者オフィス" binding="apOfficeName" [width]="200"></ea-flex-grid-column>
+        <ea-flex-grid-column header="申請日" binding="adgApDate" [width]="100"></ea-flex-grid-column>
+        <ea-flex-grid-column header="保有部署" binding="adgHolSection" [width]="270"></ea-flex-grid-column>
+        <ea-flex-grid-column header="資産管理担当者" binding="adgHolStaff" [width]="170"></ea-flex-grid-column>
+        <ea-flex-grid-column header="設置（使用）場所" binding="adgHolOffice" [width]="200"></ea-flex-grid-column>
+        <ea-flex-grid-column header="数量" binding="holQuantity" [width]="50"></ea-flex-grid-column>
+        <ea-flex-grid-column header="使用者" binding="adgUseStaff" [width]="170"></ea-flex-grid-column>
+        <ea-flex-grid-column header="資産(機器)分類" binding="astCategory2Name" [width]="150"></ea-flex-grid-column>
+        <ea-flex-grid-column header="メーカー" binding="astMakerName" [width]="100"></ea-flex-grid-column>
+        <ea-flex-grid-column header="メーカー型番" binding="astMakerModel" [width]="120"></ea-flex-grid-column>
+        <ea-flex-grid-column binding="osNameOne" [width]="100">
+          <ng-template wjFlexGridCellTemplate cellType="ColumnHeader" let-cel="cell">
+            <div class="label-column">
+              OS名<br>[代表]
+            </div>
+          </ng-template>
+        </ea-flex-grid-column>
+        <ea-flex-grid-column binding="netMacAddressOne" [width]="100">
+          <ng-template wjFlexGridCellTemplate cellType="ColumnHeader" let-cel="cell">
+            <div class="label-column">
+              MACアドレス<br>[代表]
+            </div>
+          </ng-template>
+        </ea-flex-grid-column>
+        <ea-flex-grid-column binding="netIpAddressOne" [width]="100">
+          <ng-template wjFlexGridCellTemplate cellType="ColumnHeader" let-cel="cell">
+            <div class="label-column">
+              IPアドレス<br>[代表]
+            </div>
+          </ng-template>
+        </ea-flex-grid-column>
+        <ea-flex-grid-column header="ホスト名" binding="netHostName" [width]="100"></ea-flex-grid-column>
+        <ea-flex-grid-column header="備考" binding="dscDescription" [width]="300"></ea-flex-grid-column>
+      </ea-flex-grid>
+    </div>
+  </div>
+</div>

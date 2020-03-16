@@ -1,0 +1,2832 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<!--
+ *===================================================================
+ * ファイル名 : LldDAO_SqlMap.xml
+ * 概要説明   : リース・レンタル契約情報照会用SQL文
+ * バージョン : 1.0
+ *===================================================================
+ * 修正履歴
+ * 日付       Ver. 担当者       修正内容
+ * －－－－－ －－ －－－－－－ －－－－－－－－－－－－－－－－－－
+ * 2012-09-25 1.0  李            新規
+ *===================================================================
+ -->
+<sqlMap namespace="LldDAO" >
+
+  <!-- 物件共通カラム -->
+  <sql id="selectLldComColumnA_LLD">
+    ptvla.COMPANY_CODE companyCodeA
+  , ptvla.PERIOD periodA
+<!-- リース物件台帳 -->
+  , ptvla.KOYUNO koyunoA
+  , ptvla.KAISHACD kaishacdA
+  , ptvla.KAISHANM kaishanmA
+  , ptvla.LAKAISHACD lakaishacdA
+  , ptvla.TORIHIKINM torihikinmA
+  , ptvla.KYKNO kyknoA
+  , ptvla.KYKNM kyknmA
+  , ptvla.SOSHIKI1CD soshiki1cdA
+  , ptvla.SOSHIKI1NM soshiki1nmA
+  , ptvla.SOSHIKI2CD soshiki2cdA
+  , ptvla.SOSHIKI2NM soshiki2nmA
+  , ptvla.SOSHIKI3CD soshiki3cdA
+  , ptvla.SOSHIKI3NM soshiki3nmA
+  , ptvla.SOSHIKI4CD soshiki4cdA
+  , ptvla.SOSHIKI4NM soshiki4nmA
+  , ptvla.SHURUICD shuruicdA
+  , ptvla.SHURUINM shuruinmA
+  , ptvla.KOZOCD kozocdA
+  , ptvla.KOZONM kozonmA
+  , ptvla.BUNRUICD bunruicdA
+  , ptvla.BUNRUINM bunruinmA
+  , ptvla.SETCHICD setchicdA
+  , ptvla.SETCHINM setchinmA
+  , ptvla.SHUYOSHISANKBN shuyoshisankbnA
+  , ptvla.GROUPCD groupcdA
+  , ptvla.SHINARIOCD shinariocdA
+  , ptvla.NINI_LD_1CD niniLd_1cdA
+  , ptvla.NINI_LD_1NM niniLd_1nmA
+  , ptvla.NINI_LD_2CD niniLd_2cdA
+  , ptvla.NINI_LD_2NM niniLd_2nmA
+  , ptvla.NINI_LD_3CD niniLd_3cdA
+  , ptvla.NINI_LD_3NM niniLd_3nmA
+  , ptvla.NINI_LD_4CD niniLd_4cdA
+  , ptvla.NINI_LD_4NM niniLd_4nmA
+  , ptvla.NINI_LD_5CD niniLd_5cdA
+  , ptvla.NINI_LD_5NM niniLd_5nmA
+  , ptvla.NINI_LD_6CD niniLd_6cdA
+  , ptvla.NINI_LD_6NM niniLd_6nmA
+  , ptvla.NINI_LD_7CD niniLd_7cdA
+  , ptvla.NINI_LD_7NM niniLd_7nmA
+  , ptvla.NINI_LD_8CD niniLd_8cdA
+  , ptvla.NINI_LD_8NM niniLd_8nmA
+  , ptvla.NINI_LD_9CD niniLd_9cdA
+  , ptvla.NINI_LD_9NM niniLd_9nmA
+  , ptvla.NINI_LD_10CD niniLd_10cdA
+  , ptvla.NINI_LD_10NM niniLd_10nmA
+  , ptvla.NINI_LD_11CD niniLd_11cdA
+  , ptvla.NINI_LD_11NM niniLd_11nmA
+  , ptvla.NINI_LD_12CD niniLd_12cdA
+  , ptvla.NINI_LD_12NM niniLd_12nmA
+  , ptvla.NINI_LD_13CD niniLd_13cdA
+  , ptvla.NINI_LD_13NM niniLd_13nmA
+  , ptvla.NINI_LD_14CD niniLd_14cdA
+  , ptvla.NINI_LD_14NM niniLd_14nmA
+  , ptvla.NINI_LD_15CD niniLd_15cdA
+  , ptvla.NINI_LD_15NM niniLd_15nmA
+  , ptvla.NINI_LD_16CD niniLd_16cdA
+  , ptvla.NINI_LD_16NM niniLd_16nmA
+  , ptvla.NINI_LD_17CD niniLd_17cdA
+  , ptvla.NINI_LD_17NM niniLd_17nmA
+  , ptvla.NINI_LD_18CD niniLd_18cdA
+  , ptvla.NINI_LD_18NM niniLd_18nmA
+  , ptvla.NINI_LD_19CD niniLd_19cdA
+  , ptvla.NINI_LD_19NM niniLd_19nmA
+  , ptvla.NINI_LD_20CD niniLd_20cdA
+  , ptvla.NINI_LD_20NM niniLd_20nmA
+  , ptvla.KYKKBN kykkbnA
+  , ptvla.LAKAISU lakaisuA
+  , ptvla.OYA oyaA
+  , ptvla.EDA edaA
+  , ptvla.SHISANJOTAIKBN shisanjotaikbnA
+  , ptvla.SHISANNMCD shisannmcdA
+  , ptvla.SHISANNM shisannmA
+  , ptvla.SHISANNMK shisannmkA
+  , ptvla.KONYUCD konyucdA
+  , ptvla.SURYO suryoA
+  , ptvla.TANINM taninmA
+  , ptvla.LASTYMD lastymdA
+  , ptvla.LAMANRYOYMD lamanryoymdA
+  , ptvla.KAIYKYMD kaiykymdA
+  , ptvla.BKNGK bkngkA
+  , ptvla.GENSONRUIGK gensonruigkA
+  , ptvla.GENSONTORIKUZUSHIZAN gensontorikuzushizanA
+  , ptvla.ZANSOTOGK zansotogkA
+  , ptvla.LARYO_TOTAL laryoTotalA
+  , ptvla.MAEHRLARYO_TORIKUZUSHI_ZAN maehrlaryoTorikuzushiZanA
+  , ptvla.KNRBUNRUICD knrbunruicdA
+  , ptvla.SKKHIHFCD skkhihfcdA
+  , ptvla.SKKHIHFNM skkhihfnmA
+  , ptvla.LARYOHFCD laryohfcdA
+  , ptvla.LARYOHFNM laryohfnmA
+  , ptvla.BIKO1 biko1A
+  , ptvla.BIKO2 biko2A
+  , ptvla.IKOYOTEIUMUKBN ikoyoteiumukbnA
+  , ptvla.SHISANKNRKBN shisanknrkbnA
+  , ptvla.ZANSOTOGK_PAY zansotogkPayA
+  , ptvla.UPDKAISU updkaisuA
+  , ptvla.UPDKAISHACD updkaishacdA
+  , ptvla.UPDID updidA
+  , ptvla.UPDYMD updymdA
+  , ptvla.UPDTIME updtimeA
+  , ptvla.OYA || ptvla.EDA shisanNumA
+
+  <!-- 資産別 -->
+  , pla.IKKAILARYO ikkailaryoA
+  , pla.ZANSOTOGK_PAY_DEC zansotogkPayDecA
+  , pla.MIKEIKALARYO_PAY mikeikalaryoPayA
+  , pla.MIKEIKALARYO_PAY_DEC mikeikalaryoPayDecA
+  , pla.LAGENSONYMD lagensonymdA
+  , pla.KSGENSONRUIGK ksgensonruigkA
+  , pla.KSGENSONTORIKUZUSHIZAN ksgensontorikuzushizanA
+  , NEA_UTIL_PKG.get_month_diff_f(ptvla.NINI_LD_15CD, ptvla.NINI_LD_16CD) rekikanA
+  , NEA_UTIL_PKG.get_cn_value1_f('PPFS_LLD_KYKKBN', ptvla.KYKKBN) kykkbnAName
+  , NEA_UTIL_PKG.get_cn_value1_f('PPFS_LLD_SHISANJOTAIKBN', ptvla.SHISANJOTAIKBN) shisanjotaikbnAName
+  , NEA_UTIL_PKG.get_cn_value1_f('PPFS_LLD_SHISANKNRKBN', ptvla.SHISANKNRKBN) shisanknrkbnAName
+  , NEA_UTIL_PKG.format_date_char_f(ptvla.LASTYMD) lastymdAF
+  , NEA_UTIL_PKG.format_date_char_f(ptvla.LAMANRYOYMD) lamanryoymdAF
+  , NEA_UTIL_PKG.format_date_char_f(ptvla.KAIYKYMD) kaiykymdAF
+  , NEA_UTIL_PKG.format_date_char_f(ptvla.UPDYMD) updymdAF
+  , NEA_UTIL_PKG.format_date_char_f(pla.LAGENSONYMD) lagensonymdAF
+  , NEA_UTIL_PKG.format_date_char_f(ptvla.NINI_LD_15CD) niniLd_15cdAF
+  , NEA_UTIL_PKG.format_date_char_f(ptvla.NINI_LD_16CD) niniLd_16cdAF
+
+  <!-- 固定資産 -->
+  , pf.STKGKK stkgkkA
+  , pf.TO_BOKAK toBokakA
+  , pf.ZANZONGKK zanzongkkA
+
+  </sql>
+  <!-- 物件共通カラムnull -->
+  <sql id="selectNotLldComColumnA_LLD">
+    NULL companyCodeA
+  , NULL periodA
+<!-- リース物件台帳 -->
+  , TO_NUMBER(NULL) koyunoA
+  , NULL kaishacdA
+  , NULL kaishanmA
+  , NULL lakaishacdA
+  , NULL torihikinmA
+  , NULL kyknoA
+  , NULL kyknmA
+  , NULL soshiki1cdA
+  , NULL soshiki1nmA
+  , NULL soshiki2cdA
+  , NULL soshiki2nmA
+  , NULL soshiki3cdA
+  , NULL soshiki3nmA
+  , NULL soshiki4cdA
+  , NULL soshiki4nmA
+  , NULL shuruicdA
+  , NULL shuruinmA
+  , NULL kozocdA
+  , NULL kozonmA
+  , NULL bunruicdA
+  , NULL bunruinmA
+  , NULL setchicdA
+  , NULL setchinmA
+  , NULL shuyoshisankbnA
+  , NULL groupcdA
+  , NULL shinariocdA
+  , NULL niniLd_1cdA
+  , NULL niniLd_1nmA
+  , NULL niniLd_2cdA
+  , NULL niniLd_2nmA
+  , NULL niniLd_3cdA
+  , NULL niniLd_3nmA
+  , NULL niniLd_4cdA
+  , NULL niniLd_4nmA
+  , NULL niniLd_5cdA
+  , NULL niniLd_5nmA
+  , NULL niniLd_6cdA
+  , NULL niniLd_6nmA
+  , NULL niniLd_7cdA
+  , NULL niniLd_7nmA
+  , NULL niniLd_8cdA
+  , NULL niniLd_8nmA
+  , NULL niniLd_9cdA
+  , NULL niniLd_9nmA
+  , NULL niniLd_10cdA
+  , NULL niniLd_10nmA
+  , NULL niniLd_11cdA
+  , NULL niniLd_11nmA
+  , NULL niniLd_12cdA
+  , NULL niniLd_12nmA
+  , NULL niniLd_13cdA
+  , NULL niniLd_13nmA
+  , NULL niniLd_14cdA
+  , NULL niniLd_14nmA
+  , NULL niniLd_15cdA
+  , NULL niniLd_15nmA
+  , NULL niniLd_16cdA
+  , NULL niniLd_16nmA
+  , NULL niniLd_17cdA
+  , NULL niniLd_17nmA
+  , NULL niniLd_18cdA
+  , NULL niniLd_18nmA
+  , NULL niniLd_19cdA
+  , NULL niniLd_19nmA
+  , NULL niniLd_20cdA
+  , NULL niniLd_20nmA
+  , NULL kykkbnA
+  , NULL lakaisuA
+  , NULL oyaA
+  , NULL edaA
+  , NULL shisanjotaikbnA
+  , NULL shisannmcdA
+  , NULL shisannmA
+  , NULL shisannmkA
+  , NULL konyucdA
+  , TO_NUMBER(NULL) suryoA
+  , NULL taninmA
+  , NULL lastymdA
+  , NULL lamanryoymdA
+  , NULL kaiykymdA
+  , NULL bkngkA
+  , TO_NUMBER(NULL) gensonruigkA
+  , TO_NUMBER(NULL) gensontorikuzushizanA
+  , TO_NUMBER(NULL) zansotogkA
+  , TO_NUMBER(NULL) laryoTotalA
+  , TO_NUMBER(NULL) maehrlaryoTorikuzushiZanA
+  , NULL knrbunruicdA
+  , NULL skkhihfcdA
+  , NULL skkhihfnmA
+  , NULL laryohfcdA
+  , NULL laryohfnmA
+  , NULL biko1A
+  , NULL biko2A
+  , NULL ikoyoteiumukbnA
+  , NULL shisanknrkbnA
+  , NULL zansotogkPayA
+  , NULL updkaisuA
+  , NULL updkaishacdA
+  , NULL updidA
+  , NULL updymdA
+  , NULL updtimeA
+  , NULL shisanNumA
+
+  <!-- 資産別 -->
+  , TO_NUMBER(NULL) ikkailaryoA
+  , TO_NUMBER(NULL) zansotogkPayDecA
+  , TO_NUMBER(NULL) mikeikalaryoPayA
+  , TO_NUMBER(NULL) mikeikalaryoPayDecA
+  , NULL lagensonymdA
+  , NULL ksgensonruigkA
+  , NULL ksgensontorikuzushizanA
+  , NULL rekikanA
+  , NULL kykkbnAName
+  , NULL shisanjotaikbnAName
+  , NULL shisanknrkbnAName
+  , NULL lastymdAF
+  , NULL lamanryoymdAF
+  , NULL kaiykymdAF
+  , NULL updymdAF
+  , NULL lagensonymdAF
+  , NULL niniLd_15cdAF
+  , NULL niniLd_16cdAF
+
+  <!-- 固定資産 -->
+  , TO_NUMBER(NULL) stkgkkA
+  , TO_NUMBER(NULL) toBokakA
+  , TO_NUMBER(NULL) zanzongkkA
+  </sql>
+
+  <!-- 契約共通カラム -->
+  <sql id="selectLldComColumnC_LLD">
+    ptvlc.COMPANY_CODE companyCodeC
+  , ptvlc.PERIOD periodC
+  <!-- リース契約台帳 -->
+  , ptvlc.KOYUNO koyunoC
+  , ptvlc.KAISHACD kaishacdC
+  , ptvlc.KAISHANM kaishanmC
+  , ptvlc.LAKAISHACD lakaishacdC
+  , ptvlc.TORIHIKINM torihikinmC
+  , ptvlc.SOSHIKI1CD soshiki1cdC
+  , ptvlc.SOSHIKI1NM soshiki1nmC
+  , ptvlc.SOSHIKI2CD soshiki2cdC
+  , ptvlc.SOSHIKI2NM soshiki2nmC
+  , ptvlc.SOSHIKI3CD soshiki3cdC
+  , ptvlc.SOSHIKI3NM soshiki3nmC
+  , ptvlc.SOSHIKI4CD soshiki4cdC
+  , ptvlc.SOSHIKI4NM soshiki4nmC
+  , ptvlc.SHURUICD shuruicdC
+  , ptvlc.SHURUINM shuruinmC
+  , ptvlc.KOZOCD kozocdC
+  , ptvlc.KOZONM kozonmC
+  , ptvlc.BUNRUICD bunruicdC
+  , ptvlc.BUNRUINM bunruinmC
+  , ptvlc.NINI_LD_1CD niniLd_1cdC
+  , ptvlc.NINI_LD_1NM niniLd_1nmC
+  , ptvlc.NINI_LD_2CD niniLd_2cdC
+  , ptvlc.NINI_LD_2NM niniLd_2nmC
+  , ptvlc.NINI_LD_3CD niniLd_3cdC
+  , ptvlc.NINI_LD_3NM niniLd_3nmC
+  , ptvlc.NINI_LD_4CD niniLd_4cdC
+  , ptvlc.NINI_LD_4NM niniLd_4nmC
+  , ptvlc.NINI_LD_5CD niniLd_5cdC
+  , ptvlc.NINI_LD_5NM niniLd_5nmC
+  , ptvlc.NINI_LD_6CD niniLd_6cdC
+  , ptvlc.NINI_LD_6NM niniLd_6nmC
+  , ptvlc.NINI_LD_7CD niniLd_7cdC
+  , ptvlc.NINI_LD_7NM niniLd_7nmC
+  , ptvlc.NINI_LD_8CD niniLd_8cdC
+  , ptvlc.NINI_LD_8NM niniLd_8nmC
+  , ptvlc.NINI_LD_9CD niniLd_9cdC
+  , ptvlc.NINI_LD_9NM niniLd_9nmC
+  , ptvlc.NINI_LD_10CD niniLd_10cdC
+  , ptvlc.NINI_LD_10NM niniLd_10nmC
+  , ptvlc.NINI_LD_11CD niniLd_11cdC
+  , ptvlc.NINI_LD_11NM niniLd_11nmC
+  , ptvlc.NINI_LD_12CD niniLd_12cdC
+  , ptvlc.NINI_LD_12NM niniLd_12nmC
+  , ptvlc.NINI_LD_13CD niniLd_13cdC
+  , ptvlc.NINI_LD_13NM niniLd_13nmC
+  , ptvlc.NINI_LD_14CD niniLd_14cdC
+  , ptvlc.NINI_LD_14NM niniLd_14nmC
+  , ptvlc.NINI_LD_15CD niniLd_15cdC
+  , ptvlc.NINI_LD_15NM niniLd_15nmC
+  , ptvlc.NINI_LD_16CD niniLd_16cdC
+  , ptvlc.NINI_LD_16NM niniLd_16nmC
+  , ptvlc.NINI_LD_17CD niniLd_17cdC
+  , ptvlc.NINI_LD_17NM niniLd_17nmC
+  , ptvlc.NINI_LD_18CD niniLd_18cdC
+  , ptvlc.NINI_LD_18NM niniLd_18nmC
+  , ptvlc.NINI_LD_19CD niniLd_19cdC
+  , ptvlc.NINI_LD_19NM niniLd_19nmC
+  , ptvlc.NINI_LD_20CD niniLd_20cdC
+  , ptvlc.NINI_LD_20NM niniLd_20nmC
+  , ptvlc.KYKKBN kykkbnC
+  , ptvlc.LAKAISU lakaisuC
+  , ptvlc.KYKNM kyknmC
+  , ptvlc.KYKNMK kyknmkC
+  , ptvlc.KYKNO kyknoC
+  , ptvlc.ZENKYKNO zenkyknoC
+  , ptvlc.KYKJOTAIKBN kykjotaikbnC
+  , ptvlc.KYKYMD kykymdC
+  , ptvlc.LASTYMD lastymdC
+  , ptvlc.LAMANRYOYMD lamanryoymdC
+  , ptvlc.LAKIKAN lakikanC
+  , ptvlc.SHRHOKBN shrhokbnC
+  , ptvlc.SHRMANRYOYMD shrmanryoymdC
+  , ptvlc.KAIYKYMD kaiykymdC
+  , ptvlc.SHRCYCLEKBN shrcyclekbnC
+  , ptvlc.JITSUSHRKAISU jitsushrkaisuC
+  , ptvlc.SHRKAISU shrkaisuC
+  , ptvlc.STKGKSOTOGK stkgksotogkC
+  , ptvlc.SHRLARYO1 shrlaryo1C
+  , ptvlc.LARYO_TOTAL laryoTotalC
+  , ptvlc.KIHONSPAREN1 kihonsparen1C
+  , ptvlc.MAEHRLARYO maehrlaryoC
+  , ptvlc.KINTOKBN kintokbnC
+  , ptvlc.SHOKAILARYO shokailaryoC
+  , ptvlc.LARYO laryoC
+  , ptvlc.MIKEIKALARYO_PAY mikeikalaryoPayC
+  , ptvlc.KIHONSPAREN3 kihonsparen3C
+  , ptvlc.SHRLARYO2 shrlaryo2C
+  , ptvlc.LATORIHIKIKBN latorihikikbnC
+  , ptvlc.KOJOGK1 kojogk1C
+  , ptvlc.KOJOGK2 kojogk2C
+  , ptvlc.KOJOGK3 kojogk3C
+  , ptvlc.KOJOGK4 kojogk4C
+  , ptvlc.BIKO1 biko1C
+  , ptvlc.BIKO2 biko2C
+  , ptvlc.KYKRINGINO kykringinoC
+  , ptvlc.KYKTEKIYO kyktekiyoC
+  , ptvlc.CHUKIKBN chukikbnC
+  , ptvlc.BSKEIJOKBN bskeijokbnC
+  , ptvlc.ZANSOTOGK zansotogkC
+  , ptvlc.UPDKAISU updkaisuC
+  , ptvlc.UPDKAISHACD updkaishacdC
+  , ptvlc.UPDID updidC
+  , ptvlc.UPDYMD updymdC
+  , ptvlc.UPDTIME updtimeC
+
+  <!-- 債務 -->
+  , plcd.ZANKAHOSHOGK zankahoshogkC
+  , plcd.MITSUMORIKONYUGK mitsumorikonyugkC
+  , plcd.KEIZAITAINEN keizaitainenC
+  , plcd.JUYOSEIKBN juyoseikbnC
+  , plcd.TEKIYORITSU_PAY tekiyoritsuPayC
+  , plcd.KAIKEISHORIKBN kaikeishorikbnC
+  , plcd.SHRSTYMD shrstymdC
+  , plcd.ZENSHRYMD zenshrymdC
+  , plcd.SHOHIZEIRITSU shohizeiritsuC
+  , plcd.SHOKAILARYO_KOMI shokailaryoKomiC
+  , plcd.LARYO_KOMI laryoKomiC
+  , plcd.LASTLARYO lastlaryoC
+  , plcd.LASTLARYO_KOMI lastlaryoKomiC
+  , plcd.HIKIOTOSHISTKAISU hikiotoshistkaisuC
+  , plcd.MAEHRLAMMSU maehrlammsuC
+  , plcd.ZANSOTOGK_PAY zansotogkPayC
+  , plcd.ZANSOTOGK_PAY_DEC zansotogkPayDecC
+  , plcd.MIKEIKALARYO_PAY_DEC mikeikalaryoPayDecC
+  , plcd.KIHONSPAREN5 kihonsparen5C
+
+  , ptvlc.TORIHIKINM lakaishacdCName
+
+  , NEA_UTIL_PKG.get_cn_value1_f('PPFS_LLD_KYKKBN', ptvlc.KYKKBN) kykkbnCName
+  , NEA_UTIL_PKG.get_cn_value1_f('PPFS_LLD_KYKJOTAIKBN', ptvlc.KYKJOTAIKBN) kykjotaikbnCName
+  , NEA_UTIL_PKG.get_cn_value1_f('PPFS_LLD_KINTOKBN', ptvlc.KINTOKBN) kintokbnCName
+  , NEA_UTIL_PKG.get_cn_value1_f('PPFS_LLD_LATORIHIKIKBN', ptvlc.LATORIHIKIKBN) latorihikikbnCName
+  , NEA_UTIL_PKG.get_cn_value1_f('PPFS_LLD_BSKEIJOKBN', ptvlc.BSKEIJOKBN) bskeijokbnCName
+  , NEA_UTIL_PKG.get_cn_value1_f('PPFS_LLD_CHUKIKBN', ptvlc.CHUKIKBN) chukikbnCName
+  , DECODE(NEA_UTIL_PKG.GET_LEASE_RENTAL_HANTEI_F(ptvlc.LATORIHIKIKBN,ptvlc.BUNRUICD) ,'1','レンタル','リース') latorihikikbnLRCName
+  , NEA_UTIL_PKG.get_cn_value1_f('PPFS_LLD_SHRCYCLEKBN', ptvlc.SHRCYCLEKBN) shrcyclekbnCName
+  , NEA_UTIL_PKG.get_cn_value1_f('PPFS_LLD_KAIKEISHORIKBN', plcd.KAIKEISHORIKBN) kaikeishorikbnCName
+  , NEA_UTIL_PKG.get_cn_value1_f('PPFS_LLD_JUYOSEIKBN', plcd.JUYOSEIKBN) juyoseikbnCName
+
+  , NEA_UTIL_PKG.format_date_char_f(ptvlc.KYKYMD) kykymdCF
+  , NEA_UTIL_PKG.format_date_char_f(ptvlc.KAIYKYMD) kaiykymdCF
+  , NEA_UTIL_PKG.format_date_char_f(ptvlc.LASTYMD) lastymdCF
+  , NEA_UTIL_PKG.format_date_char_f(ptvlc.LAMANRYOYMD) lamanryoymdCF
+  , NEA_UTIL_PKG.format_date_char_f(ptvlc.SHRMANRYOYMD) shrmanryoymdCF
+  , NEA_UTIL_PKG.format_date_char_f(ptvlc.UPDYMD) updymdCF
+  , NEA_UTIL_PKG.format_date_char_f(plcd.SHRSTYMD) shrstymdCF
+  , NEA_UTIL_PKG.format_date_char_f(plcd.ZENSHRYMD) zenshrymdCF
+  </sql>
+
+  <!-- 契約・物件共通カラム:複合(物件有り) -->
+  <sql id="selectLldComColumnLA_LLD">
+    <!-- 開始日 -->
+      DECODE(ptvlc.LATORIHIKIKBN, '3', NVL(ptvla.NINI_LD_15CD, ptvlc.LASTYMD), ptvlc.LASTYMD) stymdL
+    , NEA_UTIL_PKG.format_date_char_f(DECODE(ptvlc.LATORIHIKIKBN, '3', NVL(ptvla.NINI_LD_15CD, ptvlc.LASTYMD), ptvlc.LASTYMD)) stymdLF
+    <!-- 満了日 -->
+    , DECODE(ptvlc.LATORIHIKIKBN, '3', NVL(ptvla.NINI_LD_16CD, ptvlc.LAMANRYOYMD), ptvlc.LAMANRYOYMD) manryoymdL
+    , NEA_UTIL_PKG.format_date_char_f(DECODE(ptvlc.LATORIHIKIKBN, '3', NVL(ptvla.NINI_LD_16CD, ptvlc.LAMANRYOYMD), ptvlc.LAMANRYOYMD)) manryoymdLF
+    <!-- 期間 -->
+    , CASE
+        <!-- レンタル？  -->
+        WHEN NEA_UTIL_PKG.GET_LEASE_RENTAL_HANTEI_F(ptvlc.LATORIHIKIKBN,ptvlc.BUNRUICD) = '1' AND ptvla.NINI_LD_15CD IS NOT NULL AND ptvla.NINI_LD_16CD IS NOT NULL THEN NEA_UTIL_PKG.get_month_diff_f(ptvla.NINI_LD_15CD, ptvla.NINI_LD_16CD)
+        ELSE ptvlc.LAKIKAN
+      END kikanL
+    <!-- 契約金額、均等金額 -->
+    , ptvla.LARYO_TOTAL laryoTotalL
+    , pla.IKKAILARYO ikkailaryoL
+    <!--  解約日 -->
+    , ptvla.KAIYKYMD kaiykymdL
+    , NEA_UTIL_PKG.format_date_char_f(ptvla.KAIYKYMD) kaiykymdLF
+    <!-- 保有部署 -->
+    , NEA_UTIL_PKG.get_fld_hol_sec_name_f(ptvla.KOYUNO) holSectionNameLA /* 固定資産の同カラムと区別するためAを付加 */
+  </sql>
+
+  <!-- 契約・物件共通カラム:複合(物件無し) -->
+  <sql id="selectLldComColumnLC_LLD">
+    <!-- 開始日 -->
+      ptvlc.LASTYMD stymdL
+    , NEA_UTIL_PKG.format_date_char_f(ptvlc.LASTYMD) stymdLF
+    <!-- 満了日 -->
+    , ptvlc.LAMANRYOYMD manryoymdL
+    , NEA_UTIL_PKG.format_date_char_f(ptvlc.LAMANRYOYMD) manryoymdLF
+    <!-- 期間 -->
+    , ptvlc.LAKIKAN kikanL
+    <!-- 契約金額、均等金額 -->
+    , ptvlc.LARYO_TOTAL laryoTotalL
+    , DECODE(ptvlc.LARYO, 0, DECODE(ptvlc.SHOKAILARYO, 0, plcd.LASTLARYO, ptvlc.SHOKAILARYO), ptvlc.LARYO) ikkailaryoL
+    <!--  解約日 -->
+    , ptvlc.KAIYKYMD kaiykymdL
+    , NEA_UTIL_PKG.format_date_char_f(ptvlc.KAIYKYMD) kaiykymdLF
+    <!-- 保有部署 -->
+    , TO_CHAR(NULL) holSectionNameLA /* 固定資産の同カラムと区別するためAを付加 */
+  </sql>
+
+  <!-- 契約共通条件 -->
+  <sql id="selectLldComWhereC_LLD">
+       <!-- 契約状態区分:除外区分 -->
+       AND ptvlc.KYKJOTAIKBN != '6' /* 取消済は除外 */
+
+       <!-- リース/レンタル区分 -->
+       <isNotEmpty property="leaseRentalPluralList">
+          AND $leaseRentalPluralList$
+       </isNotEmpty>
+       <!-- 取引区分 -->
+       <isNotEmpty property="latorihikikbnCPluralList">
+         AND $latorihikikbnCPluralList$
+       </isNotEmpty>
+       <!-- 契約状態区分 -->
+       <isNotEmpty property="kykjotaikbnCPluralList">
+         AND $kykjotaikbnCPluralList$
+       </isNotEmpty>
+       <!-- B/S計上区分 -->
+       <isNotEmpty property="bskeijokbnCPluralList">
+         AND $bskeijokbnCPluralList$
+       </isNotEmpty>
+       <!-- リース会社 -->
+       <isNotEmpty property="searchParam.lakaishacdC">
+         AND ptvlc.LAKAISHACD = #searchParam.lakaishacdC#
+       </isNotEmpty>
+       <!-- 契約番号:元契約検索 -->
+       <isNotEmpty property="niniLd_20cdCPluralList">
+         AND $niniLd_20cdCPluralList$
+       </isNotEmpty>
+       <!-- 契約番号 -->
+       <isEmpty property="niniLd_20cdCPluralList">
+         <isNotEmpty property="searchParam.kyknoC">
+           AND ptvlc.KYKNO LIKE '%' || #searchParam.kyknoC# || '%'
+         </isNotEmpty>
+         <isNotEmpty property="kyknoCPluralList">
+           AND $kyknoCPluralList$
+         </isNotEmpty>
+       </isEmpty>
+       <!-- 取得申請番号 -->
+       <isNotEmpty property="searchParam.applicationId">
+         AND ptvlc.NINI_LD_8CD LIKE '%' || #searchParam.applicationId# || '%'
+       </isNotEmpty>
+       <isNotEmpty property="applicationIdPluralList">
+         AND $applicationIdPluralList$
+       </isNotEmpty>
+  </sql>
+
+  <!-- 契約・物件台帳検索SQL -->
+  <sql id="selectLldComSQL_LLD">
+    <!-- ///////////////////////////////////////////////////////// 物件が有る契約  -->
+       SELECT
+       <include refid="selectLldComColumnA_LLD" />
+       , <include refid="selectLldComColumnC_LLD" />
+       , <include refid="selectLldComColumnLA_LLD" />
+       FROM
+         NEA_$histTablePrefixLd$PPFS_LLDA ptvla
+       , NEA_$histTablePrefixLd$PPFS_LLDC ptvlc
+       , NEA_$histTablePrefixLd$PPFS_RELATION_LA pzvr
+       , NEA_$histTablePrefixLd$PPFS_LD_CONTRACT_DEBT plcd
+       , NEA_$histTablePrefixLd$PPFS_LD_ASSETS pla
+       , NEA_$histTablePrefixLd$PPFS_FLD pf
+       WHERE
+         ptvla.COMPANY_CODE = #companyCode#
+         AND ptvlc.KOYUNO = pzvr.KOYUNO_KYK
+         AND ptvlc.PERIOD = pzvr.PERIOD
+         AND ptvlc.COMPANY_CODE = pzvr.COMPANY_CODE
+         AND ptvla.KOYUNO = pzvr.KOYUNO_SHISAN
+         AND ptvla.PERIOD = pzvr.PERIOD
+         AND ptvla.COMPANY_CODE = pzvr.COMPANY_CODE
+         AND pzvr.YUKOFLG = '1'
+         AND pzvr.CANCELSUMIFLG = '0'
+         AND ptvla.KOYUNO = pla.KOYUNO
+         AND ptvla.PERIOD = pla.PERIOD
+         AND ptvla.COMPANY_CODE = pla.COMPANY_CODE
+         AND ptvlc.KOYUNO = plcd.KOYUNO
+         AND ptvlc.PERIOD = plcd.PERIOD
+         AND ptvlc.COMPANY_CODE = plcd.COMPANY_CODE
+
+         AND ptvla.KOYUNO = pf.KOYUNO (+)
+         AND ptvla.PERIOD = pf.PERIOD (+)
+         AND ptvla.COMPANY_CODE = pf.COMPANY_CODE (+)
+
+         <!-- 契約状態区分:除外区分 -->
+         AND ptvlc.KYKJOTAIKBN != '6' /* 取消済は除外 */
+         <!-- 資産状態区分:除外区分 -->
+         AND ptvla.SHISANJOTAIKBN != '9' /* 取消済は除外 */
+
+       <isNotEmpty property="searchParam.reportPeriod">
+         AND ptvla.PERIOD = #searchParam.reportPeriod#
+       </isNotEmpty>
+       <!-- *********************************** 物件 *********************************** -->
+       <!-- 物件状態区分 -->
+       <isNotEmpty property="shisanjotaikbnAPluralList">
+         AND $shisanjotaikbnAPluralList$
+       </isNotEmpty>
+       <!-- 物件名 -->
+       <isNotEmpty property="searchParam.shisannmA">
+         AND NEA_UTIL_PKG.to_fuzzy_f(ptvla.SHISANNM) LIKE '%' || NEA_UTIL_PKG.to_fuzzy_f(#searchParam.shisannmA#) || '%'
+       </isNotEmpty>
+       <!-- 解約日 -->
+       <isNotEmpty property="searchParam.kaiykymdAFrom">
+         AND ptvla.KAIYKYMD <![CDATA[>]]>= TO_CHAR(#searchParam.kaiykymdAFrom#, 'YYYYMMDD')
+       </isNotEmpty>
+       <isNotEmpty property="searchParam.kaiykymdATo">
+         AND ptvla.KAIYKYMD <![CDATA[<]]>= TO_CHAR(#searchParam.kaiykymdATo#, 'YYYYMMDD')
+       </isNotEmpty>
+       <!-- 種類 -->
+       <isNotEmpty property="searchParam.shuruicdA">
+         AND ptvla.SHURUICD = #searchParam.shuruicdA#
+       </isNotEmpty>
+       <isNotEmpty property="shuruinmPluralList">
+         AND $shuruinmPluralList$
+       </isNotEmpty>
+
+       <!-- 分類 -->
+       <isNotEmpty property="searchParam.bunruicdA">
+         AND ptvla.BUNRUICD = #searchParam.bunruicdA#
+       </isNotEmpty>
+       <isNotEmpty property="bunruinmPluralList">
+         AND $bunruinmPluralList$
+       </isNotEmpty>
+
+       <!-- 代表設置場所 -->
+       <isNotEmpty property="searchParam.setchicdA">
+         AND ptvla.SETCHICD = #searchParam.setchicdA#
+       </isNotEmpty>
+       <isNotEmpty property="setchinmPluralList">
+         AND $setchinmPluralList$
+       </isNotEmpty>
+       <!-- 案件グループ -->
+       <isNotEmpty property="searchParam.itemGroupCodeA">
+         AND ptvla.NINI_LD_3CD = #searchParam.itemGroupCodeA#
+       </isNotEmpty>
+       <isNotEmpty property="itemGroupNamePluralList">
+         AND $itemGroupNamePluralList$
+       </isNotEmpty>
+       <!-- 契約枝番 -->
+       <isNotEmpty property="searchParam.kykeda">
+         AND ptvla.NINI_LD_17CD LIKE '%' || #searchParam.kykeda# || '%'
+       </isNotEmpty>
+       <isNotEmpty property="kykedaPluralList">
+         AND $kykedaPluralList$
+       </isNotEmpty>
+       <!-- 資産番号 -->
+       <isNotEmpty property="searchParam.shisanNumA">
+         AND ptvla.OYA || ptvla.EDA LIKE '%' || #searchParam.shisanNumA# || '%'
+       </isNotEmpty>
+       <isNotEmpty property="shisanNumAPluralList">
+         AND $shisanNumAPluralList$
+       </isNotEmpty>
+
+       <!-- 経費負担 -->
+       <!-- 販菅/原価区分 -->
+       <isNotEmpty property="searchParam.costType">
+         AND ptvla.NINI_LD_7CD = #searchParam.costType#
+       </isNotEmpty>
+       <!-- 減価償却PJ -->
+       <isNotEmpty property="searchParam.costDepPrjCode">
+         AND ptvla.NINI_LD_6CD = #searchParam.costDepPrjCode#
+       </isNotEmpty>
+       <!-- 経費負担 -->
+       <isEmpty property="excludeCostSectionComWhere">
+         <isNotEmpty property="costSectionCodeIn">
+           AND
+             (ptvla.SOSHIKI2CD IN ( $costSectionCodeIn$ )
+               OR
+              EXISTS (
+                SELECT
+                  'X'
+                FROM
+                  PPFS_MS28_H h
+                , PPFS_MS28_D d
+                WHERE
+                  h.HFPK = d.HFPK
+                  AND h.KAISHACD = ptvla.KAISHACD
+                  AND h.HFCD = ptvla.LARYOHFCD
+                  AND d.soshiki2cd IN ( $costSectionCodeIn$ )
+              )
+           )
+         </isNotEmpty>
+       </isEmpty>
+
+       <!-- *********************************** 契約 *********************************** -->
+       <include refid="selectLldComWhereC_LLD" />
+
+
+       <!-- *********************************** 複合 *********************************** -->
+       <!-- 開始日 -->
+       <isNotEmpty property="searchParam.lastymdCFrom">
+         AND DECODE(ptvlc.LATORIHIKIKBN, '3', NVL(ptvla.NINI_LD_15CD, ptvlc.LASTYMD), ptvlc.LASTYMD) <![CDATA[>]]>= TO_CHAR(#searchParam.lastymdCFrom#, 'YYYYMMDD')
+       </isNotEmpty>
+       <isNotEmpty property="searchParam.lastymdCTo">
+         AND DECODE(ptvlc.LATORIHIKIKBN, '3', NVL(ptvla.NINI_LD_15CD, ptvlc.LASTYMD), ptvlc.LASTYMD) <![CDATA[<]]>= TO_CHAR(#searchParam.lastymdCTo#, 'YYYYMMDD')
+       </isNotEmpty>
+       <!-- 満了日 -->
+       <isNotEmpty property="searchParam.lamanryoymdCFrom">
+         AND DECODE(ptvlc.LATORIHIKIKBN, '3', NVL(ptvla.NINI_LD_16CD, ptvlc.LAMANRYOYMD), ptvlc.LAMANRYOYMD) <![CDATA[>]]>= TO_CHAR(#searchParam.lamanryoymdCFrom#, 'YYYYMMDD')
+       </isNotEmpty>
+       <isNotEmpty property="searchParam.lamanryoymdCTo">
+         AND DECODE(ptvlc.LATORIHIKIKBN, '3', NVL(ptvla.NINI_LD_16CD, ptvlc.LAMANRYOYMD), ptvlc.LAMANRYOYMD) <![CDATA[<]]>= TO_CHAR(#searchParam.lamanryoymdCTo#, 'YYYYMMDD')
+       </isNotEmpty>
+
+
+       <!-- *********************************** 現物情報 *********************************** -->
+       <!-- 現物情報入力時のみの条件 -->
+       <isNotEmpty  property="subKoyunoList">
+          AND $subKoyunoList$
+       </isNotEmpty>
+
+    <!-- ///////////////////////////////////////////////////////// 物件が無い契約  -->
+       <isNotEmpty property="isContractOnly">
+         UNION ALL
+           SELECT
+           <include refid="selectNotLldComColumnA_LLD" />
+           , <include refid="selectLldComColumnC_LLD" />
+           , <include refid="selectLldComColumnLC_LLD" />
+           FROM
+             NEA_$histTablePrefixLd$PPFS_LLDC ptvlc
+           , NEA_$histTablePrefixLd$PPFS_LD_CONTRACT_DEBT plcd
+           WHERE
+             ptvlc.COMPANY_CODE = #companyCode#
+             AND ptvlc.KOYUNO = plcd.KOYUNO
+             AND ptvlc.PERIOD = plcd.PERIOD
+             AND NOT EXISTS
+                (
+                  SELECT
+                    'X'
+                  FROM
+                    NEA_$histTablePrefixLd$PPFS_LLDA ptvla
+                  , NEA_$histTablePrefixLd$PPFS_RELATION_LA pzvr
+                  WHERE
+                    ptvlc.KOYUNO = pzvr.KOYUNO_KYK
+                    AND ptvlc.PERIOD = pzvr.PERIOD
+                    AND ptvlc.COMPANY_CODE = pzvr.COMPANY_CODE
+                    AND ptvla.KOYUNO = pzvr.KOYUNO_SHISAN
+                    AND ptvla.PERIOD = pzvr.PERIOD
+                    AND ptvla.COMPANY_CODE = pzvr.COMPANY_CODE
+                    AND pzvr.YUKOFLG = '1'
+                    AND pzvr.CANCELSUMIFLG = '0'
+                )
+             <isNotEmpty property="searchParam.reportPeriod">
+               AND ptvlc.PERIOD = #searchParam.reportPeriod#
+             </isNotEmpty>
+
+             <!-- *********************************** 契約 *********************************** -->
+             <include refid="selectLldComWhereC_LLD" />
+
+             <!-- 開始日 -->
+             <isNotEmpty property="searchParam.lastymdCFrom">
+               AND ptvlc.LASTYMD <![CDATA[>]]>= TO_CHAR(#searchParam.lastymdCFrom#, 'YYYYMMDD')
+             </isNotEmpty>
+             <isNotEmpty property="searchParam.lastymdCTo">
+               AND ptvlc.LASTYMD <![CDATA[<]]>= TO_CHAR(#searchParam.lastymdCTo#, 'YYYYMMDD')
+             </isNotEmpty>
+             <!-- 満了日 -->
+             <isNotEmpty property="searchParam.lamanryoymdCFrom">
+               AND ptvlc.LAMANRYOYMD <![CDATA[>]]>= TO_CHAR(#searchParam.lamanryoymdCFrom#, 'YYYYMMDD')
+             </isNotEmpty>
+             <isNotEmpty property="searchParam.lamanryoymdCTo">
+               AND ptvlc.LAMANRYOYMD <![CDATA[<]]>= TO_CHAR(#searchParam.lamanryoymdCTo#, 'YYYYMMDD')
+             </isNotEmpty>
+             <!-- 解約日 -->
+             <isNotEmpty property="searchParam.kaiykymdAFrom">
+               AND ptvlc.KAIYKYMD <![CDATA[>]]>= TO_CHAR(#searchParam.kaiykymdAFrom#, 'YYYYMMDD')
+             </isNotEmpty>
+             <isNotEmpty property="searchParam.kaiykymdATo">
+               AND ptvlc.KAIYKYMD <![CDATA[<]]>= TO_CHAR(#searchParam.kaiykymdATo#, 'YYYYMMDD')
+             </isNotEmpty>
+       </isNotEmpty>
+  </sql>
+
+<!-- ****************************************************** ↓ 照会・台帳で使用するメインSQL ****************************************************** -->
+  <!--
+    リース契約(照会)一覧・台帳
+    ※ selectのid単位で抽出カラムが同じになるようにSQLを分ける
+  -->
+  <sql id="selectLldListBody_LLD">
+    SELECT
+      *
+    FROM
+      (
+        <include refid="selectLldComSQL_LLD" />
+      ) lld
+      <isNotEmpty property="isOutputFld">
+        , (
+          SELECT
+            <include refid="selectFldComColumn_FLD" />
+            , <include refid="selectFldComColumnL_FLD" />
+          FROM
+            <include refid="selectFldComFrom_FLD" />
+         ) fld
+      </isNotEmpty>
+    WHERE
+      1 = 1
+      <isNotEmpty property="isOutputFld">
+        AND lld.companyCodeA = fld.companyCode (+)
+        AND lld.periodA = fld.period (+)
+        AND lld.koyunoA = fld.koyuno (+)
+      </isNotEmpty>
+      <isEmpty property="isDownload">
+        AND ROWNUM <![CDATA[<]]>= (SELECT TO_NUMBER(VALUE1) FROM NEA_CODE_NAME WHERE CATEGORY_CODE = 'MAX_SEARCH_ROW_COUNT' AND DELETE_FLAG = '0')
+      </isEmpty>
+
+    ORDER BY
+      kyknoC
+    , niniLd_17cdA
+
+  </sql>
+  <!--
+    ※ selectのid単位で抽出カラムが同じになるようにSQLを分ける
+  -->
+  <select id="selectLldList_LLD" parameterClass="java.util.Map" resultClass="jp.co.ctcg.easset.dto.lld.PpfsLldSR">
+     <include refid="selectLldListBody_LLD" />
+  </select>
+  <select id="selectLldList_FLD_LLD" parameterClass="java.util.Map" resultClass="jp.co.ctcg.easset.dto.lld.PpfsLldFldSR">
+     <include refid="selectLldListBody_LLD" />
+  </select>
+
+  <!--
+    現物情報検索SQL
+  -->
+  <select id="selectLldKoyuno_LLD" parameterClass="java.util.Map" resultClass="java.lang.Long">
+    SELECT
+      ptvla1.KOYUNO
+    FROM
+      (
+        <!-- 情報機器 -->
+        SELECT
+          na.ASSET_ID
+        , TO_CHAR(NULL) AS LICENSE_ID
+        , na.HOL_COMPANY_CODE
+        , na.HOL_SECTION_CODE
+        , na.HOL_SECTION_YEAR
+        , na.HOL_STAFF_CODE
+        , na.HOL_OFFICE_CODE
+        , na.HOL_OFFICE_FLOOR
+        , na.USE_COMPANY_CODE
+        , na.USE_SECTION_CODE
+        , na.USE_SECTION_YEAR
+        , na.USE_STAFF_CODE
+        , na.AST_SYSTEM_SECTION_DEPLOY_FLAG
+        , na.AST_MANAGE_TYPE
+        , s.KOYUNO
+        FROM
+        PPFS_LD_SUPPORT s
+        , NEA_ASSET na
+        WHERE
+        s.HOJOSHUBETSUCD = '00001'
+        AND CSCONVERT(na.ASSET_ID,'NCHAR_CS') = s.HOJOSPAREC1
+        <!-- ﾗｲｾﾝｽ -->
+        UNION ALL
+        SELECT
+          TO_CHAR(NULL) AS ASSET_ID
+        , nl.LICENSE_ID
+        , nl.HOL_COMPANY_CODE
+        , nl.HOL_SECTION_CODE
+        , nl.HOL_SECTION_YEAR
+        , nl.HOL_STAFF_CODE
+        , TO_CHAR(NULL) AS HOL_OFFICE_CODE
+        , TO_NUMBER(NULL) AS HOL_OFFICE_FLOOR
+        , nl.USE_COMPANY_CODE
+        , nl.USE_SECTION_CODE
+        , nl.USE_SECTION_YEAR
+        , TO_CHAR(NULL) AS USE_STAFF_CODE
+        , TO_CHAR(NULL) AST_SYSTEM_SECTION_DEPLOY_FLAG
+        , TO_CHAR(NULL) AST_MANAGE_TYPE
+        , s.KOYUNO
+        FROM
+          PPFS_LD_SUPPORT s
+        , NEA_LICENSE nl
+        WHERE
+        s.HOJOSHUBETSUCD = '00001'
+        AND CSCONVERT(nl.LICENSE_ID,'NCHAR_CS') = s.HOJOSPAREC1
+      ) ptvla1
+    WHERE
+      1 = 1
+    <!-- 情報機器管理番号 -->
+    <isNotEmpty property="searchParam.assetId">
+      AND ptvla1.ASSET_ID  LIKE '%' || #searchParam.assetId# || '%'
+    </isNotEmpty>
+    <isNotEmpty property="assetIdPluralList">
+      AND $assetIdPluralList$
+    </isNotEmpty>
+    <!-- ﾗｲｾﾝｽ管理番号 -->
+    <isNotEmpty property="searchParam.licenseId">
+      AND ptvla1.LICENSE_ID LIKE '%' || #searchParam.licenseId# || '%'
+    </isNotEmpty>
+    <isNotEmpty property="licenseIdPluralList">
+      AND $licenseIdPluralList$
+    </isNotEmpty>
+    <!-- 設置(使用)場所 -->
+    <isNotEmpty property="searchParam.holOfficeCode">
+      AND ptvla1.HOL_OFFICE_CODE = #searchParam.holOfficeCode#
+    </isNotEmpty>
+    <isNotEmpty property="holOfficePluralList">
+      AND $holOfficePluralList$
+    </isNotEmpty>
+    <isNotEmpty property="searchParam.holOfficeFloor">
+      AND ptvla1.HOL_OFFICE_FLOOR = #searchParam.holOfficeFloor#
+    </isNotEmpty>
+    <!-- 情シス配備 -->
+    <isNotEmpty property="searchParam.astSystemSectionDeployFlag">
+      AND ptvla1.AST_SYSTEM_SECTION_DEPLOY_FLAG = #searchParam.astSystemSectionDeployFlag#
+    </isNotEmpty>
+    <!-- 管理区分 -->
+    <isNotEmpty property="astManageTypePluralList">
+      AND $astManageTypePluralList$
+    </isNotEmpty>
+    <!-- 資産管理担当者 -->
+    <isNotEmpty property="searchParam.holStaffCode">
+      AND ptvla1.HOL_STAFF_CODE = #searchParam.holStaffCode#
+    </isNotEmpty>
+    <!-- 使用者 -->
+    <isNotEmpty property="searchParam.useStaffCode">
+      AND ptvla1.USE_STAFF_CODE = #searchParam.useStaffCode#
+    </isNotEmpty>
+    <!-- アクセスレベル -->
+    <isNotEmpty property="accessLevelSection">
+      AND $accessLevelSection$
+    </isNotEmpty>
+    <isNotEmpty property="section">
+      AND $section$
+    </isNotEmpty>
+  </select>
+
+  <!--
+    リース契約台帳(契約単位)
+  -->
+  <sql id="selectLldCComSQL_LLD">
+    SELECT
+    <!-- 契約項目 -->
+      koyunoC
+      , MIN(kyknoC) kyknoC
+      , MIN(niniLd_8cdC) niniLd_8cdC
+      , MIN(latorihikikbnLRCName) latorihikikbnLRCName
+      , MIN(kykkbnCName) kykkbnCName
+      , MIN(lakaishacdC) lakaishacdC
+      , MIN(lakaishacdCName) lakaishacdCName
+      , MIN(latorihikikbnCName) latorihikikbnCName
+      , MIN(niniLd_17nmC) niniLd_17nmC
+      , MIN(bskeijokbnCName) bskeijokbnCName
+      , MIN(kykjotaikbnCName) kykjotaikbnCName
+      , MIN(kaiykymdCF) kaiykymdCF
+      , MIN(kaikeishorikbnCName) kaikeishorikbnCName
+      , MIN(juyoseikbnCName) juyoseikbnCName
+      , MIN(chukikbnCName) chukikbnCName
+      , MIN(kykymdCF) kykymdCF
+      , MIN(niniLd_20cdC) niniLd_20cdC
+      , MIN(lakaisuC) lakaisuC
+      , MIN(laryoTotalC) laryoTotalC
+      , MIN(kihonsparen1C) kihonsparen1C
+      , MIN(shohizeiritsuC) shohizeiritsuC
+      , MIN(stkgksotogkC) stkgksotogkC
+      , MIN(mitsumorikonyugkC) mitsumorikonyugkC
+      , MIN(zankahoshogkC) zankahoshogkC
+      , MIN(keizaitainenC) keizaitainenC
+      , MIN(tekiyoritsuPayC) tekiyoritsuPayC
+      , MIN(shrstymdCF) shrstymdCF
+      , MIN(shrmanryoymdCF) shrmanryoymdCF
+      , MIN(shrcyclekbnCName) shrcyclekbnCName
+      , MIN(kintokbnCName) kintokbnCName
+      , MIN(shrkaisuC) shrkaisuC
+      , MIN(zenshrymdCF) zenshrymdCF
+      , MIN(shokailaryoC) shokailaryoC
+      , MIN(shokailaryoKomiC) shokailaryoKomiC
+      , MIN(laryoC) laryoC
+      , MIN(laryoKomiC) laryoKomiC
+      , MIN(lastlaryoC) lastlaryoC
+      , MIN(lastlaryoKomiC) lastlaryoKomiC
+      , MIN(kojogk1C) kojogk1C
+      , MIN(kojogk2C) kojogk2C
+      , MIN(kojogk3C) kojogk3C
+      , MIN(kojogk4C) kojogk4C
+      , MIN(maehrlaryoC) maehrlaryoC
+      , MIN(maehrlammsuC) maehrlammsuC
+      , MIN(niniLd_15nmC) niniLd_15nmC
+      , MIN(hikiotoshistkaisuC) hikiotoshistkaisuC
+      , MIN(mikeikalaryoPayC) mikeikalaryoPayC
+      , MIN(mikeikalaryoPayDecC) mikeikalaryoPayDecC
+      , MIN(kihonsparen3C) kihonsparen3C
+      , MIN(kihonsparen5C) kihonsparen5C
+      , MIN(zansotogkC) zansotogkC
+      , MIN(zansotogkPayC) zansotogkPayC
+      , MIN(zansotogkPayDecC) zansotogkPayDecC
+      , MIN(biko1C) biko1C
+      , MIN(biko2C) biko2C
+      , MIN(niniLd_2cdC) niniLd_2cdC
+      , MIN(niniLd_2nmC) niniLd_2nmC
+      , MIN(niniLd_1nmC) niniLd_1nmC
+      , MIN(niniLd_12nmC) niniLd_12nmC
+      , MIN(niniLd_18nmC) niniLd_18nmC
+    <!-- 期間はmin-maxに置き換え -->
+      <!-- 開始日 -->
+      , MIN(stymdLF) stymdLF
+      <!-- 満了日 -->
+      , MAX(manryoymdLF) manryoymdLF
+      <!-- 期間 -->
+<!--
+      , NEA_UTIL_PKG.get_month_diff_f(MIN(stymdL), MAX(manryoymdL)) kikanL
+ -->
+      , MAX(kikanL) kikanL
+      <!--  解約日 -->
+      , MIN(kaiykymdLF) kaiykymdLF
+    <!-- 金額は契約金額に置き換え -->
+      , MIN(laryoTotalC) laryoTotalL
+      , MIN(DECODE(laryoC, 0, DECODE(shokailaryoC, 0, lastlaryoC, shokailaryoC), laryoC)) ikkailaryoL
+    FROM
+      (
+        <include refid="selectLldComSQL_LLD" />
+      )
+    GROUP BY
+      koyunoC
+  </sql>
+  <select id="selectLldCList_LLD" parameterClass="java.util.Map" resultClass="jp.co.ctcg.easset.dto.lld.PpfsLldSR">
+    <include refid="selectLldCComSQL_LLD" />
+    ORDER BY
+      kyknoC
+  </select>
+
+  <!--
+    請求明細
+  -->
+  <sql id="selectLldPayListBody_LLD">
+    SELECT
+      <!-- *********** 請求明細用項目 *********** -->
+      NEA_UTIL_PKG.format_date_char_f(ph.PERIOD) periodName
+      , lld.kyknoC reportKey1
+      , lld.niniLd_17cdA reportKey2
+      , ph.AMOUNT amount
+      , ph.SOSHIKI2CD costSectionCode
+      , NEA_UTIL_PKG.GET_COST_SECTION_NAME_F(ph.SOSHIKI2CD, NEA_UTIL_PKG.get_year_by_period_f(ph.PERIOD)) costSectionName
+      , ph.TAX_AMOUNT taxAmount
+      , ph.SEIKYUNO seikyuno
+      , ph.RENTALSU rentalsu
+      , ph.RENTAL1STYMD rental1stymd
+      , ph.RENTAL1STYMDF rental1stymdF
+      , ph.RENTALSTYMD rentalstymd
+      , ph.RENTALSTYMDF rentalstymdF
+      , ph.RENTALEDYMD rentaledymd
+      , ph.RENTALEDYMDF rentaledymdF
+      , ph.RENTALKIKANM rentalkikanm
+      , ph.RENTALKIKAND rentalkikand
+      , ph.RENTALKIKANMALL rentalkikanmall
+      , ph.RENTALKIKANDALL rentalkikandall
+      , ph.SEIKYUST seikyust
+      , ph.SEIKYUSTF seikyustF
+      , ph.SEIKYUED seikyued
+      , ph.SEIKYUEDF seikyuedF
+      , ph.NAME name
+      , ph.KATACODE katacode
+      , ph.KATABAN kataban
+      , ph.OIR oir
+      , ph.SERIALNO serialno
+      , ph.SURYO suryo
+      , ph.SEIKYUCD seikyucd
+      , ph.SEIKYUNM seikyunm
+      , ph.SEIKYUJIGYONM seikyujigyonm
+      , ph.SEIKYUTANTOCDE seikyutantocde
+      , ph.SEIKYUBUSYONM seikyubusyonm
+      , ph.SEIKYUTANTONM seikyutantonm
+      , ph.SOUHUKAISHANM souhukaishanm
+      , ph.SOUHUJIGYONM souhujigyonm
+      , ph.SOUHUBUSYONM souhubusyonm
+      , ph.SOUHUBUTANTONM souhubutantonm
+      , ph.RENTECBASECD rentecbasecd
+      , ph.RENTECPLACDNM rentecplacdnm
+      , ph.JOHOKIKIKANRINO johokikikanrino
+      , ph.SUPLIERCD supliercd
+      , ph.SUPLIERSITE supliersite
+      , ph.SEIKYUBGROUP seikyubgroup
+      , ph.SKKPJ skkpj
+      , ph.TYUTOFLG tyutoflg
+
+      <!-- *********** 台帳項目 *********** -->
+      , lld.*
+      <isNotEmpty property="isOutputFld">
+        , fld.*
+      </isNotEmpty>
+    FROM
+      (
+        <include refid="selectLldComSQL_LLD" />
+      ) lld
+      <isNotEmpty property="isOutputFld">
+        , (
+          SELECT
+            <include refid="selectFldComColumn_FLD" />
+            , <include refid="selectFldComColumnL_FLD" />
+          FROM
+            <include refid="selectFldComFrom_FLD" />
+         ) fld
+      </isNotEmpty>
+      , (
+        /* リース */
+        SELECT
+          h.COMPANY_CODE
+          , h.PERIOD
+          , h.KOYUNO
+          , h.SHRLARYO AMOUNT
+          , h.SHOHIZEIGK TAX_AMOUNT
+          , h.SOSHIKI2CD
+          , h.KAISHACD
+          , h.LARYOHFCD HFCD
+          , TRANSLATE(NULL USING NCHAR_CS) SEIKYUNO
+          , TO_NUMBER(NULL) RENTALSU
+          , TRANSLATE(NULL USING NCHAR_CS) RENTAL1STYMD
+          , TRANSLATE(NULL USING NCHAR_CS) RENTAL1STYMDF
+          , TRANSLATE(NULL USING NCHAR_CS) RENTALSTYMD
+          , TRANSLATE(NULL USING NCHAR_CS) RENTALSTYMDF
+          , TRANSLATE(NULL USING NCHAR_CS) RENTALEDYMD
+          , TRANSLATE(NULL USING NCHAR_CS) RENTALEDYMDF
+          , TRANSLATE(NULL USING NCHAR_CS) RENTALKIKANM
+          , TRANSLATE(NULL USING NCHAR_CS) RENTALKIKAND
+          , TRANSLATE(NULL USING NCHAR_CS) RENTALKIKANMALL
+          , TRANSLATE(NULL USING NCHAR_CS) RENTALKIKANDALL
+          , TRANSLATE(NULL USING NCHAR_CS) SEIKYUST
+          , TRANSLATE(NULL USING NCHAR_CS) SEIKYUSTF
+          , TRANSLATE(NULL USING NCHAR_CS) SEIKYUED
+          , TRANSLATE(NULL USING NCHAR_CS) SEIKYUEDF
+          , TRANSLATE(NULL USING NCHAR_CS) NAME
+          , TRANSLATE(NULL USING NCHAR_CS) KATACODE
+          , TRANSLATE(NULL USING NCHAR_CS) KATABAN
+          , TRANSLATE(NULL USING NCHAR_CS) OIR
+          , TRANSLATE(NULL USING NCHAR_CS) SERIALNO
+          , TO_NUMBER(NULL) SURYO
+          , TRANSLATE(NULL USING NCHAR_CS) SEIKYUCD
+          , TRANSLATE(NULL USING NCHAR_CS) SEIKYUNM
+          , TRANSLATE(NULL USING NCHAR_CS) SEIKYUJIGYONM
+          , TRANSLATE(NULL USING NCHAR_CS) SEIKYUTANTOCDE
+          , TRANSLATE(NULL USING NCHAR_CS) SEIKYUBUSYONM
+          , TRANSLATE(NULL USING NCHAR_CS) SEIKYUTANTONM
+          , TRANSLATE(NULL USING NCHAR_CS) SOUHUKAISHANM
+          , TRANSLATE(NULL USING NCHAR_CS) SOUHUJIGYONM
+          , TRANSLATE(NULL USING NCHAR_CS) SOUHUBUSYONM
+          , TRANSLATE(NULL USING NCHAR_CS) SOUHUBUTANTONM
+          , TRANSLATE(NULL USING NCHAR_CS) RENTECBASECD
+          , TRANSLATE(NULL USING NCHAR_CS) RENTECPLACDNM
+          , TRANSLATE(NULL USING NCHAR_CS) JOHOKIKIKANRINO
+          , TRANSLATE(NULL USING NCHAR_CS) SUPLIERCD
+          , TRANSLATE(NULL USING NCHAR_CS) SUPLIERSITE
+          , TRANSLATE(NULL USING NCHAR_CS) SEIKYUBGROUP
+          , TRANSLATE(NULL USING NCHAR_CS) SKKPJ
+          , TRANSLATE(NULL USING NCHAR_CS) TYUTOFLG
+        FROM
+          NEA_$histTablePrefixFromTo$PPFS_SHR_ASSETS h
+          , NEA_$histTablePrefixFromTo$PPFS_RELATION_LA hl
+          , NEA_$histTablePrefixFromTo$PPFS_LLDC hc
+        WHERE
+          (h.SHRLARYO != 0 OR h.SHOHIZEIGK != 0) /* 支払額 != 0 */
+          AND h.PAYACCKBN = '1' /* 請求明細は約定（支払期間）ベース */
+          AND h.LARYOHFKBN = '1' /* 配賦前 */
+
+          /* オリックスレンタル以外 */
+          AND h.COMPANY_CODE = hl.COMPANY_CODE
+          AND h.PERIOD = hl.PERIOD
+          AND h.KOYUNO = hl.KOYUNO_SHISAN
+          AND hl.COMPANY_CODE = hc.COMPANY_CODE
+          AND hl.PERIOD = hc.PERIOD
+          AND hl.KOYUNO_KYK = hc.KOYUNO
+          AND hl.YUKOFLG = '1'
+          AND hl.CANCELSUMIFLG = '0'
+          AND NOT EXISTS (
+            SELECT
+              'X'
+            FROM
+              NEA_CODE_NAME cn
+            WHERE
+              cn.CATEGORY_CODE = 'LEASE_RENTAL_CUSTOMER'
+              AND cn.COMPANY_CODE = hc.COMPANY_CODE
+              AND cn.VALUE7 = '1'
+              AND cn.VALUE6 = CSCONVERT(hc.LAKAISHACD,'CHAR_CS')
+              AND NEA_UTIL_PKG.GET_LEASE_RENTAL_HANTEI_F(hc.LATORIHIKIKBN,hc.BUNRUICD) = '1'
+          )
+
+        /* レンタル */
+        UNION ALL
+        SELECT
+          h.COMPANY_CODE
+          , h.PERIOD
+          , l.KOYUNO
+          , h.SEIKYUGKNOTAX AMOUNT
+          , h.SEIKYUGKWITHTAX - h.SEIKYUGKNOTAX TAX_AMOUNT
+          , h.SOSHIKI2CD
+          , h.KAISHACD
+          , h.HFCD
+          , h.SEIKYUNO
+          , h.RENTALSU
+          , h.RENTAL1STYMD
+          , NEA_UTIL_PKG.format_date_char_f(h.RENTAL1STYMD) RENTAL1STYMDF
+          , h.RENTALSTYMD
+          , NEA_UTIL_PKG.format_date_char_f(h.RENTALSTYMD) RENTALSTYMDF
+          , h.RENTALEDYMD
+          , NEA_UTIL_PKG.format_date_char_f(h.RENTALEDYMD) RENTALEDYMDF
+          , h.RENTALKIKANM
+          , h.RENTALKIKAND
+          , h.RENTALKIKANMALL
+          , h.RENTALKIKANDALL
+          , h.SEIKYUST
+          , NEA_UTIL_PKG.format_date_char_f(h.SEIKYUST) SEIKYUSTF
+          , h.SEIKYUED
+          , NEA_UTIL_PKG.format_date_char_f(h.SEIKYUED) SEIKYUEDF
+          , h.NAME
+          , h.KATACODE
+          , h.KATABAN
+          , h.OIR
+          , h.SERIALNO
+          , h.SURYO
+          , h.SEIKYUCD
+          , h.SEIKYUNM
+          , h.SEIKYUJIGYONM
+          , h.SEIKYUTANTOCDE
+          , h.SEIKYUBUSYONM
+          , h.SEIKYUTANTONM
+          , h.SOUHUKAISHANM
+          , h.SOUHUJIGYONM
+          , h.SOUHUBUSYONM
+          , h.SOUHUBUTANTONM
+          , h.RENTECBASECD
+          , h.RENTECPLACDNM
+          , h.JOHOKIKIKANRINO
+          , h.SUPLIERCD
+          , h.SUPLIERSITE
+          , h.SEIKYUBGROUP
+          , h.SKKPJ
+          , h.TYUTOFLG
+        FROM
+          NEA_$histTablePrefixFromTo$PPFS_RENTAL_HISTORY h
+          , NEA_$histTablePrefixFromTo$PPFS_LLDA l
+        WHERE
+          (h.SEIKYUGKNOTAX != 0 OR h.SEIKYUGKWITHTAX != 0) /* 支払額 != 0 */
+          AND h.COMPANY_CODE = l.COMPANY_CODE
+          AND h.SOSHIKI1CD = l.SOSHIKI1CD
+          AND h.PERIOD = l.PERIOD
+          AND (l.OYA || l.EDA) = h.SHISANNO
+          AND h.HFKBN = '1' /* 配賦前 */
+      ) ph
+    WHERE
+      <!-- *********** 明細用条件 *********** -->
+      ph.COMPANY_CODE = #companyCode#
+      AND ph.KOYUNO = lld.koyunoA
+
+      <!-- 会計年月 -->
+      AND ph.PERIOD <![CDATA[>]]>= #searchParam.reportPeriodFrom#
+      AND ph.PERIOD <![CDATA[<]]>= #searchParam.reportPeriodTo#
+
+      <!-- 経費負担 -->
+      <isNotEmpty property="costSectionCodeIn">
+        AND
+          (ph.SOSHIKI2CD IN ( $costSectionCodeIn$ )
+            OR
+           EXISTS (
+             SELECT
+               'X'
+             FROM
+               PPFS_MS28_H h
+             , PPFS_MS28_D d
+             WHERE
+               h.HFPK = d.HFPK
+               AND h.KAISHACD = ph.KAISHACD
+               AND h.HFCD = ph.HFCD
+               AND d.soshiki2cd IN ( $costSectionCodeIn$ )
+           )
+        )
+      </isNotEmpty>
+
+      <isNotEmpty property="isOutputFld">
+        AND lld.companyCodeA = fld.companyCode (+)
+        AND lld.periodA = fld.period (+)
+        AND lld.koyunoA = fld.koyuno (+)
+      </isNotEmpty>
+    ORDER BY
+      ph.PERIOD
+      , lld.kyknoC
+      , lld.niniLd_17cdA
+      , ph.SOSHIKI2CD
+  </sql>
+  <!--
+    ※ selectのid単位で抽出カラムが同じになるようにSQLを分ける
+  -->
+  <select id="selectLldPayList_LLD" parameterClass="java.util.Map" resultClass="jp.co.ctcg.easset.dto.lld.PpfsLldSRRep">
+     <include refid="selectLldPayListBody_LLD" />
+  </select>
+  <select id="selectLldPayList_FLD_LLD" parameterClass="java.util.Map" resultClass="jp.co.ctcg.easset.dto.lld.PpfsLldSRRep">
+     <include refid="selectLldPayListBody_LLD" />
+  </select>
+
+  <!--
+    賃借料・償却費・社内金利他明細
+  -->
+  <sql id="selectLldPlListBody_LLD">
+    SELECT
+      <!-- *********** 賃借料・償却費・社内金利他明細用項目 *********** -->
+      NEA_UTIL_PKG.format_date_char_f(ph.PERIOD) periodName
+      , lld.kyknoC reportKey1
+      , lld.niniLd_17cdA reportKey2
+      , ph.ACCOUNT_NAME accountName
+      , ph.AMOUNT amount
+      , (ph.HFRITSU * 100) distRate
+      , ph.AMOUNT_NO_DIST amountNoDist
+      , ph.SOSHIKI2CD costSectionCode
+      , NEA_UTIL_PKG.GET_COST_SECTION_NAME_F(ph.SOSHIKI2CD, NEA_UTIL_PKG.get_year_by_period_f(ph.PERIOD)) costSectionName
+      , ph.HFCD distCode
+      , NEA_UTIL_PKG.GET_DIST_NAME_F(ph.COMPANY_CODE, ph.HFCD) distName
+
+      <!-- *********** 台帳項目 *********** -->
+      , lld.*
+      <isNotEmpty property="isOutputFld">
+        , fld.*
+      </isNotEmpty>
+    FROM
+      (
+        <include refid="selectLldComSQL_LLD" />
+      ) lld
+      <isNotEmpty property="isOutputFld">
+        , (
+          SELECT
+            <include refid="selectFldComColumn_FLD" />
+            , <include refid="selectFldComColumnL_FLD" />
+          FROM
+            <include refid="selectFldComFrom_FLD" />
+         ) fld
+      </isNotEmpty>
+      , (
+        /* 賃借料(オフバランスリース) */
+        SELECT
+          h.COMPANY_CODE
+          , h.PERIOD
+          , h.KOYUNO
+          , '1' ACCOUNT_TYPE
+          , '賃借料' ACCOUNT_NAME
+          , h.SHRLARYO AMOUNT
+          , h.LARYOHFCD HFCD
+          <isEqual property="searchParam.reportDistType" compareValue="2">
+            , h.HFRITSU
+            , h_no_dist.SHRLARYO AMOUNT_NO_DIST
+          </isEqual>
+          <isNotEqual property="searchParam.reportDistType" compareValue="2">
+            , TO_NUMBER(NULL) HFRITSU
+            , TO_NUMBER(NULL) AMOUNT_NO_DIST
+          </isNotEqual>
+          , h.SOSHIKI2CD
+          , h.LARYOHFKBN REPORT_DIST_TYPE
+        FROM
+          NEA_$histTablePrefixFromTo$PPFS_SHR_ASSETS h
+          , NEA_$histTablePrefixFromTo$PPFS_RELATION_LA hl
+          , NEA_$histTablePrefixFromTo$PPFS_LLDC hc
+          <!-- 配賦後の場合は配賦前取得 -->
+          <isEqual property="searchParam.reportDistType" compareValue="2">
+            , NEA_$histTablePrefixFromTo$PPFS_SHR_ASSETS h_no_dist
+          </isEqual>
+        WHERE
+          h.SHISANKNRKBN = '7' /* オフバランスリース資産 */
+          AND h.SHRLARYO != 0 /* 支払リース料 != 0 */
+          AND h.PAYACCKBN = '2' /* PLは発生（リース期間）ベース */
+
+          /* オリックスレンタル以外 */
+          AND h.COMPANY_CODE = hl.COMPANY_CODE
+          AND h.PERIOD = hl.PERIOD
+          AND h.KOYUNO = hl.KOYUNO_SHISAN
+          AND hl.COMPANY_CODE = hc.COMPANY_CODE
+          AND hl.PERIOD = hc.PERIOD
+          AND hl.KOYUNO_KYK = hc.KOYUNO
+          AND hl.YUKOFLG = '1'
+          AND hl.CANCELSUMIFLG = '0'
+          AND NOT EXISTS (
+            SELECT
+              'X'
+            FROM
+              NEA_CODE_NAME cn
+            WHERE
+              cn.CATEGORY_CODE = 'LEASE_RENTAL_CUSTOMER'
+              AND cn.COMPANY_CODE = hc.COMPANY_CODE
+              AND cn.VALUE7 = '1'
+              AND cn.VALUE6 = CSCONVERT(hc.LAKAISHACD,'CHAR_CS')
+              AND NEA_UTIL_PKG.GET_LEASE_RENTAL_HANTEI_F(hc.LATORIHIKIKBN,hc.BUNRUICD) = '1'
+          )
+
+          <!-- 配賦後の場合は配賦前取得 -->
+          <isEqual property="searchParam.reportDistType" compareValue="2">
+            AND h.COMPANY_CODE = h_no_dist.COMPANY_CODE
+            AND h.PERIOD = h_no_dist.PERIOD
+            AND h.KOYUNO =h_no_dist.KOYUNO
+            AND h.PAYACCKBN =h_no_dist.PAYACCKBN
+            AND h.LAKAISU = h_no_dist.LAKAISU
+            AND h.SHRKAISU = h_no_dist.SHRKAISU
+            AND h_no_dist.LARYOHFKBN = '1'
+          </isEqual>
+        /* 支払利息(オンバランスリース) */
+        UNION ALL
+        SELECT
+          h.COMPANY_CODE
+          , h.PERIOD
+          , h.KOYUNO
+          , '2' ACCOUNT_TYPE
+          , '支払利息' ACCOUNT_NAME
+          , h.RISOKUSOTOGK AMOUNT
+          , h.LARYOHFCD HFCD
+          <isEqual property="searchParam.reportDistType" compareValue="2">
+            , h.HFRITSU
+            , h_no_dist.RISOKUSOTOGK AMOUNT_NO_DIST
+          </isEqual>
+          <isNotEqual property="searchParam.reportDistType" compareValue="2">
+            , TO_NUMBER(NULL) HFRITSU
+            , TO_NUMBER(NULL) AMOUNT_NO_DIST
+          </isNotEqual>
+          , h.SOSHIKI2CD
+          , h.LARYOHFKBN REPORT_DIST_TYPE
+        FROM
+          NEA_$histTablePrefixFromTo$PPFS_SHR_ASSETS h
+          <!-- 配賦後の場合は配賦前取得 -->
+          <isEqual property="searchParam.reportDistType" compareValue="2">
+            , NEA_$histTablePrefixFromTo$PPFS_SHR_ASSETS h_no_dist
+          </isEqual>
+        WHERE
+          h.SHISANKNRKBN = '8' /* オンバランスリース資産 */
+          AND h.RISOKUSOTOGK != 0 /* 利息相当額 != 0 */
+    /*      AND h.PAYACCKBN = '2'  PLは発生（リース期間）ベース */
+          AND h.PAYACCKBN = '1' /* PLは約定（リース期間）ベース変更 */
+          <!-- 配賦後の場合は配賦前取得 -->
+          <isEqual property="searchParam.reportDistType" compareValue="2">
+            AND h.COMPANY_CODE = h_no_dist.COMPANY_CODE
+            AND h.PERIOD = h_no_dist.PERIOD
+            AND h.KOYUNO =h_no_dist.KOYUNO
+            AND h.PAYACCKBN =h_no_dist.PAYACCKBN
+            AND h_no_dist.LARYOHFKBN = '1'
+            AND h.LAKAISU = h_no_dist.LAKAISU
+            AND h.SHRKAISU = h_no_dist.SHRKAISU
+          </isEqual>
+        /* 控除額1-4(オンバランスリース) */
+        UNION ALL
+        SELECT
+          h.COMPANY_CODE
+          , h.PERIOD
+          , h.KOYUNO
+          , '3_1' ACCOUNT_TYPE
+          , NEA_UTIL_PKG.get_cn_value1_f('PPFS_LLD_KOJOGK_TYPE', h.COMPANY_CODE || '_1', h.COMPANY_CODE) ACCOUNT_NAME
+          , h.KOJOGK1 AMOUNT
+          , h.LARYOHFCD HFCD
+          <isEqual property="searchParam.reportDistType" compareValue="2">
+            , h.HFRITSU
+            , h_no_dist.KOJOGK1 AMOUNT_NO_DIST
+          </isEqual>
+          <isNotEqual property="searchParam.reportDistType" compareValue="2">
+            , TO_NUMBER(NULL) HFRITSU
+            , TO_NUMBER(NULL) AMOUNT_NO_DIST
+          </isNotEqual>
+          , h.SOSHIKI2CD
+          , h.LARYOHFKBN REPORT_DIST_TYPE
+        FROM
+          NEA_$histTablePrefixFromTo$PPFS_SHR_ASSETS h
+          <!-- 配賦後の場合は配賦前取得 -->
+          <isEqual property="searchParam.reportDistType" compareValue="2">
+            , NEA_$histTablePrefixFromTo$PPFS_SHR_ASSETS h_no_dist
+          </isEqual>
+        WHERE
+          h.SHISANKNRKBN = '8' /* オンバランスリース資産 */
+          AND h.KOJOGK1 != 0 /* 控除額 != 0 */
+          AND h.PAYACCKBN = '2' /* PLは発生（リース期間）ベース */
+          <!-- 配賦後の場合は配賦前取得 -->
+          <isEqual property="searchParam.reportDistType" compareValue="2">
+            AND h.COMPANY_CODE = h_no_dist.COMPANY_CODE
+            AND h.PERIOD = h_no_dist.PERIOD
+            AND h.KOYUNO =h_no_dist.KOYUNO
+            AND h.PAYACCKBN =h_no_dist.PAYACCKBN
+            AND h.LAKAISU = h_no_dist.LAKAISU
+            AND h.SHRKAISU = h_no_dist.SHRKAISU
+            AND h_no_dist.LARYOHFKBN = '1'
+          </isEqual>
+        UNION ALL
+        SELECT
+          h.COMPANY_CODE
+          , h.PERIOD
+          , h.KOYUNO
+          , '3_2' ACCOUNT_TYPE
+          ,  NEA_UTIL_PKG.get_cn_value1_f('PPFS_LLD_KOJOGK_TYPE', h.COMPANY_CODE || '_2', h.COMPANY_CODE) ACCOUNT_NAME
+          , h.KOJOGK2 AMOUNT
+          , h.LARYOHFCD HFCD
+          <isEqual property="searchParam.reportDistType" compareValue="2">
+            , h.HFRITSU
+            , h_no_dist.KOJOGK2 AMOUNT_NO_DIST
+          </isEqual>
+          <isNotEqual property="searchParam.reportDistType" compareValue="2">
+            , TO_NUMBER(NULL) HFRITSU
+            , TO_NUMBER(NULL) AMOUNT_NO_DIST
+          </isNotEqual>
+          , h.SOSHIKI2CD
+          , h.LARYOHFKBN REPORT_DIST_TYPE
+        FROM
+          NEA_$histTablePrefixFromTo$PPFS_SHR_ASSETS h
+          <!-- 配賦後の場合は配賦前取得 -->
+          <isEqual property="searchParam.reportDistType" compareValue="2">
+            , NEA_$histTablePrefixFromTo$PPFS_SHR_ASSETS h_no_dist
+          </isEqual>
+        WHERE
+          h.SHISANKNRKBN = '8' /* オンバランスリース資産 */
+          AND h.KOJOGK2 != 0 /* 控除額 != 0 */
+          AND h.PAYACCKBN = '2' /* PLは発生（リース期間）ベース */
+          <!-- 配賦後の場合は配賦前取得 -->
+          <isEqual property="searchParam.reportDistType" compareValue="2">
+            AND h.COMPANY_CODE = h_no_dist.COMPANY_CODE
+            AND h.PERIOD = h_no_dist.PERIOD
+            AND h.KOYUNO =h_no_dist.KOYUNO
+            AND h.PAYACCKBN =h_no_dist.PAYACCKBN
+            AND h.LAKAISU = h_no_dist.LAKAISU
+            AND h.SHRKAISU = h_no_dist.SHRKAISU
+            AND h_no_dist.LARYOHFKBN = '1'
+          </isEqual>
+        UNION ALL
+        SELECT
+          h.COMPANY_CODE
+          , h.PERIOD
+          , h.KOYUNO
+          , '3_3' ACCOUNT_TYPE
+          ,  NEA_UTIL_PKG.get_cn_value1_f('PPFS_LLD_KOJOGK_TYPE', h.COMPANY_CODE || '_3', h.COMPANY_CODE) ACCOUNT_NAME
+          , h.KOJOGK3 AMOUNT
+          , h.LARYOHFCD HFCD
+          <isEqual property="searchParam.reportDistType" compareValue="2">
+            , h.HFRITSU
+            ,  h_no_dist.KOJOGK3 AMOUNT_NO_DIST
+          </isEqual>
+          <isNotEqual property="searchParam.reportDistType" compareValue="2">
+            , TO_NUMBER(NULL) HFRITSU
+            , TO_NUMBER(NULL) AMOUNT_NO_DIST
+          </isNotEqual>
+          , h.SOSHIKI2CD
+          , h.LARYOHFKBN REPORT_DIST_TYPE
+        FROM
+          NEA_$histTablePrefixFromTo$PPFS_SHR_ASSETS h
+          <!-- 配賦後の場合は配賦前取得 -->
+          <isEqual property="searchParam.reportDistType" compareValue="2">
+            , NEA_$histTablePrefixFromTo$PPFS_SHR_ASSETS h_no_dist
+          </isEqual>
+        WHERE
+          h.SHISANKNRKBN = '8' /* オンバランスリース資産 */
+          AND h.KOJOGK3 != 0 /* 控除額 != 0 */
+          AND h.PAYACCKBN = '2' /* PLは発生（リース期間）ベース */
+          <!-- 配賦後の場合は配賦前取得 -->
+          <isEqual property="searchParam.reportDistType" compareValue="2">
+            AND h.COMPANY_CODE = h_no_dist.COMPANY_CODE
+            AND h.PERIOD = h_no_dist.PERIOD
+            AND h.KOYUNO =h_no_dist.KOYUNO
+            AND h.PAYACCKBN =h_no_dist.PAYACCKBN
+            AND h.LAKAISU = h_no_dist.LAKAISU
+            AND h.SHRKAISU = h_no_dist.SHRKAISU
+            AND h_no_dist.LARYOHFKBN = '1'
+          </isEqual>
+        UNION ALL
+        SELECT
+          h.COMPANY_CODE
+          , h.PERIOD
+          , h.KOYUNO
+          , '3_4' ACCOUNT_TYPE
+          ,  NEA_UTIL_PKG.get_cn_value1_f('PPFS_LLD_KOJOGK_TYPE', h.COMPANY_CODE || '_4', h.COMPANY_CODE) ACCOUNT_NAME
+          , h.KOJOGK4 AMOUNT
+          , h.LARYOHFCD HFCD
+          <isEqual property="searchParam.reportDistType" compareValue="2">
+            , h.HFRITSU
+            , (h_no_dist.KOJOGK1 + h_no_dist.KOJOGK2 + h_no_dist.KOJOGK3 + h_no_dist.KOJOGK4) AMOUNT_NO_DIST
+          </isEqual>
+          <isNotEqual property="searchParam.reportDistType" compareValue="2">
+            , TO_NUMBER(NULL) HFRITSU
+            , TO_NUMBER(NULL) AMOUNT_NO_DIST
+          </isNotEqual>
+          , h.SOSHIKI2CD
+          , h.LARYOHFKBN REPORT_DIST_TYPE
+        FROM
+          NEA_$histTablePrefixFromTo$PPFS_SHR_ASSETS h
+          <!-- 配賦後の場合は配賦前取得 -->
+          <isEqual property="searchParam.reportDistType" compareValue="2">
+            , NEA_$histTablePrefixFromTo$PPFS_SHR_ASSETS h_no_dist
+          </isEqual>
+        WHERE
+          h.SHISANKNRKBN = '8' /* オンバランスリース資産 */
+          AND h.KOJOGK4 != 0 /* 控除額 != 0 */
+          AND h.PAYACCKBN = '2' /* PLは発生（リース期間）ベース */
+          <!-- 配賦後の場合は配賦前取得 -->
+          <isEqual property="searchParam.reportDistType" compareValue="2">
+            AND h.COMPANY_CODE = h_no_dist.COMPANY_CODE
+            AND h.PERIOD = h_no_dist.PERIOD
+            AND h.KOYUNO =h_no_dist.KOYUNO
+            AND h.PAYACCKBN =h_no_dist.PAYACCKBN
+            AND h.LAKAISU = h_no_dist.LAKAISU
+            AND h.SHRKAISU = h_no_dist.SHRKAISU
+            AND h_no_dist.LARYOHFKBN = '1'
+          </isEqual>
+        /* 償却費(オンバランスリース) */
+        UNION ALL
+        SELECT
+          h.COMPANY_CODE
+          , h.PERIOD
+          , h.KOYUNO
+          , '4' ACCOUNT_TYPE
+          , '償却費' ACCOUNT_NAME
+          , h.SKKGK_L1 AMOUNT
+          , h.HFCD
+          <isEqual property="searchParam.reportDistType" compareValue="2">
+            , h.HFRITSU
+            , h_no_dist.SKKGK_L1 AMOUNT_NO_DIST
+          </isEqual>
+          <isNotEqual property="searchParam.reportDistType" compareValue="2">
+            , TO_NUMBER(NULL) HFRITSU
+            , TO_NUMBER(NULL) AMOUNT_NO_DIST
+          </isNotEqual>
+          , h.SOSHIKI2CD
+          , h.SKKGKHFKBN REPORT_DIST_TYPE
+        FROM
+          NEA_$histTablePrefixFromTo$PPFS_DP_HISTORY h
+          <!-- 配賦後の場合は配賦前取得 -->
+          <isEqual property="searchParam.reportDistType" compareValue="2">
+            , NEA_$histTablePrefixFromTo$PPFS_DP_HISTORY h_no_dist
+          </isEqual>
+        WHERE
+          h.SHISANKNRKBN = '8' /* オンバランスリース */
+          AND h.SKKGK_L1 != 0 /* 償却費 != 0 */
+          AND h.SKKGKKBN != '5' /* 減損以外 */
+          <!-- 配賦後の場合は配賦前取得 -->
+          <isEqual property="searchParam.reportDistType" compareValue="2">
+            AND h.COMPANY_CODE = h_no_dist.COMPANY_CODE
+            AND h.PERIOD = h_no_dist.PERIOD
+            AND h.KOYUNO =h_no_dist.KOYUNO
+            AND h.SKKGKKBN = h_no_dist.SKKGKKBN
+            AND h.SKKCHOSEIKBN = h_no_dist.SKKCHOSEIKBN
+            AND h.SENKOENTRYKBN = h_no_dist.SENKOENTRYKBN
+            AND NVL(h.HKKBN, '0') = NVL(h_no_dist.HKKBN, '0')
+            AND h.SOSHIKI2CD = NVL(h_no_dist.HFMOTOSOSHIKI2CD, h.SOSHIKI2CD)
+            AND h_no_dist.SKKGKHFKBN = '1'
+          </isEqual>
+        /* 社内金利(オンバランスリース) */
+        UNION ALL
+        SELECT
+          h.COMPANY_CODE
+          , h.PERIOD
+          , h.KOYUNO
+          , '5' ACCOUNT_TYPE
+          , '社内金利' ACCOUNT_NAME
+          , h.KINRI_L1 AMOUNT
+          , h.HFCD
+          <isEqual property="searchParam.reportDistType" compareValue="2">
+            , h.HFRITSU
+            , h_no_dist.KINRI_L1 AMOUNT_NO_DIST
+          </isEqual>
+          <isNotEqual property="searchParam.reportDistType" compareValue="2">
+            , TO_NUMBER(NULL) HFRITSU
+            , TO_NUMBER(NULL) AMOUNT_NO_DIST
+          </isNotEqual>
+          , h.SOSHIKI2CD
+          , h.KINRIHFKBN REPORT_DIST_TYPE
+        FROM
+          NEA_$histTablePrefixFromTo$PPFS_KINRI_HISTORY h
+          <!-- 配賦後の場合は配賦前取得 -->
+          <isEqual property="searchParam.reportDistType" compareValue="2">
+            , NEA_$histTablePrefixFromTo$PPFS_KINRI_HISTORY h_no_dist
+          </isEqual>
+        WHERE
+          h.SHISANKNRKBN = '8' /* オンバランスリース */
+          AND h.KINRI_L1 != 0  /* 社内金利 != 0 */
+          <!-- 配賦後の場合は配賦前取得 -->
+          <isEqual property="searchParam.reportDistType" compareValue="2">
+            AND h.COMPANY_CODE = h_no_dist.COMPANY_CODE
+            AND h.PERIOD = h_no_dist.PERIOD
+            AND h.KOYUNO =h_no_dist.KOYUNO
+            AND h.SENKOENTRYKBN = h_no_dist.SENKOENTRYKBN
+            AND NVL(h.HKKBN, '0') = NVL(h_no_dist.HKKBN, '0')
+            AND h.SOSHIKI2CD = NVL(h_no_dist.HFMOTOSOSHIKI2CD, h.SOSHIKI2CD)
+            AND h_no_dist.KINRIHFKBN = '1'
+          </isEqual>
+        /* 賃借料・他PL(レンタル) */
+        UNION ALL
+        SELECT
+          h.COMPANY_CODE
+          , h.PERIOD
+          , l.KOYUNO
+          , 'A' || SUBSTR(TO_CHAR(h.KANJOCD), 1, 6) ACCOUNT_TYPE
+          , REGEXP_REPLACE(NEA_UTIL_PKG.get_account_name_f(SUBSTR(TO_CHAR(h.KANJOCD), 1, 6)), '(\(|（)(原価|原価口|販管|販管口)(\)|）)', '') ACCOUNT_NAME
+          , h.SEIKYUGKNOTAX AMOUNT
+          , h.HFCD HFCD
+          <isEqual property="searchParam.reportDistType" compareValue="2">
+            , h.HFRITSU
+            , h_no_dist.SEIKYUGKNOTAX AMOUNT_NO_DIST
+          </isEqual>
+          <isNotEqual property="searchParam.reportDistType" compareValue="2">
+            , TO_NUMBER(NULL) HFRITSU
+            , TO_NUMBER(NULL) AMOUNT_NO_DIST
+          </isNotEqual>
+          , h.SOSHIKI2CD
+          , h.HFKBN REPORT_DIST_TYPE
+        FROM
+          NEA_$histTablePrefixFromTo$PPFS_RENTAL_HISTORY h
+          , NEA_$histTablePrefixFromTo$PPFS_LLDA l
+          <!-- 配賦後の場合は配賦前取得 -->
+          <isEqual property="searchParam.reportDistType" compareValue="2">
+            , NEA_$histTablePrefixFromTo$PPFS_RENTAL_HISTORY h_no_dist
+          </isEqual>
+        WHERE
+          h.SEIKYUGKNOTAX != 0 /* 支払額 != 0 */
+          AND h.PERIOD = l.PERIOD
+          AND (l.OYA || l.EDA) = h.SHISANNO
+          <!-- 配賦後の場合は配賦前取得 -->
+          <isEqual property="searchParam.reportDistType" compareValue="2">
+            AND h.COMPANY_CODE = h_no_dist.COMPANY_CODE
+            AND h.PERIOD = h_no_dist.PERIOD
+            AND h.SHISANNO =h_no_dist.SHISANNO
+            AND h.SHORINO =h_no_dist.SHORINO
+            AND h.LINENO =h_no_dist.LINENO
+            AND h_no_dist.HFKBN = '1'
+          </isEqual>
+      ) ph
+    WHERE
+      <!-- *********** 償却費・社内金利明細用条件 *********** -->
+      ph.COMPANY_CODE = #companyCode#
+      AND ph.KOYUNO = lld.koyunoA
+
+      <!-- 会計年月 -->
+      AND ph.PERIOD <![CDATA[>]]>= #searchParam.reportPeriodFrom#
+      AND ph.PERIOD <![CDATA[<]]>= #searchParam.reportPeriodTo#
+      <!-- 配賦 -->
+      AND ph.REPORT_DIST_TYPE = #searchParam.reportDistType#
+      <!-- 経費負担 -->
+      <isNotEmpty property="costSectionCodeIn">
+        AND ph.SOSHIKI2CD IN ( $costSectionCodeIn$ )
+      </isNotEmpty>
+
+      <isNotEmpty property="isOutputFld">
+        AND lld.companyCodeA = fld.companyCode
+        AND lld.periodA = fld.period
+        AND lld.koyunoA = fld.koyuno
+      </isNotEmpty>
+    ORDER BY
+      ph.PERIOD
+      , lld.kyknoC
+      , lld.niniLd_17cdA
+      , ph.SOSHIKI2CD
+      , ph.ACCOUNT_TYPE
+  </sql>
+  <!--
+    ※ selectのid単位で抽出カラムが同じになるようにSQLを分ける
+  -->
+  <select id="selectLldPlList_LLD" parameterClass="java.util.Map" resultClass="jp.co.ctcg.easset.dto.lld.PpfsLldSRRep">
+     <include refid="selectLldPlListBody_LLD" />
+  </select>
+  <select id="selectLldPlList_FLD_LLD" parameterClass="java.util.Map" resultClass="jp.co.ctcg.easset.dto.lld.PpfsLldSRRep">
+     <include refid="selectLldPlListBody_LLD" />
+  </select>
+
+  <!--
+    賃借料・償却費・社内金利他スケジュール
+  -->
+  <sql id="selectLldPlSchListBody_LLD">
+    SELECT
+      <!-- *********** 償却費・社内金利他スケジュール用用項目 *********** -->
+      lld.kyknoC reportKey1
+      , lld.niniLd_17cdA reportKey2
+      , ph.ACCOUNT_NAME accountName
+      , lld.laryoTotalL amount_l
+      , (SELECT pf.STKGKK FROM NEA_$histTablePrefixLd$PPFS_FLD pf WHERE lld.koyunoA = pf.KOYUNO AND lld.periodA = pf.PERIOD AND lld.companyCodeA = pf.COMPANY_CODE) amount_s
+      <!-- 年数分ループ -->
+      <iterate property="yearCountList">
+        <!-- 配賦後の場合は期首額は無し -->
+        <isEqual property="searchParam.reportDistType" compareValue="1">
+          , AMOUNT$yearCountList[]$_k amount$yearCountList[]$_k
+        </isEqual>
+        <isEqual property="searchParam.reportDistType" compareValue="2">
+          , TO_NUMBER(NULL) amount$yearCountList[]$_k
+        </isEqual>
+
+        , AMOUNT$yearCountList[]$_1 amount$yearCountList[]$_1
+        , AMOUNT$yearCountList[]$_2 amount$yearCountList[]$_2
+        , AMOUNT$yearCountList[]$_3 amount$yearCountList[]$_3
+        , AMOUNT$yearCountList[]$_4 amount$yearCountList[]$_4
+        , AMOUNT$yearCountList[]$_5 amount$yearCountList[]$_5
+        , AMOUNT$yearCountList[]$_6 amount$yearCountList[]$_6
+        , AMOUNT$yearCountList[]$_7 amount$yearCountList[]$_7
+        , AMOUNT$yearCountList[]$_8 amount$yearCountList[]$_8
+        , AMOUNT$yearCountList[]$_9 amount$yearCountList[]$_9
+        , AMOUNT$yearCountList[]$_10 amount$yearCountList[]$_10
+        , AMOUNT$yearCountList[]$_11 amount$yearCountList[]$_11
+        , AMOUNT$yearCountList[]$_12 amount$yearCountList[]$_12
+
+        , AMOUNT$yearCountList[]$_n amount$yearCountList[]$_n
+        , AMOUNT$yearCountList[]$_z amount$yearCountList[]$_z
+        , AMOUNT$yearCountList[]$_t amount$yearCountList[]$_t
+        , AMOUNT$yearCountList[]$_g amount$yearCountList[]$_g
+      </iterate>
+      , ph.SOSHIKI2CD costSectionCode
+      , NEA_UTIL_PKG.GET_COST_SECTION_NAME_F(ph.SOSHIKI2CD, NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#)) costSectionName
+
+      <!-- *********** 台帳項目 *********** -->
+      , lld.*
+      <isNotEmpty property="isOutputFld">
+        , fld.*
+      </isNotEmpty>
+    FROM
+      (
+        <include refid="selectLldComSQL_LLD" />
+      ) lld
+      <isNotEmpty property="isOutputFld">
+        , (
+          SELECT
+            <include refid="selectFldComColumn_FLD" />
+            , <include refid="selectFldComColumnL_FLD" />
+          FROM
+            <include refid="selectFldComFrom_FLD" />
+         ) fld
+      </isNotEmpty>
+      , (
+        /* 賃借料 */
+        SELECT
+          h.COMPANY_CODE
+          , h.KOYUNO
+          , '1' ACCOUNT_TYPE
+          , '賃借料' ACCOUNT_NAME
+          <!-- 年数分ループ -->
+          <iterate property="yearCountList">
+            , SUM(DECODE(TO_NUMBER(SHRYYDO), NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), KSMIKEIKALARYO, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_k
+            <isEqual property="searchParam.reportSchUnit" compareValue="1"> <!-- 月 -->
+              , SUM(DECODE(TO_NUMBER(SHRYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), SHRLARYO1, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_1
+              , SUM(DECODE(TO_NUMBER(SHRYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), SHRLARYO2, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_2
+              , SUM(DECODE(TO_NUMBER(SHRYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), SHRLARYO3, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_3
+              , SUM(DECODE(TO_NUMBER(SHRYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), SHRLARYO4, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_4
+              , SUM(DECODE(TO_NUMBER(SHRYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), SHRLARYO5, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_5
+              , SUM(DECODE(TO_NUMBER(SHRYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), SHRLARYO6, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_6
+              , SUM(DECODE(TO_NUMBER(SHRYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), SHRLARYO7, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_7
+              , SUM(DECODE(TO_NUMBER(SHRYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), SHRLARYO8, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_8
+              , SUM(DECODE(TO_NUMBER(SHRYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), SHRLARYO9, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_9
+              , SUM(DECODE(TO_NUMBER(SHRYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), SHRLARYO10, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_10
+              , SUM(DECODE(TO_NUMBER(SHRYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), SHRLARYO11, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_11
+              , SUM(DECODE(TO_NUMBER(SHRYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), SHRLARYO12, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_12
+            </isEqual>
+            <isEqual property="searchParam.reportSchUnit" compareValue="2"> <!-- 四半期 -->
+              , SUM(DECODE(TO_NUMBER(SHRYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), SHRLARYO1 + SHRLARYO2 + SHRLARYO3, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_1
+              , SUM(DECODE(TO_NUMBER(SHRYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), SHRLARYO4 + SHRLARYO5 + SHRLARYO6, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_2
+              , SUM(DECODE(TO_NUMBER(SHRYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), SHRLARYO7 + SHRLARYO8 + SHRLARYO9, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_3
+              , SUM(DECODE(TO_NUMBER(SHRYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), SHRLARYO10 + SHRLARYO11 + SHRLARYO12, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_4
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_5
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_6
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_7
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_8
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_9
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_10
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_11
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_12
+            </isEqual>
+            <isEqual property="searchParam.reportSchUnit" compareValue="3"> <!-- 半期 -->
+              , SUM(DECODE(TO_NUMBER(SHRYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), SHRLARYO1 + SHRLARYO2 + SHRLARYO3 + SHRLARYO4 + SHRLARYO5 + SHRLARYO6, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_1
+              , SUM(DECODE(TO_NUMBER(SHRYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), SHRLARYO7 + SHRLARYO8 + SHRLARYO9 + SHRLARYO10 + SHRLARYO11 + SHRLARYO12, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_2
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_3
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_4
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_5
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_6
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_7
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_8
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_9
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_10
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_11
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_12
+            </isEqual>
+            <isEqual property="searchParam.reportSchUnit" compareValue="4"> <!-- 年 -->
+              , SUM(DECODE(TO_NUMBER(SHRYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), SHRLARYO1 + SHRLARYO2 + SHRLARYO3 + SHRLARYO4 + SHRLARYO5 + SHRLARYO6 + SHRLARYO7 + SHRLARYO8 + SHRLARYO9 + SHRLARYO10 + SHRLARYO11 + SHRLARYO12, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_1
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_2
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_3
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_4
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_5
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_6
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_7
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_8
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_9
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_10
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_11
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_12
+            </isEqual>
+            , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_n
+            , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_z
+            , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_t
+            , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_g
+          </iterate>
+          , h.SOSHIKI2CD
+          , h.LARYOHFKBN REPORT_DIST_TYPE
+        FROM
+          NEA_PPFS_SHR_A_CALC h
+        WHERE
+          h.SHISANKNRKBN = '7' /* オフバランスリース資産 */
+          AND h.PAYACCKBN = '2' /* PLは発生（リース期間）ベース */
+        GROUP BY
+          h.COMPANY_CODE
+          , h.KOYUNO
+          , h.SOSHIKI2CD
+          , h.LARYOHFKBN
+        /* 支払利息(オンバランスリース) */
+        UNION ALL
+        SELECT
+          h.COMPANY_CODE
+          , h.KOYUNO
+          , '2' ACCOUNT_TYPE
+          , '支払利息' ACCOUNT_NAME
+          <!-- 年数分ループ -->
+          <iterate property="yearCountList">
+            , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_k
+            <isEqual property="searchParam.reportSchUnit" compareValue="1"> <!-- 月 -->
+              , SUM(DECODE(TO_NUMBER(SHRYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), RISOKUSOTOGK1, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_1
+              , SUM(DECODE(TO_NUMBER(SHRYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), RISOKUSOTOGK2, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_2
+              , SUM(DECODE(TO_NUMBER(SHRYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), RISOKUSOTOGK3, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_3
+              , SUM(DECODE(TO_NUMBER(SHRYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), RISOKUSOTOGK4, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_4
+              , SUM(DECODE(TO_NUMBER(SHRYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), RISOKUSOTOGK5, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_5
+              , SUM(DECODE(TO_NUMBER(SHRYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), RISOKUSOTOGK6, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_6
+              , SUM(DECODE(TO_NUMBER(SHRYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), RISOKUSOTOGK7, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_7
+              , SUM(DECODE(TO_NUMBER(SHRYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), RISOKUSOTOGK8, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_8
+              , SUM(DECODE(TO_NUMBER(SHRYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), RISOKUSOTOGK9, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_9
+              , SUM(DECODE(TO_NUMBER(SHRYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), RISOKUSOTOGK10, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_10
+              , SUM(DECODE(TO_NUMBER(SHRYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), RISOKUSOTOGK11, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_11
+              , SUM(DECODE(TO_NUMBER(SHRYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), RISOKUSOTOGK12, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_12
+            </isEqual>
+            <isEqual property="searchParam.reportSchUnit" compareValue="2"> <!-- 四半期 -->
+              , SUM(DECODE(TO_NUMBER(SHRYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), RISOKUSOTOGK1 + RISOKUSOTOGK2 + RISOKUSOTOGK3, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_1
+              , SUM(DECODE(TO_NUMBER(SHRYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), RISOKUSOTOGK4 + RISOKUSOTOGK5 + RISOKUSOTOGK6, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_2
+              , SUM(DECODE(TO_NUMBER(SHRYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), RISOKUSOTOGK7 + RISOKUSOTOGK8 + RISOKUSOTOGK9, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_3
+              , SUM(DECODE(TO_NUMBER(SHRYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), RISOKUSOTOGK10 + RISOKUSOTOGK11 + RISOKUSOTOGK12, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_4
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_5
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_6
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_7
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_8
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_9
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_10
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_11
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_12
+            </isEqual>
+            <isEqual property="searchParam.reportSchUnit" compareValue="3"> <!-- 半期 -->
+              , SUM(DECODE(TO_NUMBER(SHRYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), RISOKUSOTOGK1 + RISOKUSOTOGK2 + RISOKUSOTOGK3 + RISOKUSOTOGK4 + RISOKUSOTOGK5 + RISOKUSOTOGK6, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_1
+              , SUM(DECODE(TO_NUMBER(SHRYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), RISOKUSOTOGK7 + RISOKUSOTOGK8 + RISOKUSOTOGK9 + RISOKUSOTOGK10 + RISOKUSOTOGK11 + RISOKUSOTOGK12, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_2
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_3
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_4
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_5
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_6
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_7
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_8
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_9
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_10
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_11
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_12
+            </isEqual>
+            <isEqual property="searchParam.reportSchUnit" compareValue="4"> <!-- 年 -->
+              , SUM(DECODE(TO_NUMBER(SHRYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), RISOKUSOTOGK1 + RISOKUSOTOGK2 + RISOKUSOTOGK3 + RISOKUSOTOGK4 + RISOKUSOTOGK5 + RISOKUSOTOGK6 + RISOKUSOTOGK7 + RISOKUSOTOGK8 + RISOKUSOTOGK9 + RISOKUSOTOGK10 + RISOKUSOTOGK11 + RISOKUSOTOGK12, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_1
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_2
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_3
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_4
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_5
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_6
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_7
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_8
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_9
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_10
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_11
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_12
+            </isEqual>
+            , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_n
+            , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_z
+            , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_t
+            , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_g
+          </iterate>
+          , h.SOSHIKI2CD
+          , h.LARYOHFKBN REPORT_DIST_TYPE
+        FROM
+          NEA_PPFS_SHR_A_CALC h
+        WHERE
+          h.SHISANKNRKBN = '8' /* オンバランスリース資産 */
+/*          AND h.PAYACCKBN = '2'  PLは発生（リース期間）ベース */
+          AND h.PAYACCKBN = '1' /* PLは約定（リース期間）ベースに変更 */
+        GROUP BY
+          h.COMPANY_CODE
+          , h.KOYUNO
+          , h.SOSHIKI2CD
+          , h.LARYOHFKBN
+        /* 控除額1-4(オンバランスリース) */
+        <isNotEmpty property="koujoDisplay1">
+        UNION ALL
+        SELECT
+          h.COMPANY_CODE
+          , h.KOYUNO
+          , '3_1' ACCOUNT_TYPE
+          , NEA_UTIL_PKG.get_cn_value1_f('PPFS_LLD_KOJOGK_TYPE', h.COMPANY_CODE || '_1', h.COMPANY_CODE) ACCOUNT_NAME
+          <!-- 年数分ループ -->
+          <iterate property="yearCountList">
+            , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_k
+            <isEqual property="searchParam.reportSchUnit" compareValue="1"> <!-- 月 -->
+              , SUM(DECODE(TO_NUMBER(SHRYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), KOJOGK1_1, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_1
+              , SUM(DECODE(TO_NUMBER(SHRYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), KOJOGK1_2, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_2
+              , SUM(DECODE(TO_NUMBER(SHRYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), KOJOGK1_3, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_3
+              , SUM(DECODE(TO_NUMBER(SHRYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), KOJOGK1_4, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_4
+              , SUM(DECODE(TO_NUMBER(SHRYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), KOJOGK1_5, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_5
+              , SUM(DECODE(TO_NUMBER(SHRYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), KOJOGK1_6, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_6
+              , SUM(DECODE(TO_NUMBER(SHRYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), KOJOGK1_7, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_7
+              , SUM(DECODE(TO_NUMBER(SHRYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), KOJOGK1_8, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_8
+              , SUM(DECODE(TO_NUMBER(SHRYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), KOJOGK1_9, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_9
+              , SUM(DECODE(TO_NUMBER(SHRYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), KOJOGK1_10, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_10
+              , SUM(DECODE(TO_NUMBER(SHRYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), KOJOGK1_11, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_11
+              , SUM(DECODE(TO_NUMBER(SHRYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), KOJOGK1_12, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_12
+            </isEqual>
+            <isEqual property="searchParam.reportSchUnit" compareValue="2"> <!-- 四半期 -->
+              , SUM(DECODE(TO_NUMBER(SHRYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), KOJOGK1_1 + KOJOGK1_2 + KOJOGK1_3, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_1
+              , SUM(DECODE(TO_NUMBER(SHRYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), KOJOGK1_4 + KOJOGK1_5 + KOJOGK1_6, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_2
+              , SUM(DECODE(TO_NUMBER(SHRYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), KOJOGK1_7 + KOJOGK1_8 + KOJOGK1_9, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_3
+              , SUM(DECODE(TO_NUMBER(SHRYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), KOJOGK1_10 + KOJOGK1_11 + KOJOGK1_12, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_4
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_5
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_6
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_7
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_8
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_9
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_10
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_11
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_12
+            </isEqual>
+            <isEqual property="searchParam.reportSchUnit" compareValue="3"> <!-- 半期 -->
+              , SUM(DECODE(TO_NUMBER(SHRYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), KOJOGK1_1 + KOJOGK1_2 + KOJOGK1_3 + KOJOGK1_4 + KOJOGK1_5 + KOJOGK1_6, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_1
+              , SUM(DECODE(TO_NUMBER(SHRYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), KOJOGK1_7 + KOJOGK1_8 + KOJOGK1_9 + KOJOGK1_10 + KOJOGK1_11 + KOJOGK1_12, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_2
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_3
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_4
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_5
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_6
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_7
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_8
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_9
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_10
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_11
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_12
+            </isEqual>
+            <isEqual property="searchParam.reportSchUnit" compareValue="4"> <!-- 年 -->
+              , SUM(DECODE(TO_NUMBER(SHRYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), KOJOGK1_1 + KOJOGK1_2 + KOJOGK1_3 + KOJOGK1_4 + KOJOGK1_5 + KOJOGK1_6 + KOJOGK1_7 + KOJOGK1_8 + KOJOGK1_9 + KOJOGK1_10 + KOJOGK1_11 + KOJOGK1_12, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_1
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_2
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_3
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_4
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_5
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_6
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_7
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_8
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_9
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_10
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_11
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_12
+            </isEqual>
+            , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_n
+            , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_z
+            , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_t
+            , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_g
+          </iterate>
+          , h.SOSHIKI2CD
+          , h.LARYOHFKBN REPORT_DIST_TYPE
+        FROM
+          NEA_PPFS_SHR_A_CALC h
+        WHERE
+          h.SHISANKNRKBN = '8' /* オンバランスリース資産 */
+          AND h.PAYACCKBN = '2' /* PLは発生（リース期間）ベース */
+        GROUP BY
+          h.COMPANY_CODE
+          , h.KOYUNO
+          , h.SOSHIKI2CD
+          , h.LARYOHFKBN
+        </isNotEmpty>
+        <isNotEmpty property="koujoDisplay2">
+        UNION ALL
+        SELECT
+          h.COMPANY_CODE
+          , h.KOYUNO
+          , '3_2' ACCOUNT_TYPE
+          , NEA_UTIL_PKG.get_cn_value1_f('PPFS_LLD_KOJOGK_TYPE', h.COMPANY_CODE || '_2', h.COMPANY_CODE) ACCOUNT_NAME
+          <!-- 年数分ループ -->
+          <iterate property="yearCountList">
+            , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_k
+            <isEqual property="searchParam.reportSchUnit" compareValue="1"> <!-- 月 -->
+              , SUM(DECODE(TO_NUMBER(SHRYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), KOJOGK2_1, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_1
+              , SUM(DECODE(TO_NUMBER(SHRYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), KOJOGK2_2, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_2
+              , SUM(DECODE(TO_NUMBER(SHRYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), KOJOGK2_3, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_3
+              , SUM(DECODE(TO_NUMBER(SHRYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), KOJOGK2_4, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_4
+              , SUM(DECODE(TO_NUMBER(SHRYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), KOJOGK2_5, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_5
+              , SUM(DECODE(TO_NUMBER(SHRYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), KOJOGK2_6, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_6
+              , SUM(DECODE(TO_NUMBER(SHRYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), KOJOGK2_7, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_7
+              , SUM(DECODE(TO_NUMBER(SHRYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), KOJOGK2_8, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_8
+              , SUM(DECODE(TO_NUMBER(SHRYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), KOJOGK2_9, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_9
+              , SUM(DECODE(TO_NUMBER(SHRYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), KOJOGK2_10, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_10
+              , SUM(DECODE(TO_NUMBER(SHRYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), KOJOGK2_11, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_11
+              , SUM(DECODE(TO_NUMBER(SHRYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), KOJOGK2_12, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_12
+            </isEqual>
+            <isEqual property="searchParam.reportSchUnit" compareValue="2"> <!-- 四半期 -->
+              , SUM(DECODE(TO_NUMBER(SHRYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), KOJOGK2_1 + KOJOGK2_2 + KOJOGK2_3, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_1
+              , SUM(DECODE(TO_NUMBER(SHRYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), KOJOGK2_4 + KOJOGK2_5 + KOJOGK2_6, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_2
+              , SUM(DECODE(TO_NUMBER(SHRYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), KOJOGK2_7 + KOJOGK2_8 + KOJOGK2_9, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_3
+              , SUM(DECODE(TO_NUMBER(SHRYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), KOJOGK2_10 + KOJOGK2_11 + KOJOGK2_12, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_4
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_5
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_6
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_7
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_8
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_9
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_10
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_11
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_12
+            </isEqual>
+            <isEqual property="searchParam.reportSchUnit" compareValue="3"> <!-- 半期 -->
+              , SUM(DECODE(TO_NUMBER(SHRYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), KOJOGK2_1 + KOJOGK2_2 + KOJOGK2_3 + KOJOGK2_4 + KOJOGK2_5 + KOJOGK2_6, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_1
+              , SUM(DECODE(TO_NUMBER(SHRYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), KOJOGK2_7 + KOJOGK2_8 + KOJOGK2_9 + KOJOGK2_10 + KOJOGK2_11 + KOJOGK2_12, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_2
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_3
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_4
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_5
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_6
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_7
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_8
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_9
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_10
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_11
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_12
+            </isEqual>
+            <isEqual property="searchParam.reportSchUnit" compareValue="4"> <!-- 年 -->
+              , SUM(DECODE(TO_NUMBER(SHRYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), KOJOGK2_1 + KOJOGK2_2 + KOJOGK2_3 + KOJOGK2_4 + KOJOGK2_5 + KOJOGK2_6 + KOJOGK2_7 + KOJOGK2_8 + KOJOGK2_9 + KOJOGK2_10 + KOJOGK2_11 + KOJOGK2_12, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_1
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_2
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_3
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_4
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_5
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_6
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_7
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_8
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_9
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_10
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_11
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_12
+            </isEqual>
+            , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_n
+            , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_z
+            , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_t
+            , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_g
+          </iterate>
+          , h.SOSHIKI2CD
+          , h.LARYOHFKBN REPORT_DIST_TYPE
+        FROM
+          NEA_PPFS_SHR_A_CALC h
+        WHERE
+          h.SHISANKNRKBN = '8' /* オンバランスリース資産 */
+          AND h.PAYACCKBN = '2' /* PLは発生（リース期間）ベース */
+        GROUP BY
+          h.COMPANY_CODE
+          , h.KOYUNO
+          , h.SOSHIKI2CD
+          , h.LARYOHFKBN
+        </isNotEmpty>
+        <isNotEmpty property="koujoDisplay3">
+        UNION ALL
+        SELECT
+          h.COMPANY_CODE
+          , h.KOYUNO
+          , '3_3' ACCOUNT_TYPE
+          , NEA_UTIL_PKG.get_cn_value1_f('PPFS_LLD_KOJOGK_TYPE', h.COMPANY_CODE || '_3', h.COMPANY_CODE) ACCOUNT_NAME
+          <!-- 年数分ループ -->
+          <iterate property="yearCountList">
+            , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_k
+            <isEqual property="searchParam.reportSchUnit" compareValue="1"> <!-- 月 -->
+              , SUM(DECODE(TO_NUMBER(SHRYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), KOJOGK3_1, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_1
+              , SUM(DECODE(TO_NUMBER(SHRYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), KOJOGK3_2, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_2
+              , SUM(DECODE(TO_NUMBER(SHRYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), KOJOGK3_3, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_3
+              , SUM(DECODE(TO_NUMBER(SHRYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), KOJOGK3_4, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_4
+              , SUM(DECODE(TO_NUMBER(SHRYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), KOJOGK3_5, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_5
+              , SUM(DECODE(TO_NUMBER(SHRYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), KOJOGK3_6, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_6
+              , SUM(DECODE(TO_NUMBER(SHRYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), KOJOGK3_7, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_7
+              , SUM(DECODE(TO_NUMBER(SHRYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), KOJOGK3_8, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_8
+              , SUM(DECODE(TO_NUMBER(SHRYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), KOJOGK3_9, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_9
+              , SUM(DECODE(TO_NUMBER(SHRYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), KOJOGK3_10, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_10
+              , SUM(DECODE(TO_NUMBER(SHRYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), KOJOGK3_11, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_11
+              , SUM(DECODE(TO_NUMBER(SHRYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), KOJOGK3_12, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_12
+            </isEqual>
+            <isEqual property="searchParam.reportSchUnit" compareValue="2"> <!-- 四半期 -->
+              , SUM(DECODE(TO_NUMBER(SHRYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), KOJOGK3_1 + KOJOGK3_2 + KOJOGK3_3, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_1
+              , SUM(DECODE(TO_NUMBER(SHRYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), KOJOGK3_4 + KOJOGK3_5 + KOJOGK3_6, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_2
+              , SUM(DECODE(TO_NUMBER(SHRYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), KOJOGK3_7 + KOJOGK3_8 + KOJOGK3_9, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_3
+              , SUM(DECODE(TO_NUMBER(SHRYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), KOJOGK3_10 + KOJOGK3_11 + KOJOGK3_12, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_4
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_5
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_6
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_7
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_8
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_9
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_10
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_11
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_12
+            </isEqual>
+            <isEqual property="searchParam.reportSchUnit" compareValue="3"> <!-- 半期 -->
+              , SUM(DECODE(TO_NUMBER(SHRYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), KOJOGK3_1 + KOJOGK3_2 + KOJOGK3_3 + KOJOGK3_4 + KOJOGK3_5 + KOJOGK3_6, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_1
+              , SUM(DECODE(TO_NUMBER(SHRYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), KOJOGK3_7 + KOJOGK3_8 + KOJOGK3_9 + KOJOGK3_10 + KOJOGK3_11 + KOJOGK3_12, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_2
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_3
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_4
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_5
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_6
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_7
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_8
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_9
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_10
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_11
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_12
+            </isEqual>
+            <isEqual property="searchParam.reportSchUnit" compareValue="4"> <!-- 年 -->
+              , SUM(DECODE(TO_NUMBER(SHRYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), KOJOGK3_1 + KOJOGK3_2 + KOJOGK3_3 + KOJOGK3_4 + KOJOGK3_5 + KOJOGK3_6 + KOJOGK3_7 + KOJOGK3_8 + KOJOGK3_9 + KOJOGK3_10 + KOJOGK3_11 + KOJOGK3_12, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_1
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_2
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_3
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_4
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_5
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_6
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_7
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_8
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_9
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_10
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_11
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_12
+            </isEqual>
+            , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_n
+            , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_z
+            , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_t
+            , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_g
+          </iterate>
+          , h.SOSHIKI2CD
+          , h.LARYOHFKBN REPORT_DIST_TYPE
+        FROM
+          NEA_PPFS_SHR_A_CALC h
+        WHERE
+          h.SHISANKNRKBN = '8' /* オンバランスリース資産 */
+          AND h.PAYACCKBN = '2' /* PLは発生（リース期間）ベース */
+        GROUP BY
+          h.COMPANY_CODE
+          , h.KOYUNO
+          , h.SOSHIKI2CD
+          , h.LARYOHFKBN
+        </isNotEmpty>
+        <isNotEmpty property="koujoDisplay4">
+        UNION ALL
+        SELECT
+          h.COMPANY_CODE
+          , h.KOYUNO
+          , '3_4' ACCOUNT_TYPE
+          , NEA_UTIL_PKG.get_cn_value1_f('PPFS_LLD_KOJOGK_TYPE', h.COMPANY_CODE || '_4', h.COMPANY_CODE) ACCOUNT_NAME
+          <!-- 年数分ループ -->
+          <iterate property="yearCountList">
+            , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_k
+            <isEqual property="searchParam.reportSchUnit" compareValue="1"> <!-- 月 -->
+              , SUM(DECODE(TO_NUMBER(SHRYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), KOJOGK4_1, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_1
+              , SUM(DECODE(TO_NUMBER(SHRYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), KOJOGK4_2, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_2
+              , SUM(DECODE(TO_NUMBER(SHRYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), KOJOGK4_3, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_3
+              , SUM(DECODE(TO_NUMBER(SHRYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), KOJOGK4_4, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_4
+              , SUM(DECODE(TO_NUMBER(SHRYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), KOJOGK4_5, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_5
+              , SUM(DECODE(TO_NUMBER(SHRYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), KOJOGK4_6, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_6
+              , SUM(DECODE(TO_NUMBER(SHRYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), KOJOGK4_7, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_7
+              , SUM(DECODE(TO_NUMBER(SHRYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), KOJOGK4_8, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_8
+              , SUM(DECODE(TO_NUMBER(SHRYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), KOJOGK4_9, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_9
+              , SUM(DECODE(TO_NUMBER(SHRYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), KOJOGK4_10, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_10
+              , SUM(DECODE(TO_NUMBER(SHRYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), KOJOGK4_11, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_11
+              , SUM(DECODE(TO_NUMBER(SHRYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), KOJOGK4_12, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_12
+            </isEqual>
+            <isEqual property="searchParam.reportSchUnit" compareValue="2"> <!-- 四半期 -->
+              , SUM(DECODE(TO_NUMBER(SHRYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), KOJOGK4_1 + KOJOGK4_2 + KOJOGK4_3, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_1
+              , SUM(DECODE(TO_NUMBER(SHRYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), KOJOGK4_4 + KOJOGK4_5 + KOJOGK4_6, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_2
+              , SUM(DECODE(TO_NUMBER(SHRYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), KOJOGK4_7 + KOJOGK4_8 + KOJOGK4_9, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_3
+              , SUM(DECODE(TO_NUMBER(SHRYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), KOJOGK4_10 + KOJOGK4_11 + KOJOGK4_12, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_4
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_5
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_6
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_7
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_8
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_9
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_10
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_11
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_12
+            </isEqual>
+            <isEqual property="searchParam.reportSchUnit" compareValue="3"> <!-- 半期 -->
+              , SUM(DECODE(TO_NUMBER(SHRYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), KOJOGK4_1 + KOJOGK4_2 + KOJOGK4_3 + KOJOGK4_4 + KOJOGK4_5 + KOJOGK4_6, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_1
+              , SUM(DECODE(TO_NUMBER(SHRYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), KOJOGK4_7 + KOJOGK4_8 + KOJOGK4_9 + KOJOGK4_10 + KOJOGK4_11 + KOJOGK4_12, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_2
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_3
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_4
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_5
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_6
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_7
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_8
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_9
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_10
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_11
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_12
+            </isEqual>
+            <isEqual property="searchParam.reportSchUnit" compareValue="4"> <!-- 年 -->
+              , SUM(DECODE(TO_NUMBER(SHRYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), KOJOGK4_1 + KOJOGK4_2 + KOJOGK4_3 + KOJOGK4_4 + KOJOGK4_5 + KOJOGK4_6 + KOJOGK4_7 + KOJOGK4_8 + KOJOGK4_9 + KOJOGK4_10 + KOJOGK4_11 + KOJOGK4_12, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_1
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_2
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_3
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_4
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_5
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_6
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_7
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_8
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_9
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_10
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_11
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_12
+            </isEqual>
+            , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_n
+            , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_z
+            , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_t
+            , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_g
+          </iterate>
+          , h.SOSHIKI2CD
+          , h.LARYOHFKBN REPORT_DIST_TYPE
+        FROM
+          NEA_PPFS_SHR_A_CALC h
+        WHERE
+          h.SHISANKNRKBN = '8' /* オンバランスリース資産 */
+          AND h.PAYACCKBN = '2' /* PLは発生（リース期間）ベース */
+        GROUP BY
+          h.COMPANY_CODE
+          , h.KOYUNO
+          , h.SOSHIKI2CD
+          , h.LARYOHFKBN
+        </isNotEmpty>
+        /* 償却費 */
+        UNION ALL
+        SELECT
+          h.COMPANY_CODE
+          , h.KOYUNO
+          , '4' ACCOUNT_TYPE
+          , '償却費' ACCOUNT_NAME
+          <!-- 年数分ループ -->
+          <iterate property="yearCountList">
+            , MAX(DECODE(TO_NUMBER(SKKYYDO), NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), DECODE(IDOMOTOSAKIKBN, '1', KSBOKA, TO_NUMBER(NULL)), TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_k
+            <isEqual property="searchParam.reportSchUnit" compareValue="1"> <!-- 月 -->
+              , SUM(DECODE(TO_NUMBER(SKKYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), FTSKKGK1, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_1
+              , SUM(DECODE(TO_NUMBER(SKKYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), FTSKKGK2, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_2
+              , SUM(DECODE(TO_NUMBER(SKKYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), FTSKKGK3, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_3
+              , SUM(DECODE(TO_NUMBER(SKKYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), FTSKKGK4, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_4
+              , SUM(DECODE(TO_NUMBER(SKKYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), FTSKKGK5, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_5
+              , SUM(DECODE(TO_NUMBER(SKKYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), FTSKKGK6, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_6
+              , SUM(DECODE(TO_NUMBER(SKKYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), FTSKKGK7, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_7
+              , SUM(DECODE(TO_NUMBER(SKKYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), FTSKKGK8, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_8
+              , SUM(DECODE(TO_NUMBER(SKKYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), FTSKKGK9, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_9
+              , SUM(DECODE(TO_NUMBER(SKKYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), FTSKKGK10, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_10
+              , SUM(DECODE(TO_NUMBER(SKKYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), FTSKKGK11, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_11
+              , SUM(DECODE(TO_NUMBER(SKKYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), FTSKKGK12, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_12
+            </isEqual>
+            <isEqual property="searchParam.reportSchUnit" compareValue="2"> <!-- 四半期 -->
+              , SUM(DECODE(TO_NUMBER(SKKYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), FTSKKGK1 + FTSKKGK2 + FTSKKGK3, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_1
+              , SUM(DECODE(TO_NUMBER(SKKYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), FTSKKGK4 + FTSKKGK5 + FTSKKGK6, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_2
+              , SUM(DECODE(TO_NUMBER(SKKYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), FTSKKGK7 + FTSKKGK8 + FTSKKGK9, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_3
+              , SUM(DECODE(TO_NUMBER(SKKYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), FTSKKGK10 + FTSKKGK11 + FTSKKGK12, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_4
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_5
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_6
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_7
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_8
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_9
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_10
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_11
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_12
+            </isEqual>
+            <isEqual property="searchParam.reportSchUnit" compareValue="3"> <!-- 半期 -->
+              , SUM(DECODE(TO_NUMBER(SKKYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), FTSKKGK1 + FTSKKGK2 + FTSKKGK3 + FTSKKGK4 + FTSKKGK5 + FTSKKGK6, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_1
+              , SUM(DECODE(TO_NUMBER(SKKYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), FTSKKGK7 + FTSKKGK8 + FTSKKGK9 + FTSKKGK10 + FTSKKGK11 + FTSKKGK12, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_2
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_3
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_4
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_5
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_6
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_7
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_8
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_9
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_10
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_11
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_12
+            </isEqual>
+            <isEqual property="searchParam.reportSchUnit" compareValue="4"> <!-- 年 -->
+              , SUM(DECODE(TO_NUMBER(SKKYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), FTSKKGK1 + FTSKKGK2 + FTSKKGK3 + FTSKKGK4 + FTSKKGK5 + FTSKKGK6 + FTSKKGK7 + FTSKKGK8 + FTSKKGK9 + FTSKKGK10 + FTSKKGK11 + FTSKKGK12, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_1
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_2
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_3
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_4
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_5
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_6
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_7
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_8
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_9
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_10
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_11
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_12
+            </isEqual>
+            , SUM(DECODE(TO_NUMBER(SKKYYDO), NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), (NINISKKGK1 + NINISKKGK2 + NINISKKGK3 + NINISKKGK4 + NINISKKGK5 + NINISKKGK6 + NINISKKGK7 + NINISKKGK8 + NINISKKGK9 + NINISKKGK10 + NINISKKGK11 + NINISKKGK12), TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_n
+            , SUM(DECODE(TO_NUMBER(SKKYYDO), NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), (ZKSKKGK1 + ZKSKKGK2 + ZKSKKGK3 + ZKSKKGK4 + ZKSKKGK5 + ZKSKKGK6 + ZKSKKGK7 + ZKSKKGK8 + ZKSKKGK9 + ZKSKKGK10 + ZKSKKGK11 + ZKSKKGK12), TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_z
+            , SUM(DECODE(TO_NUMBER(SKKYYDO), NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), (TKSKKGK1 + TKSKKGK2 + TKSKKGK3 + TKSKKGK4 + TKSKKGK5 + TKSKKGK6 + TKSKKGK7 + TKSKKGK8 + TKSKKGK9 + TKSKKGK10 + TKSKKGK11 + TKSKKGK12), TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_t
+            , SUM(DECODE(TO_NUMBER(SKKYYDO), NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), (GENSONGK1 + GENSONGK2 + GENSONGK3 + GENSONGK4 + GENSONGK5 + GENSONGK6 + GENSONGK7 + GENSONGK8 + GENSONGK9 + GENSONGK10 + GENSONGK11 + GENSONGK12), TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_g
+          </iterate>
+          , h.SOSHIKI2CD
+          , h.SKKGKHFKBN REPORT_DIST_TYPE
+        FROM
+          NEA_PPFS_YSK_CALC h
+        WHERE
+          h.CHOBO = '1' /* 会社帳簿 */
+          /* AND h.YSKDATAKBN = '1' */ /* 計算処理対象 */
+        GROUP BY
+          h.COMPANY_CODE
+          , h.KOYUNO
+          , h.SOSHIKI2CD
+          , h.SKKGKHFKBN
+        <isNotEmpty property="kinriDisplay">
+        /* 社内金利 */
+        UNION ALL
+        SELECT
+          h.COMPANY_CODE
+          , h.KOYUNO
+          , '5' ACCOUNT_TYPE
+          , '社内金利' ACCOUNT_NAME
+          <!-- 年数分ループ -->
+          <iterate property="yearCountList">
+            , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_k
+            <isEqual property="searchParam.reportSchUnit" compareValue="1"> <!-- 月 -->
+              , SUM(DECODE(TO_NUMBER(SKKYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), SHIKINKINRI1, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_1
+              , SUM(DECODE(TO_NUMBER(SKKYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), SHIKINKINRI2, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_2
+              , SUM(DECODE(TO_NUMBER(SKKYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), SHIKINKINRI3, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_3
+              , SUM(DECODE(TO_NUMBER(SKKYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), SHIKINKINRI4, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_4
+              , SUM(DECODE(TO_NUMBER(SKKYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), SHIKINKINRI5, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_5
+              , SUM(DECODE(TO_NUMBER(SKKYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), SHIKINKINRI6, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_6
+              , SUM(DECODE(TO_NUMBER(SKKYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), SHIKINKINRI7, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_7
+              , SUM(DECODE(TO_NUMBER(SKKYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), SHIKINKINRI8, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_8
+              , SUM(DECODE(TO_NUMBER(SKKYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), SHIKINKINRI9, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_9
+              , SUM(DECODE(TO_NUMBER(SKKYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), SHIKINKINRI10, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_10
+              , SUM(DECODE(TO_NUMBER(SKKYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), SHIKINKINRI11, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_11
+              , SUM(DECODE(TO_NUMBER(SKKYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), SHIKINKINRI12, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_12
+            </isEqual>
+            <isEqual property="searchParam.reportSchUnit" compareValue="2"> <!-- 四半期 -->
+              , SUM(DECODE(TO_NUMBER(SKKYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), SHIKINKINRI1 + SHIKINKINRI2 + SHIKINKINRI3, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_1
+              , SUM(DECODE(TO_NUMBER(SKKYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), SHIKINKINRI4 + SHIKINKINRI5 + SHIKINKINRI6, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_2
+              , SUM(DECODE(TO_NUMBER(SKKYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), SHIKINKINRI7 + SHIKINKINRI8 + SHIKINKINRI9, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_3
+              , SUM(DECODE(TO_NUMBER(SKKYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), SHIKINKINRI10 + SHIKINKINRI11 + SHIKINKINRI12, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_4
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_5
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_6
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_7
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_8
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_9
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_10
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_11
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_12
+            </isEqual>
+            <isEqual property="searchParam.reportSchUnit" compareValue="3"> <!-- 半期 -->
+              , SUM(DECODE(TO_NUMBER(SKKYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), SHIKINKINRI1 + SHIKINKINRI2 + SHIKINKINRI3 + SHIKINKINRI4 + SHIKINKINRI5 + SHIKINKINRI6, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_1
+              , SUM(DECODE(TO_NUMBER(SKKYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), SHIKINKINRI7 + SHIKINKINRI8 + SHIKINKINRI9 + SHIKINKINRI10 + SHIKINKINRI11 + SHIKINKINRI12, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_2
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_3
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_4
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_5
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_6
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_7
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_8
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_9
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_10
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_11
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_12
+            </isEqual>
+            <isEqual property="searchParam.reportSchUnit" compareValue="4"> <!-- 年 -->
+              , SUM(DECODE(TO_NUMBER(SKKYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), SHIKINKINRI1 + SHIKINKINRI2 + SHIKINKINRI3 + SHIKINKINRI4 + SHIKINKINRI5 + SHIKINKINRI6 + SHIKINKINRI7 + SHIKINKINRI8 + SHIKINKINRI9 + SHIKINKINRI10 + SHIKINKINRI11 + SHIKINKINRI12, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_1
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_2
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_3
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_4
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_5
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_6
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_7
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_8
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_9
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_10
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_11
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_12
+            </isEqual>
+            , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_n
+            , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_z
+            , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_t
+            , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_g
+          </iterate>
+          , h.SOSHIKI2CD
+          , h.SKKGKHFKBN REPORT_DIST_TYPE
+        FROM
+          NEA_PPFS_KINRI_YSK_CALC h
+        WHERE
+          h.CHOBO = '1' /* 会社帳簿 */
+          /* AND h.YSKDATAKBN = '1' */ /* 計算処理対象 */
+        GROUP BY
+          h.COMPANY_CODE
+          , h.KOYUNO
+          , h.SOSHIKI2CD
+          , h.SKKGKHFKBN
+        </isNotEmpty>
+      ) ph
+    WHERE
+      <!-- *********** 賃借料・償却費・社内金利スケジュール用条件 *********** -->
+      ph.COMPANY_CODE = #companyCode#
+      AND ph.KOYUNO = lld.koyunoA
+
+      <!-- 配賦 -->
+      AND ph.REPORT_DIST_TYPE = #searchParam.reportDistType#
+      <!-- 経費負担 -->
+      <isNotEmpty property="costSectionCodeIn">
+        AND ph.SOSHIKI2CD IN ( $costSectionCodeIn$ )
+      </isNotEmpty>
+
+      <!-- 控除額は契約に設定されているもののみ表示 -->
+      AND NOT (ph.ACCOUNT_TYPE = '3_1' AND NVL(lld.kojogk1C, 0) = 0)
+      AND NOT (ph.ACCOUNT_TYPE = '3_2' AND NVL(lld.kojogk2C, 0) = 0)
+      AND NOT (ph.ACCOUNT_TYPE = '3_3' AND NVL(lld.kojogk3C, 0) = 0)
+      AND NOT (ph.ACCOUNT_TYPE = '3_4' AND NVL(lld.kojogk4C, 0) = 0)
+
+      <isNotEmpty property="isOutputFld">
+        AND lld.companyCodeA = fld.companyCode (+)
+        AND lld.periodA = fld.period (+)
+        AND lld.koyunoA = fld.koyuno (+)
+      </isNotEmpty>
+
+    ORDER BY
+      lld.kyknoC
+      , lld.niniLd_17cdA
+      , ph.SOSHIKI2CD
+      , ph.ACCOUNT_TYPE
+  </sql>
+  <!--
+    ※ selectのid単位で抽出カラムが同じになるようにSQLを分ける
+  -->
+  <select id="selectLldPlSchList_LLD" parameterClass="java.util.Map" resultClass="jp.co.ctcg.easset.dto.lld.PpfsLldSRRep">
+     <include refid="selectLldPlSchListBody_LLD" />
+  </select>
+  <select id="selectLldPlSchList_FLD_LLD" parameterClass="java.util.Map" resultClass="jp.co.ctcg.easset.dto.lld.PpfsLldSRRep">
+     <include refid="selectLldPlSchListBody_LLD" />
+  </select>
+
+  <!--
+    元本返済スケジュール
+  -->
+  <select id="selectLldBsSchList_LLD" parameterClass="java.util.Map" resultClass="jp.co.ctcg.easset.dto.lld.PpfsLldSRRep">
+    SELECT
+      <!-- *********** 元本返済スケジュール用項目 *********** -->
+      lld.kyknoC reportKey1
+      , ph.ACCOUNT_NAME accountName
+      , lld.laryoTotalC amount_l
+      , lld.stkgksotogkC amount_s
+      <!-- 年数分ループ -->
+      <iterate property="yearCountList">
+        , AMOUNT$yearCountList[]$_k amount$yearCountList[]$_k
+        , AMOUNT$yearCountList[]$_1 amount$yearCountList[]$_1
+        , AMOUNT$yearCountList[]$_2 amount$yearCountList[]$_2
+        , AMOUNT$yearCountList[]$_3 amount$yearCountList[]$_3
+        , AMOUNT$yearCountList[]$_4 amount$yearCountList[]$_4
+        , AMOUNT$yearCountList[]$_5 amount$yearCountList[]$_5
+        , AMOUNT$yearCountList[]$_6 amount$yearCountList[]$_6
+        , AMOUNT$yearCountList[]$_7 amount$yearCountList[]$_7
+        , AMOUNT$yearCountList[]$_8 amount$yearCountList[]$_8
+        , AMOUNT$yearCountList[]$_9 amount$yearCountList[]$_9
+        , AMOUNT$yearCountList[]$_10 amount$yearCountList[]$_10
+        , AMOUNT$yearCountList[]$_11 amount$yearCountList[]$_11
+        , AMOUNT$yearCountList[]$_12 amount$yearCountList[]$_12
+      </iterate>
+      , ph.SOSHIKI2CD costSectionCode
+      , NEA_UTIL_PKG.GET_COST_SECTION_NAME_F(ph.SOSHIKI2CD, NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#)) costSectionName
+
+      <!-- *********** 台帳項目 *********** -->
+      , lld.*
+    FROM
+      (
+        <include refid="selectLldCComSQL_LLD" />
+      ) lld
+      , (
+        /* リース債務(オンバランスリース) */
+        SELECT
+          h.COMPANY_CODE
+          , h.KOYUNO
+          , '1' ACCOUNT_TYPE
+          , 'リース債務' ACCOUNT_NAME
+          <!-- 年数分ループ -->
+          <iterate property="yearCountList">
+            , SUM(DECODE(TO_NUMBER(SHRYYDO), NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), KSZANSOTOGK, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_k
+            <isEqual property="searchParam.reportSchUnit" compareValue="1"> <!-- 月 -->
+              , SUM(DECODE(TO_NUMBER(SHRYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), HENSAISOTOGK1, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_1
+              , SUM(DECODE(TO_NUMBER(SHRYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), HENSAISOTOGK2, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_2
+              , SUM(DECODE(TO_NUMBER(SHRYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), HENSAISOTOGK3, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_3
+              , SUM(DECODE(TO_NUMBER(SHRYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), HENSAISOTOGK4, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_4
+              , SUM(DECODE(TO_NUMBER(SHRYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), HENSAISOTOGK5, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_5
+              , SUM(DECODE(TO_NUMBER(SHRYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), HENSAISOTOGK6, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_6
+              , SUM(DECODE(TO_NUMBER(SHRYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), HENSAISOTOGK7, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_7
+              , SUM(DECODE(TO_NUMBER(SHRYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), HENSAISOTOGK8, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_8
+              , SUM(DECODE(TO_NUMBER(SHRYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), HENSAISOTOGK9, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_9
+              , SUM(DECODE(TO_NUMBER(SHRYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), HENSAISOTOGK10, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_10
+              , SUM(DECODE(TO_NUMBER(SHRYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), HENSAISOTOGK11, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_11
+              , SUM(DECODE(TO_NUMBER(SHRYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), HENSAISOTOGK12, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_12
+            </isEqual>
+            <isEqual property="searchParam.reportSchUnit" compareValue="2"> <!-- 四半期 -->
+              , SUM(DECODE(TO_NUMBER(SHRYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), HENSAISOTOGK1 + HENSAISOTOGK2 + HENSAISOTOGK3, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_1
+              , SUM(DECODE(TO_NUMBER(SHRYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), HENSAISOTOGK4 + HENSAISOTOGK5 + HENSAISOTOGK6, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_2
+              , SUM(DECODE(TO_NUMBER(SHRYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), HENSAISOTOGK7 + HENSAISOTOGK8 + HENSAISOTOGK9, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_3
+              , SUM(DECODE(TO_NUMBER(SHRYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), HENSAISOTOGK10 + HENSAISOTOGK11 + HENSAISOTOGK12, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_4
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_5
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_6
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_7
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_8
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_9
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_10
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_11
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_12
+            </isEqual>
+            <isEqual property="searchParam.reportSchUnit" compareValue="3"> <!-- 半期 -->
+              , SUM(DECODE(TO_NUMBER(SHRYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), HENSAISOTOGK1 + HENSAISOTOGK2 + HENSAISOTOGK3 + HENSAISOTOGK4 + HENSAISOTOGK5 + HENSAISOTOGK6, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_1
+              , SUM(DECODE(TO_NUMBER(SHRYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), HENSAISOTOGK7 + HENSAISOTOGK8 + HENSAISOTOGK9 + HENSAISOTOGK10 + HENSAISOTOGK11 + HENSAISOTOGK12, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_2
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_3
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_4
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_5
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_6
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_7
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_8
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_9
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_10
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_11
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_12
+            </isEqual>
+            <isEqual property="searchParam.reportSchUnit" compareValue="4"> <!-- 年 -->
+              , SUM(DECODE(TO_NUMBER(SHRYYDO),  NEA_UTIL_PKG.get_year_by_period_f(#calcBasePeriod#) + ($yearCountList[]$ - 1), HENSAISOTOGK1 + HENSAISOTOGK2 + HENSAISOTOGK3 + HENSAISOTOGK4 + HENSAISOTOGK5 + HENSAISOTOGK6 + HENSAISOTOGK7 + HENSAISOTOGK8 + HENSAISOTOGK9 + HENSAISOTOGK10 + HENSAISOTOGK11 + HENSAISOTOGK12, TO_NUMBER(NULL))) AMOUNT$yearCountList[]$_1
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_2
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_3
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_4
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_5
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_6
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_7
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_8
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_9
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_10
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_11
+              , TO_NUMBER(NULL) AMOUNT$yearCountList[]$_12
+            </isEqual>
+          </iterate>
+          , h.SOSHIKI2CD
+        FROM
+          NEA_PPFS_SHR_C_CALC h
+        WHERE
+          h.PAYACCKBN = '1' /* BSは約定（支払期間）ベース */
+        GROUP BY
+          h.COMPANY_CODE
+          , h.KOYUNO
+          , h.SOSHIKI2CD
+      ) ph
+    WHERE
+      <!-- *********** 元本返済スケジュール用条件 *********** -->
+      ph.COMPANY_CODE = #companyCode#
+      AND ph.KOYUNO = lld.koyunoC
+
+      <!-- 経費負担 -->
+      <isNotEmpty property="costSectionCodeIn">
+        AND ph.SOSHIKI2CD IN ( $costSectionCodeIn$ )
+      </isNotEmpty>
+
+    ORDER BY
+      lld.kyknoC
+      , ph.SOSHIKI2CD
+      , ph.ACCOUNT_TYPE
+  </select>
+
+  <!--
+    契約/物件-現物紐付リスト
+  -->
+  <sql id="selectLldJoinSGListBody_LLD">
+    <!-- 情報機器等 -->
+    SELECT
+      lld.kyknoC reportKey1
+      , lld.niniLd_17cdA reportKey2
+      , a.ASSET_ID reportKey3
+
+      <!-- 現物項目 -->
+      , a.AST_NAME astNameGen
+      , NEA_UTIL_PKG.get_company_name_f(a.HOL_COMPANY_CODE) holCompanyNameGen
+      , NEA_UTIL_PKG.get_section_name_f(a.HOL_COMPANY_CODE, a.HOL_SECTION_CODE, a.HOL_SECTION_YEAR) holSectionNameGen
+      , a.HOL_STAFF_CODE holStaffCodeGen
+      , NEA_UTIL_PKG.get_staff_name_f(a.HOL_STAFF_CODE) holStaffNameGen
+      , a.USE_STAFF_CODE useStaffCodeGen
+      , NEA_UTIL_PKG.get_staff_name_f(a.USE_STAFF_CODE) useStaffNameGen
+      , NEA_UTIL_PKG.get_cn_value1_f('OFFICE', a.HOL_OFFICE_CODE) holOfficeNameGen
+      , a.HOL_OFFICE_FLOOR holOfficeFloorGen
+      , a.HOL_QUANTITY holQuantityGen
+      , a.DELETE_DATE deleteDateGen
+
+      <!-- 契約・物件・資産項目 -->
+      , lld.*
+      <isNotEmpty property="isOutputFld">
+      , fld.*
+      </isNotEmpty>
+    FROM
+      (
+        <include refid="selectLldComSQL_LLD" />
+      ) lld
+      <isNotEmpty property="isOutputFld">
+        , (
+          SELECT
+            <include refid="selectFldComColumn_FLD" />
+            , <include refid="selectFldComColumnL_FLD" />
+          FROM
+            <include refid="selectFldComFrom_FLD" />
+         ) fld
+      </isNotEmpty>
+      , PPFS_LD_SUPPORT s
+      , NEA_ASSET a
+    WHERE
+      lld.koyunoA = s.KOYUNO
+      AND s.HOJOSHUBETSUCD = '00001'
+      AND CSCONVERT(s.HOJOSPAREC1,'CHAR_CS') = a.ASSET_ID
+      <isNotEmpty property="isOutputFld">
+        AND lld.companyCodeA = fld.companyCode (+)
+        AND lld.periodA = fld.period (+)
+        AND lld.koyunoA = fld.koyuno (+)
+      </isNotEmpty>
+
+    <!-- ライセンス -->
+    UNION ALL
+    SELECT
+      lld.kyknoC reportKey1
+      , lld.niniLd_17cdA reportKey2
+      , a.LICENSE_ID reportKey3
+
+      <!-- 現物項目 -->
+      , NEA_UTIL_PKG.get_software_name_f(a.SOFTWARE_ID) astNameGen
+      , NEA_UTIL_PKG.get_company_name_f(a.HOL_COMPANY_CODE) holCompanyNameGen
+      , NEA_UTIL_PKG.get_section_name_f(a.HOL_COMPANY_CODE, a.HOL_SECTION_CODE, a.HOL_SECTION_YEAR) holSectionNameGen
+      , a.HOL_STAFF_CODE holStaffCodeGen
+      , NEA_UTIL_PKG.get_staff_name_f(a.HOL_STAFF_CODE) holStaffNameGen
+      , TO_CHAR(NULL) useStaffCodeGen
+      , TO_CHAR(NULL) useStaffNameGen
+      , TO_CHAR(NULL) holOfficeNameGen
+      , TO_NUMBER(NULL) holOfficeFloorGen
+      , TO_NUMBER(NULL) holQuantityGen
+      , a.DELETE_DATE deleteDateGen
+
+      <!-- 契約・物件・資産項目 -->
+      , lld.*
+      <isNotEmpty property="isOutputFld">
+      , fld.*
+      </isNotEmpty>
+    FROM
+      (
+        <include refid="selectLldComSQL_LLD" />
+      ) lld
+      <isNotEmpty property="isOutputFld">
+        , (
+          SELECT
+            <include refid="selectFldComColumn_FLD" />
+            , <include refid="selectFldComColumnL_FLD" />
+          FROM
+            <include refid="selectFldComFrom_FLD" />
+         ) fld
+      </isNotEmpty>
+      , PPFS_LD_SUPPORT s
+      , NEA_LICENSE a
+    WHERE
+      lld.koyunoA = s.KOYUNO
+      AND s.HOJOSHUBETSUCD = '00001'
+      AND CSCONVERT(s.HOJOSPAREC1,'CHAR_CS') = a.LICENSE_ID
+      <isNotEmpty property="isOutputFld">
+        AND lld.companyCodeA = fld.companyCode (+)
+        AND lld.periodA = fld.period (+)
+        AND lld.koyunoA = fld.koyuno (+)
+      </isNotEmpty>
+
+    ORDER BY
+      reportKey1
+    , reportKey2
+    , reportKey3
+
+  </sql>
+  <!--
+    ※ selectのid単位で抽出カラムが同じになるようにSQLを分ける
+  -->
+  <select id="selectLldJoinSGList_LLD" parameterClass="java.util.Map" resultClass="jp.co.ctcg.easset.dto.lld.PpfsLldSRRep">
+     <include refid="selectLldJoinSGListBody_LLD" />
+  </select>
+  <select id="selectLldJoinSGList_FLD_LLD" parameterClass="java.util.Map" resultClass="jp.co.ctcg.easset.dto.lld.PpfsLldSRRep">
+     <include refid="selectLldJoinSGListBody_LLD" />
+  </select>
+
+  <!--
+    元契約番号取得
+  -->
+  <select id="selectLldCOldKykNoList_LLD" parameterClass="java.util.Map" resultClass="java.lang.String">
+    SELECT DISTINCT
+      NINI_LD_20CD
+    FROM
+      NEA_$histTablePrefixLd$PPFS_LLDC ptvlc
+    WHERE
+      <!-- 契約番号 -->
+      $kyknoCPluralList$
+      <isNotEmpty property="searchParam.reportPeriod">
+        AND ptvlc.PERIOD = #searchParam.reportPeriod#
+      </isNotEmpty>
+  </select>
+
+<!-- ****************************************************** ↑ 照会・台帳で使用するメインSQL ****************************************************** -->
+
+  <!--
+    リース・レンタル契約照会
+  -->
+  <select id="selectLld_LLD" parameterClass="java.util.Map" resultClass="jp.co.ctcg.easset.dto.lld.PpfsLld">
+    SELECT
+      <include refid="selectLldComColumnA_LLD" />
+    , <include refid="selectLldComColumnC_LLD" />
+    FROM
+      NEA_$histTablePrefixLd$PPFS_LLDA ptvla
+    , NEA_$histTablePrefixLd$PPFS_LLDC ptvlc
+    , NEA_$histTablePrefixLd$PPFS_RELATION_LA pzvr
+    , NEA_$histTablePrefixLd$PPFS_LD_CONTRACT_DEBT plcd
+    , NEA_$histTablePrefixLd$PPFS_LD_ASSETS pla
+    , NEA_$histTablePrefixLd$PPFS_FLD pf
+    WHERE
+      ptvla.KOYUNO = #koyunoA#
+
+      AND ptvlc.KOYUNO = pzvr.KOYUNO_KYK
+      AND ptvlc.PERIOD = pzvr.PERIOD
+      AND ptvlc.COMPANY_CODE = pzvr.COMPANY_CODE
+      AND ptvla.KOYUNO = pzvr.KOYUNO_SHISAN
+      AND ptvla.PERIOD = pzvr.PERIOD
+      AND ptvla.COMPANY_CODE = pzvr.COMPANY_CODE
+      AND pzvr.YUKOFLG = '1'
+      AND pzvr.CANCELSUMIFLG = '0'
+      AND ptvla.KOYUNO = pla.KOYUNO
+      AND ptvla.PERIOD = pla.PERIOD
+      AND ptvla.COMPANY_CODE = pla.COMPANY_CODE
+      AND ptvlc.KOYUNO = plcd.KOYUNO
+      AND ptvlc.PERIOD = plcd.PERIOD
+      AND ptvlc.COMPANY_CODE = plcd.COMPANY_CODE
+
+      AND ptvla.KOYUNO = pf.KOYUNO (+)
+      AND ptvla.PERIOD = pf.PERIOD (+)
+      AND ptvla.COMPANY_CODE = pf.COMPANY_CODE (+)
+  </select>
+
+  <!--
+    リース・レンタル契約照会(物件に紐付かない契約の検索)
+  -->
+  <select id="selectLldC_LLD" parameterClass="java.util.Map" resultClass="jp.co.ctcg.easset.dto.lld.PpfsLld">
+    SELECT
+      <include refid="selectNotLldComColumnA_LLD" />
+    , <include refid="selectLldComColumnC_LLD" />
+    FROM
+      NEA_$histTablePrefixLd$PPFS_LLDC ptvlc
+    , NEA_$histTablePrefixLd$PPFS_LD_CONTRACT_DEBT plcd
+    WHERE
+      ptvlc.KOYUNO = #koyunoC#
+      AND ptvlc.KOYUNO = plcd.KOYUNO
+      AND ptvlc.PERIOD = plcd.PERIOD
+      AND ptvlc.COMPANY_CODE = plcd.COMPANY_CODE
+  </select>
+
+  <select id="selectPpfsLld_LLD" parameterClass="java.util.Map" resultClass="jp.co.ctcg.easset.dto.lld.PpfsLldSR">
+    SELECT
+      KOYUNO koyunoA
+    , UPDYMD updymdA
+    , UPDTIME updtimeA
+    FROM
+      PPFS_LLDA
+    WHERE
+      KAISHACD = NEA_UTIL_PKG.GET_CN_VALUE_F('USE_COMPANY', #companyCode#, 7)
+    <isNotEmpty property="koyunoAPluralList">
+      AND $koyunoAPluralList$
+    </isNotEmpty>
+  </select>
+
+</sqlMap>

@@ -1,0 +1,56 @@
+<form class="form-master-group row row-selection" [formGroup]="projectForm">
+    <ea-input-mask #projectCode formControlName="{{projectCodeControlName}}" [formControl]="projectForm.controls[projectCodeControlName]"  [maxLength]="10" [pattern]="'a-zA-Z0-9'" (focusout)="getProjectDataOnFocus()" (keyup)="onInput($event)" (change)="getMasterNameData()" class="ip-code wm-combo wm-80"></ea-input-mask>
+    <button type="button" class="wm-btn wm-sm" (click)="open($event.currentTarget)"><span class="ico"><img src="assets/images/button/popup.png"></span></button>
+    <ea-input-mask #projectName class="ip-name wm-combo bg-gray" formControlName="{{projectNameControlName}}" readonly></ea-input-mask>
+  </form>
+  <ea-popup #projectSelectionPopup class="popup-staff-selection project-selection" [hideTrigger]="'None'" (hidden)="close()">
+      <div class="form-select-staff">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">減価償却プロジェクト選択</h5>
+              <button type="button" tabindex="-1" class="close bt-close wj-hide">&times;</button>
+            </div>
+            <div class="modal-body">
+              <div class="section-search">
+                <form class="row" [formGroup]="searchForm">
+                  <div class="col-6">
+                    <div class="row row-search">
+                      <div class="col-6 p-0">プロジェクト名(あいまい)：</div>
+                      <div class="col-6">
+                        <ea-input-mask formControlName="projectName"></ea-input-mask>
+                      </div>
+                    </div>
+                    <div class="row row-search">
+                      <div class="col-6 p-0">タイプ名(あいまい)：</div>
+                      <div class="col-6">
+                        <ea-input-mask formControlName="projectValue1"></ea-input-mask>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-6 col-buttons">
+                    <button type="button" class="wm-btn" (click) ="search()">検索</button>
+                  </div>
+                </form>
+              </div>
+              <div class="section-data">
+                <ea-flex-grid
+                  #gridProjectSelectionList
+                  class="grid-common-list grid-staff-selection-list"
+                  [itemsSource]="statusList"
+                  [allowResizing]="'None'"
+                  [headersVisibility]="'Column'"
+                  (dblclick)="submit()"
+                >
+                  <ea-flex-grid-column header="プロジェクトコード" binding="code" [allowResizing]="false" [allowMerging]=true [width]="130"></ea-flex-grid-column>
+                  <ea-flex-grid-column header="プロジェクト名" binding="name" [allowResizing]="false" [allowMerging]=true [width]="200"></ea-flex-grid-column>
+                  <ea-flex-grid-column header="タイプ名" binding="value1" [allowResizing]="false" [allowMerging]=true [width]="320"></ea-flex-grid-column>
+                </ea-flex-grid>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="wm-btn" (click)="submit()">選択</button>
+              <button type="button" class="wm-btn wj-hide">閉じる</button>
+            </div>
+          </div>
+        </div>
+  </ea-popup>

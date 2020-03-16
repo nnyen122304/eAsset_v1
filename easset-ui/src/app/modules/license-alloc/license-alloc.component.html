@@ -1,0 +1,33 @@
+<wj-tab-panel #viewStack class="view-stack" (selectedIndexChange)="this.selectedIndexChangeHandler($event)">
+  <ea-view-stack-tab [keepViewState]="true">
+    <!-- 画面切替後も状態を維持する画面：true、維持しない画面:false-->
+    <a>照会/修正</a>
+    <div>
+      <app-license-alloc-asset-search [parent]="this" #childViewLicenseAllocAssetSearch
+        *ngIf="this.isLoaded.get(this.viewIndexAllocAssetSearch)">
+        {{this.changeChildSubject.set(this.viewIndexAllocAssetSearch, childViewLicenseAllocAssetSearch.changeChildSubject)}}
+      </app-license-alloc-asset-search>
+    </div>
+  </ea-view-stack-tab>
+  <ea-view-stack-tab [keepViewState]="false">
+      <!-- 画面切替後も状態を維持する画面：true、維持しない画面:false-->
+      <a>照会/修正</a>
+      <div>
+        <app-license-alloc-asset-result [parent]="this" #childViewLicenseAllocAssetResult
+          *ngIf="this.isLoaded.get(this.viewIndexAllocAssetResult)">
+          {{this.changeChildSubject.set(this.viewIndexAllocAssetResult, childViewLicenseAllocAssetResult.changeChildSubject)}}
+        </app-license-alloc-asset-result>
+      </div>
+    </ea-view-stack-tab>
+  <ea-view-stack-tab [keepViewState]="false">
+    <!-- 画面切替後も状態を維持する画面：true、維持しない画面:false-->
+    <a>照会/修正</a>
+    <div>
+      <app-license-alloc-license-search [parent]="this" #childViewReportAllocLicense
+        *ngIf="this.isLoaded.get(this.viewIndexAllocLicenseSearch)">
+        {{this.changeChildSubject.set(this.viewIndexAllocLicenseSearch, childViewReportAllocLicense.changeChildSubject)}}
+      </app-license-alloc-license-search>
+    </div>
+  </ea-view-stack-tab>
+</wj-tab-panel>
+<app-confirm-popup #confirmPopup (confirm)="onConfirm()"></app-confirm-popup>

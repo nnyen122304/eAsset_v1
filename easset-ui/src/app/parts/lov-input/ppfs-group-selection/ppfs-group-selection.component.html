@@ -1,0 +1,64 @@
+<form class="form-staff row row-selection" [formGroup]="ppfsGroupForm">
+  <label [ngClass]="title ? styleTitle : ''">{{title}}</label>
+  <ea-input-mask formControlName="{{ppfsGroupCodeControlName}}"
+                 [formControl]="ppfsGroupForm.controls[ppfsGroupCodeControlName]" [maxLength]="10"
+                 [pattern]="'a-zA-Z0-9'" (keyup)="onInput($event)" (change)="getMasterNameData()"
+                 (focusout)="getMasterDataOnFocus()" [capitalize]="true" class="ip-code wm-combo wm-100"
+                 [ngClass]="ppfsGroupCodeStyle"></ea-input-mask>
+  <button type="button" [hidden]="!visibleStatus" class="wm-btn wm-sm wm-btn-custom"
+          (click)="open($event.currentTarget)">
+    <span class="ico"><img src="assets/images/button/popup.png"></span>
+  </button>
+  <ea-input-mask class="ip-name wm-combo bg-gray" formControlName="{{ppfsGroupNameControlName}}"
+                 readonly [ngClass]="ppfsGroupNameStyle"></ea-input-mask>
+</form>
+<ea-popup #ppfsGroupSelectionPopup class="popup-common-sel popup-master-group-selection" [hideTrigger]="'None'"
+          (hidden)="close()">
+  <div class="form-select-staff">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">案件グループ選択</h5>
+        <button type="button" tabindex="-1" class="close bt-close wj-hide">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="section-search">
+          <form clas="row" [formGroup]="searchForm">
+            <div class="col">
+              <div class="row row-search">
+                <div class="col-3 m-0 col-left">
+                  <span class="text-nowrap">
+                    案件グループ名(あいまい)：
+                  </span>
+                </div>
+                <div class="col-5 ml-4 col-center">
+                  <ea-input-mask formControlName="ppfsGroupName" class="w-100"></ea-input-mask>
+                </div>
+                <div class="col-2 m-0 p-0 col-right">
+                  <button type="button" class="wm-btn" (click)="init()">検索</button>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="section-data">
+          <ea-flex-grid
+            #gridPpfsGroupSelectionList
+            class="grid-common-list grid-staff-selection-list"
+            [itemsSource]="ppfsGroupSelectionList"
+            [allowResizing]="'None'"
+            [headersVisibility]="'Column'"
+            (dblclick)="submit()">
+            <ea-flex-grid-column header="案件グループコード" binding="code" [allowResizing]="false" [allowMerging]=true
+                                 [width]="150"></ea-flex-grid-column>
+            <ea-flex-grid-column header="案件グループ名" binding="name" [allowResizing]="false" [allowMerging]=true
+                                 [width]="200"></ea-flex-grid-column>
+          </ea-flex-grid>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="wm-btn" (click)="submit()">選択</button>
+        <button type="button" class="wm-btn wj-hide">閉じる</button>
+      </div>
+    </div>
+  </div>
+</ea-popup>

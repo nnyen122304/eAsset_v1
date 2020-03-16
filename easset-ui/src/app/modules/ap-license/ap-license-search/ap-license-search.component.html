@@ -1,0 +1,20 @@
+<div class="page-container page-search-license">
+  <div class="section-header text-blue mb-1" [hidden]="currentMenuId !== AP_ENTRY_LICENSE_CREATE_COPY">
+    コピー元の申請書を検索してください。
+  </div>
+  <div class="section-body" [ngClass]="currentMenuId === AP_ENTRY_LICENSE_CREATE_COPY ? 'is-header': ''"
+       [hidden]="!isBody">
+    <app-ap-license-search-condition></app-ap-license-search-condition>
+  </div>
+  <div class="section-footer mt-1 pt-2" [hidden]="!isFooter">
+    <div class="button-bottom ">
+      <button type="button" class="wm-btn wm-tab-element ml-3" (click)="search()">検索</button>
+      <button type="button" class="wm-btn wm-tab-element ml-3" (click)="popupDownload.open($event.currentTarget)"
+              [hidden]="currentMenuId === AP_ENTRY_LICENSE_CREATE_COPY">ダウンロード
+      </button>
+      <button type="button" class="wm-btn wm-tab-element ml-3" (click)="resetSearch()">クリア</button>
+    </div>
+  </div>
+</div>
+<app-download-option-prop (select)="downloadCSV($event)"
+                          [paramObj]="{itemDefName: 'ITEM_DEF_AP_LICENSE'}"></app-download-option-prop>

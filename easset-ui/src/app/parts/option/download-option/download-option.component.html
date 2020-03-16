@@ -1,0 +1,29 @@
+<ea-popup #downloadOptionPopup class="form-download-option-popup" [hideTrigger]="'None'" (hidden)="close()">
+  <form class="popup-common-sel download-option" [formGroup]="optionForm">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">ダウンロードオプション</h5>
+        <button type="button" tabindex="-1" class="close bt-close wj-hide">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="row frame-content">
+          <label class="opt-label">出力単位：</label>
+          <div class="col pl-1">
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" id="opt1" formControlName="optValue" [value]="1">
+              <label class="form-check-label" for="opt1">{{optText1}}</label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" id="opt2" formControlName="optValue" [value]="2">
+              <label class="form-check-label" for="opt2">{{optText2}}</label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="wm-btn" (click)="submit()"><span class="txt">OK</span></button>
+        <button type="button" class="wm-btn wj-hide">キャンセル</button>
+      </div>
+    </div>
+  </form>
+</ea-popup>

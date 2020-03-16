@@ -1,0 +1,29 @@
+.section-status {
+  border: none;
+}
+.modal-body--search {
+  padding-top: 5px !important;
+  .form-search {
+    padding: 2px;
+  }
+}
+
+.grid-status-selection-list {
+  display: block;
+  width: 100%;
+  height: auto;
+  min-height: 0;
+  max-height: 300px;
+}
+
+.non-rounded{
+  border-radius: unset !important;
+}
+
+.popup-status-selection {
+  width: 450px;
+}
+
+.h-300 {
+  height:300px;
+}

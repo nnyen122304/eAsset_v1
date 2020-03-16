@@ -1,0 +1,36 @@
+<div fxFlexFill>
+<app-ap-get-int-entry [accessMenu]="accessMenu" [accessLevel]="accessLevel"></app-ap-get-int-entry>
+  <div class="footer mt-1" *ngIf="accessMenu != 'menuIdApGetIntEapp'">
+    <!-- 表示制御：全社権限もしくは、部署/一般権限でステータスが"未申請"、"申請中"、"差戻し"の場合は表示 -->
+    <button type="button" class="wm-btn wm-sm" *ngIf="accessMenu != 'menuIdApGetIntEapp'">
+      <span class="ico"><img src="assets/images/button/save.png" /></span>
+      <span class="save">保存</span>
+    </button>
+    <!-- 表示制御：ステータスが"未申請"、"差戻し"の場合は表示 -->
+    <button type="button" class="wm-btn wm-sm">
+      <span class="ico"><img src="assets/images/button/save.png" /></span>
+      <span class="apply">申請</span>
+    </button>
+    <!-- 表示制御：更新フラグがON且つステータスが"未申請"、"差戻し"の場合は表示 -->
+    <button type="button" class="wm-btn wm-sm">
+      <span class="ico"><img src="assets/images/button/save.png" /></span>
+      <span class="del">削除</span>
+    </button>
+    <button type="button" class="wm-btn wm-sm">
+      <span class="ico"><img src="assets/images/button/save.png" /></span>
+      <span class="print">印刷</span>
+    </button>
+    <button type="button" class="wm-btn wm-sm">
+      <span class="ico"><img src="assets/images/button/save.png" /></span>
+      <span class="mailTo">定型メール</span>
+    </button>
+    <button type="button" class="wm-btn wm-sm">
+      <span class="ico"><img src="assets/images/button/save.png" /></span>
+      <span class="hist">更新履歴照会</span>
+    </button>
+    <button type="button" class="wm-btn wm-sm">
+      <span class="ico"><img src="assets/images/button/save.png" /></span>
+      <span class="backToIndex">戻る</span>
+    </button>
+  </div>
+</div>

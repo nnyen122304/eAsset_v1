@@ -1,0 +1,699 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<!--
+ *===================================================================
+ * ファイル名 : MasterDAO_SqlMap.xml
+ * 概要説明   : LOV用SQL文
+ * バージョン : 1.0
+ *===================================================================
+ * 修正履歴
+ * 日付       Ver. 担当者       修正内容
+ * －－－－－ －－ －－－－－－ －－－－－－－－－－－－－－－－－－
+ * 2010-10-06 1.0  リヨン        新規
+ *===================================================================
+ -->
+<sqlMap namespace="LovDAO" >
+
+  <!--
+    汎用マスタ検索
+  -->
+  <select id="selectCodeName_LOV" parameterClass="java.util.Map" resultClass="jp.co.ctcg.easset.dto.LovDataEx">
+    SELECT
+      INTERNAL_CODE code
+      , DESCRIPTION description
+      , VALUE1 value1
+      , VALUE2 value2
+      , VALUE3 value3
+      , VALUE4 value4
+      , VALUE5 value5
+      , VALUE6 value6
+      , VALUE7 value7
+      , VALUE8 value8
+      , VALUE9 value9
+      , VALUE10 value10
+      , VALUE11 value11
+      , VALUE12 value12
+      , VALUE13 value13
+      , VALUE14 value14
+      , VALUE15 value15
+      , VALUE16 value16
+      , VALUE17 value17
+      , VALUE18 value18
+      , VALUE19 value19
+      , VALUE20 value20
+      , VALUE21 value21
+      , VALUE22 value22
+      , VALUE23 value23
+      , VALUE24 value24
+      , VALUE25 value25
+      , VALUE26 value26
+      , VALUE27 value27
+      , VALUE28 value28
+      , VALUE29 value29
+      , VALUE30 value30
+    FROM
+      NEA_CODE_NAME
+    WHERE
+      CATEGORY_CODE = #categoryCode#
+      AND DELETE_FLAG = '0'
+      <isNotEmpty property="companyCode">
+        AND COMPANY_CODE LIKE '%' || #companyCode# || '%'
+      </isNotEmpty>
+      <isNotEmpty property="parentCategoryCode">
+        AND PARENT_CATEGORY_CODE = #parentCategoryCode#
+      </isNotEmpty>
+      <isNotEmpty property="parentInternalCode">
+        AND PARENT_INTERNAL_CODE = #parentInternalCode#
+      </isNotEmpty>
+      <isNotEmpty property="value1">
+        AND NEA_UTIL_PKG.TO_FUZZY_F(VALUE1) LIKE '%' || NEA_UTIL_PKG.TO_FUZZY_F(#value1#) || '%'
+      </isNotEmpty>
+
+      <isNotEmpty property="whereClause">
+        AND ($whereClause$)
+      </isNotEmpty>
+
+      <isNotEmpty property="code">
+        AND INTERNAL_CODE = #code#
+      </isNotEmpty>
+   ORDER BY
+     SORT_NUMBER
+     , CATEGORY_CODE
+     , INTERNAL_CODE
+  </select>
+
+  <!--
+    申請部署検索
+  -->
+  <select id="selectApSection_LOV" parameterClass="java.util.Map" resultClass="jp.co.ctcg.easset.dto.LovDataEx">
+    SELECT
+      UC.DIVISIONCODE code
+      , D.DIVISIONKANJI name
+/*      , DECODE(UC.ADDITIONALFLG, '1', '兼務', '主務') description */
+    FROM
+      NEA_USERTABLE_V U
+      , NEA_USERCOMPANYTABLE_V UC
+      , NEA_DIVISIONMASTERTABLE_V D
+    WHERE
+      U.STAFFCODE = #staffCode#
+      AND U.USERID = UC.USERID
+      AND UC.COMPANYCODE = #companyCode#
+      AND D.DIVISIONCODE = UC.DIVISIONCODE
+      AND D.NENDO = (SELECT VALUE1 FROM NEA_CODE_NAME C WHERE C.CATEGORY_CODE = 'CURRENT_YEAR' AND DELETE_FLAG = '0')
+      AND (U.RETIREDDAY IS NULL OR U.RETIREDDAY >= TO_CHAR(SYSDATE, 'YYYYMMDD'))
+      AND (UC.ENDDATE IS NULL OR UC.ENDDATE >= TO_CHAR(SYSDATE, 'YYYYMMDD'))
+
+      <isNotEmpty property="code">
+        AND UC.DIVISIONCODE = #code#
+      </isNotEmpty>
+    UNION
+    SELECT DISTINCT
+      UC.DIVISIONCODE code
+      , D.DIVISIONKANJI name
+/*      , '管轄' description */
+    FROM
+      NEA_USER_ROLE_SECTION_ALL_V R
+      , NEA_USERCOMPANYTABLE_V UC
+      , NEA_USERTABLE_V U
+      , NEA_DIVISIONMASTERTABLE_V D
+    WHERE
+      R.STAFF_CODE = #staffCode#
+      AND R.COMPANY_CODE = #companyCode#
+      AND UC.COMPANYCODE = R.COMPANY_CODE
+      AND UC.DIVISIONCODE LIKE SUBSTRB(R.SECTION_CODE, 1, 4) || '%'
+      AND UC.DIVISIONCODE NOT LIKE '%00'
+      AND U.USERID = UC.USERID
+      AND D.DIVISIONCODE = UC.DIVISIONCODE
+      AND D.NENDO = (SELECT VALUE1 FROM NEA_CODE_NAME C WHERE C.CATEGORY_CODE = 'CURRENT_YEAR' AND DELETE_FLAG = '0')
+      AND (U.RETIREDDAY IS NULL OR U.RETIREDDAY >= TO_CHAR(SYSDATE, 'YYYYMMDD'))
+      AND (UC.ENDDATE IS NULL OR UC.ENDDATE >= TO_CHAR(SYSDATE, 'YYYYMMDD'))
+
+      <isNotEmpty property="code">
+        AND UC.DIVISIONCODE = #code#
+      </isNotEmpty>
+    ORDER BY
+      code
+      , name
+  </select>
+
+  <!--
+    購入先検索
+  -->
+  <select id="selectPurCompany_LOV" parameterClass="java.util.Map" resultClass="jp.co.ctcg.easset.dto.LovDataEx">
+    SELECT
+      VENDOR_ID code
+      , VENDOR_NAME name
+    FROM
+      NEA_SAP_VENDORS
+    WHERE
+      VENDOR_GROUP IS NULL
+      AND ACCOUNT_GROUP IN ('Z001', 'ZGRP') /* 法人、事業会社 */
+      AND VENDOR_STATUS != 'N' /* 取引状態停止以外 */
+      AND ENABLED_FLAG = 'Y'
+
+      <isNotEmpty property="companyCode">
+        AND COMPANY_CD = NEA_UTIL_PKG.GET_CN_VALUE_F('USE_COMPANY', #companyCode#, 5)
+      </isNotEmpty>
+
+      <isNotEmpty property="name">
+        AND NEA_UTIL_PKG.TO_FUZZY_F(VENDOR_NAME) LIKE '%' || NEA_UTIL_PKG.TO_FUZZY_F(#name#) || '%'
+      </isNotEmpty>
+
+      <isNotEmpty property="code">
+        AND VENDOR_ID = #code#
+      </isNotEmpty>
+
+    ORDER BY
+      1
+  <!--
+     SELECT
+       SEGMENT1 code
+      , ATTRIBUTE1 name
+     FROM
+       PO_VENDORS  PV
+     WHERE
+       VENDOR_TYPE_LOOKUP_CODE = 'VENDOR'
+       AND ATTRIBUTE11 != '4' /* 取引状態停止以外 */
+       AND EXISTS (
+         SELECT
+           'X'
+         FROM
+           PO_VENDOR_SITES_ALL PVS
+         WHERE
+           PVS.ORG_ID = NEA_UTIL_PKG.GET_CN_VALUE_F('USE_COMPANY', #companyCode#, 6)
+           AND PVS.VENDOR_ID = PV.VENDOR_ID
+           AND PVS.ATTRIBUTE11 != '4' /* 取引状態停止以外 */
+           AND ROWNUM <![CDATA[<]]>= 1
+       )
+       <isNotEmpty property="name">
+         AND NEA_UTIL_PKG.TO_FUZZY_F(ATTRIBUTE1) LIKE '%' || NEA_UTIL_PKG.TO_FUZZY_F(#name#) || '%'
+       </isNotEmpty>
+
+       <isNotEmpty property="code">
+         AND SEGMENT1 = #code#
+       </isNotEmpty>
+      ORDER BY
+        1
+  -->
+  </select>
+
+  <!--
+    顧客検索
+  -->
+  <select id="selectCustCompany_LOV" parameterClass="java.util.Map" resultClass="jp.co.ctcg.easset.dto.LovDataEx">
+    SELECT
+      CUST_ID code
+      , CUST_NAME name
+    FROM
+      NEA_SAP_CUST_ACCOUNTS
+    WHERE
+      CUST_GROUP IS NULL
+      AND ACCOUNT_GROUP IN ('Z001', 'ZGRP') /* 法人、事業会社 */
+      AND CUST_STATUS != 'N' /* 取引状態停止以外 */
+      AND ENABLED_FLAG = 'Y'
+
+      <isNotEmpty property="companyCode">
+        AND COMPANY_CD = NEA_UTIL_PKG.GET_CN_VALUE_F('USE_COMPANY', #companyCode#, 5)
+      </isNotEmpty>
+
+      <isNotEmpty property="name">
+        AND NEA_UTIL_PKG.TO_FUZZY_F(CUST_NAME) LIKE '%' || NEA_UTIL_PKG.TO_FUZZY_F(#name#) || '%'
+      </isNotEmpty>
+
+      <isNotEmpty property="code">
+        AND CUST_ID = #code#
+      </isNotEmpty>
+
+    ORDER BY
+      1
+<!--
+    SELECT
+      HCA.ACCOUNT_NUMBER code
+     , HP.ATTRIBUTE1 name
+    FROM
+      HZ_CUST_ACCOUNTS  HCA
+      , HZ_PARTIES  HP
+    WHERE
+      HCA.PARTY_ID = HP.PARTY_ID
+      AND HP.PARTY_TYPE = 'ORGANIZATION'
+      AND HCA.STATUS = 'A' /* 取引状態停止以外 */
+      AND EXISTS (
+        SELECT
+          'X'
+        FROM
+          HZ_CUST_ACCT_SITES_ALL HCSA
+        WHERE
+          HCSA.ORG_ID = NEA_UTIL_PKG.GET_CN_VALUE_F('USE_COMPANY', #companyCode#, 6)
+          AND HCSA.CUST_ACCOUNT_ID = HCA.CUST_ACCOUNT_ID
+          AND HCSA.STATUS = 'A' /* 取引状態停止以外 */
+          AND ROWNUM <![CDATA[<]]>= 1
+      )
+      <isNotEmpty property="name">
+        AND NEA_UTIL_PKG.TO_FUZZY_F(HP.PARTY_NAME) LIKE '%' || NEA_UTIL_PKG.TO_FUZZY_F(#name#) || '%'
+      </isNotEmpty>
+
+      <isNotEmpty property="code">
+        AND HCA.ACCOUNT_NUMBER = #code#
+      </isNotEmpty>
+      ORDER BY
+        1
+-->
+  </select>
+
+  <!--
+    プロジェクト検索
+  -->
+  <select id="selectProject_LOV" parameterClass="java.util.Map" resultClass="jp.co.ctcg.easset.dto.LovDataEx">
+    SELECT
+      PRJ_CD code
+      , PRJ_NM name
+      , PRJ_TYP_NM value1
+    FROM
+      PJ_PRJ_V
+    WHERE
+      CO_SEG = NEA_UTIL_PKG.GET_CN_VALUE_F('USE_COMPANY', #companyCode#, 5)
+
+      <isNotEmpty property="prjCategory">
+        AND PRJ_TYP_CD IN (
+          SELECT
+            VALUE2
+          FROM
+            NEA_CODE_NAME
+          WHERE
+            CATEGORY_CODE = 'PROJECT_GATEGORY_SEGMENT'
+            AND DELETE_FLAG = '0'
+            AND VALUE1 = #prjCategory#
+        )
+      </isNotEmpty>
+
+      <isNotEmpty property="name">
+        AND NEA_UTIL_PKG.TO_FUZZY_F(PRJ_NM) LIKE '%' || NEA_UTIL_PKG.TO_FUZZY_F(#name#) || '%'
+      </isNotEmpty>
+
+      <isNotEmpty property="searchDateFrom">
+        AND (PRJ_END_DT IS NULL OR TRUNC(PRJ_END_DT, 'DD') <![CDATA[>]]>= TRUNC(TO_DATE(#searchDateFrom#, 'YYYY/MM/DD'), 'DD'))
+      </isNotEmpty>
+      <isNotEmpty property="searchDateTo">
+        AND (PRJ_STR_DT IS NULL OR TRUNC(PRJ_STR_DT, 'DD') <![CDATA[<]]>= TRUNC(TO_DATE(#searchDateTo#, 'YYYY/MM/DD'), 'DD'))
+      </isNotEmpty>
+
+      <isNotEmpty property="code">
+        AND PRJ_CD = #code#
+      </isNotEmpty>
+
+      <isNotEmpty property="value1">
+        AND NEA_UTIL_PKG.TO_FUZZY_F(PRJ_TYP_NM) LIKE '%' || NEA_UTIL_PKG.TO_FUZZY_F(#value1#) || '%'
+      </isNotEmpty>
+
+    ORDER BY
+      PRJ_CD
+<!--
+    SELECT
+      PRJ.SEGMENT1 code
+      , PRJ.NAME name
+      , PRJ.PROJECT_TYPE value1
+      , TP.NAME  value2
+      , PRJ.PROJECT_TYPE || '/' || TP.NAME value3
+      , SUBSTR(PRJ.PROJECT_TYPE, 1, 2) value4
+    FROM
+      PA_PROJECTS_ALL PRJ
+      , PA_PROJECTS_ALL TP
+    WHERE
+      PRJ.CREATED_FROM_PROJECT_ID = TP.PROJECT_ID
+      AND PRJ.ORG_ID = (
+        SELECT
+          VALUE6
+        FROM
+          NEA_CODE_NAME
+        WHERE
+          CATEGORY_CODE = 'USE_COMPANY'
+          AND INTERNAL_CODE = #companyCode#
+          AND DELETE_FLAG = '0'
+      )
+      AND PRJ.TEMPLATE_FLAG = 'N'
+      <isNotEmpty property="name">
+        AND NEA_UTIL_PKG.TO_FUZZY_F(PRJ.NAME) LIKE '%' || NEA_UTIL_PKG.TO_FUZZY_F(#name#) || '%'
+      </isNotEmpty>
+
+      <isNotEmpty property="statusLimit">
+        AND PRJ.PROJECT_STATUS_CODE IN (
+          SELECT
+            PS.PROJECT_STATUS_CODE
+          FROM
+            NEA_CODE_NAME CN
+            , PA_PROJECT_STATUSES PS
+          WHERE
+            CN.CATEGORY_CODE = 'ENABLE_PROJECT_STATUS'
+            AND CN.DELETE_FLAG = '0'
+            AND PS.PROJECT_STATUS_NAME = CN.VALUE1
+        )
+      </isNotEmpty>
+      <isNotEmpty property="searchDateFrom">
+        AND (PRJ.COMPLETION_DATE IS NULL OR TRUNC(PRJ.COMPLETION_DATE, 'DD') <![CDATA[>]]>= TRUNC(#searchDateFrom#, 'DD'))
+      </isNotEmpty>
+      <isNotEmpty property="searchDateTo">
+        AND (PRJ.START_DATE IS NULL OR TRUNC(PRJ.START_DATE, 'DD') <![CDATA[<]]>= TRUNC(#searchDateTo#, 'DD'))
+      </isNotEmpty>
+
+      <isNotEmpty property="code">
+        AND PRJ.SEGMENT1 = #code#
+      </isNotEmpty>
+
+      <isNotEmpty property="value3">
+        AND NEA_UTIL_PKG.TO_FUZZY_F(PRJ.PROJECT_TYPE || '/' || TP.NAME) LIKE '%' || NEA_UTIL_PKG.TO_FUZZY_F(#value3#) || '%'
+      </isNotEmpty>
+
+    ORDER BY
+      PRJ.SEGMENT1
+ -->
+  </select>
+
+  <!--
+    資産管理担当者検索
+  -->
+  <select id="selectHolStaff_LOV" parameterClass="java.util.Map" resultClass="jp.co.ctcg.easset.dto.LovDataEx">
+    SELECT
+      US.STAFF_CODE code
+      , U.NAMEKANJI name
+      , US.STAFF_CODE || ' ' || U.NAMEKANJI value1
+      , NEA_UTIL_PKG.GET_SECTION_NAME_F(US.COMPANY_CODE, US.SECTION_CODE, US.SECTION_YEAR) value2
+      , US.PUBLIC_COMMENT value3
+    FROM
+      NEA_USER_ROLE_SECTION US
+      , NEA_USERTABLE_V U
+    WHERE
+      US.STAFF_CODE = U.STAFFCODE
+      AND US.COMPANY_CODE = #companyCode#
+      <isNotEmpty property="sectionCode">
+        <isNotEqual property="includeSectionHierarchyFlag" compareValue="1">
+          AND US.SECTION_CODE = #sectionCode#
+        </isNotEqual>
+        <isEqual property="includeSectionHierarchyFlag" compareValue="1">
+          AND US.SECTION_CODE IN (
+            SELECT
+              DIVISIONCODE
+            FROM
+              NEA_NEWDIVISIONMASTERTABLE_V
+            START WITH
+              COMPANYCODE = #companyCode#
+              AND DIVISIONCODE = #sectionCode#
+              AND NENDO = (SELECT VALUE1 FROM NEA_CODE_NAME C WHERE C.CATEGORY_CODE = 'CURRENT_YEAR' AND DELETE_FLAG = '0')
+            CONNECT BY
+              PRIOR COMPANYCODE = COMPANYCODE
+              AND PRIOR DIVISIONCODE = PARENTDIVISIONCODE
+              AND PRIOR NENDO = NENDO
+          )
+        </isEqual>
+      </isNotEmpty>
+      <isNotEmpty property="value1">
+        AND (
+          NEA_UTIL_PKG.TO_FUZZY_F(US.STAFF_CODE) LIKE '%' || NEA_UTIL_PKG.TO_FUZZY_F(#value1#) || '%'
+          OR NEA_UTIL_PKG.TO_FUZZY_F(U.NAMEKANJI) LIKE '%' || NEA_UTIL_PKG.TO_FUZZY_F(#value1#) || '%'
+        )
+      </isNotEmpty>
+      AND PUBLIC_FLAG = '1'
+
+      <isNotEmpty property="code">
+        AND US.STAFF_CODE = #code#
+      </isNotEmpty>
+   ORDER BY
+     <isNotEqual property="includeSectionHierarchyFlag" compareValue="1">
+       STAFF_CODE
+     </isNotEqual>
+     <isEqual property="includeSectionHierarchyFlag" compareValue="1">
+       SECTION_CODE
+       , STAFF_CODE
+     </isEqual>
+  </select>
+
+  <!--
+    ソフトウェアメーカー検索
+  -->
+  <select id="selectSoftwareMaker_LOV" parameterClass="java.util.Map" resultClass="jp.co.ctcg.easset.dto.LovDataEx">
+    SELECT
+        SOFTWARE_MAKER_ID code
+      , SOFTWARE_MAKER_NAME name
+    FROM
+        NEA_SOFTWARE_MAKER
+    WHERE
+        DELETE_FLAG = '0'
+      <isNotEmpty property="name">
+        AND NEA_UTIL_PKG.TO_FUZZY_F(SOFTWARE_MAKER_NAME) LIKE '%' || NEA_UTIL_PKG.TO_FUZZY_F(#name#) || '%'
+      </isNotEmpty>
+
+      <isNotEmpty property="code">
+        AND SOFTWARE_MAKER_ID = #code#
+      </isNotEmpty>
+   ORDER BY
+     SOFTWARE_MAKER_NAME
+  </select>
+
+  <!--
+    ソフトウェア検索
+  -->
+  <select id="selectSoftware_LOV" parameterClass="java.util.Map" resultClass="jp.co.ctcg.easset.dto.LovDataEx">
+    SELECT
+        TO_CHAR(S.SOFTWARE_ID) code
+      , S.SOFTWARE_NAME name
+      , TO_CHAR(S.SOFTWARE_MAKER_ID) value1
+      , SM.SOFTWARE_MAKER_NAME value2
+    FROM
+        NEA_SOFTWARE S
+      , NEA_SOFTWARE_MAKER SM
+    WHERE
+          S.SOFTWARE_MAKER_ID = SM.SOFTWARE_MAKER_ID
+      AND S.DELETE_FLAG = '0'
+      AND SM.DELETE_FLAG = '0'
+      <isNotEmpty property="makerId">
+        AND S.SOFTWARE_MAKER_ID = TO_NUMBER(#makerId#)
+      </isNotEmpty>
+      <isNotEmpty property="makerName">
+        AND NEA_UTIL_PKG.TO_FUZZY_F(SM.SOFTWARE_MAKER_NAME) LIKE '%' || NEA_UTIL_PKG.TO_FUZZY_F(#makerName#) || '%'
+      </isNotEmpty>
+      <isNotEmpty property="name">
+        AND NEA_UTIL_PKG.TO_FUZZY_F(S.SOFTWARE_NAME) LIKE '%' || NEA_UTIL_PKG.TO_FUZZY_F(#name#) || '%'
+      </isNotEmpty>
+
+      <isNotEmpty property="code">
+        AND S.SOFTWARE_ID = TO_NUMBER(#code#)
+      </isNotEmpty>
+   ORDER BY
+       SM.SOFTWARE_MAKER_NAME
+     , S.SOFTWARE_NAME
+  </select>
+
+  <!--
+    カレント年度の年月検索
+  -->
+  <select id="selectCurrentYearPeriod_LOV" parameterClass="java.util.Map" resultClass="jp.co.ctcg.easset.dto.LovDataEx">
+    SELECT
+      *
+    FROM
+      (
+        SELECT VALUE1 || '04' code, VALUE1 || '-' || '04' name FROM NEA_CODE_NAME WHERE CATEGORY_CODE = 'CURRENT_YEAR' AND DELETE_FLAG = '0'
+        UNION ALL SELECT VALUE1 || '05' code, VALUE1 || '-' || '05' name FROM NEA_CODE_NAME WHERE CATEGORY_CODE = 'CURRENT_YEAR' AND DELETE_FLAG = '0'
+        UNION ALL SELECT VALUE1 || '06' code, VALUE1 || '-' || '06' name FROM NEA_CODE_NAME WHERE CATEGORY_CODE = 'CURRENT_YEAR' AND DELETE_FLAG = '0'
+        UNION ALL SELECT VALUE1 || '07' code, VALUE1 || '-' || '07' name FROM NEA_CODE_NAME WHERE CATEGORY_CODE = 'CURRENT_YEAR' AND DELETE_FLAG = '0'
+        UNION ALL SELECT VALUE1 || '08' code, VALUE1 || '-' || '08' name FROM NEA_CODE_NAME WHERE CATEGORY_CODE = 'CURRENT_YEAR' AND DELETE_FLAG = '0'
+        UNION ALL SELECT VALUE1 || '09' code, VALUE1 || '-' || '09' name FROM NEA_CODE_NAME WHERE CATEGORY_CODE = 'CURRENT_YEAR' AND DELETE_FLAG = '0'
+        UNION ALL SELECT VALUE1 || '10' code, VALUE1 || '-' || '10' name FROM NEA_CODE_NAME WHERE CATEGORY_CODE = 'CURRENT_YEAR' AND DELETE_FLAG = '0'
+        UNION ALL SELECT VALUE1 || '11' code, VALUE1 || '-' || '11' name FROM NEA_CODE_NAME WHERE CATEGORY_CODE = 'CURRENT_YEAR' AND DELETE_FLAG = '0'
+        UNION ALL SELECT VALUE1 || '12' code, VALUE1 || '-' || '12' name FROM NEA_CODE_NAME WHERE CATEGORY_CODE = 'CURRENT_YEAR' AND DELETE_FLAG = '0'
+        UNION ALL SELECT TO_CHAR(TO_NUMBER(VALUE1) + 1) || '01' code, TO_CHAR(TO_NUMBER(VALUE1) + 1) || '-' || '01' name FROM NEA_CODE_NAME WHERE CATEGORY_CODE = 'CURRENT_YEAR' AND DELETE_FLAG = '0'
+        UNION ALL SELECT TO_CHAR(TO_NUMBER(VALUE1) + 1) || '02' code, TO_CHAR(TO_NUMBER(VALUE1) + 1) || '-' || '02' name FROM NEA_CODE_NAME WHERE CATEGORY_CODE = 'CURRENT_YEAR' AND DELETE_FLAG = '0'
+        UNION ALL SELECT TO_CHAR(TO_NUMBER(VALUE1) + 1) || '03' code, TO_CHAR(TO_NUMBER(VALUE1) + 1) || '-' || '03' name FROM NEA_CODE_NAME WHERE CATEGORY_CODE = 'CURRENT_YEAR' AND DELETE_FLAG = '0'
+      )
+    WHERE
+      code >= NEA_UTIL_PKG.GET_PPFS_CURRENT_PERIOD_F(#companyCode#)
+      <isNotEmpty property="code">
+        AND code = #code#
+      </isNotEmpty>
+    ORDER BY
+      code
+  </select>
+
+ <!--
+    案件グループ検索
+  -->
+  <select id="selectPpfs_Group_LOV" parameterClass="java.util.Map" resultClass="jp.co.ctcg.easset.dto.LovDataEx">
+    SELECT
+      pzvg.GROUPCD code
+    , pzvg.GROUPNM name
+    FROM
+      PPFS_GROUP pzvg
+    WHERE
+      pzvg.KAISHACD = (
+        SELECT
+          VALUE7
+        FROM
+          NEA_CODE_NAME
+        WHERE
+          CATEGORY_CODE = 'USE_COMPANY'
+          AND INTERNAL_CODE = #companyCode#
+          AND DELETE_FLAG = '0'
+      )
+    <isNotEmpty property="gruoupName">
+     AND NEA_UTIL_PKG.TO_FUZZY_F(pzvg.GROUPNM) LIKE '%' || NEA_UTIL_PKG.TO_FUZZY_F(#gruoupName#) || '%'
+    </isNotEmpty>
+    <isNotEmpty property="code">
+     AND pzvg.GROUPCD = #code#
+    </isNotEmpty>
+    <isNotEmpty property="searchDateFrom">
+      AND TO_DATE(YUKOSTYMD, 'YYYY/MM/DD') <![CDATA[<]]>= TRUNC(TO_DATE(#searchDateFrom#, 'YYYY/MM/DD'), 'DD')
+    </isNotEmpty>
+    <isNotEmpty property="searchDateTo">
+      AND TO_DATE(YUKOEDYMD, 'YYYY/MM/DD') <![CDATA[>]]>= TRUNC(TO_DATE(#searchDateTo#, 'YYYY/MM/DD'), 'DD')
+    </isNotEmpty>
+    ORDER BY
+      code
+  </select>
+
+ <!--
+    管理者権限検索
+  -->
+  <select id="selectAdmin_LOV" parameterClass="java.util.Map" resultClass="jp.co.ctcg.easset.dto.LovDataEx">
+    SELECT
+      INTERNAL_CODE code
+    , VALUE1 || DECODE(VALUE2, NULL, NULL, '(' || VALUE2 || ')') name
+    FROM
+      NEA_CODE_NAME
+    WHERE
+      CATEGORY_CODE = 'ROLE'
+    AND DELETE_FLAG = '0'
+    AND (SUBSTR(INTERNAL_CODE, 1, 1) IN ('A', 'S') OR INTERNAL_CODE = 'B01')
+    <isEqual property="accessLevel" compareValue="A"> <!-- 保有権限+部署権限 -->
+      AND INTERNAL_CODE IN (
+        SELECT
+          'B01'
+        FROM
+          DUAL
+        UNION ALL
+        SELECT
+          ROLE_CODE
+        FROM
+          NEA_USER_ROLE_ADMIN
+        WHERE
+          STAFF_CODE = #staffCode#
+          AND COMPANY_CODE = #companyCode#
+          AND ROLE_CODE != 'S00'
+      )
+    </isEqual>
+    <isEqual property="accessLevel" compareValue="B"> <!-- 保有権限 -->
+      AND INTERNAL_CODE IN (
+        SELECT
+          ROLE_CODE
+        FROM
+          NEA_USER_ROLE_ADMIN
+        WHERE
+          STAFF_CODE = #staffCode#
+          AND COMPANY_CODE = #companyCode#
+          AND ROLE_CODE != 'S00'
+      )
+    </isEqual>
+    ORDER BY
+      SORT_NUMBER
+    , INTERNAL_CODE
+  </select>
+
+ <!--
+    対象機器OS検索
+  -->
+  <select id="selectOs_LOV" parameterClass="java.util.Map" resultClass="jp.co.ctcg.easset.dto.LovDataEx">
+    SELECT
+      ASSET_LINE_OS_ID code
+    , OS_NAME name
+    FROM
+      NEA_ASSET_LINE_OS nalo
+    WHERE
+      ASSET_ID = #assetId#
+    ORDER BY
+      LINE_SEQ
+  </select>
+
+  <!--
+    種類検索
+  -->
+  <select id="selectShurui_LOV" parameterClass="java.util.Map" resultClass="jp.co.ctcg.easset.dto.LovDataEx">
+    SELECT
+      SHURUICD code
+    , SHURUINM name
+    FROM
+      PPFS_MS01
+    WHERE
+      KAISHACD = NEA_UTIL_PKG.GET_CN_VALUE_F('USE_COMPANY', #companyCode#, 7)
+    <isNotEmpty property="code">
+      AND SHURUICD LIKE '%' || #code# || '%'
+    </isNotEmpty>
+    <isNotEmpty property="name">
+      AND NEA_UTIL_PKG.TO_FUZZY_F(SHURUINM) LIKE '%' || NEA_UTIL_PKG.TO_FUZZY_F(#name#) || '%'
+    </isNotEmpty>
+    ORDER BY
+      code
+  </select>
+
+  <!--
+    分類検索
+  -->
+  <select id="selectBunrui_LOV" parameterClass="java.util.Map" resultClass="jp.co.ctcg.easset.dto.LovDataEx">
+    SELECT
+      BUNRUICD code
+    , BUNRUINM name
+    FROM
+      PPFS_MS03
+    WHERE
+      KAISHACD = NEA_UTIL_PKG.GET_CN_VALUE_F('USE_COMPANY', #companyCode#, 7)
+    <isNotEmpty property="code">
+      AND BUNRUICD LIKE '%' || #code# || '%'
+    </isNotEmpty>
+    <isNotEmpty property="name">
+      AND NEA_UTIL_PKG.TO_FUZZY_F(BUNRUINM) LIKE '%' || NEA_UTIL_PKG.TO_FUZZY_F(#name#) || '%'
+    </isNotEmpty>
+    <isNotEmpty property="shuruicd">
+      AND SHURUICD =  #shuruicd#
+    </isNotEmpty>
+    ORDER BY
+      code
+  </select>
+
+  <!--
+    代表設置場所検索
+  -->
+  <select id="selectSetchi_LOV" parameterClass="java.util.Map" resultClass="jp.co.ctcg.easset.dto.LovDataEx">
+    SELECT
+      SETCHICD code
+    , SETCHINM name
+    FROM
+      PPFS_MS07
+    WHERE
+      KAISHACD = NEA_UTIL_PKG.GET_CN_VALUE_F('USE_COMPANY', #companyCode#, 7)
+    <isNotEmpty property="code">
+      AND NEA_UTIL_PKG.TO_FUZZY_F(SETCHICD) LIKE '%' || NEA_UTIL_PKG.TO_FUZZY_F(#code#) || '%'
+    </isNotEmpty>
+    <isNotEmpty property="name">
+      AND NEA_UTIL_PKG.TO_FUZZY_F(SETCHINM) LIKE '%' || NEA_UTIL_PKG.TO_FUZZY_F(#name#) || '%'
+    </isNotEmpty>
+    ORDER BY
+      code
+  </select>
+
+  <!--
+    除売却理由区分
+  -->
+  <select id="selectApReason_LOV" parameterClass="java.util.Map" resultClass="jp.co.ctcg.easset.dto.LovDataEx">
+    SELECT
+      NINICD code
+    , NININM name
+    FROM
+      PPFS_MS10
+    WHERE
+      KAISHACD = NEA_UTIL_PKG.GET_CN_VALUE_F('USE_COMPANY', #companyCode#, 7)
+    AND
+      fieldcd = '0010'
+    <isNotEmpty property="name">
+      AND NEA_UTIL_PKG.TO_FUZZY_F(NININM) LIKE '%' || NEA_UTIL_PKG.TO_FUZZY_F(#name#) || '%'
+    </isNotEmpty>
+    ORDER BY
+      code
+  </select>
+
+</sqlMap>

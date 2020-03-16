@@ -1,0 +1,174 @@
+
+<div class="page-container page-inventory-list" [ngClass]="{'no-scope-search': view !== 'general' && view !== 'asset_manager'}">
+
+  <div class="section-inventory-form">
+    <form class="form-search" [formGroup]="searchForm">
+      <div class="form-scope container-fluid" *ngIf="view === 'general' || view === 'asset_manager'">
+        <div class="row row-scope">
+          <div class="col-label text-right">検索対象：</div>
+          <div class="col p-0">
+            <div class="form-check form-check-inline">
+              <input type="radio" class="form-check-input" [value]="'1'" id="item-scope-01" formControlName="searchScopeType" name="searchScopeType">
+              <label class="form-check-label" for="item-scope-01">
+                <ng-container *ngIf="view === 'asset_manager'; else labelScropeGeneral">自分の管轄部署、もしくは棚卸担当分が保有部署に設定されている資産</ng-container>
+                <ng-template #labelScropeGeneral>自分の棚卸担当分が保有部署に設定されている資産</ng-template>
+              </label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input type="radio" class="form-check-input" [value]="'2'" id="item-scope-02" formControlName="searchScopeType" name="searchScopeType">
+              <label class="form-check-label" for="item-scope-02">全ての資産</label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="block-frame-border">
+        <h2 class="frame-title">検索条件</h2>
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-5">
+              <div class="row">
+                <div class="col-label text-right">会計年月：</div>
+                <div class="col p-0">
+                  <div class="form-group bt">
+                    <wj-combo-box
+                      #fieldPeriod
+                      class="wm-combo wm-dropdown wm-100 input-period"
+                      [itemsSource]="accountingDates"
+                      [displayMemberPath]="'periodName'"
+                      [selectedValuePath]="'period'"
+                      formControlName="period"
+                    ></wj-combo-box>
+                    <ng-container *ngIf="fieldPeriod.selectedItem as item">
+                      <span class="text-inline">(集計日:<ng-container *ngIf="item.lastSuccessCreateEndDate"> {{item.lastSuccessCreateEndDate | date:'yyyy/MM/dd HH:mm'}}</ng-container>)</span>
+                    </ng-container>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-label text-right">棚卸実施状況：</div>
+                <div class="col p-0">
+                  <div class="form-check form-check-inline" *ngFor="let item of invImplementation; let i = index" formArrayName="invImplementation">
+                    <input type="checkbox" class="form-check-input wm-checkbox" [id]="'item-list-implementation-' + i" [formControlName]="i" (change)="toggleInvStatus($event)">
+                    <label class="form-check-label" [for]="'item-list-implementation-' + i">{{item}}</label>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-label text-right">棚卸完了報告：</div>
+                <div class="col p-0 form-sub-status">
+                  <div class="form-check form-check-inline" *ngFor="let item of apStatus; let i = index" formArrayName="apStatus">
+                    <input type="checkbox" class="form-check-input wm-checkbox" [id]="'item-list-status-' + i" [formControlName]="i">
+                    <label class="form-check-label" [for]="'item-list-status-' + i">{{item}}</label>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-label text-right">保有部署：</div>
+                <div class="col p-0">
+                  <div class="form-group bt">
+                    <app-section-selection (select)="selectSection($event)" [sectionForm]="sectionForm" [sectionCodeControlName]="'sectionCode'" [sectionNameControlName]="'sectionName'" [sectionYearControlName]="'sectionYear'" [year]="fieldPeriod.selectedItem ? getFiscalYear(fieldPeriod.selectedItem.period) : null"></app-section-selection>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-label text-right"></div>
+                <div class="col p-0">
+                  <div class="form-check form-check-inline mb-0">
+                    <input type="checkbox" class="form-check-input wm-checkbox" [value]="true" id="item-list-hierarchy-flag" formControlName="includeSectionHierarchyFlag">
+                    <label class="form-check-label" for="item-list-hierarchy-flag">指定部署の配下部署も検索に含める。</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-5 row">
+              <div class="col-label text-right">資産区分：</div>
+              <div class="col p-0">
+                <div class="form-check form-check-inline" *ngFor="let item of invAssetType; let i = index" formArrayName="invAssetType" [ngClass]="{'d-block': i === 6}">
+                  <input type="checkbox" class="form-check-input wm-checkbox" [id]="'item-list-asset-' + i" [formControlName]="i">
+                  <label class="form-check-label" [for]="'item-list-asset-' + i">{{item}}</label>
+                </div>
+              </div>
+            </div>
+            <div class="col-2 col-form-buttons d-flex align-items-center">
+              <button type="button" class="wm-btn" (click)="search()">検索</button>
+              <button type="button" class="wm-btn" (click)="download()">ダウンロード</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <div class="section-inventory-buttons wm-buttons">
+    <button type="button" class="wm-btn" (click)="inventoryComplete()" *ngIf="allowComplete"><span class="ico"><img src="assets/images/button/save.png" alt="棚卸完了報告"></span><span class="txt">棚卸完了報告</span></button>
+    <button type="button" class="wm-btn" (click)="sendReminderMail()" *ngIf="allowSendMail"><span class="ico"><img src="assets/images/button/save.png" alt="督促メール送信"></span><span class="txt">督促メール送信</span></button>
+    <button type="button" class="wm-btn" (click)="downloadDetails()">明細ダウンロード</button>
+    <button type="button" class="wm-btn" (click)="printFactSheet()">実査表印刷</button>
+    <p class="text-desc">※棚卸完了報告は、部長以下のメンバで実施いただくようお願いします。</p>
+  </div>
+
+  <div class="section-inventory-list">
+    <div class="grid-common-wrap" id="grid-cont">
+      <div class="grid-common-count">【件数：{{gridInventoryList && gridInventoryList.rows ? (gridInventoryList.rows.length | number) : 0}} 件】</div>
+      <div class="wp-grid-inventory-list" id="wp-grid-inventory-list">
+        <ea-flex-grid #gridInventoryList
+          class="grid-common-list grid-inventory-list"
+          [(itemsSource)]="inventoryList"
+          [allowSorting]="false"
+          [isReadOnly]="false"
+          (initialized)="onGridInitialized(gridInventoryList)"
+        >
+          <ea-flex-grid-column header="Sel" binding="sel" [allowDragging]="'None'" [allowMerging]="false" [width]="30" [isReadOnly]="false"></ea-flex-grid-column>
+          <ea-flex-grid-column header="保有部署" binding="holSectionName" [width]="240"></ea-flex-grid-column>
+          <ea-flex-grid-column header="資産区分" binding="invAssetTypeName" [width]="150"></ea-flex-grid-column>
+          <ea-flex-grid-column header="操作" [width]="100">
+            <ng-template wjFlexGridCellTemplate [cellType]="'Cell'" let-cell="cell">
+              <span class="cell-link">{{assetLabel}}</span>
+            </ng-template>
+          </ea-flex-grid-column>
+          <ea-flex-grid-column header="未" binding="invCountUndecided" [width]="60" [aggregate]="'Sum'" [format]="'n0'"></ea-flex-grid-column>
+          <ea-flex-grid-column header="済：有" binding="invCountOwn" [width]="60" [aggregate]="'Sum'" [format]="'n0'"></ea-flex-grid-column>
+          <ea-flex-grid-column header="済：無" binding="invCountNotOwn" [width]="60" [aggregate]="'Sum'" [format]="'n0'"></ea-flex-grid-column>
+          <ea-flex-grid-column header="計" binding="invCountTotal" [width]="60" [aggregate]="'Sum'" [format]="'n0'"></ea-flex-grid-column>
+          <ea-flex-grid-column header="資産件数" binding="assetCount" [width]="60" [aggregate]="'Sum'" [format]="'n0'">
+            <ng-template wjFlexGridCellTemplate cellType="ColumnHeader" let-cell="cell">
+              資産<br>件数
+              <span class="wj-glyph-up" *ngIf="cell.col.currentSort==='+'"></span>
+              <span class="wj-glyph-down" *ngIf="cell.col.currentSort==='-'"></span>
+            </ng-template>
+            <ng-template wjFlexGridCellTemplate [cellType]="'Cell'" let-cell="cell">
+              {{cell.item.assetCount | number: 0}}
+            </ng-template>
+          </ea-flex-grid-column>
+          <ea-flex-grid-column header="棚卸完了報告ステータス" binding="apStatusName" [width]="100">
+            <ng-template wjFlexGridCellTemplate cellType="ColumnHeader" let-cell="cell">
+              棚卸完了報告<br>ステータス
+              <span class="wj-glyph-up" *ngIf="cell.col.currentSort==='+'"></span>
+              <span class="wj-glyph-down" *ngIf="cell.col.currentSort==='-'"></span>
+            </ng-template>
+          </ea-flex-grid-column>
+          <ea-flex-grid-column header="申請日" binding="apDate" [width]="100" [format]="'yyyy/MM/dd'">
+          </ea-flex-grid-column>
+          <ea-flex-grid-column header="申請者" binding="apStaffCode" [width]="140">
+            <ng-template wjFlexGridCellTemplate [cellType]="'Cell'" let-cell="cell">
+              {{cell.item.apStaffCode}} {{cell.item.apStaffName}}
+            </ng-template>
+          </ea-flex-grid-column>
+          <ea-flex-grid-column header="承認日" binding="approveDate" [width]="100" [format]="'yyyy/MM/dd'">
+          </ea-flex-grid-column>
+          <ea-flex-grid-column header="承認者" binding="approveStaffCode" [width]="140">
+            <ng-template wjFlexGridCellTemplate [cellType]="'Cell'" let-cell="cell">
+              {{cell.item.approveStaffCode}} {{cell.item.approveStaffName}}
+            </ng-template>
+          </ea-flex-grid-column>
+          <ea-flex-grid-column header="e申請書類ID" binding="eappId" [width]="120" [minWidth]="140">
+            <ng-template wjFlexGridCellTemplate [cellType]="'Cell'" let-cell="cell">
+              <span style="display: block; text-align: left;">{{cell.item.eappId}}</span>
+            </ng-template>
+          </ea-flex-grid-column>
+        </ea-flex-grid>
+      </div>
+    </div>
+  </div>
+</div>
+<app-confirm-popup #confirmPopup (confirm)="confirmCompleteSend()"></app-confirm-popup>

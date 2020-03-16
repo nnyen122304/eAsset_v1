@@ -1,0 +1,155 @@
+<div class="page-container page-create-data">
+    <div class="section-create-form">
+        <div class="block-frame">
+            <h2 class="frame-title">データ作成</h2>
+            <div class="frame-body">
+                <form class="form-creator row" [formGroup]="creatorForm">
+                    <div class="col col-inputs">
+                        <div class="row">
+                            <div class="col-label">
+                                <label for="field-login-company-name">会社：</label>
+                            </div>
+                            <div class="col col-content">
+                                <div class="form-group bt">
+                                    <ea-input-mask class="wm-combo wm-tab-element wm-100 bg-gray"
+                                                   id="field-login-company-name"
+                                                   [value]="sessionInfo.loginCompanyName"
+                                                   readonly></ea-input-mask>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-label">
+                                <label>会計年月：</label>
+                            </div>
+                            <div class="col col-content">
+                                <div class="form-group bt">
+                                    <wj-combo-box
+                                        #fieldPeriod
+                                        class="wm-combo wm-dropdown wm-tab-element wm-100"
+                                        id="field-period"
+                                        [itemsSource]="accountingDates"
+                                        [displayMemberPath]="'periodName'"
+                                        [selectedValuePath]="'period'"
+                                        formControlName="period"
+                                    ></wj-combo-box>
+                                    <ng-container *ngIf="fieldPeriod.selectedItem as item">
+                                        <span class="text-inline" *ngIf="item.lastSuccessCreateDate">
+                                          （ProPlusデータ取込日：{{item.lastSuccessCreateDate | date:'yyyy/MM/dd HH:mm'}}）
+                                        </span>
+                                    </ng-container>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-label"></div>
+                            <div class="col col-content">
+                                <div class="form-group bt">
+                                    <div class="form-checkbox">
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input wm-checkbox wm-tab-element" type="checkbox"
+                                                   id="field-overwrite" formControlName="overwriteFlag"
+                                                   (change)="toggleOverwritePopup()">
+                                            <label class="form-check-label" for="field-overwrite">作成済の場合は再作成する　※
+                                                公開されている資産区分は再作成されません。</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col col-buttons d-flex align-items-center">
+                        <button type="button" class="wm-btn wm-tab-element" (click)="create(creatorForm.value)"><span
+                                class="ico"><img src="assets/images/button/save.png" alt="作成実行"></span><span
+                                class="txt">作成実行</span></button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="section-create-list">
+        <div class="block-frame">
+            <h2 class="frame-title bg-blue">データ公開・作成状況</h2>
+            <div class="frame-body" id="grid-cont">
+                <div class="block-buttons">
+                    <button type="button" class="wm-btn"
+                            (click)="showReleaseSettingsPopup(gridDataReleaseList, $event.currentTarget)">選択年月の各部公開設定
+                    </button>
+                    <button type="button" class="wm-btn" (click)="updateData()">最新の情報に更新</button>
+                    <p class="text-desc">※　画面を閉じても実行中の処理は停止しません。</p>
+                </div>
+                <div class="block-container">
+                    <div class="grid-common-wrap">
+                        <div class="grid-common-count">
+                            【件数：{{gridDataReleaseList && gridDataReleaseList.rows ? (gridDataReleaseList.rows.length | number) : 0}}
+                            件】
+                        </div>
+                        <div class="wp-grid-data-realease-list" id="wp-grid-data-realease-list">
+                            <ea-flex-grid
+                                #gridDataReleaseList
+                                class="grid-common-list grid-data-realease-list"
+                                [itemsSource]="dataReleaseList"
+                                (initialized)="onGridInitialized(gridDataReleaseList)"
+                                (dblclick)="showReleaseSettingsPopup(gridDataReleaseList, $event.currentTarget)">
+                                <ea-flex-grid-column header="会計年月" binding="periodFormated"
+                                                     [width]="80"></ea-flex-grid-column>
+                                <ea-flex-grid-column binding="createStatusName" [width]="80">
+                                    <ng-template wjFlexGridCellTemplate cellType="ColumnHeader" let-cell="cell">
+                                        データ作成<br>ステータス
+                                        <span class="wj-glyph-up" *ngIf="cell.col.currentSort==='+'"></span>
+                                        <span class="wj-glyph-down" *ngIf="cell.col.currentSort==='-'"></span>
+                                    </ng-template>
+                                </ea-flex-grid-column>
+                                <ea-flex-grid-column binding="createStartDate" [width]="120"
+                                                     [format]="'yyyy/MM/dd HH:mm'">
+                                    <ng-template wjFlexGridCellTemplate cellType="ColumnHeader" let-cell="cell">
+                                        データ作成<br>処理開始日
+                                        <span class="wj-glyph-up" *ngIf="cell.col.currentSort==='+'"></span>
+                                        <span class="wj-glyph-down" *ngIf="cell.col.currentSort==='-'"></span>
+                                    </ng-template>
+                                </ea-flex-grid-column>
+                                <ea-flex-grid-column binding="createEndDate" [width]="120"
+                                                     [format]="'yyyy/MM/dd HH:mm'">
+                                    <ng-template wjFlexGridCellTemplate cellType="ColumnHeader" let-cell="cell">
+                                        データ作成<br>処理終了日
+                                        <span class="wj-glyph-up" *ngIf="cell.col.currentSort==='+'"></span>
+                                        <span class="wj-glyph-down" *ngIf="cell.col.currentSort==='-'"></span>
+                                    </ng-template>
+                                </ea-flex-grid-column>
+                                <ea-flex-grid-column binding="createExecStaffName" [width]="140">
+                                    <ng-template wjFlexGridCellTemplate cellType="ColumnHeader" let-cell="cell">
+                                        データ作成<br>実行者
+                                        <span class="wj-glyph-up" *ngIf="cell.col.currentSort==='+'"></span>
+                                        <span class="wj-glyph-down" *ngIf="cell.col.currentSort==='-'"></span>
+                                    </ng-template>
+                                    <ng-template wjFlexGridCellTemplate [cellType]="'Cell'" let-cell="cell">
+                                        {{cell.item.createExecStaffCode}}　{{cell.item.createExecStaffName}}
+                                    </ng-template>
+                                    <ng-template wjFlexGridCellTemplate [cellType]="'CellEdit'" let-cell="cell">
+                                        <input class="wj-grid-editor wj-form-control" type="text"
+                                               [value]="cell.item.createExecStaffCode + '　' + cell.item.createExecStaffName"
+                                               readonly>
+                                    </ng-template>
+                                </ea-flex-grid-column>
+                                <ea-flex-grid-column header="有形固資" binding="fldTanPublicTypeName"
+                                                     [width]="80"></ea-flex-grid-column>
+                                <ea-flex-grid-column header="除去費用" binding="fldRoPublicTypeName"
+                                                     [width]="80"></ea-flex-grid-column>
+                                <ea-flex-grid-column header="無形固資" binding="fldIntPublicTypeName"
+                                                     [width]="80"></ea-flex-grid-column>
+                                <ea-flex-grid-column header="リース" binding="lePublicTypeName"
+                                                     [width]="80"></ea-flex-grid-column>
+                                <ea-flex-grid-column header="レンタル" binding="rePublicTypeName"
+                                                     [width]="80"></ea-flex-grid-column>
+                                <ea-flex-grid-column header="備品等" binding="equipPublicTypeName"
+                                                     [width]="80"></ea-flex-grid-column>
+                            </ea-flex-grid>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<app-release-settings-popup (select)="onRowUpdate($event['data'])"></app-release-settings-popup>

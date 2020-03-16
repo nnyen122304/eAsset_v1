@@ -1,0 +1,79 @@
+.section-inventory-form {
+  padding-top: 10px;
+
+  .form-scope {
+    margin-bottom: 10px;
+    .row-scope {
+      border-bottom: 1px solid #fff;
+      margin-bottom: 15px;
+      padding-bottom: 5px;
+    }
+    .block-frame-border {
+      padding: 15px 10px 10px;
+    }
+    .col-label {
+      margin-right: 3px;
+      flex: 0 1 auto;
+    }
+  }
+
+  .input-period {
+    margin-top: -4px;
+  }
+  .text-inline {
+    margin-left: 5px;
+  }
+  .col-label {
+    flex: 0 0 100px;
+  }
+  .col-form-buttons {
+    border-left: 1px solid #fff;
+    .wm-btn:not(:first-child) {
+      margin-left: 5px;
+    }
+  }
+  .form-search {
+    .block-frame-border {
+      max-width: 1050px;
+    }
+  }
+
+}
+
+.section-inventory-buttons {
+  margin-top: 13px;
+  margin-bottom: 10px;
+  position: relative;
+  z-index: 1;
+  .text-desc {
+    display: inline-block;
+    margin: 0 0 0 10px;
+    vertical-align: middle;
+    color: #ff0000;
+    font-weight: bold;
+  }
+}
+
+.section-inventory-list {
+  .grid-common-count {
+    margin-top: -25px;
+  }
+  .grid-common-wrap {
+    display: block;
+    width: 1559px;
+  }
+}
+
+.wp-grid-inventory-list {
+  height: calc(100vh - 360px);
+}
+
+.no-scope-search .wp-grid-inventory-list {
+  height: calc(100vh - 320px);
+}
+
+.grid-inventory-list {
+  display: block;
+  width: 100%;
+  height: 100%;
+}

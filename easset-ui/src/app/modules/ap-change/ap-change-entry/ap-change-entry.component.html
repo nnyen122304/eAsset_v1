@@ -1,0 +1,1124 @@
+<!-- ヘッダレイアウト -->
+<form [formGroup]="apChangeForm">
+  <div class="entry-header" [hidden]="currentMenuId === '07098'">
+    <div class=" block-frame-border">
+      <div class="row">
+        <div class="row col-6">
+          <div class="form-group">
+            <label class="col-label">移動申請書番号:</label>
+            <div class="col-content">
+              <ea-input-mask [attr.disabled]="true" class="input-display wm-combo bg-gray" id="applicationId"
+                name="applicationId" formControlName="applicationId" [isReadOnly]="true"></ea-input-mask>
+            </div>
+          </div>
+          <div class="form-group wm-350">
+            <label class="col-label">ステータス:</label>
+            <div class="wm-buttons">
+              <ea-input-mask class="input-display wm-combo is-rounded ap-status required" id="apStatusName"
+                name="apStatusName" formControlName="apStatusName" [isReadOnly]="true"></ea-input-mask>
+              <button #apStatusName_LOV type="button" class="wm-btn wm-smbtn-status-popup"
+                (click)="popupStatus.open($event.currentTarget)" *ngIf="accessLevel=='A' || accessLevel=='S'">
+                <span class="ico"><img src="assets/images/button/popup.png"></span>
+              </button>
+            </div>
+            <app-status-selection [sqlName]="'selectCodeName_LOV'"
+              [paramMap]="{ categoryCode: 'AP_STATUS_CHANGE',
+             whereClause: (apChangeForm.get('apStatus').value == 4 || apChangeForm.get('apStatus').value == 5 ? 'VALUE = 2': '')}" (select)="selectStatus($event)">
+            </app-status-selection>
+            <div
+              [hidden]="!(apChangeForm.get('eappId').value != '' && apChangeForm.get('eappId').value != null && apChangeForm.get('apStatus').value != 1)">
+              <label class="col-label">e申請書類ID:</label>
+              <div class="e-link" (click)="linkBtnClickEvent('eappId_LNK')">
+                <a class="link">{{apChangeForm.get('eappId').value }}</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row col-4">
+          <div class="form-group f-right">
+            <label class="col-label">申請日:</label>
+            <div class="col-content">
+              <wj-input-date class="w-120 required wm-combo" id="apDate" name="apDate" formControlName="apDate"
+                [isReadOnly]="(apChangeForm.get('apStatus').value == 3 || apChangeForm.get('apStatus').value == 5) ? true : false">
+              </wj-input-date>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="row col-8">
+          <div class="form-group col">
+            <label class="col-label">申請区分:</label>
+            <div class="col-content">
+              <ea-input-mask class="w-700 input-display wm-combo bg-gray" id="apChangeTypeName" name="apChangeTypeName"
+                formControlName="apChangeTypeName" [isReadOnly]="true" [attr.disabled]="true">
+              </ea-input-mask>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
+
+<!-- ボディレイアウト -->
+
+<!-- entry-body -->
+<div class="entry-body">
+  <div class="page-container page-create-data e-body">
+    <!-- <div class="block-frame-border e-white" *ngIf="currentMenuId != '07098' && (accessLevel=='A' || accessLevel=='S')">
+      <label>
+        登録残のある取得申請の資産(機器)明細のみ表示される。
+      </label>
+    </div> -->
+    <!-- <div class="block-frame-border e-white" *ngIf="currentMenuId == '07098'">
+      <button type="button" class="wm-btn wm-sm" (click)="btnClickEvent('printEapp')">
+        <span class="ico"><img src="assets/images/button/save.png"></span>
+        <span>印刷</span>
+      </button>
+      <button type="button" class="wm-btn wm-sm" (click)="btnClickEvent('openEasset')">
+        <span class="ico"><img src="assets/images/button/save.png"></span>
+        <span>eAssetで開く</span>
+      </button>
+    </div> -->
+    <div class="section-create-list">
+      <form [formGroup]="apStaffForm">
+        <!-- 申請者情報 ここから -->
+        <div class="block-frame min-h" [hidden]="currentMenuId == '07098'">
+          <h2 class="frame-title bg-green">申請者</h2>
+          <div class="frame-body">
+            <div class="block-frame-border" [hidden]="!(accessLevel=='A' || accessLevel=='S')">
+              <h2 class="frame-title">起票者</h2>
+              <div class="row col">
+                <div class="form-group wm-200">
+                  <label for="apCreateStaffCode">社員番号:</label>
+                  <ea-input-mask [attr.disabled]="true" class="input-display wm-combo wm-80 bg-gray"
+                    id="apCreateStaffCode" name="apCreateStaffCode" formControlName="apCreateStaffCode"></ea-input-mask>
+                </div>
+                <div class="form-group">
+                  <label for="apCreateStaffName">氏名:</label>
+                  <ea-input-mask [attr.disabled]="true" class="input-display wm-combo wm-150 bg-gray"
+                    id="apCreateStaffName" name="apCreateStaffName" formControlName="apCreateStaffName"></ea-input-mask>
+                </div>
+                <div class="form-group">
+                  <label for="apCreateCompanyName">会社:</label>
+                  <ea-input-mask [attr.disabled]="true" class="input-display wm-combo wm-80 bg-gray"
+                    id="apCreateCompanyName" name="apCreateCompanyName" formControlName="apCreateCompanyName">
+                  </ea-input-mask>
+                </div>
+                <div class="form-group wm-310">
+                  <label for="apCreateSectionName">所属部署:</label>
+                  <ea-input-mask [attr.disabled]="true" class="input-display wm-combo wm-200 bg-gray"
+                    id="apCreateSectionName" name="apCreateSectionName" formControlName="apCreateSectionName">
+                  </ea-input-mask>
+                </div>
+                <div class="form-group">
+                  <label for="apDate">連絡先TEL:</label>
+                  <ea-input-mask [attr.disabled]="true" class="input-display wm-combo wm-200 bg-gray" id="apCreateTel"
+                    name="apCreateTel" formControlName="apCreateTel"></ea-input-mask>
+                  <button type="button" class="wm-btn wm-sm">
+                    <span class="ico"><img src="assets/images/button/mail.png" /></span>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="block-frame-border">
+              <h2 class="frame-title">申請者</h2>
+              <div class="row col">
+                <div class="form-group wm-200">
+                  <app-staff-selection (select)="selectStaff($event)" [staffForm]="apStaffForm"
+                    [staffCodeControlName]="'apStaffCode'" [staffNameControlName]="'apStaffName'" [onlyStaffCode]="true"
+                    [usableDataOnly]="true" [required]="true" [title]="'社員番号:'" [companyOnly]="true"
+                    [extClass]="'wm-80'"
+                    [visibleStatus]="(apChangeForm.get('apStatus').value == 3 || apChangeForm.get('apStatus').value == 5) ? false : true">
+                  </app-staff-selection>
+                </div>
+                <div class="form-group">
+                  <label for="apStaffName">氏名:</label>
+                  <ea-input-mask [attr.disabled]="true" class="input-display wm-combo wm-150 bg-gray" id="apStaffName"
+                    name="apStaffName" formControlName="apStaffName"></ea-input-mask>
+                </div>
+                <div class="form-group">
+                  <label for="apCompanyName">会社:</label>
+                  <ea-input-mask [attr.disabled]="true" class="input-display wm-combo wm-80 bg-gray" id="apCompanyName"
+                    name="apCompanyName" formControlName="apCompanyName"></ea-input-mask>
+                </div>
+                <div class="form-group wm-310">
+                  <app-ap-section-selection [sectionForm]="apStaffForm" [apSectionCodeControlName]="'apSectionCode'"
+                    [apSectionNameControlName]="'apSectionName'" [title]="'申請部署:'" [sqlName]="'selectApSection_LOV'"
+                    [paramMap]="{staffCode: staffCode}"
+                    [visibleStatus]="(apChangeForm.get('apStatus').value == 3 || apChangeForm.get('apStatus').value == 5) ? false : true">
+                  </app-ap-section-selection>
+                </div>
+                <div>
+                  <div class="form-group">
+                    <label for="apTel">連絡先TEL:</label>
+                    <div>
+                      <ea-input-mask [attr.disabled]="true" class="input-display wm-combo wm-200 bg-gray" id="apTel"
+                        name="apTel" formControlName="apTel"></ea-input-mask>
+                      <button type="button" class="wm-btn wm-sm">
+                        <span class="ico"><img src="assets/images/button/mail.png" /></span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- 申請者情報 ここまで -->
+
+        <!-- 移動日情報 ここから -->
+        <div class="block-frame">
+          <h2 class="frame-title bg-violet">移動日</h2>
+          <div class="frame-body">
+            <div class="block-frame-border">
+              <h2 class="frame-title">移動予定日:</h2>
+              <div class="row col">
+                <div class="form-group" [hidden]="apChange && !((apChange.apChangeType == '1' || apChange.apChangeType == '2' || apChange.apChangeType == '3') || apStaffForm.get('chgScheduleDate').value != '' 
+                || (apChange.apChangeType == '' && currentMenuId == '07010'))">
+                  <label for="apDate">移動予定日:</label>
+                  <wj-input-date class="w-120 required wm-combo" id="chgScheduleDate" maxlength="10"
+                    name="chgScheduleDate" formControlName="chgScheduleDate" [isRequired]="false"
+                    change="dataChange(event)"
+                    [isReadOnly]="(apChangeForm.get('apStatus').value == 3 || apChangeForm.get('apStatus').value == 5) ? true : false">
+                  </wj-input-date>
+                </div>
+                <div class="form-group" [hidden]="apChange && !((apChange.apChangeType == 'A' || apChange.apChangeType == 'B' || apChange.apChangeType == 'C') || apStaffForm.get('chgSchedulePeriod').value != '' 
+                || (apChange.apChangeType == '' && currentMenuId == '07030'))">
+                  <label for="apDate">経費変更年月度:</label>
+                  <app-current-year-selection [form]="apStaffForm" [chgSchedulePeriod]="'chgSchedulePeriod'"
+                    [chgSchedulePeriodName]="'chgSchedulePeriodName'" [extClass]="'wm-80 required'"
+                    [visibleStatus]="(apChangeForm.get('apStatus').value == 3 || apChangeForm.get('apStatus').value == 5) ? false : true"
+                    [required]="true" [sqlName]="'selectCurrentYearPeriod_LOV'"
+                    [paramMap]="{companyCode: sessionInfo.loginCompanyCode}">
+                  </app-current-year-selection>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- 移動日情報 ここまで -->
+
+        <!-- 備考情報 ここから -->
+        <div class="block-frame">
+          <h2 class="frame-title bg-orange">備 考</h2>
+          <div class="frame-body">
+            <div class="block-frame-border">
+              <h2 class="frame-title">移動理由/備考</h2>
+              <div class="row col">
+                <div class="form-group">
+                  <textarea class="w-550" id="chgDescription" name="chgDescription"
+                    formControlName="chgDescription"></textarea>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- 備考情報 ここまで -->
+      </form>
+      <!-- 移動対象情報  ここから -->
+      <div class="block-frame min-h">
+        <h2 class="frame-title bg-black">移動対象</h2>
+        <div class="frame-body">
+          <div [hidden]="currentMenuId == '07098'">
+            <label
+              [hidden]="(apChange && !(apChange.apChangeLineLic.length == 0 && apChange.apChangeLineAst.length == 0 && apChange.apChangeLineContractLease.length == 0
+                && apChange.apChangeLineContractRental.length == 0 && apChange.apChangeLineFldTan.length == 0 && apChange.apChangeLineFldInt.length == 0))">移動対象を指定してください。</label>
+            <div class="e-link">
+              <a class="link d-block" (click)="linkBtnClickEvent('assetSearchChange_LNK')" *ngIf="assetSearchChange"
+                id="assetSearchChange_LNK">情報機器等の移動申請を行う</a>
+              <!-- *ngIf="apChange && (((apChange.apChangeType === '' && currentMenuId === '07010') || apChange.apChangeType === '1') && !(apChangeForm.controls.apStatus.value === '3' ||
+              (apChangeForm.controls.apStatus.value === '2' && (accessLevel === 'C' || accessLevel === 'B')) || apChangeForm.controls.apStatus.value === '5'))" -->
+              <a class="link d-block" (click)="linkBtnClickEvent('licSearchChange_LNK')" *ngIf="licSearchChange"
+                id="licSearchChange_LNK">ライセンスの移動申請を行う</a>
+              <!-- *ngIf="apChange && (((apChange.apChangeType === '' && currentMenuId === '07010') || apChange.apChangeType === '2') && !(apChangeForm.controls.apStatus.value === '3' ||
+              (apChangeForm.controls.apStatus.value === '2' && (accessLevel === 'C' || accessLevel === 'B')) || apChangeForm.controls.apStatus.value === '5') &&
+              (accessLevel === 'S' || accessLevel === 'B'))" -->
+              <a class="link d-block" (click)="linkBtnClickEvent('fldIntEaSearchChange_LNK')"
+                *ngIf="fldIntEaSearchChange" id="fldIntEaSearchChange_LNK">無形固定資産の移動申請を行う</a>
+              <!-- *ngIf="apChange && (((apChange.apChangeType === '' && currentMenuId === '07010') || apChange.apChangeType === '3') && !(apChangeForm.controls.apStatus.value === '3' ||
+              (apChangeForm.controls.apStatus.value === '2' && (accessLevel === 'C' || accessLevel === 'B')) || apChangeForm.controls.apStatus.value === '5') &&
+              (accessLevel === 'S' || accessLevel === 'B'))" -->
+              <a class="link d-block" (click)="linkBtnClickEvent('lldSearchChange_LNK')" *ngIf="lldSearchChange"
+                id="lldSearchChange_LNK">リース・レンタルの移動申請を行う</a>
+              <!-- *ngIf="apChange && (((apChange.apChangeType === '' && currentMenuId === '07030') || apChange.apChangeType === 'A') && !(apChangeForm.controls.apStatus.value === '3' ||
+              (apChangeForm.controls.apStatus.value === '2' && (accessLevel === 'C' || accessLevel === 'B')) || apChangeForm.controls.apStatus.value === '5'))" -->
+              <a class="link d-block" (click)="linkBtnClickEvent('fldTanSearchChange_LNK')" *ngIf="fldTanSearchChange"
+                id="fldTanSearchChange_LNK">有形固定資産の移動申請を行う</a>
+              <!-- *ngIf="apChange && (((apChange.apChangeType === '' && currentMenuId === '07030') || apChange.apChangeType === 'B') && !(apChangeForm.controls.apStatus.value === '3' ||
+              (apChangeForm.controls.apStatus.value === '2' && (accessLevel === 'C' || accessLevel === 'B')) || apChangeForm.controls.apStatus.value === '5'))" -->
+              <a class="link d-block" (click)="linkBtnClickEvent('fldIntSearchChange_LNK')" *ngIf="fldIntSearchChange"
+                id="fldIntSearchChange_LNK">無形固定資産の移動申請を行う</a>
+              <!-- *ngIf="apChange && (((apChange.apChangeType === '' && currentMenuId === '07030') || apChange.apChangeType === 'C') && !(apChangeForm.controls.apStatus.value === '3' ||
+              (apChangeForm.controls.apStatus.value === '2' && (accessLevel === 'C' || accessLevel === 'B')) || apChangeForm.controls.apStatus.value === '5'))" -->
+            </div>
+          </div>
+
+          <div
+            *ngIf="apChange && (apChange.apChangeLineLic.length > 0 || apChange.apChangeLineAst.length > 0 || apChange.apChangeLineContractLease.length > 0
+            || apChange.apChangeLineContractRental.length > 0 || apChange.apChangeLineFldTan.length > 0 || apChange.apChangeLineFldInt.length > 0)">
+            <div class="e-link" *ngIf="currentMenuId != '07098' && (!holSectionGB && !holOfficeGB && !useStaffGB && !intHolStaffGB && !holRepOfficeGB &&
+            !costGB && !costSecGB)">
+              <button type="button" class="wm-btn d-block" (click)="btnClickEvent('addAstItem_BTN')" *ngIf="apChange && (apChange.apChangeType === '1' && !(apChangeForm.controls.apStatus.value === '3' || (apChangeForm.controls.apStatus.value === '2' &&
+                (accessLevel === 'C' || accessLevel === 'B')) || apChangeForm.controls.apStatus.value === '5'))"
+                id="addAstItem_BTN">情報機器等の追加検索</button>
+              <button type="button" class="wm-btn d-block" (click)="btnClickEvent('addLicItem_BTN')"
+                *ngIf="apChange && (apChange.apChangeType === '2' && !(apChangeForm.controls.apStatus.value === '3' || (apChangeForm.controls.apStatus.value === '2' &&
+                (accessLevel === 'C' || accessLevel === 'B')) || apChangeForm.controls.apStatus.value === '5') && (accessLevel === 'S' || accessLevel === 'B'))" id="addLicItem_BTN">ライセンスの追加検索</button>
+              <button type="button" class="wm-btn d-block" (click)="btnClickEvent('addFldIntEaItem_BTN')"
+                *ngIf="apChange && (apChange.apChangeType === '3' && !(apChangeForm.controls.apStatus.value === '3' || (apChangeForm.controls.apStatus.value === '2' &&
+                (accessLevel === 'C' || accessLevel === 'B')) || apChangeForm.controls.apStatus.value === '5') && (accessLevel === 'S' || accessLevel === 'B'))" id="addFldIntEaItem_BTN">無形固定資産の追加検索</button>
+              <button type="button" class="wm-btn d-block" (click)="btnClickEvent('addLldItem_BTN')" *ngIf="apChange && (apChange.apChangeType === 'A' && !(apChangeForm.controls.apStatus.value === '3' || (apChangeForm.controls.apStatus.value === '2' &&
+                (accessLevel === 'C' || accessLevel === 'B')) || apChangeForm.controls.apStatus.value === '5'))"
+                id="addLldItem_BTN">リース・レンタルの追加検索</button>
+              <button type="button" class="wm-btn d-block" (click)="btnClickEvent('addFldTanItem_BTN')" *ngIf="apChange && (apChange.apChangeType === 'B' && !(apChangeForm.controls.apStatus.value === '3' || (apChangeForm.controls.apStatus.value === '2' &&
+                (accessLevel === 'C' || accessLevel === 'B')) || apChangeForm.controls.apStatus.value === '5'))"
+                id="addFldTanItem_BTN">有形固定資産の追加検索</button>
+              <button type="button" class="wm-btn d-block" (click)="btnClickEvent('addFldIntItem_BTN')" *ngIf="apChange && (apChange.apChangeType === 'C' && !(apChangeForm.controls.apStatus.value === '3' || (apChangeForm.controls.apStatus.value === '2' &&
+                (accessLevel === 'C' || accessLevel === 'B')) || apChangeForm.controls.apStatus.value === '5'))"
+                id="addFldIntItem_BTN">無形固定資産の追加検索</button>
+            </div>
+            <label>※　行をダブルクリックすると詳細が表示されます。</label>
+            <label class="color-red">※　以下に表示されている情報は、移動申請書作成時点でのものです。</label>
+          </div>
+
+          <!-- 移動対象情報:リース契約 ここから -->
+          <div class="block-frame-border" id="leaseGB" *ngIf="apChange && apChange.apChangeLineContractLease.length > 0">
+            <h2 class="frame-title">リース契約</h2>
+            <div class="block-container pt-2 pl-3">
+              <div class="grid-common-wrap">
+                <div class="grid-common-count">
+                  【{{  gridLineContractLeaseList && gridLineContractLeaseList.rows ? (gridLineContractLeaseList.rows.length | number) : 0 }}
+                  件】
+                </div>
+                <div class="wp-grid-data-list" id="wp-grid-data-list">
+                  <ea-flex-grid #gridLineContractLeaseList class="grid-common-list grid-list"
+                    [itemsSource]="apChangeLineContractLease" (dblclick)="showDetail(gridLineContractLeaseList)"
+                    [allowSorting]="false">
+                    <ea-flex-grid-column header="" binding="" [width]="30">
+                      <ng-template wjFlexGridCellTemplate [cellType]="'Cell'" let-cell="cell">
+                        <a class="btn-del"
+                          *ngIf="(currentMenuId != '07098' && (!(apChangeForm.get('apStatus').value == '3' || (apChangeForm.get('apStatus').value == '2' &&
+                        (accessLevel === 'C' || accessLevel === 'B')) || apChangeForm.get('apStatus').value == '5')? (holSectionGB && holStaffGB &&
+                        holOfficeGB && useStaffGB && intHolStaffGB && holRepOfficeGB && costGB && costSecGB) : false))"></a>
+                      </ng-template>
+                    </ea-flex-grid-column>
+                    <ea-flex-grid-column header="契約番号" binding="contractNum" [width]="150"></ea-flex-grid-column>
+                    <ea-flex-grid-column header="契約枝番" binding="contractSubNum" [width]="150"></ea-flex-grid-column>
+                    <ea-flex-grid-column header="開始日" binding="contractStartDate" [width]="80"></ea-flex-grid-column>
+                    <ea-flex-grid-column header="満了日" binding="contractEndDate" [width]="80"></ea-flex-grid-column>
+                    <ea-flex-grid-column header="均等金額" binding="monthAmount" [width]="100"></ea-flex-grid-column>
+                    <ea-flex-grid-column header="販管/原価" binding="costTypeName" [width]="80"></ea-flex-grid-column>
+                    <ea-flex-grid-column header="減価償却ﾌﾟﾛｼﾞｪｸﾄ" binding="costDepPrjName" [width]="140">
+                    </ea-flex-grid-column>
+                    <ea-flex-grid-column header="経費負担部署" binding="costSectionName" [width]="180"></ea-flex-grid-column>
+                    <ea-flex-grid-column header="代表設置場所" binding="holRepOfficeName" [width]="200"></ea-flex-grid-column>
+                  </ea-flex-grid>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- 移動対象情報:リース契約 ここまで -->
+
+          <!-- 移動対象情報:レンタル契約 ここから -->
+          <div class="block-frame-border" id="rentalGB" *ngIf="apChange && apChange.apChangeLineContractRental.length > 0">
+            <h2 class="frame-title">レンタル契約</h2>
+            <div class="block-container pt-2 pl-3">
+              <div class="grid-common-wrap">
+                <div class="grid-common-count">
+                  【{{  gridLineContractRentalList && gridLineContractRentalList.rows ? (gridLineContractRentalList.rows.length | number) : 0 }}
+                  件】
+                </div>
+                <div class="wp-grid-data-list" id="wp-grid-data-list">
+                  <ea-flex-grid #gridLineContractRentalList class="grid-common-list grid-list"
+                    [itemsSource]="apChangeLineContractRental" (dblclick)="showDetail(gridLineContractRentalList)"
+                    [allowSorting]="false">
+                    <ea-flex-grid-column header="" [width]="30">
+                      <ng-template wjFlexGridCellTemplate [cellType]="'Cell'" let-cell="cell">
+                        <a class="btn-del" *ngIf="(currentMenuId != '07098' && (!(apChangeForm.get('apStatus').value == '3' || (apChangeForm.get('apStatus').value == '2' &&
+                        (accessLevel === 'C' || accessLevel === 'B')) || apChangeForm.get('apStatus').value == '5')? (holSectionGB && holStaffGB && holOfficeGB &&
+                        useStaffGB && intHolStaffGB && holRepOfficeGB && costGB && costSecGB): false))"></a>
+                      </ng-template>
+                    </ea-flex-grid-column>
+                    <ea-flex-grid-column header="契約番号" binding="contractNum" [width]="150"></ea-flex-grid-column>
+                    <ea-flex-grid-column header="契約枝番" binding="contractSubNum" [width]="150"></ea-flex-grid-column>
+                    <ea-flex-grid-column header="開始日" binding="contractStartDate" [width]="80"></ea-flex-grid-column>
+                    <ea-flex-grid-column header="満了日" binding="contractEndDate" [width]="80"></ea-flex-grid-column>
+                    <ea-flex-grid-column header="均等金額" binding="monthAmount" [width]="100"></ea-flex-grid-column>
+                    <ea-flex-grid-column header="販管/原価" binding="costTypeName" [width]="80"></ea-flex-grid-column>
+                    <ea-flex-grid-column header="減価償却ﾌﾟﾛｼﾞｪｸﾄ" binding="costDepPrjName" [width]="140">
+                    </ea-flex-grid-column>
+                    <ea-flex-grid-column header="経費負担部署" binding="costSectionName" width="*"></ea-flex-grid-column>
+                  </ea-flex-grid>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- 移動対象情報:レンタル契約 ここまで -->
+
+          <!-- 移動対象情報:有形固定資産 ここから -->
+          <div class="block-frame-border" id="fldTanGB" *ngIf="apChange && apChange.apChangeLineFldTan.length > 0">
+            <h2 class="frame-title">有形固定資産</h2>
+            <div class="block-container pt-2 pl-3">
+              <div class="grid-common-wrap">
+                <div class="grid-common-count">
+                  【{{  gridLineFldTanList && gridLineFldTanList.rows ? (gridLineFldTanList.rows.length | number) : 0 }}
+                  件】
+                </div>
+                <div class="wp-grid-data-list" id="wp-grid-data-list">
+                  <ea-flex-grid #gridLineFldTanList class="grid-common-list grid-list"
+                    [itemsSource]="apChangeLineFldTan" (dblclick)="showDetail(gridLineFldTanList)"
+                    [allowSorting]="false">
+                    <ea-flex-grid-column header="" binding="" [width]="30">
+                      <ng-template wjFlexGridCellTemplate [cellType]="'Cell'" let-cell="cell">
+                        <a class="btn-del" *ngIf="(currentMenuId != '07098' && (!(apChangeForm.get('apStatus').value == '3' || (apChangeForm.get('apStatus').value == '2' &&
+                        (accessLevel === 'C' || accessLevel === 'B')) || apChangeForm.get('apStatus').value == '5')? (holSectionGB && holStaffGB && holOfficeGB &&
+                        useStaffGB && intHolStaffGB && holRepOfficeGB && costGB && costSecGB): false))"></a>
+                      </ng-template>
+                    </ea-flex-grid-column>
+                    <ea-flex-grid-column header="資産番号" binding="getAstNumStr" [width]="140"></ea-flex-grid-column>
+                    <ea-flex-grid-column header="取得申請番号" binding="getApplicationId" [width]="100"></ea-flex-grid-column>
+                    <ea-flex-grid-column header="資産名" binding="astName" [width]="200"></ea-flex-grid-column>
+                    <ea-flex-grid-column header="販管/原価区分" binding="costTypeName" [width]="100"></ea-flex-grid-column>
+                    <ea-flex-grid-column header="減価償却ﾌﾟﾛｼﾞｪｸﾄ" binding="costDepPrjName" [width]="200">
+                    </ea-flex-grid-column>
+                    <ea-flex-grid-column header="経費負担部署" binding="costSectionName" [width]="180"></ea-flex-grid-column>
+                    <ea-flex-grid-column header="代表設置場所" binding="holRepOfficeName" [width]="200"></ea-flex-grid-column>
+                    <ea-flex-grid-column header="取得日" binding="getAstDateStr" [width]="80"></ea-flex-grid-column>
+                    <ea-flex-grid-column header="取得価額" binding="astGetAmount" [width]="100"></ea-flex-grid-column>
+                    <ea-flex-grid-column header="帳簿価額" binding="astBookAmount" [width]="100"></ea-flex-grid-column>
+                    <ea-flex-grid-column header="種類" binding="astClassName" [width]="200"></ea-flex-grid-column>
+                  </ea-flex-grid>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- 移動対象情報:有形固定資産 ここまで -->
+
+          <!-- 移動対象情報:無形固定資産 ここから -->
+          <div class="block-frame-border" id="fldIntGB" *ngIf="apChange && apChange.apChangeLineFldInt.length > 0">
+            <h2 class="frame-title">無形固定資産</h2>
+            <div class="block-container pt-2 pl-3">
+              <div class="grid-common-wrap">
+                <div class="grid-common-count">
+                  【{{  gridLineFldIntList && gridLineFldIntList.rows ? (gridLineFldIntList.rows.length | number) : 0 }}
+                  件】
+                </div>
+                <div class="wp-grid-data-list" id="wp-grid-data-list">
+                  <ea-flex-grid #gridLineFldIntList class="grid-common-list grid-list"
+                    [itemsSource]="apChangeLineFldInt" (dblclick)="showDetail(gridLineFldIntList)"
+                    [allowSorting]="false">
+                    <ea-flex-grid-column header="" binding="" [width]="30">
+                      <ng-template wjFlexGridCellTemplate [cellType]="'CellEdit'" let-cell="cell">
+                        <button type="button" class="wm-btn wm-smbtn-status-popup" *ngIf="allowStatus">
+                          <span class="ico"><img src="assets/images/button/line_delete.png"></span>
+                        </button>
+                        <a class="btn-del" *ngIf="(currentMenuId != '07098' && (!(apChangeForm.get('apStatus').value == '3' || (apChangeForm.get('apStatus').value == '2' &&
+                        (accessLevel === 'C' || accessLevel === 'B')) || apChangeForm.get('apStatus').value == '5')? (holSectionGB && holStaffGB && holOfficeGB &&
+                        useStaffGB && intHolStaffGB && holRepOfficeGB && costGB && costSecGB): false))"></a>
+                      </ng-template>
+                    </ea-flex-grid-column>
+                    <ea-flex-grid-column header="資産番号" binding="getAstNumStr" [width]="140"></ea-flex-grid-column>
+                    <ea-flex-grid-column header="取得申請番号" binding="getApplicationId" [width]="100"></ea-flex-grid-column>
+                    <ea-flex-grid-column header="資産名" binding="astName" [width]="200"></ea-flex-grid-column>
+                    <ea-flex-grid-column header="販管/原価区分" binding="costTypeName" [width]="100"></ea-flex-grid-column>
+                    <ea-flex-grid-column header="減価償却ﾌﾟﾛｼﾞｪｸﾄ" binding="costDepPrjName" [width]="200">
+                    </ea-flex-grid-column>
+                    <ea-flex-grid-column header="経費負担部署" binding="costSectionName" [width]="180"></ea-flex-grid-column>
+                    <ea-flex-grid-column header="代表設置場所" binding="holRepOfficeName" [width]="200"></ea-flex-grid-column>
+                    <ea-flex-grid-column header="保有部署" binding="holSectionName" [width]="140"></ea-flex-grid-column>
+                    <ea-flex-grid-column header="無形管理担当者" binding="holStaffName" [width]="100"></ea-flex-grid-column>
+                    <ea-flex-grid-column header="取得日" binding="getAstDateStr" [width]="80"></ea-flex-grid-column>
+                    <ea-flex-grid-column header="取得価額" binding="astGetAmount" [width]="100"></ea-flex-grid-column>
+                    <ea-flex-grid-column header="帳簿価額" binding="astBookAmount" [width]="100"></ea-flex-grid-column>
+                    <ea-flex-grid-column header="種類" binding="astClassName" [width]="200"></ea-flex-grid-column>
+                  </ea-flex-grid>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- 移動対象情報:無形固定資産 ここまで -->
+
+          <!-- 移動対象情報:情報機器等 ここから -->
+          <div class="block-frame-border" id="astGB" *ngIf="apChange && apChange.apChangeLineAst.length > 0">
+            <h2 class="frame-title">情報機器等</h2>
+            <div class="block-container pt-2 pl-3">
+              <div class="grid-common-wrap">
+                <div class="grid-common-count">
+                  【{{  gridLineAstList && gridLineAstList.rows ? (gridLineAstList.rows.length | number) : 0 }} 件】
+                </div>
+                <div class="wp-grid-data-list" id="wp-grid-data-list">
+                  <ea-flex-grid #gridLineAstList class="grid-common-list grid-list" [itemsSource]="apChangeLineAst"
+                    (dblclick)="showDetail(gridLineAstList)" [allowSorting]="false">
+                    <ea-flex-grid-column header="" binding="" [width]="30">
+                      <ng-template wjFlexGridCellTemplate [cellType]="'Cell'" let-cell="cell">
+                        <a class="btn-del" *ngIf="((apChange.apChangeType == '1' || apChange.apChangeType == '2') && currentMenuId != '07098' && (!(apChangeForm.get('apStatus').value == '3' 
+                        || (apChangeForm.get('apStatus').value == '2' && (accessLevel === 'C' || accessLevel === 'B')) || apChangeForm.get('apStatus').value == '5')? (holSectionGB && holStaffGB && holOfficeGB &&
+                        useStaffGB && intHolStaffGB && holRepOfficeGB && costGB && costSecGB): false))"></a>
+                      </ng-template>
+                    </ea-flex-grid-column>
+                    <ea-flex-grid-column header="管理番号" binding="assetId" [width]="80"></ea-flex-grid-column>
+                    <ea-flex-grid-column header="資産(機器)名称" binding="astName" [width]="150"></ea-flex-grid-column>
+                    <ea-flex-grid-column header="保有部署" binding="holSectionName" [width]="140"></ea-flex-grid-column>
+                    <ea-flex-grid-column header="資産管理担当者" binding="holStaffName" [width]="110"></ea-flex-grid-column>
+                    <ea-flex-grid-column header="個別設置場所" binding="holOfficeName" [width]="110"></ea-flex-grid-column>
+                    <ea-flex-grid-column header="使用者" binding="useStaffName" [width]="100"></ea-flex-grid-column>
+                    <ea-flex-grid-column header="資産区分" binding="astAssetTypeName" [width]="80"></ea-flex-grid-column>
+                    <ea-flex-grid-column header="契約枝番/資産番号" binding="astNum" [width]="130"></ea-flex-grid-column>
+                  </ea-flex-grid>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- 移動対象情報:情報機器等 ここまで -->
+
+          <!-- 移動対象:ライセンス ここから -->
+          <div class="block-frame-border" id="licGB" *ngIf="apChange && apChange.apChangeLineLic.length > 0">
+            <h2 class="frame-title">ライセンス</h2>
+            <div class="block-container pt-2 pl-3">
+              <div class="grid-common-wrap">
+                <div class="grid-common-count">
+                  【{{  gridLineLicList && gridLineLicList.rows ? (gridLineLicList.rows.length | number) : 0 }} 件】
+                </div>
+                <div class="wp-grid-data-list" id="wp-grid-data-list">
+                  <ea-flex-grid #gridLineLicList class="grid-common-list grid-list" [itemsSource]="apChangeLineLic"
+                    (dblclick)="showDetail(gridLineLicList)" [allowSorting]="false">
+                    <ea-flex-grid-column header="" binding="" [width]="30">
+                      <ng-template wjFlexGridCellTemplate [cellType]="'Cell'" let-cell="cell">
+                        <a class="btn-del" *ngIf="((apChange.apChangeType == '1' || apChange.apChangeType == '2') && currentMenuId != '07098' && (!(apChangeForm.get('apStatus').value == '3' 
+                        || (apChangeForm.get('apStatus').value == '2' && (accessLevel === 'C' || accessLevel === 'B')) || apChangeForm.get('apStatus').value == '5')? (holSectionGB && holStaffGB && holOfficeGB &&
+                        useStaffGB && intHolStaffGB && holRepOfficeGB && costGB && costSecGB): false))"></a>
+                      </ng-template>
+                    </ea-flex-grid-column>
+                    <ea-flex-grid-column header="管理番号" binding="licenseId" [width]="80"></ea-flex-grid-column>
+                    <ea-flex-grid-column header="メーカー" binding="softwareMakerName" [width]="150"></ea-flex-grid-column>
+                    <ea-flex-grid-column header="ソフトウェア" binding="softwareName" [width]="210"></ea-flex-grid-column>
+                    <ea-flex-grid-column header="保有部署" binding="holSectionName" [width]="140"></ea-flex-grid-column>
+                    <ea-flex-grid-column header="資産管理担当者" binding="holStaffName" [width]="110"></ea-flex-grid-column>
+                    <ea-flex-grid-column header="資産区分" binding="licAssetTypeName" [width]="80"></ea-flex-grid-column>
+                    <ea-flex-grid-column header="契約枝番/資産番号" binding="astNum" [width]="130"></ea-flex-grid-column>
+                  </ea-flex-grid>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- 移動対象:ライセンス ここまで -->
+        </div>
+      </div>
+      <!-- 移動対象情報  ここまで -->
+
+      <!-- 変更項目情報  ここから -->
+      <div class="block-frame"
+        [hidden]="apChange && !(currentMenuId != '07098' && (apChange.apChangeLineAst.length > 0 || apChange.apChangeLineLic.length > 0
+        || apChange.apChangeLineContractLease.length > 0 || apChange.apChangeLineContractRental.length > 0 || apChange.apChangeLineFldTan.length > 0 || apChange.apChangeLineFldInt.length > 0))">
+        <h2 class="frame-title bg-blue">変　更　項　目</h2>
+        <div class="frame-body">
+          <!-- 変更項目情報:保有部署 ここから -->
+          <div class="block-frame-border" id="holSectionGB" [hidden]="!holSectionGB">
+            <!-- [hidden]="apChange && !((apChange.apChangeLineAst.length > 0 || apChange.apChangeLineLic.length > 0
+            || apChange.apChangeLineContractLease.length > 0 || apChange.apChangeLineContractRental.length > 0 || apChange.apChangeLineFldTan.length > 0 || apChange.apChangeLineFldInt.length > 0) 
+            && (apChange.apChangeLineAst.length > 0 || apChange.apChangeLineLic.length > 0 || apChange.apChangeLineFldInt.length > 0)
+           && (apChange.apChangeType == '1' || apChange.apChangeType == '2' || apChange.apChangeType == '3' || sectionBox.get('holSectionCode').value != ''))" -->
+            <h2 class="frame-title">保有部署</h2>
+            <div>
+              <label class="warm" id="holSectionMsg"
+                [hidden]="apChange && !(holSectionMsg)">※　移動対象に保有部署が異なるものが混在するため変更できません。</label>
+              <!-- [hidden]="apChange && !((apChange.apChangeType == '1' || apChange.apChangeType == '2' || apChange.apChangeType == '3') && (apChange.apChangeLineAst.length > 0 ||
+              apChange.apChangeLineLic.length >0 || apChange.apChangeLineFldInt.length > 0 ? getHolSectionMixFlag() : false))" -->
+              <label class="warm" id="assetTypeMsgHolSec"
+                [hidden]="apChange && !(assetTypeMsgHolSec)">※　移動対象にリース・レンタル、有形固定資産、無形固定資産が混在するため変更できません。</label>
+              <!-- [hidden]="apChange && !((apChange.apChangeLineFldTan.length > 0 || apChange.apChangeLineFldInt.length > 0 || apChange.apChangeLineContractLease.length > 0
+              || apChange.apChangeLineContractRental.length > 0 ? getAstTypeMixFlag() : false))" -->
+              <div class="e-link">
+                <a class="link m-10"
+                  [hidden]="(isSectionBox || holSectionMsg || assetTypeMsgHolSec || sectionBox.get('holSectionName').value == '' || apChangeForm.get('apStatus').value == 3 || apChangeForm.get('apStatus').value == 5)"
+                  (click)="linkBtnClickEvent('sectionBox')">変更する</a>
+              </div>
+            </div>
+            <form [formGroup]="sectionBox" [hidden]="!isSectionBox || holSectionMsg || assetTypeMsgHolSec">
+              <div class="row col">
+                <div class="row col-11">
+                  <div class="form-group wm-150">
+                    <label>会社:</label>
+                    <ea-input-mask [attr.disabled]="true" class="input-display wm-combo wm-80 bg-gray"
+                      id="holCompanyName" name="holCompanyName" formControlName="holCompanyName"></ea-input-mask>
+                  </div>
+                  <div class="form-group wm-290">
+                    <label>部署:</label>
+                    <app-section-selection (select)="selectSectionBox($event)" [sectionForm]="sectionBox"
+                      [sectionCodeControlName]="'holSectionCode'" [sectionNameControlName]="'holSectionName'"
+                      [sectionYearControlName]="'holSectionYear'" [selectOnly]="true" [extClass]="'wm-200 required'"
+                      [visibleStatus]="(apChangeForm.get('apStatus').value == 3 || apChangeForm.get('apStatus').value == 5) ? false : true">
+                    </app-section-selection>
+                  </div>
+                  <div class="form-group wm-150">
+                    <label>部署年度:</label>
+                    <wj-input-number [attr.disabled]="true" class="input-display wm-combo wm-80 bg-gray"
+                      id="holSectionYear" name="holSectionYear" formControlName="holSectionYear" format="d">
+                    </wj-input-number>
+                  </div>
+                  <div class="form-group"
+                    [hidden]="apChange && !(apChange.apChangeType === '1' || apChange.apChangeType === '2')">
+                    <div class="form-checkbox">
+                      <div class="form-check form-check-inline">
+                        <input class="form-check-input wm-checkbox" type="checkbox" id="holSectionWithFlag"
+                          formControlName="holSectionWithFlag" />
+                        <label class="form-check-label" for="holSectionWithFlag">使用部署も入力部署で更新する。</label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-1">
+                  <div class="e-link"
+                    [hidden]="(apChangeForm.get('apStatus').value == 3 || apChangeForm.get('apStatus').value == 5) ? true : false">
+                    <a class="link m-10" (click)="linkBtnClickEvent('sectionBox')">変更取消</a>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+          <!-- 変更項目情報:保有部署 ここまで -->
+
+          <!-- 変更項目情報:資産管理担当者 ここから -->
+          <div class="block-frame-border" id="holStaffGB" [hidden]="!holStaffGB">
+            <!-- [hidden]="apChange && !((apChange.apChangeType == '1' || apChange.apChangeType == '2') && !holSectionMsg && !assetTypeMsgHolSec)" -->
+            <h2 class="frame-title">資産管理担当者</h2>
+            <div class="row col">
+              <div class="e-link">
+                <a class="link m-10"
+                  [hidden]="!(!isStaffBox && !holSectionMsg && !assetTypeMsgHolSec && apChangeForm.get('apStatus').value != 3 && apChangeForm.get('apStatus').value != 5)"
+                  (click)="linkBtnClickEvent('staffBox')">変更する</a>
+              </div>
+            </div>
+            <form [formGroup]="staffBox">
+              <div class="row col" [hidden]="!isStaffBox || holSectionMsg || assetTypeMsgHolSec">
+                <!-- *ngIf="isStaffBox && (staffBox.get('holStaffCode').value !='')" -->
+                <div class="row col-11">
+                  <div class="form-group">
+                    <label>資産管理担当者:</label>
+                    <app-hol-staff-selection (select)="selectStaffBox($event)" [holStaffForm]="staffBox"
+                      [staffCodeControlName]="'holStaffCode'" [staffNameControlName]="'holStaffName'"
+                      [selectOnly]="true" [sqlName]="'selectHolStaff_LOV'" [holStaffClass]="'required'"
+                      [paramMap]="{ sectionCode: sectionBox.get('holSectionCode').value, companyCode: sectionBox.get('holCompanyCode').value}"
+                      [isShowStatus]="(apChangeForm.get('apStatus').value == 3 || apChangeForm.get('apStatus').value == 5) ? false : true">
+                    </app-hol-staff-selection>
+                  </div>
+                </div>
+                <div class="col-1">
+                  <div class="e-link">
+                    <a class="link m-10"
+                      [hidden]="(apChangeForm.get('apStatus').value == 3 || apChangeForm.get('apStatus').value == 5) ? true : false"
+                      (click)="linkBtnClickEvent('staffBox')">変更取消</a>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+          <!-- 変更項目情報:資産管理担当者 ここまで -->
+
+          <!-- 変更項目情報:設置(使用)場所 ここから -->
+          <div class="block-frame-border" id="holOfficeGB" [hidden]="!holOfficeGB">
+            <!-- [hidden]="apChange && !(apChange.apChangeType == '1') " -->
+            <h2 class="frame-title">個別設置(使用)場所</h2>
+            <div class="row col">
+              <div class="e-link"
+                [hidden]="!(!isOfficeBox && apChangeForm.get('apStatus').value != 3 && apChangeForm.get('apStatus').value != 5)">
+                <a class="link m-10" (click)="linkBtnClickEvent('officeBox')">変更する</a>
+              </div>
+            </div>
+            <form [formGroup]="officeBox">
+              <div class="row col" [hidden]="!(isOfficeBox && officeBox.get('holOfficeCode').value != '' )">
+                <div class="row col-11">
+                  <div class="form-group wm-370">
+                    <label>個別設置(使用)場所:</label>
+                    <app-code-name-selection [formExportSearch]="officeBox" [statusCodeControlName]="'holOfficeCode'"
+                      [statusNameControlName]="'holOfficeName'" [isShowButtonClear]="false" [modalTitle]="'設置場所選択'"
+                      [modalLabelTitle]="'設置場所名(あいまい)：'" [headerGrid]="'設置場所'" [extClass]="'wm-200 required'"
+                      [sqlName]="'selectCodeName_LOV'" [paramMap]="{categoryCode: 'OFFICE', whereClause : 'VALUE5 = 0'}"
+                      [visibleStatus]="(apChangeForm.get('apStatus').value == 3 || apChangeForm.get('apStatus').value == 5) ? false : true">
+                    </app-code-name-selection>
+                  </div>
+                  <div class="form-group wm-100">
+                    <wj-input-number class="input-display wm-combo wm-50 mr-20" id="holOfficeFloor"
+                      name="holOfficeFloor" formControlName="holOfficeFloor"></wj-input-number>
+                    <label>F</label>
+                  </div>
+                  <div class="form-group wm-175">
+                    <label>部屋番号:</label>
+                    <div class="wm-buttons">
+                      <ea-input-mask class="input-display wm-combo wm-100" id="holOfficeRoomNum" name="holOfficeRoomNum"
+                        formControlName="holOfficeRoomNum">
+                      </ea-input-mask>
+                    </div>
+                  </div>
+                  <div class="form-group wm-175">
+                    <label>ラック番号:</label>
+                    <div class="wm-buttons">
+                      <ea-input-mask class="input-display wm-combo wm-100" id="holOfficeRackNum" name="holOfficeRackNum"
+                        formControlName="holOfficeRackNum">
+                      </ea-input-mask>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-1">
+                  <div class="e-link">
+                    <a class="link m-10"
+                      [hidden]="(apChangeForm.get('apStatus').value == 3 || apChangeForm.get('apStatus').value == 5) ? true : false"
+                      (click)="linkBtnClickEvent('officeBox')">変更取消</a>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+          <!-- 変更項目情報:設置(使用)場所 ここまで -->
+
+          <!-- 変更項目情報:使用者 ここから -->
+          <div class="block-frame-border" id="useStaffGB" [hidden]="!useStaffGB">
+            <!-- [hidden]="apChange && !(apChange.apChangeType == '1')" -->
+            <h2 class="frame-title">使用者</h2>
+            <div class="row col">
+              <div class="e-link"
+                [hidden]="!(!isUseStaffBox && apChangeForm.get('apStatus').value != 3 && apChangeForm.get('apStatus').value != 5)">
+                <a class="link m-10" (click)="linkBtnClickEvent('useStaffBox')">変更する</a>
+              </div>
+            </div>
+            <form [formGroup]="useStaffBox">
+              <div class="row col" [hidden]="!(isUseStaffBox && useStaffBox.get('useStaffCode').value != '')">
+                <div class="row col-11">
+                  <div class="form-group wm-200">
+                    <div class="col">
+                      <app-staff-selection (select)="selectUseStaffBox($event)" [staffForm]="useStaffBox"
+                        [staffCodeControlName]="'useStaffCode'" [staffNameControlName]="'useStaffName'"
+                        [onlyStaffCode]="true"
+                        [visibleStatus]="(apChangeForm.get('apStatus').value == 3 || apChangeForm.get('apStatus').value == 5) ? false : true"
+                        [usableDataOnly]="true" [required]="true" [title]="'社員番号:'" [companyOnly]="true">
+                      </app-staff-selection>
+                    </div>
+                  </div>
+                  <div class="form-group wm-200">
+                    <label>氏名:</label>
+                    <ea-input-mask [attr.disabled]="true" class="input-display wm-combo wm-150 bg-gray"
+                      id="useStaffName" name="useStaffName" formControlName="useStaffName" [isReadOnly]="true">
+                    </ea-input-mask>
+                  </div>
+                  <div class="form-group wm-200">
+                    <label>所属会社:</label>
+                    <div class="wm-buttons">
+                      <ea-input-mask [attr.disabled]="true" class="input-display wm-combo wm-80 bg-gray"
+                        id="useStaffCompanyName" name="useStaffCompanyName" formControlName="useStaffCompanyName"
+                        [isReadOnly]="true">
+                      </ea-input-mask>
+                    </div>
+                  </div>
+                  <div class="form-group ">
+                    <label>所属部署:</label>
+                    <div class="wm-buttons">
+                      <ea-input-mask [attr.disabled]="true" class="input-display wm-combo wm-200 bg-gray"
+                        id="useStaffSectionName" name="useStaffSectionName" formControlName="useStaffSectionName"
+                        [isReadOnly]="true">
+                      </ea-input-mask>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-1">
+                  <div class="e-link">
+                    <a class="link m-10"
+                      [hidden]="(apChangeForm.get('apStatus').value == 3 || apChangeForm.get('apStatus').value == 5) ? true : false"
+                      (click)="linkBtnClickEvent('useStaffBox')">変更取消</a>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+          <!-- 変更項目情報:使用者 ここまで -->
+
+          <!-- 変更項目情報:無形管理担当者 ここから -->
+          <div class="block-frame-border" id="intHolStaffGB" [hidden]="!intHolStaffGB">
+            <!-- [hidden]="apChange && !(apChange.apChangeType == '3') " -->
+            <h2 class="frame-title">無形管理担当者</h2>
+            <div class="row col">
+              <div class="e-link"
+                [hidden]="!(!isIntHolStaffBox && apChangeForm.get('apStatus').value != 3 && apChangeForm.get('apStatus').value != 5)">
+                <a class="link m-10" (click)="linkBtnClickEvent('intHolStaffBox')">変更する</a>
+              </div>
+            </div>
+            <form [formGroup]="intHolStaffBox">
+              <div class="row col" [hidden]="!(isIntHolStaffBox && intHolStaffBox.get('intHolStaffCode').value != '')">
+                <div class="row col-11">
+                  <div class="form-group wm-200">
+                    <div class="col">
+                      <app-staff-selection (select)="selectUseStaffBox($event)" [staffForm]="intHolStaffBox"
+                        [staffCodeControlName]="'intHolStaffCode'" [staffNameControlName]="'intHolStaffName'"
+                        [onlyStaffCode]="true"
+                        [visibleStatus]="(apChangeForm.get('apStatus').value == 3 || apChangeForm.get('apStatus').value == 5) ? false : true"
+                        [usableDataOnly]="true" [required]="true" [title]="'社員番号:'" [companyOnly]="true">
+                      </app-staff-selection>
+                    </div>
+                  </div>
+                  <div class="form-group wm-200">
+                    <label>氏名:</label>
+                    <ea-input-mask [attr.disabled]="true" class="input-display wm-combo wm-150 bg-gray"
+                      id="intHolStaffName" name="intHolStaffName" formControlName="intHolStaffName" [isReadOnly]="true">
+                    </ea-input-mask>
+                  </div>
+                  <div class="form-group wm-200">
+                    <label>所属会社:</label>
+                    <div class="wm-buttons">
+                      <ea-input-mask [attr.disabled]="true" class="input-display wm-combo wm-80 bg-gray"
+                        id="intHolStaffCompanyName" name="intHolStaffCompanyName"
+                        formControlName="intHolStaffCompanyName" [isReadOnly]="true">
+                      </ea-input-mask>
+                    </div>
+                  </div>
+                  <div class="form-group ">
+                    <label>所属部署:</label>
+                    <div class="wm-buttons">
+                      <ea-input-mask [attr.disabled]="true" class="input-display wm-combo wm-200 bg-gray"
+                        id="intHolStaffSectionName" name="intHolStaffSectionName"
+                        formControlName="intHolStaffSectionName" [isReadOnly]="true">
+                      </ea-input-mask>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-1">
+                  <div class="e-link">
+                    <a class="link m-10"
+                      [hidden]="(apChangeForm.get('apStatus').value == 3 || apChangeForm.get('apStatus').value == 5) ? true : false"
+                      (click)="linkBtnClickEvent('intHolStaffBox')">変更取消</a>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+          <!-- 変更項目情報:無形管理担当者 ここまで -->
+
+          <!-- 変更項目情報:代表設置場所 ここから -->
+          <div class="block-frame-border" id="holRepOfficeGB" [hidden]="!holRepOfficeGB">
+            <!-- [hidden]="apChange && !((apChange.apChangeType == 'A' || apChange.apChangeType == 'B' || apChange.apChangeType == 'C') && (apChange.apChangeLineContractLease.length > 0 ||
+            apChange.apChangeLineFldTan.length >0 || apChange.apChangeLineFldInt.length > 0)) " -->
+            <h2 class="frame-title">代表設置場所</h2>
+            <div>
+              <label class="warm" id="assetTypeMsgHolRepOffice"
+                [hidden]="!assetTypeMsgHolRepOffice">※　移動対象にリース・レンタル、有形固定資産、無形固定資産が混在するため変更できません。</label>
+              <!-- [hidden]="apChange && !((apChange.apChangeLineFldTan.length > 0 || apChange.apChangeLineFldInt.length > 0 || apChange.apChangeLineContractLease.length >0 || 
+                    apChange.apChangeLineContractRental.length > 0 ? getAstTypeMixFlag() : false ))" -->
+              <div class="e-link"
+                [hidden]="!(!isRepOfficeBox && !assetTypeMsgHolRepOffice && apChangeForm.get('apStatus').value != 3 && apChangeForm.get('apStatus').value != 5)">
+                <a class="link m-10" (click)="linkBtnClickEvent('repOfficeBox')">変更する</a>
+              </div>
+            </div>
+            <form [formGroup]="repOfficeBox">
+              <div class="row col"
+                [hidden]="!(isRepOfficeBox && repOfficeBox.get('holRepOfficeCode').value != '' &&  !assetTypeMsgHolRepOffice)">
+                <div class="row col-11">
+                  <div class="form-group">
+                    <label>代表設置場所:</label>
+                    <div class="wm-buttons">
+                      <ea-input-mask class="input-display wm-combo is-rounded required wm-200" id="holRepOfficeName"
+                        name="holRepOfficeName" formControlName="holRepOfficeName" [isReadOnly]="true">
+                      </ea-input-mask>
+                      <button type="button" class="wm-btn wm-smbtn-status-popup">
+                        <span class="ico"><img src="assets/images/button/popup.png"></span>
+                      </button>
+                    </div>
+                  </div><br>
+                  <div class="form-group" [hidden]="apChange && !(apChange.apChangeLineAst.length > 0)">
+                    <label>※ 情報機器等の個々の設置(使用)場所は変更されません。</label>
+                  </div>
+                </div>
+                <div class="col-1">
+                  <div class="e-link">
+                    <a class="link m-10"
+                      [hidden]="(apChangeForm.get('apStatus').value == 3 || apChangeForm.get('apStatus').value == 5) ? true : false"
+                      (click)="linkBtnClickEvent('repOfficeBox')">変更取消</a>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+          <!-- 変更項目情報:代表設置場所 ここまで -->
+
+          <!-- 変更項目情報:販売管理費/原価区分-減価償却プロジェクトコード ここから -->
+          <div class="block-frame-border" id="costGB" [hidden]="!costGB">
+            <!-- [hidden]="apChange && !((apChange.apChangeLineAst.length > 0 || apChange.apChangeLineLic.length > 0 || apChange.apChangeLineContractLease.length > 0 
+            || apChange.apChangeLineContractRental.length > 0 || apChange.apChangeLineFldTan.length > 0 || apChange.apChangeLineFldInt.length > 0) && (apChange.apChangeLineContractLease.length > 0 || apChange.apChangeLineContractRental.length > 0 ||
+            apChange.apChangeLineFldTan.length > 0 || apChange.apChangeLineFldInt.length > 0 ) && (apChange.apChangeType == 'A' || apChange.apChangeType == 'B' || apChange.apChangeType == 'C') 
+            && (costBox.get('costType').value != null || costBox.get('costType').value != ''))" -->
+            <h2 class="frame-title">販売管理費/原価区分-減価償却プロジェクトコード</h2>
+            <div>
+              <label class="warm" id="costSectionMsgCost"
+                [hidden]="!costSectionMsgCost">※　移動対象に経費負担部署が異なるものが混在するため変更できません。</label>
+              <!-- [hidden]="apChange && !((apChange.apChangeLineContractLease.length > 0 || apChange.apChangeLineContractRental.length > 0 || apChange.apChangeLineFldTan.length > 0 
+                    || apChange.apChangeLineFldInt.length > 0 ? getCostSectionMixFlag() : false))" -->
+              <label class="warm" id="assetTypeMsgCost"
+                [hidden]="!assetTypeMsgCost">※　移動対象にリース・レンタル、有形固定資産、無形固定資産が混在するため変更できません。</label>
+              <!-- "apChange && !((apChange.apChangeLineFldTan.length > 0 || apChange.apChangeLineFldInt.length > 0 || apChange.apChangeLineContractLease.length > 0 
+                    || apChange.apChangeLineContractRental.length > 0 ? getAstTypeMixFlag() : false ))" -->
+              <div class="e-link"
+                [hidden]="!(!isCostBox && !assetTypeMsgCost && !costSectionMsgCost && apChangeForm.get('apStatus').value != 3 && apChangeForm.get('apStatus').value != 5)">
+                <a class="link m-10" (click)="linkBtnClickEvent('costBox')">変更する</a>
+              </div>
+            </div>
+            <form [formGroup]="costBox">
+              <div class="row col"
+                [hidden]="!(isCostBox && costBox.get('costType').value != null && costBox.get('costType').value != '' && !assetTypeMsgCost && !costSectionMsgCost)">
+                <div class="row col-11">
+                  <div class="form-group">
+                    <div class="form-check form-check-inline">
+                      <input class="form-check-input" type="radio" id="costType1" formControlName="costType"
+                        [value]="'1'">
+                      <label class="form-check-label" for="costType1">販売管理費</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                      <input class="form-check-input" type="radio" id="costType2" formControlName="costType"
+                        [value]="'2'">
+                      <label class="form-check-label" for="costType2">原価</label>
+                    </div>
+                  </div>
+                  <div class="form-group" [hidden]="costBox.get('costType').value != '2'">
+                    <label class="wm-combo wm-50 text-left">- </label>
+                    <label class="wm-combo">減価償却プロジェクトコード:</label>
+                    <div class="col">
+                      <app-project-selection [title]="''" [projectForm]="costBox" [paramMap]="{prjCategory:'2'}"
+                        (select)="changeCostDepPrj($event)" [projectCodeControlName]="'costDepPrjCode'"
+                        [projectNameControlName]="'costDepPrjName'" [extClass]="'required'"
+                        [visibleStatus]="(apChangeForm.get('apStatus').value == 3 || apChangeForm.get('apStatus').value == 5) ? false : true"
+                        [projectTypeControlName]="'costDepPrjType'" [sqlName]="'selectProject_LOV'">
+                      </app-project-selection>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-1">
+                  <div class="e-link">
+                    <a class="link m-10"
+                      [hidden]="(apChangeForm.get('apStatus').value == 3 || apChangeForm.get('apStatus').value == 5) ? true : false"
+                      (click)="linkBtnClickEvent('costBox')">変更取消</a>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+          <!-- 変更項目情報:販売管理費/原価区分-減価償却プロジェクトコード ここまで -->
+
+          <!-- 変更項目情報:経費負担部署 ここから -->
+          <div class="block-frame-border" id="costSecGB" [hidden]="!costSecGB">
+            <!-- [hidden]="apChange && !((apChange.apChangeLineAst.length > 0 || apChange.apChangeLineLic.length > 0 || apChange.apChangeLineContractLease.length > 0 
+              || apChange.apChangeLineContractRental.length > 0 || apChange.apChangeLineFldTan.length > 0 || apChange.apChangeLineFldInt.length > 0) && (apChange.apChangeLineContractLease.length > 0 || apChange.apChangeLineContractRental.length > 0 ||
+              apChange.apChangeLineFldTan.length > 0 || apChange.apChangeLineFldInt.length > 0 ) && (apChange.apChangeType == 'A' || apChange.apChangeType == 'B' || apChange.apChangeType == 'C' || costSecBox.get('costCompanyCode').value != ''))" -->
+            <h2 class="frame-title">経費負担部署</h2>
+            <div>
+              <label class="warm" id="costSectionMsgCostSec"
+                [hidden]="!costSectionMsgCostSec">※　移動対象に経費負担部署が異なるものが混在するため変更できません。</label>
+              <!-- [hidden]="apChange && !((apChange.apChangeLineContractLease.length > 0 || apChange.apChangeLineContractRental.length > 0 || apChange.apChangeLineFldTan.length > 0 
+                || apChange.apChangeLineFldInt.length > 0 ? getCostSectionMixFlag() : false ))" -->
+              <label class="warm" id="assetTypeMsgCostSec"
+                [hidden]="!assetTypeMsgCostSec">※　移動対象にリース・レンタル、有形固定資産、無形固定資産が混在するため変更できません。</label>
+              <!--  [hidden]="apChange && !((apChange.apChangeLineFldTan.length > 0 || apChange.apChangeLineFldInt.length > 0 || apChange.apChangeLineContractLease.length > 0 
+                      || apChange.apChangeLineContractRental.length > 0 ? getAstTypeMixFlag() : false ))" -->
+              <div class="e-link"
+                [hidden]="!(!isCostSecBox && !costSectionMsgCostSec && !assetTypeMsgCostSec && apChangeForm.get('apStatus').value != 3 && apChangeForm.get('apStatus').value != 5)">
+                <a class="link m-10" (click)="linkBtnClickEvent('costSecBox')">変更する</a>
+              </div>
+            </div>
+            <form [formGroup]="costSecBox">
+              <div class="row col"
+                [hidden]="!(isCostSecBox && costSecBox.get('costCompanyCode').value != '' && !costSectionMsgCostSec && !assetTypeMsgCostSec)">
+                <div class="row col-11">
+                  <div class="form-group col-10">
+                    <label>経費負担部課:</label>
+                    <div class="section-create-list col-8">
+                    <app-line-cost-sec-list (change)="changeLineCostSec($event)" 
+                    [visibleStatus]="(apChangeForm.get('apStatus').value == 3 || apChangeForm.get('apStatus').value == 5) ? false : true"></app-line-cost-sec-list>
+                    <label class="color-red">※　移動対象に経費負担部署が異なるものが混在するため変更できません。</label>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                      <label>資産計上部課:</label>
+                      <div class="col p-0">
+                          <app-cost-section-selection [title]="''" [sectionForm]="costSecBox"
+                          [modalTitle]="'経費負担部署選択'" [isFocus]="true" [staffCode]="this.sessionInfo.loginCompanyCode"
+                          [disabled]="apChange && apChange.apChangeLineCostSecOld.length <=1 ? true: null"
+                          [extClass]="apChange && apChange.apChangeLineCostSecOld.length <=1 ? 'bg-gray': 'required'"
+                          [costSectionCodeControlName]="'costSectionCode'" [visibleStatus]="(apChangeForm.get('apStatus').value == 3 || apChangeForm.get('apStatus').value == 5) ? false : true"
+                          [costSectionNameControlName]="'costSectionName'"></app-cost-section-selection>
+                      </div>
+                  </div>                  
+                </div>
+                <div class="col-1">
+                  <div class="e-link">
+                    <a class="link m-10"
+                      *ngIf="(apChangeForm.get('apStatus').value == 3 || apChangeForm.get('apStatus').value == 5) ? false : true"
+                      (click)="linkBtnClickEvent('costSecBox')">変更取消</a>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+          <!-- 変更項目情報:経費負担部署 ここまで -->
+        </div>
+      </div>
+      <!-- 変更項目情報 ここまで -->
+
+      <!-- 担当部承認者情報  ここまで -->
+      <form [formGroup]="staffInfo">
+        <div class="block-frame min-h" [hidden]="apChange && !((staffInfo.get('apprHolStaffCodeOld').value != '' || staffInfo.get('apprCostStaffCodeOld').value != '' || staffInfo.get('apprSuperiorStaffCodeOld').value != ''
+        || staffInfo.get('apprHolStaffCodeNew').value != '' || staffInfo.get('apprCostStaffCodeNew').value != '' || staffInfo.get('apprSuperiorStaffCodeNew').value != '') || 
+        (holSectionGB || costGB || costSecGB || ((apChange.apChangeTypeThinClFlag == '1' || apChange.apChangeTypeTakePcFlag == '1') && (holOfficeGB || holStaffGB) && 
+        (accessLevel == 'C' && apChange.apChangeType != '3' && apChange.apChangeType != 'C'))) && !assetSearchChange && !licSearchChange
+        && !fldIntEaSearchChange && !lldSearchChange && !fldTanSearchChange && !fldIntSearchChange)">
+          <h2 class="frame-title bg-yellow">担当部承認者</h2>
+          <!-- 担当部承認者情報:現担当者(移動元)  ここから -->
+          <div class="frame-body col-5,5">
+            <div class="block-frame-border mr-20">
+              <h2 class="frame-title">現担当者(移動元)</h2>
+              <div class="form-group"
+                [hidden]="apChange && !(staffInfo.get('apprHolStaffCodeOld').value != '' || (accessLevel == 'C' && apChange.apChangeType != '3' && apChange.apChangeType != 'C'))">
+                <label class="w-130">資産管理担当者:</label>
+                <app-hol-staff-selection (select)="selectStaffBox($event)" [holStaffForm]="staffInfo"
+                  [staffCodeControlName]="'apprHolStaffCodeOld'" [staffNameControlName]="'apprHolStaffNameOld'"
+                  [selectOnly]="true" [sqlName]="'selectHolStaff_LOV'"
+                  [paramMap]="{ sectionCode: sectionBox.get('holSectionCode').value, companyCode: sectionBox.get('holCompanyCode').value}"
+                  [isShowStatus]="(apChangeForm.get('apStatus').value == 3 || apChangeForm.get('apStatus').value == 5) ? false : true">
+                </app-hol-staff-selection>
+              </div>
+              <div class="form-group"
+                [hidden]="!((staffInfo.get('apprCostStaffCodeOld').value != '' || (costGB || costSecGB)) && !assetSearchChange &&
+              !licSearchChange && !fldIntEaSearchChange && !lldSearchChange && !fldTanSearchChange && !fldIntSearchChange)"
+                [ngClass]="staffInfo.get('apprHolStaffCodeOld').value != '' || (accessLevel == 'C' && apChange.apChangeType != '3' && apChange.apChangeType != 'C') ? '': 'mt-30'">
+                <label class="w-130">経費負担部課長/GL:</label>
+                <div [ngClass]="(apChangeForm.get('apStatus').value == 3 || apChangeForm.get('apStatus').value == 5) ? 'w-250' : 'w-300'">
+                  <app-staff-selection [hidden]="staffInfo.get('apprCostStaffSkipFlagOld').value == true"
+                    (select)="selectUseStaffBox($event)" [staffForm]="staffInfo"
+                    [staffCodeControlName]="'apprCostStaffCodeOld'" [staffNameControlName]="'apprCostStaffNameOld'"
+                    [visibleStatus]="(apChangeForm.get('apStatus').value == 3 || apChangeForm.get('apStatus').value == 5) ? false : true"
+                    [usableDataOnly]="true" [required]="true" [title]="'社員番号:'" [companyOnly]="true">
+                  </app-staff-selection>
+                </div>
+                <div [hidden]="(currentMenuId == '07098' && staffInfo.get('apprCostStaffSkipFlagOld').value == false) ">
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input wm-checkbox" type="checkbox" id="apprCostStaffSkipFlagOld"
+                      formControlName="apprCostStaffSkipFlagOld" />
+                    <label class="form-check-label" for="apprCostStaffSkipFlagOld">承認不要</label>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group"
+                [hidden]="!((staffInfo.get('apprSuperiorStaffCodeOld').value != '' || (holSectionGB || costGB || costSecGB)) && !assetSearchChange &&
+              !licSearchChange && !fldIntEaSearchChange && !lldSearchChange && !fldTanSearchChange && !fldIntSearchChange)">
+                <label class="w-130">部長:</label>
+                <app-staff-selection (select)="selectUseStaffBox($event)" [staffForm]="staffInfo"
+                  [staffCodeControlName]="'apprSuperiorStaffCodeOld'"
+                  [staffNameControlName]="'apprSuperiorStaffNameOld'"
+                  [visibleStatus]="(apChangeForm.get('apStatus').value == 3 || apChangeForm.get('apStatus').value == 5) ? false : true"
+                  [usableDataOnly]="true" [required]="true" [title]="'社員番号:'" [companyOnly]="true">
+                </app-staff-selection>
+              </div>
+            </div>
+          </div>
+          <!-- 担当部承認者情報:現担当者(移動元)  ここまで -->
+
+          <!-- 担当部承認者情報:新担当者(移動先)  ここから -->
+          <div class="frame-body col-5,5"
+            [hidden]="!(((staffInfo.get('apprHolStaffCodeNew').value != '' || staffInfo.get('apprCostStaffCodeNew').value != '' || staffInfo.get('apprSuperiorStaffCodeNew').value != '') ||
+          (holSectionGB || costSecGB)) && !assetSearchChange && !licSearchChange && !fldIntEaSearchChange && !lldSearchChange && !fldTanSearchChange && !fldIntSearchChange)">
+            <div class="block-frame-border">
+              <h2 class="frame-title">現担当者(移動元)</h2>
+              <div class="form-group"
+                [hidden]="apChange && !(staffInfo.get('apprHolStaffCodeNew').value != ''|| (holSectionGB && apChange.apChangeType != '3' && apChange.apChangeType != 'C'))">
+                <label class="w-130">資産管理担当者:</label>
+                <app-hol-staff-selection (select)="selectStaffBox($event)" [holStaffForm]="staffInfo"
+                  [staffCodeControlName]="'apprHolStaffCodeNew'" [staffNameControlName]="'apprHolStaffNameNew'"
+                  [selectOnly]="true" [sqlName]="'selectHolStaff_LOV'" [holStaffClass]="'required'"
+                  [paramMap]="{ sectionCode: sectionBox.get('holSectionCode').value, companyCode: sectionBox.get('holCompanyCode').value}"
+                  [isShowStatus]="(apChangeForm.get('apStatus').value == 3 || apChangeForm.get('apStatus').value == 5) ? false : true">
+                </app-hol-staff-selection>
+              </div>
+              <div class="form-group"
+                [hidden]="!((staffInfo.get('apprCostStaffCodeNew').value != '' || costSecGB) && !assetSearchChange &&
+              !licSearchChange && !fldIntEaSearchChange && !lldSearchChange && !fldTanSearchChange && !fldIntSearchChange )"
+                [ngClass]="staffInfo.get('apprHolStaffCodeNew').value != ''|| (holSectionGB && apChange && apChange.apChangeType != '3' && apChange.apChangeType != 'C') ? '': 'mt-30'">
+                <label class="w-130">経費負担部課長/GL:</label>
+                <div  [ngClass]="(apChangeForm.get('apStatus').value == 3 || apChangeForm.get('apStatus').value == 5) ? 'w-250' : 'w-300'">
+                  <app-staff-selection [hidden]="staffInfo.get('apprCostStaffSkipFlagNew').value == true"
+                    (select)="selectUseStaffBox($event)" [staffForm]="staffInfo"
+                    [staffCodeControlName]="'apprCostStaffCodeNew'" [staffNameControlName]="'apprCostStaffNameNew'"
+                    [visibleStatus]="(apChangeForm.get('apStatus').value == 3 || apChangeForm.get('apStatus').value == 5) ? false : true"
+                    [usableDataOnly]="true" [required]="true" [title]="'社員番号:'" [companyOnly]="true">
+                  </app-staff-selection>
+                </div>
+                <div [hidden]="(currentMenuId == '07098' && staffInfo.get('apprCostStaffSkipFlagNew').value == false)">
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input wm-checkbox" type="checkbox" id="apprCostStaffSkipFlagNew"
+                      formControlName="apprCostStaffSkipFlagNew" />
+                    <label class="form-check-label" for="apprCostStaffSkipFlagNew">承認不要</label>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="w-130">部長:</label>
+                <app-staff-selection (select)="selectUseStaffBox($event)" [staffForm]="staffInfo"
+                  [staffCodeControlName]="'apprSuperiorStaffCodeNew'"
+                  [staffNameControlName]="'apprSuperiorStaffNameNew'"
+                  [visibleStatus]="(apChangeForm.get('apStatus').value == 3 || apChangeForm.get('apStatus').value == 5) ? false : true"
+                  [usableDataOnly]="true" [required]="true" [title]="'社員番号:'" [companyOnly]="true">
+                </app-staff-selection>
+              </div>
+            </div>
+          </div>
+          <!-- 担当部承認者情報:新担当者(移動先)  ここまで -->
+        </div>
+      </form>
+      <!-- 担当部承認者情報  ここまで -->
+    </div>
+  </div>
+</div>
+
+<!-- end entry-body -->
+
+<div class="entry-footer" *ngIf="currentMenuId != '07098'">
+  <button type="button" class="wm-btn wm-sm" (click)="btnClickEvent('save')"
+    *ngIf=" accessLevel == 'S' || (apChangeForm.get('apStatus').value == 1 && (accessLevel == 'C' || accessLevel == 'B')) || (apChangeForm.get('apStatus').value != 3 && accessLevel == 'A' )">
+    <span class="ico"><img src="assets/images/button/save.png"></span>
+    <span>保存</span>
+  </button>
+  <button type="button" class="wm-btn wm-sm" (click)="btnClickEvent('apply')"
+    *ngIf="apChangeForm.get('apStatus').value == 1 || (apChangeForm.get('apStatus').value == 4)">
+    <span class="ico"><img src="assets/images/button/save.png"></span>
+    <span>申請</span>
+  </button>
+  <button type="button" class="wm-btn wm-sm" (click)="btnClickEvent('del')"
+    *ngIf="apChangeForm.get('applicationId').value != '' && (apChangeForm.get('apStatus').value == 1 || apChangeForm.get('apStatus').value == 4)">
+    <span class="ico"><img src="assets/images/button/save.png"></span>
+    <span>削除</span>
+  </button>
+  <button type="button" (click)="btnClickEvent('approve')" class="wm-btn wm-sm"
+    *ngIf="apChangeForm.get('apStatus').value == 2 && (accessLevel == 'S' || (accessLevel == 'A' && apChange.eappId == null))">
+    <span class="ico"><img src="assets/images/button/save.png"></span>
+    <span>承認</span>
+  </button>
+  <button type="button" (click)="btnClickEvent('reject')" class="wm-btn wm-sm"
+    *ngIf="apChangeForm.get('apStatus').value == 2 && (accessLevel == 'S' || (accessLevel == 'A' && apChange.eappId == null))">
+    <span class="ico"><img src="assets/images/button/save.png"></span>
+    <span>却下</span>
+  </button>
+  <button type="button" (click)="btnClickEvent('sendBack')" class="wm-btn wm-sm"
+    *ngIf="apChangeForm.get('apStatus').value == 2 && (accessLevel == 'S' || (accessLevel == 'A' && apChange.eappId == null))">
+    <span class="ico"><img src="assets/images/button/save.png"></span>
+    <span>差戻し</span>
+  </button>
+  <!-- <button type="button" class="wm-btn wm-sm" *ngIf="apChangeForm.get('applicationId').value != ''" (click)="print()">
+    <span class="ico"><img src="assets/images/button/save.png"></span>
+    <span>印刷</span>
+  </button> -->
+  <button type="button" (click)="btnClickEvent('hist')" class="wm-btn wm-sm"
+    *ngIf="apChangeForm.get('applicationId').value != ''">
+    <span class="ico"><img src="assets/images/button/save.png"></span>
+    <span>更新履歴照会</span>
+  </button>
+  <button type="button" (click)="btnClickEvent('back')" class="wm-btn wm-sm"
+    *ngIf="apChangeForm.get('applicationId').value != ''">
+    <span class="ico"><img src="assets/images/button/save.png"></span>
+    <span>戻る</span>
+  </button>
+</div>

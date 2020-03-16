@@ -1,0 +1,23 @@
+button {
+  min-width: 40px;
+  margin: 0px 5px;
+  padding: 3px 15px;
+}
+
+.grid-common-wrap {
+  position: relative;
+  z-index: 0;
+  top: -1rem;
+
+  &.u-top {
+    top: -2rem !important;
+  }
+
+  .grid-common-count {
+    margin: 5px 0;
+  }
+
+  .grid-common-list {
+    height: auto;
+  }
+}

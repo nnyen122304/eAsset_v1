@@ -1,0 +1,2558 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<!--
+ *===================================================================
+ * ファイル名 : LicenseDAO_SqlMap.xml
+ * 概要説明   : ライセンス、ライセンス登録申請用SQL文
+ * バージョン : 1.0
+ *===================================================================
+ * 修正履歴
+ * 日付       Ver. 担当者       修正内容
+ * －－－－－ －－ －－－－－－ －－－－－－－－－－－－－－－－－－
+ * 2010-10-06 1.0  リヨン       新規
+ *===================================================================
+ -->
+<sqlMap namespace="LicenseDAO" >
+
+  <sql id="selectLicenseComColumn_LIC">
+        nlcs.LICENSE_ID licenseId
+      , nlcs.CREATE_DATE createDate
+      , nlcs.CREATE_STAFF_CODE createStaffCode
+      , nlcs.UPDATE_DATE updateDate
+      , nlcs.UPDATE_STAFF_CODE updateStaffCode
+      , nlcs.VERSION version
+
+     <!-- ライセンス -->
+     <isEmpty property="tableNamePrefix">
+       , TO_CHAR(NULL) apGetTanLineLicId
+       , TO_CHAR(NULL) updateComment
+       , TO_CHAR(NULL) eappId
+       , TO_CHAR(NULL) apStatus
+       , TO_CHAR(NULL) apStatusName
+       , TO_DATE(NULL) apDate
+       , TO_CHAR(NULL) apCreateStaffCode
+       , TO_CHAR(NULL) apCreateStaffName
+       , TO_CHAR(NULL) apCreateCompanyCode
+       , TO_CHAR(NULL) apCreateCompanyName
+       , TO_CHAR(NULL) apCreateSectionCode
+       , TO_NUMBER(NULL) apCreateSectionYear
+       , TO_CHAR(NULL) apCreateSectionName
+       , TO_CHAR(NULL) apTel
+       , TO_CHAR(NULL) apOfficeName
+       , nsm.SOFTWARE_MAKER_NAME softwareMakerName
+       , ns.SOFTWARE_NAME softwareName
+       , TO_CHAR(NULL) licenseLicenseId
+       , TO_CHAR(NULL) attDescription
+     </isEmpty>
+     <!-- 登録申請 -->
+     <isNotEmpty property="tableNamePrefix">
+       , nlcs.AP_GET_TAN_LINE_LIC_ID apGetTanLineLicId
+       , nlcs.UPDATE_COMMENT updateComment
+       , nlcs.EAPP_ID eappId
+       , nlcs.AP_STATUS apStatus
+       , NEA_UTIL_PKG.get_cn_value1_f('AP_STATUS_LICENSE', nlcs.AP_STATUS) apStatusName
+       , nlcs.AP_DATE apDate
+       , nlcs.AP_CREATE_STAFF_CODE apCreateStaffCode
+       , NEA_UTIL_PKG.get_staff_name_f(nlcs.AP_CREATE_STAFF_CODE) apCreateStaffName
+       , nlcs.AP_CREATE_COMPANY_CODE apCreateCompanyCode
+       , NEA_UTIL_PKG.get_company_name_f(nlcs.AP_CREATE_COMPANY_CODE) apCreateCompanyName
+       , nlcs.AP_CREATE_SECTION_CODE apCreateSectionCode
+       , nlcs.AP_CREATE_SECTION_YEAR apCreateSectionYear
+       , NEA_UTIL_PKG.get_section_name_f(nlcs.AP_CREATE_COMPANY_CODE, nlcs.AP_CREATE_SECTION_CODE, nlcs.AP_CREATE_SECTION_YEAR) apCreateSectionName
+       , nlcs.AP_TEL apTel
+       , nlcs.AP_OFFICE_NAME apOfficeName
+       , nlcs.SOFTWARE_MAKER_NAME softwareMakerName
+       , nlcs.SOFTWARE_NAME softwareName
+       , (SELECT MAX(nl.LICENSE_ID) FROM NEA_LICENSE nl WHERE nl.REGIST_APPLICATION_ID = nlcs.LICENSE_ID) licenseLicenseId
+       , NEA_UTIL_PKG.replace_enter_f(nlcs.ATT_DESCRIPTION, #enterChar#) attDescription
+     </isNotEmpty>
+
+      , nlcs.AP_STAFF_CODE apStaffCode
+      , NEA_UTIL_PKG.get_staff_name_f(nlcs.AP_STAFF_CODE) apStaffName
+      , nlcs.AP_COMPANY_CODE apCompanyCode
+      , NEA_UTIL_PKG.get_company_name_f(nlcs.AP_COMPANY_CODE) apCompanyName
+      , nlcs.AP_SECTION_CODE apSectionCode
+      , nlcs.AP_SECTION_YEAR apSectionYear
+      , NEA_UTIL_PKG.get_section_name_f(nlcs.AP_COMPANY_CODE, nlcs.AP_SECTION_CODE, nlcs.AP_SECTION_YEAR) apSectionName
+      , nlcs.SOFTWARE_MAKER_ID softwareMakerId
+      , nlcs.SOFTWARE_ID softwareId
+      , nlcs.LIC_SERIAL_CODE licSerialCode
+      , nlcs.LIC_PRODUCT_KEY licProductKey
+      , nlcs.LIC_LICENSE_KEY licLicenseKey
+      , nlcs.LIC_MEDIA_TYPE licMediaType
+      , NEA_UTIL_PKG.get_cn_value1_f('SOFTWARE_MEDIA_TYPE', nlcs.LIC_MEDIA_TYPE) licMediaTypeName
+      , nlcs.LIC_ASSET_TYPE licAssetType
+      , NEA_UTIL_PKG.get_cn_value1_f('LICENSE_ASSET_TYPE', nlcs.LIC_ASSET_TYPE) licAssetTypeName
+      , nlcs.LIC_GET_TYPE licGetType
+      , NEA_UTIL_PKG.get_cn_value1_f('LICENSE_GET_TYPE', nlcs.LIC_GET_TYPE) licGetTypeName
+      , nlcs.LIC_HRD_BANDLE_FLAG licHrdBandleFlag
+      , NEA_UTIL_PKG.get_cn_value1_f('FLAG_YN', nlcs.LIC_HRD_BANDLE_FLAG) licHrdBandleFlagName
+      , nlcs.LIC_SHOP_NAME licShopName
+      , nlcs.LIC_AMOUNT licAmount
+      , nlcs.LIC_LICENSE_TYPE licLicenseType
+      , NEA_UTIL_PKG.get_cn_value1_f('LICENSE_TYPE', nlcs.LIC_LICENSE_TYPE) licLicenseTypeName
+      , NEA_UTIL_PKG.get_cn_value_f('LICENSE_TYPE', nlcs.LIC_LICENSE_TYPE, 2) enableAllocFlag
+      , nlcs.LIC_UPGRADE_FLAG licUpgradeFlag
+      , NEA_UTIL_PKG.get_cn_value1_f('FLAG_YN', nlcs.LIC_UPGRADE_FLAG) licUpgradeFlagName
+      , nlcs.LIC_TERM_FLAG licTermFlag
+      , NEA_UTIL_PKG.get_cn_value1_f('FLAG_YN', nlcs.LIC_TERM_FLAG) licTermFlagName
+      , nlcs.LIC_VOLUME_TYPE licVolumeType
+      , NEA_UTIL_PKG.get_cn_value1_f('LICENSE_VOLUME_TYPE', nlcs.LIC_VOLUME_TYPE) licVolumeTypeName
+      , nlcs.LIC_USE_CONSENT_FLAG licUseConsentFlag
+      , NEA_UTIL_PKG.get_cn_value1_f('FLAG_AN', nlcs.LIC_USE_CONSENT_FLAG) licUseConsentFlagName
+      , nlcs.LIC_DOWNGRADE_CONSENT_FLAG licDowngradeConsentFlag
+      , NEA_UTIL_PKG.get_cn_value1_f('FLAG_AN', nlcs.LIC_DOWNGRADE_CONSENT_FLAG) licDowngradeConsentFlagName
+      , nlcs.LIC_QUANTITY_TYPE licQuantityType
+      , NEA_UTIL_PKG.get_cn_value1_f('LICENSE_QUANTITY_TYPE', nlcs.LIC_QUANTITY_TYPE) licQuantityTypeName
+      , nlcs.LIC_QUANTITY licQuantity
+      , NEA_UTIL_PKG.get_lic_enable_quantity_f(nlcs.LICENSE_ID) licEnableQuantity
+      , NEA_UTIL_PKG.get_lic_use_quantity_f(nlcs.LICENSE_ID) licUseQuantity
+      , NEA_UTIL_PKG.get_lic_upgrade_to_quantity_f(nlcs.LICENSE_ID) licUpgradeToQuantity
+      , nlcs.LIC_USE_FILE_ID licUseFileId
+      , nlcs.LIC_USE_FILE_NAME licUseFileName
+      , nlcs.TRM_CONTRACT_TYPE trmContractType
+      , NEA_UTIL_PKG.get_cn_value1_f('LICENSE_TERM_CONTRACT_TYPE', nlcs.TRM_CONTRACT_TYPE) trmContractTypeName
+      , nlcs.TRM_PARENT_LICENSE_ID trmParentLicenseId
+      , nlcs.TRM_START_DATE trmStartDate
+      , nlcs.TRM_END_DATE trmEndDate
+      , nlcs.TRM_ALERT_DATE trmAlertDate
+      , nlcs.TRM_AUTO_ALLOC_FLAG trmAutoAllocFlag
+      , NEA_UTIL_PKG.get_cn_value1_f('FLAG_YN', nlcs.TRM_AUTO_ALLOC_FLAG) trmAutoAllocFlagName
+      , nlcs.HOL_COMPANY_CODE holCompanyCode
+      , NEA_UTIL_PKG.get_company_name_f(nlcs.HOL_COMPANY_CODE) holCompanyName
+      , nlcs.HOL_SECTION_CODE holSectionCode
+      , nlcs.HOL_SECTION_YEAR holSectionYear
+      , NEA_UTIL_PKG.get_section_name_f(nlcs.HOL_COMPANY_CODE, nlcs.HOL_SECTION_CODE, nlcs.HOL_SECTION_YEAR) holSectionName
+      , nlcs.HOL_STAFF_CODE holStaffCode
+      , NEA_UTIL_PKG.get_staff_name_f(nlcs.HOL_STAFF_CODE) holStaffName
+      , nlcs.USE_TYPE useType
+      , NEA_UTIL_PKG.get_cn_value1_f('LICENSE_USE_TYPE', nlcs.USE_TYPE) useTypeName
+      , nlcs.USE_COMPANY_CODE useCompanyCode
+      , NEA_UTIL_PKG.get_company_name_f(nlcs.USE_COMPANY_CODE) useCompanyName
+      , nlcs.USE_SECTION_CODE useSectionCode
+      , nlcs.USE_SECTION_YEAR useSectionYear
+      , NEA_UTIL_PKG.get_section_name_f(nlcs.USE_COMPANY_CODE, nlcs.USE_SECTION_CODE, nlcs.USE_SECTION_YEAR) useSectionName
+      , nlcs.USE_RENTAL_FLAG useRentalFlag
+      , NEA_UTIL_PKG.get_cn_value1_f('LICENSE_USE_RENTAL_FLAG', nlcs.USE_RENTAL_FLAG) useRentalFlagName
+      , nlcs.MNT_CONTRACT_CODE mntContractCode
+      , nlcs.MNT_CONTRACT_COMPANY_NAME mntContractCompanyName
+      , nlcs.MNT_CONTRACT_START_DATE mntContractStartDate
+      , nlcs.MNT_CONTRACT_END_DATE mntContractEndDate
+      , nlcs.MNT_CONTRACT_AMOUNT mntContractAmount
+      , nlcs.MNT_CONTRACT_REGIST_CODE mntContractRegistCode
+      , nlcs.MNT_CONTRACT_REGIST_DATE mntContractRegistDate
+      , nlcs.MNT_CONTRACT_STAFF_CODE mntContractStaffCode
+      , NEA_UTIL_PKG.get_staff_name_f(nlcs.MNT_CONTRACT_STAFF_CODE) mntContractStaffName
+      , NEA_UTIL_PKG.replace_enter_f(nlcs.DSC_DESCRIPTION, #enterChar#) dscDescription
+      , nlcs.DSC_ATTRIBUTE1 dscAttribute1
+      , nlcs.DSC_ATTRIBUTE2 dscAttribute2
+      , nlcs.DSC_ATTRIBUTE3 dscAttribute3
+      , nlcs.DSC_ATTRIBUTE4 dscAttribute4
+      , nlcs.DSC_ATTRIBUTE5 dscAttribute5
+      , nlcs.DSC_ATTRIBUTE6 dscAttribute6
+      , nlcs.DSC_ATTRIBUTE7 dscAttribute7
+      , nlcs.DSC_ATTRIBUTE8 dscAttribute8
+      , nlcs.DSC_ATTRIBUTE9 dscAttribute9
+      , nlcs.DSC_ATTRIBUTE10 dscAttribute10
+      , nlcs.DSC_ATTRIBUTE11 dscAttribute11
+      , nlcs.DSC_ATTRIBUTE12 dscAttribute12
+      , nlcs.DSC_ATTRIBUTE13 dscAttribute13
+      , nlcs.DSC_ATTRIBUTE14 dscAttribute14
+      , nlcs.DSC_ATTRIBUTE15 dscAttribute15
+      , nlcs.DSC_ATTRIBUTE16 dscAttribute16
+      , nlcs.DSC_ATTRIBUTE17 dscAttribute17
+      , nlcs.DSC_ATTRIBUTE18 dscAttribute18
+      , nlcs.DSC_ATTRIBUTE19 dscAttribute19
+      , nlcs.DSC_ATTRIBUTE20 dscAttribute20
+      , nlcs.DELETE_FLAG deleteFlag
+      , nlcs.DELETE_DATE deleteDate
+      , nlcs.DELETE_REASON deleteReason
+      , nlcs.GET_APPLICATION_ID getApplicationId
+      , (SELECT
+             APPLICATION_VERSION
+           FROM
+             NEA_AP_GET_INT
+          WHERE
+             APPLICATION_ID = nlcs.GET_APPLICATION_ID
+             AND ACTIVE_FLAG = '1') getApplicationVersion
+      , nlcs.REGIST_APPLICATION_ID registApplicationId
+      , nlcs.PARENT_LICENSE_ID parentLicenseId
+     <isEmpty property="tableNamePrefix">
+       , NVL(
+              NVL(
+                  (SELECT max(f1.KOYUNO)
+                     FROM NEA_PPFS_FLD f1
+                        , PPFS_LD_SUPPORT s
+                     WHERE s.HOJOSPAREC1 = CSCONVERT(nlcs.LICENSE_ID,'NCHAR_CS')
+                       AND s.HOJOSHUBETSUCD = '00001'
+                       AND s.KOYUNO = f1.KOYUNO
+                       AND f1.COMPANY_CODE = nlcs.HOL_COMPANY_CODE
+                       AND NOT(f1.SHISANKNRKBN != '1'
+                       AND EXISTS(SELECT 'X'
+                      FROM NEA_CODE_NAME c
+                     WHERE c.CATEGORY_CODE = 'PPFS_FLD_SR_EXCLUDE_BUNRUI'
+                       AND c.INTERNAL_CODE = TO_CHAR(f1.BUNRUICD)))
+                       AND f1.SHISANKNRKBN = '8'
+                       AND f1.SKKSHISANKBN IN ('2', '4')),
+                  (SELECT max(f1.KOYUNO)
+                     FROM NEA_PPFS_FLD f1
+                    WHERE f1.APPLICATION_ID = CSCONVERT(nlcs.GET_APPLICATION_ID,'NCHAR_CS')
+                      AND f1.COMPANY_CODE = nlcs.HOL_COMPANY_CODE
+                      AND NOT(f1.SHISANKNRKBN != '1'
+                          AND EXISTS(SELECT 'X'
+                                     FROM NEA_CODE_NAME c
+                                    WHERE c.CATEGORY_CODE = 'PPFS_FLD_SR_EXCLUDE_BUNRUI'
+                                      AND c.INTERNAL_CODE = TO_CHAR(f1.BUNRUICD)))
+                      AND f1.SHISANKNRKBN != '8'
+                      AND f1.SKKSHISANKBN IN ('2', '4'))),
+         (SELECT max(f1.KOYUNO)
+            FROM NEA_PPFS_FLD f1
+               , PPFS_LD_SUPPORT s
+           WHERE s.HOJOSPAREC1 = CSCONVERT(nlcs.LICENSE_ID,'NCHAR_CS')
+             AND s.HOJOSHUBETSUCD = '00001'
+             AND s.KOYUNO = f1.KOYUNO
+             AND f1.COMPANY_CODE = nlcs.HOL_COMPANY_CODE
+             AND NOT(f1.SHISANKNRKBN != '1'
+                 AND EXISTS(SELECT 'X'
+                              FROM NEA_CODE_NAME c
+                             WHERE c.CATEGORY_CODE = 'PPFS_FLD_SR_EXCLUDE_BUNRUI'
+                               AND c.INTERNAL_CODE = TO_CHAR(f1.BUNRUICD)))
+                               AND f1.SKKSHISANKBN IN ('1', '3'))) koyunoF
+       , (SELECT f.SKKSHISANKBN
+               FROM NEA_PPFS_FLD f
+              WHERE f.KOYUNO =  NVL(
+                                   NVL(
+                                        (SELECT max(f1.KOYUNO)
+                                           FROM NEA_PPFS_FLD f1
+                                              , PPFS_LD_SUPPORT s
+                                          WHERE s.HOJOSPAREC1 = CSCONVERT(nlcs.LICENSE_ID,'NCHAR_CS')
+                                            AND s.HOJOSHUBETSUCD = '00001'
+                                            AND s.KOYUNO = f1.KOYUNO
+                                            AND f1.COMPANY_CODE = nlcs.HOL_COMPANY_CODE
+                                            AND NOT(f1.SHISANKNRKBN != '1'
+                                                AND EXISTS(SELECT 'X'
+                                                             FROM NEA_CODE_NAME c
+                                                            WHERE c.CATEGORY_CODE = 'PPFS_FLD_SR_EXCLUDE_BUNRUI'
+                                                              AND c.INTERNAL_CODE = TO_CHAR(f1.BUNRUICD)))
+                                            AND f1.SHISANKNRKBN = '8'
+                                            AND f1.SKKSHISANKBN IN ('2', '4')),
+                                        (SELECT max(f1.KOYUNO)
+                                           FROM NEA_PPFS_FLD f1
+                                          WHERE f1.APPLICATION_ID = CSCONVERT(nlcs.GET_APPLICATION_ID,'NCHAR_CS')
+                                            AND f1.COMPANY_CODE = nlcs.HOL_COMPANY_CODE
+                                            AND NOT(f1.SHISANKNRKBN != '1'
+                                                AND EXISTS(SELECT 'X'
+                                                             FROM NEA_CODE_NAME c
+                                                            WHERE c.CATEGORY_CODE = 'PPFS_FLD_SR_EXCLUDE_BUNRUI'
+                                                              AND c.INTERNAL_CODE = TO_CHAR(f1.BUNRUICD)))
+                                            AND f1.SHISANKNRKBN != '8'
+                                            AND f1.SKKSHISANKBN IN ('2', '4'))),
+                                    (SELECT max(f1.KOYUNO)
+                                       FROM NEA_PPFS_FLD f1
+                                          , PPFS_LD_SUPPORT s
+                                      WHERE s.HOJOSPAREC1 = CSCONVERT(nlcs.LICENSE_ID,'NCHAR_CS')
+                                        AND s.HOJOSHUBETSUCD = '00001'
+                                        AND s.KOYUNO = f1.KOYUNO
+                                        AND f1.COMPANY_CODE = nlcs.HOL_COMPANY_CODE
+                                        AND NOT(f1.SHISANKNRKBN != '1'
+                                            AND EXISTS(SELECT 'X'
+                                                         FROM NEA_CODE_NAME c
+                                                        WHERE c.CATEGORY_CODE = 'PPFS_FLD_SR_EXCLUDE_BUNRUI'
+                                                          AND c.INTERNAL_CODE = TO_CHAR(f1.BUNRUICD)))
+                                        AND f1.SKKSHISANKBN IN ('1', '3')))) shisanKbn
+       , NVL((SELECT f.OYA || f.EDA
+                FROM NEA_PPFS_FLD f
+               WHERE f.KOYUNO = NVL(
+                                    NVL(
+                                        (SELECT max(f1.KOYUNO)
+                                           FROM easset.NEA_PPFS_FLD f1
+                                              , easset.PPFS_LD_SUPPORT s
+                                          WHERE s.HOJOSPAREC1 = CSCONVERT(nlcs.LICENSE_ID,'NCHAR_CS')
+                                            AND s.HOJOSHUBETSUCD = '00001'
+                                            AND s.KOYUNO = f1.KOYUNO
+                                            AND f1.COMPANY_CODE = nlcs.HOL_COMPANY_CODE
+                                            AND NOT(f1.SHISANKNRKBN != '1'
+                                                AND EXISTS(SELECT 'X'
+                                                             FROM NEA_CODE_NAME c
+                                                            WHERE c.CATEGORY_CODE = 'PPFS_FLD_SR_EXCLUDE_BUNRUI'
+                                                              AND c.INTERNAL_CODE = TO_CHAR(f1.BUNRUICD)))
+                                            AND f1.SHISANKNRKBN = '8'
+                                            AND f1.SKKSHISANKBN IN ('2', '4')),
+                                        (SELECT max(f1.KOYUNO)
+                                           FROM easset.NEA_PPFS_FLD f1
+                                          WHERE f1.APPLICATION_ID = CSCONVERT(nlcs.GET_APPLICATION_ID,'NCHAR_CS')
+                                            AND f1.COMPANY_CODE = nlcs.HOL_COMPANY_CODE
+                                            AND NOT(f1.SHISANKNRKBN != '1'
+                                                AND EXISTS(SELECT 'X'
+                                                             FROM NEA_CODE_NAME c
+                                                            WHERE c.CATEGORY_CODE = 'PPFS_FLD_SR_EXCLUDE_BUNRUI'
+                                                              AND c.INTERNAL_CODE = TO_CHAR(f1.BUNRUICD)))
+                                            AND f1.SHISANKNRKBN != '8'
+                                            AND f1.SKKSHISANKBN IN ('2', '4'))),
+                                    (SELECT max(f1.KOYUNO)
+                                       FROM NEA_PPFS_FLD f1
+                                          , PPFS_LD_SUPPORT s
+                                      WHERE s.HOJOSPAREC1 = CSCONVERT(nlcs.LICENSE_ID,'NCHAR_CS')
+                                        AND s.HOJOSHUBETSUCD = '00001'
+                                        AND s.KOYUNO = f1.KOYUNO
+                                        AND f1.COMPANY_CODE = nlcs.HOL_COMPANY_CODE
+                                        AND NOT(f1.SHISANKNRKBN != '1'
+                                        AND EXISTS(SELECT 'X'
+                                                     FROM NEA_CODE_NAME c
+                                                    WHERE c.CATEGORY_CODE = 'PPFS_FLD_SR_EXCLUDE_BUNRUI'
+                                                      AND c.INTERNAL_CODE = TO_CHAR(f1.BUNRUICD)))
+                                        AND f1.SKKSHISANKBN IN ('1', '3'))))
+                                    ,
+         (SELECT l.OYA || l.EDA
+            FROM NEA_PPFS_LLDA l
+           WHERE l.KOYUNO = (SELECT max(l1.KOYUNO)
+                               FROM NEA_PPFS_LLDA l1
+                                  , PPFS_LD_SUPPORT s
+                              WHERE s.HOJOSPAREC1 = CSCONVERT(nlcs.LICENSE_ID,'NCHAR_CS')
+                                AND s.HOJOSHUBETSUCD = '00001'
+                                AND s.KOYUNO = l1.KOYUNO
+                                AND l1.COMPANY_CODE = nlcs.HOL_COMPANY_CODE))) shisanNum
+       , (SELECT max(l.KOYUNO)
+            FROM NEA_PPFS_LLDA l
+               , PPFS_LD_SUPPORT s
+           WHERE s.HOJOSPAREC1 = CSCONVERT(nlcs.LICENSE_ID,'NCHAR_CS')
+             AND s.HOJOSHUBETSUCD = '00001'
+             AND s.KOYUNO = l.KOYUNO
+             AND l.COMPANY_CODE = nlcs.HOL_COMPANY_CODE) koyunoL
+       , (SELECT l.KYKNO
+            FROM NEA_PPFS_LLDA l
+           WHERE l.KOYUNO = (SELECT max(l1.KOYUNO)
+                               FROM NEA_PPFS_LLDA l1
+                                  , PPFS_LD_SUPPORT s
+                              WHERE s.HOJOSPAREC1 = CSCONVERT(nlcs.LICENSE_ID,'NCHAR_CS')
+                                AND s.HOJOSHUBETSUCD = '00001'
+                                AND s.KOYUNO = l1.KOYUNO
+                                AND l1.COMPANY_CODE = nlcs.HOL_COMPANY_CODE)) contractNum
+       , (SELECT l.NINI_LD_17CD
+            FROM NEA_PPFS_LLDA l
+           WHERE l.KOYUNO = (SELECT max(l1.KOYUNO)
+                               FROM NEA_PPFS_LLDA l1
+                                  , PPFS_LD_SUPPORT s
+                              WHERE s.HOJOSPAREC1 = CSCONVERT(nlcs.LICENSE_ID,'NCHAR_CS')
+                                AND s.HOJOSHUBETSUCD = '00001'
+                                AND s.KOYUNO = l1.KOYUNO
+                                AND l1.COMPANY_CODE = nlcs.HOL_COMPANY_CODE)) contractEda
+     </isEmpty>
+     <isNotEmpty property="tableNamePrefix">
+       , NULL koyunoF
+       , NULL shisanKbn
+       , NULL shisanNum
+       , NULL koyunoL
+       , nlcs.CONTRACT_NUM contractNum
+       , NULL contractEda
+     </isNotEmpty>
+  </sql>
+
+  <sql id="whereLicenseCom_LIC">
+
+      <!-- ライセンス管理番号 -->
+      <isNotEmpty property="searchParam.licenseId">
+        AND nlcs.LICENSE_ID LIKE '%' || #searchParam.licenseId# || '%'
+      </isNotEmpty>
+      <isNotEmpty property="licenseIdPluralList">
+        AND $licenseIdPluralList$
+      </isNotEmpty>
+      <!-- 割当情報機器管理番号 -->
+      <isNotEmpty property="searchParam.assetId">
+        AND EXISTS (
+          SELECT
+            'X'
+          FROM
+            NEA_LICENSE_LINE_ALLOC nlla_sub
+          WHERE
+            nlla_sub.LICENSE_ID = nlcs.LICENSE_ID
+            AND nlla_sub.ASSET_ID LIKE '%' || #searchParam.assetId# || '%'
+        )
+      </isNotEmpty>
+      <isNotEmpty property="assetIdPluralList">
+        AND EXISTS (
+          SELECT
+            'X'
+          FROM
+            NEA_LICENSE_LINE_ALLOC nlla_sub
+          WHERE
+            nlla_sub.LICENSE_ID = nlcs.LICENSE_ID
+            AND $assetIdPluralList$
+        )
+      </isNotEmpty>
+      <!-- 取得申請書番号 -->
+      <isNotEmpty property="searchParam.getApplicationId">
+        AND nlcs.GET_APPLICATION_ID LIKE '%' || #searchParam.getApplicationId# || '%'
+      </isNotEmpty>
+      <isNotEmpty property="getApplicationIdPluralList">
+        AND $getApplicationIdPluralList$
+      </isNotEmpty>
+      <!-- 登録申請書番号 -->
+      <isNotEmpty property="searchParam.registApplicationId">
+        AND nlcs.REGIST_APPLICATION_ID LIKE '%' || #searchParam.registApplicationId# || '%'
+      </isNotEmpty>
+      <isNotEmpty property="registApplicationIdPluralList">
+        AND $registApplicationIdPluralList$
+      </isNotEmpty>
+      <!-- 申請会社 -->
+      <isNotEmpty property="searchParam.apCompanyCode">
+        AND nlcs.AP_COMPANY_CODE = #searchParam.apCompanyCode#
+      </isNotEmpty>
+      <!-- 登録完了日:登録申請 -->
+      <isNotEmpty property="tableNamePrefix">
+        <isNotEmpty property="searchParam.registDateFrom">
+          AND EXISTS (SELECT 'X' FROM NEA_LICENSE nl WHERE nl.REGIST_APPLICATION_ID = nlcs.LICENSE_ID AND nl.CREATE_DATE <![CDATA[>]]>= #searchParam.registDateFrom#)
+        </isNotEmpty>
+        <isNotEmpty property="searchParam.registDateTo">
+          AND EXISTS (SELECT 'X' FROM NEA_LICENSE nl WHERE nl.REGIST_APPLICATION_ID = nlcs.LICENSE_ID AND nl.CREATE_DATE <![CDATA[<]]> (#searchParam.registDateTo# + 1))
+        </isNotEmpty>
+      </isNotEmpty>
+      <!-- 登録日 -->
+      <isEmpty property="tableNamePrefix">
+        <isNotEmpty property="searchParam.registDateFrom">
+          AND nlcs.CREATE_DATE <![CDATA[>]]>= #searchParam.registDateFrom#
+        </isNotEmpty>
+        <isNotEmpty property="searchParam.registDateTo">
+          AND nlcs.CREATE_DATE <![CDATA[<]]>= (#searchParam.registDateTo# + 1)
+        </isNotEmpty>
+      </isEmpty>
+
+      <!-- 抹消済みを含む -->
+      <isEqual property="searchParam.deleteFlag" compareValue="0">
+        AND nlcs.DELETE_FLAG = '0'
+      </isEqual>
+
+      <!-- 申請ステータス -->
+      <isNotEmpty property="apStatusPluralList">
+        AND $apStatusPluralList$
+      </isNotEmpty>
+      <!-- 申請日 -->
+      <isNotEmpty property="searchParam.apDateFrom">
+        AND nlcs.AP_DATE <![CDATA[>]]>= #searchParam.apDateFrom#
+      </isNotEmpty>
+      <isNotEmpty property="searchParam.apDateTo">
+        AND nlcs.AP_DATE <![CDATA[<]]>= #searchParam.apDateTo#
+      </isNotEmpty>
+      <!-- 起票/申請者 -->
+      <isNotEmpty property="searchParam.apStaffCode">
+        <isNotEmpty property="tableNamePrefix">
+          AND (nlcs.AP_CREATE_STAFF_CODE = #searchParam.apStaffCode#
+            OR nlcs.AP_STAFF_CODE = #searchParam.apStaffCode#)
+        </isNotEmpty>
+        <isEmpty property="tableNamePrefix">
+          AND nlcs.AP_STAFF_CODE = #searchParam.apStaffCode#
+        </isEmpty>
+      </isNotEmpty>
+      <!-- 登録が完了している申請書を除外 -->
+      <isEqual property="searchParam.notCompleteFlag" compareValue="1">
+        AND nlcs.AP_STATUS <![CDATA[<]]><![CDATA[>]]> '3'
+      </isEqual>
+
+      <!-- ソフトウェア -->
+      <!-- メーカー -->
+      <isNotEmpty property="searchParam.softwareMakerId">
+        AND nlcs.SOFTWARE_MAKER_ID = #searchParam.softwareMakerId#
+      </isNotEmpty>
+      <isEmpty property="searchParam.softwareMakerId">
+        <isNotEmpty property="searchParam.softwareMakerName">
+          AND NEA_UTIL_PKG.TO_FUZZY_F(nsm.SOFTWARE_MAKER_NAME) LIKE '%' || NEA_UTIL_PKG.TO_FUZZY_F(#searchParam.softwareMakerName#) || '%'
+        </isNotEmpty>
+      </isEmpty>
+      <!-- ソフトウェア -->
+      <isNotEmpty property="searchParam.softwareId">
+        AND nlcs.SOFTWARE_ID = #searchParam.softwareId#
+      </isNotEmpty>
+      <isEmpty property="searchParam.softwareId">
+        <isNotEmpty property="searchParam.softwareName">
+          AND NEA_UTIL_PKG.TO_FUZZY_F(ns.SOFTWARE_NAME) LIKE '%' || NEA_UTIL_PKG.TO_FUZZY_F(#searchParam.softwareName#) || '%'
+        </isNotEmpty>
+      </isEmpty>
+
+      <!-- 取得・資産 -->
+      <!-- 資産区分 -->
+      <isNotEmpty property="searchParam.licAssetType">
+        AND nlcs.LIC_ASSET_TYPE = #searchParam.licAssetType#
+      </isNotEmpty>
+      <isNotEmpty property="licAssetTypePluralList">
+        AND $licAssetTypePluralList$
+      </isNotEmpty>
+      <!-- 取得形態 -->
+      <isNotEmpty property="searchParam.licGetType">
+        AND nlcs.LIC_GET_TYPE = #searchParam.licGetType#
+      </isNotEmpty>
+      <!-- 取得費用 -->
+      <isNotEmpty property="searchParam.licAmountFrom">
+        AND nlcs.LIC_AMOUNT <![CDATA[>]]>= #searchParam.licAmountFrom#
+      </isNotEmpty>
+      <isNotEmpty property="searchParam.licAmountTo">
+        AND nlcs.LIC_AMOUNT <![CDATA[<]]>= #searchParam.licAmountTo#
+      </isNotEmpty>
+      <!-- シリアル番号 -->
+      <isNotEmpty property="searchParam.licSerialCode">
+        AND nlcs.LIC_SERIAL_CODE LIKE '%' || #searchParam.licSerialCode# || '%'
+      </isNotEmpty>
+      <isNotEmpty property="licSerialCodePluralList">
+        AND $licSerialCodePluralList$
+      </isNotEmpty>
+      <!-- プロダクトKEY -->
+      <isNotEmpty property="searchParam.licProductKey">
+        AND nlcs.LIC_PRODUCT_KEY LIKE '%' || #searchParam.licProductKey# || '%'
+      </isNotEmpty>
+      <isNotEmpty property="licProductKeyPluralList">
+        AND $licProductKeyPluralList$
+      </isNotEmpty>
+      <!-- ハードウェアバンドル -->
+      <isNotEmpty property="searchParam.licHrdBandleFlag">
+        AND nlcs.LIC_HRD_BANDLE_FLAG = #searchParam.licHrdBandleFlag#
+      </isNotEmpty>
+
+      <!-- ライセンス形態 -->
+      <!-- ライセンス形態 -->
+      <isNotEmpty property="searchParam.licLicenseType">
+        AND nlcs.LIC_LICENSE_TYPE = #searchParam.licLicenseType#
+      </isNotEmpty>
+      <isNotEmpty property="licLicenseTypePluralList">
+        AND $licLicenseTypePluralList$
+      </isNotEmpty>
+      <!-- アップグレードライセンスフラグ -->
+      <isNotEmpty property="searchParam.licUpgradeFlag">
+        AND nlcs.LIC_UPGRADE_FLAG = #searchParam.licUpgradeFlag#
+      </isNotEmpty>
+      <!-- ボリュームタイプ -->
+      <isNotEmpty property="searchParam.licVolumeType">
+        AND nlcs.LIC_VOLUME_TYPE = #searchParam.licVolumeType#
+      </isNotEmpty>
+      <!-- タームライセンスフラグ -->
+      <isNotEmpty property="searchParam.licTermFlag">
+        AND nlcs.LIC_TERM_FLAG = #searchParam.licTermFlag#
+      </isNotEmpty>
+      <!-- タームライセンス期間終了日 -->
+      <isNotEmpty property="searchParam.trmEndDateFrom">
+        AND nlcs.TRM_END_DATE <![CDATA[>]]>= #searchParam.trmEndDateFrom#
+      </isNotEmpty>
+      <isNotEmpty property="searchParam.trmEndDateTo">
+        AND nlcs.TRM_END_DATE <![CDATA[<]]>= #searchParam.trmEndDateTo#
+      </isNotEmpty>
+      <!-- タームライセンス期限通知日 -->
+      <isNotEmpty property="searchParam.trmAlertDateFrom">
+        AND nlcs.TRM_ALERT_DATE <![CDATA[>]]>= #searchParam.trmAlertDateFrom#
+      </isNotEmpty>
+      <isNotEmpty property="searchParam.trmAlertDateTo">
+        AND nlcs.TRM_ALERT_DATE <![CDATA[<]]>= #searchParam.trmAlertDateTo#
+      </isNotEmpty>
+
+
+      <!-- 保有・使用許諾 -->
+      <!-- 保有会社 -->
+      <isNotEmpty property="searchParam.holCompanyCode">
+        AND nlcs.HOL_COMPANY_CODE = #searchParam.holCompanyCode#
+      </isNotEmpty>
+      <isNotEmpty property="sectionYear">
+        AND nlcs.HOL_SECTION_YEAR = #sectionYear#
+      </isNotEmpty>
+      <!-- 保有部署 -->
+      <isNotEmpty property="section">
+        AND $section$
+      </isNotEmpty>
+      <!-- 資産管理担当者 -->
+      <isNotEmpty property="searchParam.holStaffCode">
+        AND nlcs.HOL_STAFF_CODE = #searchParam.holStaffCode#
+      </isNotEmpty>
+
+      <!-- 備考・付加情報 -->
+      <!-- 備考 -->
+      <isNotEmpty property="dscDescriptionPluralList">
+        AND $dscDescriptionPluralList$
+      </isNotEmpty>
+      <!-- 管理項目 -->
+      <isNotEmpty property="dscAttribute1PluralList">
+        AND ($dscAttribute1PluralList$
+          OR $dscAttribute2PluralList$
+          OR $dscAttribute3PluralList$
+          OR $dscAttribute4PluralList$
+          OR $dscAttribute5PluralList$
+          OR $dscAttribute6PluralList$
+          OR $dscAttribute7PluralList$
+          OR $dscAttribute8PluralList$
+          OR $dscAttribute9PluralList$
+          OR $dscAttribute10PluralList$
+          OR $dscAttribute11PluralList$
+          OR $dscAttribute12PluralList$
+          OR $dscAttribute13PluralList$
+          OR $dscAttribute14PluralList$
+          OR $dscAttribute15PluralList$
+          OR $dscAttribute16PluralList$
+          OR $dscAttribute17PluralList$
+          OR $dscAttribute18PluralList$
+          OR $dscAttribute19PluralList$
+          OR $dscAttribute20PluralList$
+            )
+      </isNotEmpty>
+      <isNotEmpty property="dscAttribute1List">
+        AND $dscAttribute1List$
+      </isNotEmpty>
+      <isNotEmpty property="dscAttribute2List">
+        AND $dscAttribute2List$
+      </isNotEmpty>
+      <isNotEmpty property="dscAttribute3List">
+        AND $dscAttribute3List$
+      </isNotEmpty>
+      <isNotEmpty property="dscAttribute4List">
+        AND $dscAttribute4List$
+      </isNotEmpty>
+      <isNotEmpty property="dscAttribute5List">
+        AND $dscAttribute5List$
+      </isNotEmpty>
+      <isNotEmpty property="dscAttribute6List">
+        AND $dscAttribute6List$
+      </isNotEmpty>
+      <isNotEmpty property="dscAttribute7List">
+        AND $dscAttribute7List$
+      </isNotEmpty>
+      <isNotEmpty property="dscAttribute8List">
+        AND $dscAttribute8List$
+      </isNotEmpty>
+      <isNotEmpty property="dscAttribute9List">
+        AND $dscAttribute9List$
+      </isNotEmpty>
+      <isNotEmpty property="dscAttribute10List">
+        AND $dscAttribute10List$
+      </isNotEmpty>
+      <isNotEmpty property="dscAttribute11List">
+        AND $dscAttribute11List$
+      </isNotEmpty>
+      <isNotEmpty property="dscAttribute12List">
+        AND $dscAttribute12List$
+      </isNotEmpty>
+      <isNotEmpty property="dscAttribute13List">
+        AND $dscAttribute13List$
+      </isNotEmpty>
+      <isNotEmpty property="dscAttribute14List">
+        AND $dscAttribute14List$
+      </isNotEmpty>
+      <isNotEmpty property="dscAttribute15List">
+        AND $dscAttribute15List$
+      </isNotEmpty>
+      <isNotEmpty property="dscAttribute16List">
+        AND $dscAttribute16List$
+      </isNotEmpty>
+      <isNotEmpty property="dscAttribute17List">
+        AND $dscAttribute17List$
+      </isNotEmpty>
+      <isNotEmpty property="dscAttribute18List">
+        AND $dscAttribute18List$
+      </isNotEmpty>
+      <isNotEmpty property="dscAttribute19List">
+        AND $dscAttribute19List$
+      </isNotEmpty>
+      <isNotEmpty property="dscAttribute20List">
+        AND $dscAttribute20List$
+      </isNotEmpty>
+
+      <isNotEmpty property="accessLevelSection">
+        AND $accessLevelSection$
+      </isNotEmpty>
+
+      <!-- e申請書類ID -->
+      <isNotEmpty property="searchParam.searchEapp">
+        <isNotEmpty property="searchParam.eappId">
+          AND nlcs.EAPP_ID = #searchParam.eappId#
+        </isNotEmpty>
+      </isNotEmpty>
+      <isEmpty property="searchParam.searchEapp">
+        <isNotEmpty property="searchParam.eappId">
+          AND nlcs.EAPP_ID LIKE '%' || #searchParam.eappId# || '%'
+        </isNotEmpty>
+        <isNotEmpty property="eappIdPluralList">
+          AND $eappIdPluralList$
+        </isNotEmpty>
+      </isEmpty>
+
+      <!-- 契約番号からのライセンス管理番号 -->
+      <isNotEmpty property="licenseIdPluralByContractNumList">
+        AND $licenseIdPluralByContractNumList$
+      </isNotEmpty>
+      <!-- 契約枝番からのライセンス管理番号 -->
+      <isNotEmpty property="licenseIdPluralByContractEdaList">
+        AND $licenseIdPluralByContractEdaList$
+      </isNotEmpty>
+      <!-- 資産番号からのライセンス管理番号 -->
+      <isNotEmpty property="licenseIdPluralByShisanNumList">
+        AND $licenseIdPluralByShisanNumList$
+      </isNotEmpty>
+
+      <!-- 割当可能のみ検索 -->
+      <isNotEmpty property="searchParam.enableAllocFlag">
+        AND EXISTS (
+          SELECT 'X' FROM NEA_CODE_NAME cn WHERE cn.INTERNAL_CODE = nlcs.LIC_LICENSE_TYPE AND cn.CATEGORY_CODE = 'LICENSE_TYPE' AND DELETE_FLAG = '0' AND cn.VALUE2 = '1'
+        )
+      </isNotEmpty>
+
+      <isEmpty property="isDownload">
+        AND ROWNUM <![CDATA[<]]>= (SELECT TO_NUMBER(VALUE1) FROM NEA_CODE_NAME WHERE CATEGORY_CODE = 'MAX_SEARCH_ROW_COUNT' AND DELETE_FLAG = '0')
+      </isEmpty>
+
+  </sql>
+
+
+  <!--
+    契約番号 => ライセンス管理番号一覧変換
+  -->
+  <select id="selectLicenseIdByContractNum_LIC" parameterClass="java.util.Map" resultClass="java.lang.String">
+    <isNotEmpty property="searchParam.contractNum">
+      SELECT CSCONVERT(s.HOJOSPAREC1,'CHAR_CS')
+        FROM NEA_PPFS_LLDA l
+           , PPFS_LD_SUPPORT s
+       WHERE l.KYKNO LIKE '%' || #searchParam.contractNum# || '%'
+         <isNotEmpty property="searchParam.holCompanyCode">
+           AND l.COMPANY_CODE = #searchParam.holCompanyCode#
+         </isNotEmpty>
+         AND l.KOYUNO = s.KOYUNO
+         AND s.HOJOSHUBETSUCD = '00001'
+         AND s.HOJOSPAREC1 IS NOT NULL
+    </isNotEmpty>
+    <isNotEmpty property="contractNumPluralList">
+      SELECT CSCONVERT(s.HOJOSPAREC1,'CHAR_CS')
+        FROM NEA_PPFS_LLDA l
+           , PPFS_LD_SUPPORT s
+       WHERE $contractNumPluralList$
+         <isNotEmpty property="searchParam.holCompanyCode">
+           AND l.COMPANY_CODE = #searchParam.holCompanyCode#
+         </isNotEmpty>
+         AND l.KOYUNO = s.KOYUNO
+         AND s.HOJOSHUBETSUCD = '00001'
+         AND s.HOJOSPAREC1 IS NOT NULL
+    </isNotEmpty>
+  </select>
+
+  <!--
+    契約枝番 => ライセンス管理番号一覧変換
+  -->
+  <select id="selectLicenseIdByContractEda_LIC" parameterClass="java.util.Map" resultClass="java.lang.String">
+    <isNotEmpty property="searchParam.contractEda">
+      SELECT CSCONVERT(s.HOJOSPAREC1,'CHAR_CS')
+        FROM NEA_PPFS_LLDA l
+           , PPFS_LD_SUPPORT s
+       WHERE l.NINI_LD_17CD LIKE '%' || #searchParam.contractEda# || '%'
+         <isNotEmpty property="searchParam.holCompanyCode">
+           AND l.COMPANY_CODE = #searchParam.holCompanyCode#
+         </isNotEmpty>
+         AND l.KOYUNO = s.KOYUNO
+         AND s.HOJOSHUBETSUCD = '00001'
+         AND s.HOJOSPAREC1 IS NOT NULL
+    </isNotEmpty>
+    <isNotEmpty property="contractEdaPluralList">
+      SELECT CSCONVERT(s.HOJOSPAREC1,'CHAR_CS')
+        FROM NEA_PPFS_LLDA l
+           , PPFS_LD_SUPPORT s
+       WHERE $contractEdaPluralList$
+         <isNotEmpty property="searchParam.holCompanyCode">
+           AND l.COMPANY_CODE = #searchParam.holCompanyCode#
+         </isNotEmpty>
+         AND l.KOYUNO = s.KOYUNO
+         AND s.HOJOSHUBETSUCD = '00001'
+         AND s.HOJOSPAREC1 IS NOT NULL
+    </isNotEmpty>
+  </select>
+
+  <!--
+    資産番号 => ライセンス管理番号一覧変換
+  -->
+  <select id="selectLicenseIdByShisanNum_LIC" parameterClass="java.util.Map" resultClass="java.lang.String">
+    <isNotEmpty property="searchParam.shisanNum">
+      <isEqual property="searchParam.relationShisanNumFlag" compareValue="1">
+        SELECT CSCONVERT(s.HOJOSPAREC1,'CHAR_CS')
+          FROM NEA_PPFS_FLD f
+             , PPFS_LD_SUPPORT s
+         WHERE f.OYA LIKE '%' || #searchParam.shisanNum# || '%'
+           <isNotEmpty property="searchParam.holCompanyCode">
+             AND f.COMPANY_CODE = #searchParam.holCompanyCode#
+           </isNotEmpty>
+           AND NOT(f.SHISANKNRKBN != '1'
+               AND EXISTS(SELECT 'X'
+                            FROM NEA_CODE_NAME c
+                           WHERE c.CATEGORY_CODE = 'PPFS_FLD_SR_EXCLUDE_BUNRUI'
+                             AND c.INTERNAL_CODE = TO_CHAR(f.BUNRUICD)))
+           AND f.SKKSHISANKBN IN ('1', '3')
+           AND f.KOYUNO = s.KOYUNO
+           AND s.HOJOSHUBETSUCD = '00001'
+           AND s.HOJOSPAREC1 IS NOT NULL
+        UNION ALL
+        SELECT l.LICENSE_ID
+          FROM NEA_PPFS_FLD f
+             , NEA_LICENSE l
+         WHERE f.OYA LIKE '%' || #searchParam.shisanNum# || '%'
+           <isNotEmpty property="searchParam.holCompanyCode">
+             AND f.COMPANY_CODE = #searchParam.holCompanyCode#
+           </isNotEmpty>
+           AND NOT(f.SHISANKNRKBN != '1'
+               AND EXISTS(SELECT 'X'
+                            FROM NEA_CODE_NAME c
+                           WHERE c.CATEGORY_CODE = 'PPFS_FLD_SR_EXCLUDE_BUNRUI'
+                             AND c.INTERNAL_CODE = TO_CHAR(f.BUNRUICD)))
+           AND f.SKKSHISANKBN IN ('2', '4')
+           AND f.SHISANKNRKBN != '8' /* オンバランスリース以外 */
+           AND l.GET_APPLICATION_ID = CSCONVERT(f.APPLICATION_ID,'CHAR_CS')
+        UNION ALL
+        SELECT CSCONVERT(s.HOJOSPAREC1,'CHAR_CS')
+          FROM NEA_PPFS_LLDA l
+             , PPFS_LD_SUPPORT s
+         WHERE l.OYA LIKE '%' || #searchParam.shisanNum# || '%'
+           <isNotEmpty property="searchParam.holCompanyCode">
+             AND l.COMPANY_CODE = #searchParam.holCompanyCode#
+           </isNotEmpty>
+           AND l.KOYUNO = s.KOYUNO
+           AND s.HOJOSHUBETSUCD = '00001'
+           AND s.HOJOSPAREC1 IS NOT NULL
+      </isEqual>
+      <isNotEqual property="searchParam.relationShisanNumFlag" compareValue="1">
+        SELECT CSCONVERT(s.HOJOSPAREC1,'CHAR_CS')
+          FROM NEA_PPFS_FLD f
+             , PPFS_LD_SUPPORT s
+         WHERE (f.OYA || f.EDA) LIKE '%' || #searchParam.shisanNum# || '%'
+           <isNotEmpty property="searchParam.holCompanyCode">
+             AND f.COMPANY_CODE = #searchParam.holCompanyCode#
+           </isNotEmpty>
+           AND NOT(f.SHISANKNRKBN != '1'
+               AND EXISTS(SELECT 'X'
+                            FROM NEA_CODE_NAME c
+                           WHERE c.CATEGORY_CODE = 'PPFS_FLD_SR_EXCLUDE_BUNRUI'
+                             AND c.INTERNAL_CODE = TO_CHAR(f.BUNRUICD)))
+           AND f.SKKSHISANKBN IN ('1', '3')
+           AND f.KOYUNO = s.KOYUNO
+           AND s.HOJOSHUBETSUCD = '00001'
+           AND s.HOJOSPAREC1 IS NOT NULL
+        UNION ALL
+        SELECT l.LICENSE_ID
+          FROM NEA_PPFS_FLD f
+             , NEA_LICENSE l
+         WHERE (f.OYA || f.EDA) LIKE '%' || #searchParam.shisanNum# || '%'
+           <isNotEmpty property="searchParam.holCompanyCode">
+             AND f.COMPANY_CODE = #searchParam.holCompanyCode#
+           </isNotEmpty>
+           AND NOT(f.SHISANKNRKBN != '1'
+               AND EXISTS(SELECT 'X'
+                            FROM NEA_CODE_NAME c
+                           WHERE c.CATEGORY_CODE = 'PPFS_FLD_SR_EXCLUDE_BUNRUI'
+                             AND c.INTERNAL_CODE = TO_CHAR(f.BUNRUICD)))
+           AND f.SKKSHISANKBN IN ('2', '4')
+           AND f.SHISANKNRKBN != '8' /* オンバランスリース以外 */
+           AND l.GET_APPLICATION_ID = CSCONVERT(f.APPLICATION_ID,'CHAR_CS')
+        UNION ALL
+        SELECT CSCONVERT(s.HOJOSPAREC1,'CHAR_CS')
+          FROM NEA_PPFS_LLDA f
+             , PPFS_LD_SUPPORT s
+         WHERE (f.OYA || f.EDA) LIKE '%' || #searchParam.shisanNum# || '%'
+           <isNotEmpty property="searchParam.holCompanyCode">
+             AND f.COMPANY_CODE = #searchParam.holCompanyCode#
+           </isNotEmpty>
+           AND f.KOYUNO = s.KOYUNO
+           AND s.HOJOSHUBETSUCD = '00001'
+           AND s.HOJOSPAREC1 IS NOT NULL
+      </isNotEqual>
+    </isNotEmpty>
+    <isNotEmpty property="shisanNumPluralList">
+      SELECT CSCONVERT(s.HOJOSPAREC1,'CHAR_CS')
+        FROM NEA_PPFS_FLD f
+           , PPFS_LD_SUPPORT s
+       WHERE $shisanNumPluralList$
+         <isNotEmpty property="searchParam.holCompanyCode">
+           AND f.COMPANY_CODE = #searchParam.holCompanyCode#
+         </isNotEmpty>
+         AND NOT(f.SHISANKNRKBN != '1'
+             AND EXISTS(SELECT 'X'
+                          FROM NEA_CODE_NAME c
+                         WHERE c.CATEGORY_CODE = 'PPFS_FLD_SR_EXCLUDE_BUNRUI'
+                           AND c.INTERNAL_CODE = TO_CHAR(f.BUNRUICD)))
+         AND f.SKKSHISANKBN IN ('1', '3')
+         AND f.KOYUNO = s.KOYUNO
+         AND s.HOJOSHUBETSUCD = '00001'
+         AND s.HOJOSPAREC1 IS NOT NULL
+      UNION ALL
+      SELECT l.LICENSE_ID
+        FROM NEA_PPFS_FLD f
+           , NEA_LICENSE l
+       WHERE $shisanNumPluralList$
+         <isNotEmpty property="searchParam.holCompanyCode">
+           AND f.COMPANY_CODE = #searchParam.holCompanyCode#
+         </isNotEmpty>
+         AND NOT(f.SHISANKNRKBN != '1'
+             AND EXISTS(SELECT 'X'
+                          FROM NEA_CODE_NAME c
+                         WHERE c.CATEGORY_CODE = 'PPFS_FLD_SR_EXCLUDE_BUNRUI'
+                           AND c.INTERNAL_CODE = TO_CHAR(f.BUNRUICD)))
+         AND f.SKKSHISANKBN IN ('2', '4')
+         AND f.SHISANKNRKBN != '8' /* オンバランスリース以外 */
+         AND l.GET_APPLICATION_ID = CSCONVERT(f.APPLICATION_ID,'CHAR_CS')
+      UNION ALL
+      SELECT CSCONVERT(s.HOJOSPAREC1,'CHAR_CS')
+        FROM NEA_PPFS_LLDA f
+           , PPFS_LD_SUPPORT s
+       WHERE $shisanNumPluralList$
+         <isNotEmpty property="searchParam.holCompanyCode">
+           AND f.COMPANY_CODE = #searchParam.holCompanyCode#
+         </isNotEmpty>
+         AND f.KOYUNO = s.KOYUNO
+         AND s.HOJOSHUBETSUCD = '00001'
+         AND s.HOJOSPAREC1 IS NOT NULL
+    </isNotEmpty>
+  </select>
+
+  <!--
+    ライセンス取得(ヘッダ)
+  -->
+  <select id="selectLicense_LIC" parameterClass="java.util.Map" resultClass="jp.co.ctcg.easset.dto.license.License">
+    SELECT
+      <include refid="selectLicenseComColumn_LIC" />
+      <isEmpty property="tableNamePrefix">
+       , TO_CHAR(NULL) apCreateTel
+      </isEmpty>
+      <isNotEmpty property="tableNamePrefix">
+       , NEA_UTIL_PKG.get_tel_f(nlcs.AP_CREATE_COMPANY_CODE, nlcs.AP_CREATE_STAFF_CODE, nlcs.AP_CREATE_SECTION_YEAR) apCreateTel
+      </isNotEmpty>
+    FROM
+          NEA_$tableNamePrefix$License nlcs
+        , NEA_SOFTWARE_MAKER nsm
+        , NEA_SOFTWARE ns
+    WHERE
+          nlcs.LICENSE_ID = #licenseId#
+      AND nlcs.SOFTWARE_MAKER_ID = nsm.SOFTWARE_MAKER_ID(+)
+      AND nlcs.SOFTWARE_ID = ns.SOFTWARE_ID(+)
+    <isNotEmpty property="lockFlag">
+      FOR UPDATE
+    </isNotEmpty>
+  </select>
+
+  <!--
+    ライセンス検索
+  -->
+  <select id="selectLicenseList_LIC" parameterClass="java.util.Map" resultClass="jp.co.ctcg.easset.dto.license.LicenseSR">
+    SELECT
+      <include refid="selectLicenseComColumn_LIC" />
+
+     <!-- 割当情報(ライセンスから検索)-CSVファイル作成ダウンロード -->
+     <isNotEmpty property="isAllocLicense">
+      , na.ASSET_ID assetId
+      , NEA_UTIL_PKG.get_company_name_f(na.HOL_COMPANY_CODE) hwHolCompanyName
+      , NEA_UTIL_PKG.get_section_name_f(na.HOL_COMPANY_CODE, na.HOL_SECTION_CODE, na.HOL_SECTION_YEAR) hwHolSectionName
+      , NEA_UTIL_PKG.get_company_name_f(na.USE_COMPANY_CODE) astUseCompanyName
+      , NEA_UTIL_PKG.get_section_name_f(na.USE_COMPANY_CODE, na.USE_SECTION_CODE, na.USE_SECTION_YEAR) astUseSectionName
+      , na.HOL_STAFF_CODE astHolStaffCode
+      , NEA_UTIL_PKG.get_staff_name_f(na.HOL_STAFF_CODE) astHolStaffName
+      , na.USE_STAFF_CODE useStaffCode
+      , NEA_UTIL_PKG.get_staff_name_f(na.USE_STAFF_CODE) useStaffName
+      , NEA_UTIL_PKG.get_cn_value1_f('ASSET_MANAGE_TYPE', na.AST_MANAGE_TYPE) astManageTypeName
+      , na.CREATE_DATE astCreateDate
+     </isNotEmpty>
+     <isEmpty property="isAllocLicense">
+      , TO_CHAR(NULL) assetId
+      , TO_CHAR(NULL) hwHolCompanyName
+      , TO_CHAR(NULL) hwHolSectionName
+      , TO_CHAR(NULL) astUseCompanyName
+      , TO_CHAR(NULL) astUseSectionName
+      , TO_CHAR(NULL) astHolStaffCode
+      , TO_CHAR(NULL) astHolStaffName
+      , TO_CHAR(NULL) useStaffCode
+      , TO_CHAR(NULL) useStaffName
+      , TO_CHAR(NULL) astManageTypeName
+      , TO_DATE(NULL) astCreateDate
+     </isEmpty>
+
+    FROM
+          NEA_$tableNamePrefix$LICENSE nlcs
+        , NEA_SOFTWARE_MAKER nsm
+        , NEA_SOFTWARE ns
+
+      <!-- 割当情報(機器から検索)-CSVファイル作成ダウンロード -->
+     <isNotEmpty property="isAllocLicense">
+        , NEA_ASSET na
+        , NEA_ASSET_LINE_OS nastlos
+        , NEA_LICENSE_LINE_ALLOC nlla
+        , NEA_LICENSE_LINE_QTY nllq
+     </isNotEmpty>
+
+    WHERE
+          nlcs.SOFTWARE_MAKER_ID = nsm.SOFTWARE_MAKER_ID(+)
+      AND nlcs.SOFTWARE_ID = ns.SOFTWARE_ID(+)
+
+      <!-- 割当情報(機器から検索)-CSVファイル作成ダウンロード -->
+      <isNotEmpty property="isAllocLicense">
+        AND na.ASSET_ID = nastlos.ASSET_ID
+        AND nastlos.ASSET_ID = nlla.ASSET_ID
+        AND nastlos.ASSET_LINE_OS_ID = nlla.ASSET_LINE_OS_ID
+        AND nlla.LICENSE_ID = nllq.LICENSE_ID
+        AND nlla.LICENSE_LINE_QTY_ID = nllq.LICENSE_LINE_QTY_ID
+        AND nlcs.LICENSE_ID = nllq.LICENSE_ID
+        AND nlcs.SOFTWARE_MAKER_ID = nsm.SOFTWARE_MAKER_ID(+)
+        AND nlcs.SOFTWARE_ID = ns.SOFTWARE_ID(+)
+     </isNotEmpty>
+
+      <!-- 割当検索条件 -->
+      <isNotEmpty property="searchParam.assetHolCompanyCode">
+        AND (
+               ( nlcs.USE_TYPE = '3' )  /* 全社利用 */
+            OR ( nlcs.USE_TYPE = '2'
+                 AND EXISTS (
+                      SELECT 'X'
+                      FROM NEA_LICENSE_LINE_QTY nllq1
+                      WHERE nllq1.LICENSE_ID = nlcs.LICENSE_ID
+                      AND nllq1.USE_COMPANY_CODE = #searchParam.assetHolCompanyCode#
+                      )  /* 会社利用 */
+                )
+            OR ( nlcs.USE_TYPE = '1'
+                 AND EXISTS (
+                       SELECT 'X'
+                       FROM NEA_LICENSE_LINE_QTY nllq2
+                       WHERE nllq2.LICENSE_ID = nlcs.LICENSE_ID
+                       AND nllq2.USE_COMPANY_CODE = #searchParam.assetHolCompanyCode#
+                       AND nllq2.USE_SECTION_CODE = #searchParam.assetHolSectionCode#
+                       AND nllq2.USE_SECTION_YEAR = #searchParam.assetHolSectionYear#
+                       ) /* 部署限定 */
+                )
+             )
+        AND (
+                ( nlcs.LIC_QUANTITY_TYPE = '2' )
+             OR ( nlcs.LIC_QUANTITY_TYPE = '1'
+                  AND EXISTS (
+                       SELECT 'X'
+                       FROM NEA_LICENSE_LINE_QTY nllq3
+                       WHERE  nllq3.LICENSE_ID = nlcs.LICENSE_ID
+                       AND nllq3.LIC_LINE_ENABLE_QUANTITY <![CDATA[>]]> nllq3.LIC_LINE_USE_QUANTITY
+                       ) /* 有効数 ＞ 消費数 */
+                )
+            )
+      </isNotEmpty>
+
+     <!-- 共通検索条件 -->
+     <include refid="whereLicenseCom_LIC" />
+
+
+     <isNotEmpty property="searchParam.trmAlertDateTo">
+        ORDER BY nlcs.HOL_STAFF_CODE, nlcs.LICENSE_ID
+     </isNotEmpty>
+     <isEmpty property="searchParam.trmAlertDateTo">
+       ORDER BY nlcs.LICENSE_ID
+       <!-- 割当情報(機器から検索)-CSVファイル作成ダウンロード -->
+       <isNotEmpty property="isAllocLicense">
+         , assetId
+       </isNotEmpty>
+     </isEmpty>
+
+
+
+
+  </select>
+
+  <!--
+    アップグレード情報
+  -->
+  <select id="selectLicenseUpgradeList_LIC" parameterClass="java.util.Map" resultClass="jp.co.ctcg.easset.dto.license.LicenseSR">
+    SELECT
+      nlcs.LICENSE_ID licenseId
+    , nsm.SOFTWARE_MAKER_NAME softwareMakerName
+    , ns.SOFTWARE_NAME softwareName
+    , nlcs.LIC_SERIAL_CODE licSerialCode
+    , nlcs.LIC_PRODUCT_KEY licProductKey
+    , nlcs.LIC_LICENSE_KEY licLicenseKey
+    , NEA_UTIL_PKG.get_cn_value1_f('LICENSE_QUANTITY_TYPE', nlcs.LIC_QUANTITY_TYPE) licQuantityTypeName
+    , nlcs.LIC_QUANTITY licQuantity
+    , NEA_UTIL_PKG.get_lic_enable_quantity_f(nlcs.LICENSE_ID) licEnableQuantity
+    , NEA_UTIL_PKG.get_lic_upgrade_to_quantity_f(nlcs.LICENSE_ID) licUpgradeToQuantity
+    , NEA_UTIL_PKG.get_cn_value1_f('FLAG_LICENSE_UPGRADE', nlcs.LIC_UPGRADE_FLAG) licUpgradeFlagName
+    , nlup.LICENSE_ID upLicenseId
+    , nsmup.SOFTWARE_MAKER_NAME upSoftwareMakerName
+    , nsup.SOFTWARE_NAME upSoftwareName
+    , nlup.LIC_SERIAL_CODE upLicSerialCode
+    , nlup.LIC_PRODUCT_KEY upLicProductKey
+    , nlup.LIC_LICENSE_KEY upLicLicenseKey
+    , NEA_UTIL_PKG.get_cn_value1_f('LICENSE_QUANTITY_TYPE', nlup.LIC_QUANTITY_TYPE) upLicQuantityTypeName
+    , nlup.LIC_QUANTITY upLicQuantity
+    , NEA_UTIL_PKG.get_lic_enable_quantity_f(nlup.LICENSE_ID) upLicEnableQuantity
+    , NEA_UTIL_PKG.get_lic_upgrade_to_quantity_f(nlup.LICENSE_ID) upLicUpgradeToQuantity
+    , nllu.LIC_UPGRADE_QUANTITY upLicUpgradeQuantity
+    FROM
+      NEA_LICENSE nlcs
+    , NEA_SOFTWARE_MAKER nsm
+    , NEA_SOFTWARE ns
+    , NEA_LICENSE_LINE_UPG nllu
+    , NEA_LICENSE nlup
+    , NEA_SOFTWARE_MAKER nsmup
+    , NEA_SOFTWARE nsup
+    , NEA_LICENSE_LINE_ALLOC nlla
+    WHERE
+        nlcs.SOFTWARE_MAKER_ID = nsm.SOFTWARE_MAKER_ID(+)
+    AND nlcs.SOFTWARE_ID = ns.SOFTWARE_ID(+)
+    AND nllu.LICENSE_ID = nlcs.LICENSE_ID
+    AND nllu.UPGRADE_LICENSE_ID = nlup.LICENSE_ID
+    AND nlup.SOFTWARE_MAKER_ID = nsmup.SOFTWARE_MAKER_ID(+)
+    AND nlup.SOFTWARE_ID = nsup.SOFTWARE_ID(+)
+    AND nlcs.LICENSE_ID = nlla.LICENSE_ID(+)
+
+    <include refid="whereLicenseCom_LIC" />
+
+  UNION
+    SELECT
+      nl.LICENSE_ID licenseId
+    , nsm.SOFTWARE_MAKER_NAME softwareMakerName
+    , ns.SOFTWARE_NAME softwareName
+    , nl.LIC_SERIAL_CODE licSerialCode
+    , nl.LIC_PRODUCT_KEY licProductKey
+    , nl.LIC_LICENSE_KEY licLicenseKey
+    , NEA_UTIL_PKG.get_cn_value1_f('LICENSE_QUANTITY_TYPE', nl.LIC_QUANTITY_TYPE) licQuantityTypeName
+    , nl.LIC_QUANTITY licQuantity
+    , NEA_UTIL_PKG.get_lic_enable_quantity_f(nl.LICENSE_ID) licEnableQuantity
+    , NEA_UTIL_PKG.get_lic_upgrade_to_quantity_f(nl.LICENSE_ID) licUpgradeToQuantity
+    , NEA_UTIL_PKG.get_cn_value1_f('FLAG_LICENSE_UPGRADE', nl.LIC_UPGRADE_FLAG) licUpgradeFlagName
+    , nlcs.LICENSE_ID upLicenseId
+    , nsmup.SOFTWARE_MAKER_NAME upSoftwareMakerName
+    , nsup.SOFTWARE_NAME upSoftwareName
+    , nlcs.LIC_SERIAL_CODE upLicSerialCode
+    , nlcs.LIC_PRODUCT_KEY upLicProductKey
+    , nlcs.LIC_LICENSE_KEY upLicLicenseKey
+    , NEA_UTIL_PKG.get_cn_value1_f('LICENSE_QUANTITY_TYPE', nlcs.LIC_QUANTITY_TYPE) upLicQuantityTypeName
+    , nlcs.LIC_QUANTITY upLicQuantity
+    , NEA_UTIL_PKG.get_lic_enable_quantity_f(nlcs.LICENSE_ID) upLicEnableQuantity
+    , NEA_UTIL_PKG.get_lic_upgrade_to_quantity_f(nlcs.LICENSE_ID) upLicUpgradeToQuantity
+    , nllu.LIC_UPGRADE_QUANTITY upLicUpgradeQuantity
+    FROM
+      NEA_LICENSE nlcs
+    , NEA_SOFTWARE_MAKER nsm
+    , NEA_SOFTWARE ns
+    , NEA_LICENSE_LINE_UPG nllu
+    , NEA_LICENSE nl
+    , NEA_SOFTWARE_MAKER nsmup
+    , NEA_SOFTWARE nsup
+    , NEA_LICENSE_LINE_ALLOC nlla
+    WHERE
+        nl.SOFTWARE_MAKER_ID = nsm.SOFTWARE_MAKER_ID(+)
+    AND nl.SOFTWARE_ID = ns.SOFTWARE_ID(+)
+    AND nllu.LICENSE_ID = nl.LICENSE_ID
+    AND nllu.UPGRADE_LICENSE_ID = nlcs.LICENSE_ID
+    AND nlcs.SOFTWARE_MAKER_ID = nsmup.SOFTWARE_MAKER_ID(+)
+    AND nlcs.SOFTWARE_ID = nsup.SOFTWARE_ID(+)
+    AND nlcs.LICENSE_ID = nlla.LICENSE_ID(+)
+
+    <include refid="whereLicenseCom_LIC" />
+
+    ORDER BY licenseId, upLicenseId
+
+  </select>
+
+  <!--
+    ライセンス登録申請添付ファイル明細取得
+  -->
+  <select id="selectApLicenseLineAtt_APGT" parameterClass="java.util.Map" resultClass="jp.co.ctcg.easset.dto.license.ApLicenseLineAtt">
+    SELECT
+      LICENSE_ID licenseId
+      , LINE_SEQ lineSeq
+      , CREATE_DATE createDate
+      , CREATE_STAFF_CODE createStaffCode
+      , NEA_UTIL_PKG.GET_STAFF_NAME_F(CREATE_STAFF_CODE) createStaffName
+      , UPDATE_DATE updateDate
+      , UPDATE_STAFF_CODE updateStaffCode
+      , ATT_FILE_NAME attFileName
+      , ATT_FILE_ID attFileId
+      , ATT_FILE_COMMENT attFileComment
+    FROM
+      NEA_AP_LICENSE_LINE_ATT
+    WHERE
+      LICENSE_ID = #licenseId#
+    ORDER BY
+      LICENSE_ID
+      , LINE_SEQ
+  </select>
+
+  <!--
+    ライセンスヘッダ作成
+  -->
+   <insert id="insertLicense_LIC" parameterClass="java.util.Map">
+     INSERT INTO NEA_$tableNamePrefix$LICENSE (
+         LICENSE_ID
+       , CREATE_DATE
+       , CREATE_STAFF_CODE
+       , UPDATE_DATE
+       , UPDATE_STAFF_CODE
+       , VERSION
+       <!-- 登録申請 -->
+       <isNotEmpty property="tableNamePrefix">
+         , AP_GET_TAN_LINE_LIC_ID
+         , UPDATE_COMMENT
+         , EAPP_ID
+         , AP_STATUS
+         , AP_DATE
+         , AP_CREATE_STAFF_CODE
+         , AP_CREATE_COMPANY_CODE
+         , AP_CREATE_SECTION_CODE
+         , AP_CREATE_SECTION_YEAR
+         , AP_TEL
+         , AP_OFFICE_NAME
+         , SOFTWARE_MAKER_NAME
+         , SOFTWARE_NAME
+         , ATT_DESCRIPTION
+       </isNotEmpty>
+       , AP_STAFF_CODE
+       , AP_COMPANY_CODE
+       , AP_SECTION_CODE
+       , AP_SECTION_YEAR
+       , SOFTWARE_MAKER_ID
+       , SOFTWARE_ID
+       , LIC_ASSET_TYPE
+       , LIC_GET_TYPE
+       , LIC_HRD_BANDLE_FLAG
+       , LIC_SHOP_NAME
+       , LIC_AMOUNT
+       , LIC_SERIAL_CODE
+       , LIC_PRODUCT_KEY
+       , LIC_LICENSE_KEY
+       , LIC_MEDIA_TYPE
+       , LIC_LICENSE_TYPE
+       , LIC_UPGRADE_FLAG
+       , LIC_TERM_FLAG
+       , LIC_VOLUME_TYPE
+       , LIC_USE_CONSENT_FLAG
+       , LIC_DOWNGRADE_CONSENT_FLAG
+       , LIC_QUANTITY_TYPE
+       , LIC_QUANTITY
+       , LIC_USE_FILE_ID
+       , LIC_USE_FILE_NAME
+       , TRM_CONTRACT_TYPE
+       , TRM_PARENT_LICENSE_ID
+       , TRM_START_DATE
+       , TRM_END_DATE
+       , TRM_ALERT_DATE
+       , TRM_AUTO_ALLOC_FLAG
+       , HOL_COMPANY_CODE
+       , HOL_SECTION_CODE
+       , HOL_SECTION_YEAR
+       , HOL_STAFF_CODE
+       , USE_TYPE
+       , USE_COMPANY_CODE
+       , USE_SECTION_CODE
+       , USE_SECTION_YEAR
+       , USE_RENTAL_FLAG
+       , MNT_CONTRACT_CODE
+       , MNT_CONTRACT_COMPANY_NAME
+       , MNT_CONTRACT_START_DATE
+       , MNT_CONTRACT_END_DATE
+       , MNT_CONTRACT_AMOUNT
+       , MNT_CONTRACT_REGIST_CODE
+       , MNT_CONTRACT_REGIST_DATE
+       , MNT_CONTRACT_STAFF_CODE
+       , DSC_DESCRIPTION
+       , DSC_ATTRIBUTE1
+       , DSC_ATTRIBUTE2
+       , DSC_ATTRIBUTE3
+       , DSC_ATTRIBUTE4
+       , DSC_ATTRIBUTE5
+       , DSC_ATTRIBUTE6
+       , DSC_ATTRIBUTE7
+       , DSC_ATTRIBUTE8
+       , DSC_ATTRIBUTE9
+       , DSC_ATTRIBUTE10
+       , DSC_ATTRIBUTE11
+       , DSC_ATTRIBUTE12
+       , DSC_ATTRIBUTE13
+       , DSC_ATTRIBUTE14
+       , DSC_ATTRIBUTE15
+       , DSC_ATTRIBUTE16
+       , DSC_ATTRIBUTE17
+       , DSC_ATTRIBUTE18
+       , DSC_ATTRIBUTE19
+       , DSC_ATTRIBUTE20
+       , DELETE_FLAG
+       , DELETE_DATE
+       , DELETE_REASON
+       , GET_APPLICATION_ID
+       , REGIST_APPLICATION_ID
+       , CONTRACT_NUM
+       , PARENT_LICENSE_ID
+     ) VALUES (
+         #obj.licenseId:VARCHAR# /* LICENSE_ID*/
+       , #obj.createDate:TIMESTAMP# /* CREATE_DATE*/
+       , #obj.createStaffCode:VARCHAR# /* CREATE_STAFF_CODE*/
+       , #obj.updateDate:TIMESTAMP# /* UPDATE_DATE*/
+       , #obj.updateStaffCode:VARCHAR# /* UPDATE_STAFF_CODE*/
+       , #obj.version:NUMERIC# /* VERSION*/
+       <!-- 登録申請 -->
+       <isNotEmpty property="tableNamePrefix">
+         , #obj.apGetTanLineLicId:NUMERIC# /* AP_GET_TAN_LINE_LIC_ID*/
+         , #obj.updateComment:VARCHAR# /* UPDATE_COMMENT*/
+         , #obj.eappId:NUMERIC# /* EAPP_ID*/
+         , #obj.apStatus:CHAR# /* AP_STATUS*/
+         , #obj.apDate:DATE# /* AP_DATE*/
+         , #obj.apCreateStaffCode:VARCHAR# /* AP_CREATE_STAFF_CODE*/
+         , #obj.apCreateCompanyCode:VARCHAR# /* AP_CREATE_COMPANY_CODE*/
+         , #obj.apCreateSectionCode:VARCHAR# /* AP_CREATE_SECTION_CODE*/
+         , #obj.apCreateSectionYear:NUMERIC# /* AP_CREATE_SECTION_YEAR*/
+         , #obj.apTel:VARCHAR# /* AP_TEL*/
+         , #obj.apOfficeName:VARCHAR# /* AP_OFFICE_NAME*/
+         , #obj.softwareMakerName:VARCHAR# /* SOFTWARE_MAKER_NAME*/
+         , #obj.softwareName:VARCHAR# /* SOFTWARE_NAME*/
+         , #obj.attDescription:VARCHAR# /* ATT_DESCRIPTION*/
+       </isNotEmpty>
+       , #obj.apStaffCode:VARCHAR# /* AP_STAFF_CODE*/
+       , #obj.apCompanyCode:VARCHAR# /* AP_COMPANY_CODE*/
+       , #obj.apSectionCode:VARCHAR# /* AP_SECTION_CODE*/
+       , #obj.apSectionYear:NUMERIC# /* AP_SECTION_YEAR*/
+       , #obj.softwareMakerId:NUMERIC# /* SOFTWARE_MAKER_ID*/
+       , #obj.softwareId:NUMERIC# /* SOFTWARE_ID*/
+       , #obj.licAssetType:VARCHAR# /* LIC_ASSET_TYPE*/
+       , #obj.licGetType:VARCHAR# /* LIC_GET_TYPE*/
+       , #obj.licHrdBandleFlag:CHAR# /* LIC_HRD_BANDLE_FLAG*/
+       , #obj.licShopName:VARCHAR# /* LIC_SHOP_NAME*/
+       , #obj.licAmount:NUMERIC# /* LIC_AMOUNT*/
+       , #obj.licSerialCode:VARCHAR# /* LIC_SERIAL_CODE*/
+       , #obj.licProductKey:VARCHAR# /* LIC_PRODUCT_KEY*/
+       , #obj.licLicenseKey:VARCHAR# /* LIC_LICENSE_KEY*/
+       , #obj.licMediaType:VARCHAR# /* LIC_MEDIA_TYPE*/
+       , #obj.licLicenseType:VARCHAR# /* LIC_LICENSE_TYPE*/
+       , #obj.licUpgradeFlag:CHAR# /* LIC_UPGRADE_FLAG*/
+       , #obj.licTermFlag:CHAR# /* LIC_TERM_FLAG*/
+       , #obj.licVolumeType:VARCHAR# /* LIC_VOLUME_TYPE*/
+       , #obj.licUseConsentFlag:CHAR# /* LIC_USE_CONSENT_FLAG*/
+       , #obj.licDowngradeConsentFlag:CHAR# /* LIC_DOWNGRADE_CONSENT_FLAG*/
+       , #obj.licQuantityType:CHAR# /* LIC_QUANTITY_TYPE*/
+       , #obj.licQuantity:NUMERIC# /* LIC_QUANTITY*/
+       , #obj.licUseFileId:VARCHAR# /* LIC_USE_FILE_ID*/
+       , #obj.licUseFileName:VARCHAR# /* LIC_USE_FILE_NAME*/
+       , #obj.trmContractType:CHAR# /* TRM_CONTRACT_TYPE*/
+       , #obj.trmParentLicenseId:VARCHAR# /* TRM_PARENT_LICENSE_ID*/
+       , #obj.trmStartDate:DATE# /* TRM_START_DATE*/
+       , #obj.trmEndDate:DATE# /* TRM_END_DATE*/
+       , #obj.trmAlertDate:DATE# /* TRM_ALERT_DATE*/
+       , #obj.trmAutoAllocFlag:CHAR# /* TRM_AUTO_ALLOC_FLAG*/
+       , #obj.holCompanyCode:VARCHAR# /* HOL_COMPANY_CODE*/
+       , #obj.holSectionCode:VARCHAR# /* HOL_SECTION_CODE*/
+       , #obj.holSectionYear:NUMERIC# /* HOL_SECTION_YEAR*/
+       , #obj.holStaffCode:VARCHAR# /* HOL_STAFF_CODE*/
+       , #obj.useType:CHAR# /* USE_TYPE*/
+       , #obj.useCompanyCode:VARCHAR# /* USE_COMPANY_CODE*/
+       , #obj.useSectionCode:VARCHAR# /* USE_SECTION_CODE*/
+       , #obj.useSectionYear:NUMERIC# /* USE_SECTION_YEAR*/
+       , #obj.useRentalFlag:CHAR# /* USE_RENTAL_FLAG*/
+       , #obj.mntContractCode:VARCHAR# /* MNT_CONTRACT_CODE*/
+       , #obj.mntContractCompanyName:VARCHAR# /* MNT_CONTRACT_COMPANY_NAME*/
+       , #obj.mntContractStartDate:DATE# /* MNT_CONTRACT_START_DATE*/
+       , #obj.mntContractEndDate:DATE# /* MNT_CONTRACT_END_DATE*/
+       , #obj.mntContractAmount:NUMERIC# /* MNT_CONTRACT_AMOUNT*/
+       , #obj.mntContractRegistCode:VARCHAR# /* MNT_CONTRACT_REGIST_CODE*/
+       , #obj.mntContractRegistDate:DATE# /* MNT_CONTRACT_REGIST_DATE*/
+       , #obj.mntContractStaffCode:VARCHAR# /* MNT_CONTRACT_STAFF_CODE*/
+       , #obj.dscDescription:VARCHAR# /* DSC_DESCRIPTION*/
+       , #obj.dscAttribute1:VARCHAR# /* DSC_ATTRIBUTE1*/
+       , #obj.dscAttribute2:VARCHAR# /* DSC_ATTRIBUTE2*/
+       , #obj.dscAttribute3:VARCHAR# /* DSC_ATTRIBUTE3*/
+       , #obj.dscAttribute4:VARCHAR# /* DSC_ATTRIBUTE4*/
+       , #obj.dscAttribute5:VARCHAR# /* DSC_ATTRIBUTE5*/
+       , #obj.dscAttribute6:VARCHAR# /* DSC_ATTRIBUTE6*/
+       , #obj.dscAttribute7:VARCHAR# /* DSC_ATTRIBUTE7*/
+       , #obj.dscAttribute8:VARCHAR# /* DSC_ATTRIBUTE8*/
+       , #obj.dscAttribute9:VARCHAR# /* DSC_ATTRIBUTE9*/
+       , #obj.dscAttribute10:VARCHAR# /* DSC_ATTRIBUTE10*/
+       , #obj.dscAttribute11:VARCHAR# /* DSC_ATTRIBUTE11*/
+       , #obj.dscAttribute12:VARCHAR# /* DSC_ATTRIBUTE12*/
+       , #obj.dscAttribute13:VARCHAR# /* DSC_ATTRIBUTE13*/
+       , #obj.dscAttribute14:VARCHAR# /* DSC_ATTRIBUTE14*/
+       , #obj.dscAttribute15:VARCHAR# /* DSC_ATTRIBUTE15*/
+       , #obj.dscAttribute16:VARCHAR# /* DSC_ATTRIBUTE16*/
+       , #obj.dscAttribute17:VARCHAR# /* DSC_ATTRIBUTE17*/
+       , #obj.dscAttribute18:VARCHAR# /* DSC_ATTRIBUTE18*/
+       , #obj.dscAttribute19:VARCHAR# /* DSC_ATTRIBUTE19*/
+       , #obj.dscAttribute20:VARCHAR# /* DSC_ATTRIBUTE20*/
+       , #obj.deleteFlag:CHAR# /* DELETE_FLAG*/
+       , #obj.deleteDate:DATE# /* DELETE_DATE*/
+       , #obj.deleteReason:VARCHAR# /* DELETE_REASON*/
+       , #obj.getApplicationId:VARCHAR# /* GET_APPLICATION_ID*/
+       , #obj.registApplicationId:VARCHAR# /* REGIST_APPLICATION_ID*/
+       , #obj.contractNum:VARCHAR# /* CONTRACT_NUM*/
+       , #obj.parentLicenseId:VARCHAR# /* PARENT_LICENSE_ID*/
+     )
+  </insert>
+
+  <!--
+    ライセンス_貸出明細作成
+  -->
+   <insert id="insertLicenseLineQty_LIC" parameterClass="java.util.Map">
+     INSERT INTO NEA_LICENSE_LINE_QTY (
+      LICENSE_ID
+      , LICENSE_LINE_QTY_TYPE
+      , LINE_SEQ
+      , CREATE_DATE
+      , CREATE_STAFF_CODE
+      , UPDATE_DATE
+      , UPDATE_STAFF_CODE
+      , LICENSE_LINE_QTY_ID
+      , USE_COMPANY_CODE
+      , USE_SECTION_CODE
+      , USE_SECTION_YEAR
+      , LIC_LINE_ENABLE_QUANTITY
+      , LIC_LINE_USE_QUANTITY
+     ) VALUES (
+      #obj.licenseId:VARCHAR# /* LICENSE_ID*/
+      , #obj.licenseLineQtyType:CHAR# /* LICENSE_LINE_QTY_TYPE*/
+      , #obj.lineSeq:NUMERIC# /* LINE_SEQ*/
+      , #obj.createDate:TIMESTAMP# /* CREATE_DATE*/
+      , #obj.createStaffCode:VARCHAR# /* CREATE_STAFF_CODE*/
+      , #obj.updateDate:TIMESTAMP# /* UPDATE_DATE*/
+      , #obj.updateStaffCode:VARCHAR# /* UPDATE_STAFF_CODE*/
+      , #obj.licenseLineQtyId:NUMERIC# /* LICENSE_LINE_QTY_ID*/
+      , #obj.useCompanyCode:VARCHAR# /* USE_COMPANY_CODE*/
+      , #obj.useSectionCode:VARCHAR# /* USE_SECTION_CODE*/
+      , #obj.useSectionYear:NUMERIC# /* USE_SECTION_YEAR*/
+      , #obj.licLineEnableQuantity:NUMERIC# /* LIC_LINE_ENABLE_QUANTITY*/
+      , #obj.licLineUseQuantity:NUMERIC# /* LIC_LINE_USE_QUANTITY*/
+     )
+   </insert>
+
+  <!--
+    ライセンス_アップグレード明細作成
+  -->
+   <insert id="insertLicenseLineUpg_LIC" parameterClass="java.util.Map">
+     INSERT INTO NEA_LICENSE_LINE_UPG (
+      LICENSE_ID
+      , UPGRADE_LICENSE_ID
+      , CREATE_DATE
+      , CREATE_STAFF_CODE
+      , UPDATE_DATE
+      , UPDATE_STAFF_CODE
+      , LIC_UPGRADE_QUANTITY
+     ) VALUES (
+      #obj.licenseId:VARCHAR# /* LICENSE_ID*/
+      , #obj.upgradeLicenseId:VARCHAR# /* UPGRADE_LICENSE_ID*/
+      , #obj.createDate:TIMESTAMP# /* CREATE_DATE*/
+      , #obj.createStaffCode:VARCHAR# /* CREATE_STAFF_CODE*/
+      , #obj.updateDate:TIMESTAMP# /* UPDATE_DATE*/
+      , #obj.updateStaffCode:VARCHAR# /* UPDATE_STAFF_CODE*/
+      , #obj.licUpgradeQuantity:NUMERIC# /* LIC_UPGRADE_QUANTITY*/
+     )
+   </insert>
+
+  <!--
+    ライセンス登録申請添付明細作成
+  -->
+  <insert id="insertApLicenseLineAtt_APGT" parameterClass="java.util.Map">
+    INSERT INTO NEA_AP_LICENSE_LINE_ATT (
+      LICENSE_ID
+      , LINE_SEQ
+      , CREATE_DATE
+      , CREATE_STAFF_CODE
+      , UPDATE_DATE
+      , UPDATE_STAFF_CODE
+      , ATT_FILE_NAME
+      , ATT_FILE_ID
+      , ATT_FILE_COMMENT
+    ) VALUES (
+      #obj.licenseId:VARCHAR# /* LICENSE_ID*/
+      , #obj.lineSeq:NUMERIC# /* LINE_SEQ*/
+      , #obj.createDate:TIMESTAMP# /* CREATE_DATE*/
+      , #obj.createStaffCode:VARCHAR# /* CREATE_STAFF_CODE*/
+      , #obj.updateDate:TIMESTAMP# /* UPDATE_DATE*/
+      , #obj.updateStaffCode:VARCHAR# /* UPDATE_STAFF_CODE*/
+      , #obj.attFileName:VARCHAR# /* ATT_FILE_NAME*/
+      , #obj.attFileId:NUMERIC# /* ATT_FILE_ID*/
+      , #obj.attFileComment:VARCHAR# /* ATT_FILE_COMMENT*/
+    )
+  </insert>
+
+  <!--
+    ライセンスヘッダ更新
+  -->
+  <update id="updateLicense_LIC" parameterClass="java.util.Map">
+    UPDATE
+      NEA_$tableNamePrefix$LICENSE
+    SET
+         LICENSE_ID = #obj.licenseId:VARCHAR#
+       , CREATE_DATE = #obj.createDate:TIMESTAMP#
+       , CREATE_STAFF_CODE = #obj.createStaffCode:VARCHAR#
+       , UPDATE_DATE = #obj.updateDate:TIMESTAMP#
+       , UPDATE_STAFF_CODE = #obj.updateStaffCode:VARCHAR#
+       , VERSION = #obj.version:NUMERIC#
+       <!-- 登録申請 -->
+       <isNotEmpty property="tableNamePrefix">
+         , AP_GET_TAN_LINE_LIC_ID = #obj.apGetTanLineLicId:NUMERIC#
+         , UPDATE_COMMENT = #obj.updateComment:VARCHAR#
+         , EAPP_ID = #obj.eappId:NUMERIC#
+         , AP_STATUS = #obj.apStatus:CHAR#
+         , AP_DATE = #obj.apDate:DATE#
+         , AP_CREATE_STAFF_CODE = #obj.apCreateStaffCode:VARCHAR#
+         , AP_CREATE_COMPANY_CODE = #obj.apCreateCompanyCode:VARCHAR#
+         , AP_CREATE_SECTION_CODE = #obj.apCreateSectionCode:VARCHAR#
+         , AP_CREATE_SECTION_YEAR = #obj.apCreateSectionYear:NUMERIC#
+         , AP_TEL = #obj.apTel:VARCHAR#
+         , AP_OFFICE_NAME = #obj.apOfficeName:VARCHAR#
+         , SOFTWARE_MAKER_NAME = #obj.softwareMakerName:VARCHAR#
+         , SOFTWARE_NAME = #obj.softwareName:VARCHAR#
+         , ATT_DESCRIPTION = #obj.attDescription:VARCHAR#
+       </isNotEmpty>
+       , AP_STAFF_CODE = #obj.apStaffCode:VARCHAR#
+       , AP_COMPANY_CODE = #obj.apCompanyCode:VARCHAR#
+       , AP_SECTION_CODE = #obj.apSectionCode:VARCHAR#
+       , AP_SECTION_YEAR = #obj.apSectionYear:NUMERIC#
+       , SOFTWARE_MAKER_ID = #obj.softwareMakerId:NUMERIC#
+       , SOFTWARE_ID = #obj.softwareId:NUMERIC#
+       , LIC_ASSET_TYPE = #obj.licAssetType:VARCHAR#
+       , LIC_GET_TYPE = #obj.licGetType:VARCHAR#
+       , LIC_HRD_BANDLE_FLAG = #obj.licHrdBandleFlag:CHAR#
+       , LIC_SHOP_NAME = #obj.licShopName:VARCHAR#
+       , LIC_AMOUNT = #obj.licAmount:NUMERIC#
+       , LIC_SERIAL_CODE = #obj.licSerialCode:VARCHAR#
+       , LIC_PRODUCT_KEY = #obj.licProductKey:VARCHAR#
+       , LIC_LICENSE_KEY = #obj.licLicenseKey:VARCHAR#
+       , LIC_MEDIA_TYPE = #obj.licMediaType:VARCHAR#
+       , LIC_LICENSE_TYPE = #obj.licLicenseType:VARCHAR#
+       , LIC_UPGRADE_FLAG = #obj.licUpgradeFlag:CHAR#
+       , LIC_TERM_FLAG = #obj.licTermFlag:CHAR#
+       , LIC_VOLUME_TYPE = #obj.licVolumeType:VARCHAR#
+       , LIC_USE_CONSENT_FLAG = #obj.licUseConsentFlag:CHAR#
+       , LIC_DOWNGRADE_CONSENT_FLAG = #obj.licDowngradeConsentFlag:CHAR#
+       , LIC_QUANTITY_TYPE = #obj.licQuantityType:CHAR#
+       , LIC_QUANTITY = #obj.licQuantity:NUMERIC#
+       , LIC_USE_FILE_ID = #obj.licUseFileId:VARCHAR#
+       , LIC_USE_FILE_NAME = #obj.licUseFileName:VARCHAR#
+       , TRM_CONTRACT_TYPE = #obj.trmContractType:CHAR#
+       , TRM_PARENT_LICENSE_ID = #obj.trmParentLicenseId:VARCHAR#
+       , TRM_START_DATE = #obj.trmStartDate:DATE#
+       , TRM_END_DATE = #obj.trmEndDate:DATE#
+       , TRM_ALERT_DATE = #obj.trmAlertDate:DATE#
+       , TRM_AUTO_ALLOC_FLAG = #obj.trmAutoAllocFlag:CHAR#
+       , HOL_COMPANY_CODE = #obj.holCompanyCode:VARCHAR#
+       , HOL_SECTION_CODE = #obj.holSectionCode:VARCHAR#
+       , HOL_SECTION_YEAR = #obj.holSectionYear:NUMERIC#
+       , HOL_STAFF_CODE = #obj.holStaffCode:VARCHAR#
+       , USE_TYPE = #obj.useType:CHAR#
+       , USE_COMPANY_CODE = #obj.useCompanyCode:VARCHAR#
+       , USE_SECTION_CODE = #obj.useSectionCode:VARCHAR#
+       , USE_SECTION_YEAR = #obj.useSectionYear:NUMERIC#
+       , USE_RENTAL_FLAG = #obj.useRentalFlag:CHAR#
+       , MNT_CONTRACT_CODE = #obj.mntContractCode:VARCHAR#
+       , MNT_CONTRACT_COMPANY_NAME = #obj.mntContractCompanyName:VARCHAR#
+       , MNT_CONTRACT_START_DATE = #obj.mntContractStartDate:DATE#
+       , MNT_CONTRACT_END_DATE = #obj.mntContractEndDate:DATE#
+       , MNT_CONTRACT_AMOUNT = #obj.mntContractAmount:NUMERIC#
+       , MNT_CONTRACT_REGIST_CODE = #obj.mntContractRegistCode:VARCHAR#
+       , MNT_CONTRACT_REGIST_DATE = #obj.mntContractRegistDate:DATE#
+       , MNT_CONTRACT_STAFF_CODE = #obj.mntContractStaffCode:VARCHAR#
+       , DSC_DESCRIPTION = #obj.dscDescription:VARCHAR#
+       , DSC_ATTRIBUTE1 = #obj.dscAttribute1:VARCHAR#
+       , DSC_ATTRIBUTE2 = #obj.dscAttribute2:VARCHAR#
+       , DSC_ATTRIBUTE3 = #obj.dscAttribute3:VARCHAR#
+       , DSC_ATTRIBUTE4 = #obj.dscAttribute4:VARCHAR#
+       , DSC_ATTRIBUTE5 = #obj.dscAttribute5:VARCHAR#
+       , DSC_ATTRIBUTE6 = #obj.dscAttribute6:VARCHAR#
+       , DSC_ATTRIBUTE7 = #obj.dscAttribute7:VARCHAR#
+       , DSC_ATTRIBUTE8 = #obj.dscAttribute8:VARCHAR#
+       , DSC_ATTRIBUTE9 = #obj.dscAttribute9:VARCHAR#
+       , DSC_ATTRIBUTE10 = #obj.dscAttribute10:VARCHAR#
+       , DSC_ATTRIBUTE11 = #obj.dscAttribute11:VARCHAR#
+       , DSC_ATTRIBUTE12 = #obj.dscAttribute12:VARCHAR#
+       , DSC_ATTRIBUTE13 = #obj.dscAttribute13:VARCHAR#
+       , DSC_ATTRIBUTE14 = #obj.dscAttribute14:VARCHAR#
+       , DSC_ATTRIBUTE15 = #obj.dscAttribute15:VARCHAR#
+       , DSC_ATTRIBUTE16 = #obj.dscAttribute16:VARCHAR#
+       , DSC_ATTRIBUTE17 = #obj.dscAttribute17:VARCHAR#
+       , DSC_ATTRIBUTE18 = #obj.dscAttribute18:VARCHAR#
+       , DSC_ATTRIBUTE19 = #obj.dscAttribute19:VARCHAR#
+       , DSC_ATTRIBUTE20 = #obj.dscAttribute20:VARCHAR#
+       , DELETE_FLAG = #obj.deleteFlag:CHAR#
+       , DELETE_DATE = #obj.deleteDate:DATE#
+       , DELETE_REASON = #obj.deleteReason:VARCHAR#
+       , GET_APPLICATION_ID = #obj.getApplicationId:VARCHAR#
+       , REGIST_APPLICATION_ID = #obj.registApplicationId:VARCHAR#
+       , CONTRACT_NUM = #obj.contractNum:VARCHAR#
+       , PARENT_LICENSE_ID = #obj.parentLicenseId:VARCHAR#
+    WHERE
+      LICENSE_ID = #obj.licenseId:VARCHAR#
+  </update>
+
+  <!--
+    ライセンスヘッダ削除
+  -->
+  <delete id="deleteLicense_LIC" parameterClass="java.util.Map">
+    DELETE FROM
+      NEA_$tableNamePrefix$LICENSE
+    WHERE
+      LICENSE_ID = #licenseId#
+  </delete>
+
+  <!--
+    ライセンス_貸出明細削除
+  -->
+  <delete id="deleteLicenseLineQty_LIC" parameterClass="java.util.Map">
+    DELETE FROM
+      NEA_LICENSE_LINE_QTY
+    WHERE
+      LICENSE_ID = #licenseId#
+  </delete>
+
+  <!--
+    アップグレード明細削除
+  -->
+  <delete id="deleteLicenseLineUpg_LIC" parameterClass="java.util.Map">
+    DELETE FROM
+      NEA_LICENSE_LINE_UPG
+    WHERE
+         UPGRADE_LICENSE_ID = #licenseId#
+      OR LICENSE_ID = #licenseId#
+  </delete>
+
+  <!--
+    ライセンス登録申請添付明細削除
+  -->
+  <delete id="deleteApLicenseLineAtt_APGT" parameterClass="java.util.Map">
+    DELETE FROM
+      NEA_AP_LICENSE_LINE_ATT
+    WHERE
+      LICENSE_ID = #licenseId#
+  </delete>
+
+  <!--
+    ソフトウェアメーカー検索
+  -->
+  <select id="selectSoftwareMakerList_LIC" parameterClass="java.util.Map" resultClass="jp.co.ctcg.easset.dto.license.SoftwareMaker">
+    SELECT
+      SOFTWARE_MAKER_ID softwareMakerId
+      , CREATE_DATE createDate
+      , CREATE_STAFF_CODE createStaffCode
+      , UPDATE_DATE updateDate
+      , UPDATE_STAFF_CODE updateStaffCode
+      , SOFTWARE_MAKER_NAME softwareMakerName
+      , AP_STAFF_CODE apStaffCode
+      , AP_DATE apDate
+      , DELETE_FLAG deleteFlag
+      , DELETE_STAFF_CODE deleteStaffCode
+      , DELETE_DATE deleteDate
+      , NEA_UTIL_PKG.get_staff_name_f(CREATE_STAFF_CODE) createStaffName
+      , NEA_UTIL_PKG.get_staff_name_f(UPDATE_STAFF_CODE) updateStaffName
+      , NEA_UTIL_PKG.get_staff_name_f(DELETE_STAFF_CODE) deleteStaffName
+      , NEA_UTIL_PKG.get_staff_name_f(AP_STAFF_CODE) apStaffName
+      , NEA_UTIL_PKG.get_cn_value1_f('FLAG_DEL_USE', DELETE_FLAG) deleteFlagName
+    FROM
+      NEA_SOFTWARE_MAKER SM
+    WHERE
+      1 = 1
+      <isNotEmpty property="softwareMakerName">
+        AND SOFTWARE_MAKER_NAME = #softwareMakerName#
+      </isNotEmpty>
+      <isNotEmpty property="softwareMakerNameFuzzy">
+        AND NEA_UTIL_PKG.TO_FUZZY_F(SOFTWARE_MAKER_NAME) LIKE '%' || NEA_UTIL_PKG.TO_FUZZY_F(#softwareMakerNameFuzzy#) || '%'
+      </isNotEmpty>
+      <isNotEmpty property="softwareMakerNameCheck">
+        AND NEA_UTIL_PKG.TO_FUZZY_F(SOFTWARE_MAKER_NAME) = NEA_UTIL_PKG.TO_FUZZY_F(#softwareMakerNameCheck#)
+      </isNotEmpty>
+      <isNotEmpty property="enableOnly">
+        AND DELETE_FLAG = #enableOnly#
+      </isNotEmpty>
+      <isNotEmpty property="lockFlag">
+        FOR UPDATE
+      </isNotEmpty>
+    ORDER BY
+      softwareMakerName
+  </select>
+
+  <!--
+    ソフトウェア検索
+  -->
+  <select id="selectSoftwareList_LIC" parameterClass="java.util.Map" resultClass="jp.co.ctcg.easset.dto.license.Software">
+    SELECT
+      SOFTWARE_ID softwareId
+      , CREATE_DATE createDate
+      , CREATE_STAFF_CODE createStaffCode
+      , UPDATE_DATE updateDate
+      , UPDATE_STAFF_CODE updateStaffCode
+      , SOFTWARE_MAKER_ID softwareMakerId
+      , SOFTWARE_NAME softwareName
+      , AP_STAFF_CODE apStaffCode
+      , AP_DATE apDate
+      , DELETE_FLAG deleteFlag
+      , DELETE_STAFF_CODE deleteStaffCode
+      , DELETE_DATE deleteDate
+      , NEA_UTIL_PKG.get_staff_name_f(CREATE_STAFF_CODE) createStaffName
+      , NEA_UTIL_PKG.get_staff_name_f(UPDATE_STAFF_CODE) updateStaffName
+      , NEA_UTIL_PKG.get_staff_name_f(DELETE_STAFF_CODE) deleteStaffName
+      , NEA_UTIL_PKG.get_staff_name_f(AP_STAFF_CODE) apStaffName
+      , NEA_UTIL_PKG.get_cn_value1_f('FLAG_DEL_USE', DELETE_FLAG) deleteFlagName
+      , (SELECT SOFTWARE_MAKER_NAME name FROM NEA_SOFTWARE_MAKER WHERE SOFTWARE_MAKER_ID = S.SOFTWARE_MAKER_ID) softwareMakerName
+    FROM
+      NEA_SOFTWARE S
+    WHERE
+      1 = 1
+      <isNotEmpty property="softwareMakerId">
+        AND SOFTWARE_MAKER_ID = #softwareMakerId#
+      </isNotEmpty>
+      <isNotEmpty property="softwareName">
+        AND SOFTWARE_NAME = #softwareName#
+      </isNotEmpty>
+      <isNotEmpty property="softwareNameFuzzy">
+        AND NEA_UTIL_PKG.TO_FUZZY_F(SOFTWARE_NAME) LIKE '%' || NEA_UTIL_PKG.TO_FUZZY_F(#softwareNameFuzzy#) || '%'
+      </isNotEmpty>
+      <isNotEmpty property="enableOnly">
+        AND DELETE_FLAG = #enableOnly#
+      </isNotEmpty>
+      <isNotEmpty property="softwareNameCheck">
+        AND NEA_UTIL_PKG.TO_FUZZY_F(SOFTWARE_NAME) = NEA_UTIL_PKG.TO_FUZZY_F(#softwareNameCheck#)
+      </isNotEmpty>
+      <isNotEmpty property="lockFlag">
+        FOR UPDATE
+      </isNotEmpty>
+    ORDER BY
+      softwareMakerName
+      , softwareName
+  </select>
+
+  <!--
+   ソフトウェアメーカー作成
+  -->
+  <insert id="insertSoftwareMaker_LIC" parameterClass="java.util.Map">
+    <selectKey resultClass="java.lang.Long" keyProperty="softwareMakerId">
+      SELECT
+        NEA_SOFTWARE_MAKER_S.NEXTVAL softwareMakerId
+      FROM
+        dual
+    </selectKey>
+    INSERT INTO NEA_SOFTWARE_MAKER (
+      SOFTWARE_MAKER_ID
+    , CREATE_DATE
+    , CREATE_STAFF_CODE
+    , UPDATE_DATE
+    , UPDATE_STAFF_CODE
+    , SOFTWARE_MAKER_NAME
+    , AP_STAFF_CODE
+    , AP_DATE
+    , DELETE_FLAG
+    , DELETE_STAFF_CODE
+    , DELETE_DATE
+    ) VALUES (
+      #softwareMakerId:NUMERIC# /* SOFTWARE_MAKER_ID*/
+    , #obj.createDate:TIMESTAMP# /* CREATE_DATE*/
+    , #obj.createStaffCode:VARCHAR# /* CREATE_STAFF_CODE*/
+    , #obj.updateDate:TIMESTAMP# /* UPDATE_DATE*/
+    , #obj.updateStaffCode:VARCHAR# /* UPDATE_STAFF_CODE*/
+    , #obj.softwareMakerName:VARCHAR# /* SOFTWARE_MAKER_NAME*/
+    , #obj.apStaffCode:VARCHAR# /* AP_STAFF_CODE*/
+    , #obj.apDate:DATE# /* AP_DATE*/
+    , #obj.deleteFlag:VARCHAR# /* DELETE_FLAG*/
+    , #obj.deleteStaffCode:VARCHAR# /* DELETE_STAFF_CODE*/
+    , #obj.deleteDate:DATE# /* DELETE_DATE*/
+    )
+  </insert>
+
+  <!--
+   ソフトウェアメーカーアップデート
+  -->
+  <update id="updateSoftwareMaker_LIC" parameterClass="java.util.Map">
+    UPDATE
+      NEA_SOFTWARE_MAKER
+    SET
+      SOFTWARE_MAKER_NAME = #obj.softwareMakerName:VARCHAR#
+    , UPDATE_DATE = #obj.updateDate:TIMESTAMP#
+    , UPDATE_STAFF_CODE = #obj.updateStaffCode:VARCHAR#
+    , DELETE_FLAG = #obj.deleteFlag#
+    WHERE
+      SOFTWARE_MAKER_ID = #obj.softwareMakerId:NUMERIC#
+  </update>
+
+  <!--
+   ソフトウェア作成
+  -->
+  <insert id="insertSoftware_LIC" parameterClass="java.util.Map">
+    <selectKey resultClass="java.lang.Long" keyProperty="softwareId">
+      SELECT
+        NEA_SOFTWARE_S.NEXTVAL softwareId
+      FROM
+        dual
+    </selectKey>
+    INSERT INTO NEA_SOFTWARE (
+      SOFTWARE_ID
+    , CREATE_DATE
+    , CREATE_STAFF_CODE
+    , UPDATE_DATE
+    , UPDATE_STAFF_CODE
+    , SOFTWARE_MAKER_ID
+    , SOFTWARE_NAME
+    , AP_STAFF_CODE
+    , AP_DATE
+    , DELETE_FLAG
+    , DELETE_STAFF_CODE
+    , DELETE_DATE
+    ) VALUES (
+      #softwareId:NUMERIC# /* SOFTWARE_ID*/
+    , #obj.createDate:TIMESTAMP# /* CREATE_DATE*/
+    , #obj.createStaffCode:VARCHAR# /* CREATE_STAFF_CODE*/
+    , #obj.updateDate:TIMESTAMP# /* UPDATE_DATE*/
+    , #obj.updateStaffCode:VARCHAR# /* UPDATE_STAFF_CODE*/
+    , #obj.softwareMakerId:NUMERIC# /* SOFTWARE_MAKER_ID*/
+    , #obj.softwareName:VARCHAR# /* SOFTWARE_NAME*/
+    , #obj.apStaffCode:VARCHAR# /* AP_STAFF_CODE*/
+    , #obj.apDate:DATE# /* AP_DATE*/
+    , #obj.deleteFlag:VARCHAR# /* DELETE_FLAG*/
+    , #obj.deleteStaffCode:VARCHAR# /* DELETE_STAFF_CODE*/
+    , #obj.deleteDate:DATE# /* DELETE_DATE*/
+    )
+  </insert>
+
+  <!--
+   ソフトウェアアップデート
+  -->
+  <update id="updateSoftware_LIC" parameterClass="java.util.Map">
+    UPDATE
+      NEA_SOFTWARE
+    SET
+      UPDATE_DATE = #obj.updateDate:TIMESTAMP#
+    , UPDATE_STAFF_CODE = #obj.updateStaffCode:VARCHAR#
+    , SOFTWARE_MAKER_ID = #obj.softwareMakerId:NUMERIC#
+    , SOFTWARE_NAME = #obj.softwareName:VARCHAR#
+    , DELETE_FLAG = #obj.deleteFlag:VARCHAR#
+    , DELETE_STAFF_CODE = #obj.deleteStaffCode:VARCHAR#
+    , DELETE_DATE = #obj.deleteDate:DATE#
+    WHERE
+      SOFTWARE_ID = #obj.softwareId:NUMERIC#
+  </update>
+
+  <!--
+    取得申請(有形)明細から登録申請データ取得
+  -->
+  <select id="selectApLicenseByApGetTan_LIC" parameterClass="java.util.Map" resultClass="jp.co.ctcg.easset.dto.license.License">
+    SELECT
+      nagtll.AP_GET_TAN_LINE_LIC_ID apGetTanLineLicId
+      , nagtll.LINE_SEQ apGetTanLineLicLineSeq
+      , nagtll.SOFTWARE_MAKER_ID softwareMakerId
+      , nagtll.SOFTWARE_MAKER_NAME softwareMakerName
+      , nagtll.SOFTWARE_ID softwareId
+      , nagtll.SOFTWARE_NAME softwareName
+      , cn_latype.INTERNAL_CODE licAssetType
+      , NEA_UTIL_PKG.get_cn_value1_f('LICENSE_ASSET_TYPE', cn_latype.INTERNAL_CODE) licAssetTypeName
+      , (SELECT INTERNAL_CODE FROM NEA_CODE_NAME cn_lgtype WHERE cn_lgtype.CATEGORY_CODE = 'LICENSE_GET_TYPE' AND (cn_lgtype.VALUE2 = cn_latype.INTERNAL_CODE OR cn_lgtype.VALUE3 = cn_latype.INTERNAL_CODE) AND cn_lgtype.DELETE_FLAG = '0') licGetType
+      , NEA_UTIL_PKG.get_cn_value1_f('LICENSE_GET_TYPE',
+          (SELECT INTERNAL_CODE FROM NEA_CODE_NAME cn_lgtype WHERE cn_lgtype.CATEGORY_CODE = 'LICENSE_GET_TYPE' AND (cn_lgtype.VALUE2 = cn_latype.INTERNAL_CODE OR cn_lgtype.VALUE3 = cn_latype.INTERNAL_CODE) AND cn_lgtype.DELETE_FLAG = '0')
+        ) licGetTypeName
+      , '0' licHrdBandleFlag
+      , NEA_UTIL_PKG.get_cn_value1_f('FLAG_YN', '0') licHrdBandleFlagName
+      , '0' licUpgradeFlag
+      , NEA_UTIL_PKG.get_cn_value1_f('FLAG_YN', '0') licUpgradeFlagName
+      , '0' licTermFlag
+      , NEA_UTIL_PKG.get_cn_value1_f('FLAG_YN', '0') licTermFlagName
+      , (SELECT INTERNAL_CODE FROM NEA_CODE_NAME cn WHERE cn.CATEGORY_CODE = 'LICENSE_VOLUME_TYPE' AND cn.VALUE2 = '1' AND cn.DELETE_FLAG = '0' AND ROWNUM = 1) licVolumeType
+      , (SELECT VALUE1 FROM NEA_CODE_NAME cn WHERE cn.CATEGORY_CODE = 'LICENSE_VOLUME_TYPE' AND cn.VALUE2 = '1' AND cn.DELETE_FLAG = '0' AND ROWNUM = 1) licVolumeTypeName
+      , '0' licUseConsentFlag
+      , NEA_UTIL_PKG.get_cn_value1_f('FLAG_AN', '0') licUseConsentFlagName
+      , '0' licDowngradeConsentFlag
+      , NEA_UTIL_PKG.get_cn_value1_f('FLAG_AN', '0') licDowngradeConsentFlagName
+      , nagt.HOL_COMPANY_CODE holCompanyCode
+      , NEA_UTIL_PKG.get_company_name_f(nagt.HOL_COMPANY_CODE) holCompanyName
+      , CASE
+          WHEN nagt.HOL_SECTION_YEAR = (SELECT VALUE1 FROM NEA_CODE_NAME CN WHERE CN.CATEGORY_CODE = 'CURRENT_YEAR' AND CN.DELETE_FLAG = '0') THEN
+            nagt.HOL_SECTION_CODE
+          ELSE
+            NULL
+        END holSectionCode
+      , CASE
+          WHEN nagt.HOL_SECTION_YEAR = (SELECT VALUE1 FROM NEA_CODE_NAME CN WHERE CN.CATEGORY_CODE = 'CURRENT_YEAR' AND CN.DELETE_FLAG = '0') THEN
+            nagt.HOL_SECTION_YEAR
+          ELSE
+            NULL
+        END holSectionYear
+      , CASE
+          WHEN nagt.HOL_SECTION_YEAR = (SELECT VALUE1 FROM NEA_CODE_NAME CN WHERE CN.CATEGORY_CODE = 'CURRENT_YEAR' AND CN.DELETE_FLAG = '0') THEN
+            NEA_UTIL_PKG.get_section_name_f(nagt.HOL_COMPANY_CODE, nagt.HOL_SECTION_CODE, nagt.HOL_SECTION_YEAR)
+          ELSE
+            NULL
+        END holSectionName
+      , CASE
+          WHEN nagt.HOL_SECTION_YEAR = (SELECT VALUE1 FROM NEA_CODE_NAME CN WHERE CN.CATEGORY_CODE = 'CURRENT_YEAR' AND CN.DELETE_FLAG = '0') THEN
+            nagt.HOL_STAFF_CODE
+          ELSE
+            NULL
+        END holStaffCode
+      , CASE
+          WHEN nagt.HOL_SECTION_YEAR = (SELECT VALUE1 FROM NEA_CODE_NAME CN WHERE CN.CATEGORY_CODE = 'CURRENT_YEAR' AND CN.DELETE_FLAG = '0') THEN
+            NEA_UTIL_PKG.get_staff_name_f(nagt.HOL_STAFF_CODE)
+          ELSE
+            NULL
+        END holStaffName
+      , nagt.HOL_COMPANY_CODE useCompanyCode
+      , NEA_UTIL_PKG.get_company_name_f(nagt.HOL_COMPANY_CODE) useCompanyName
+      , CASE
+          WHEN nagt.HOL_SECTION_YEAR = (SELECT VALUE1 FROM NEA_CODE_NAME CN WHERE CN.CATEGORY_CODE = 'CURRENT_YEAR' AND CN.DELETE_FLAG = '0') THEN
+            nagt.HOL_SECTION_CODE
+          ELSE
+            NULL
+        END useSectionCode
+      , CASE
+          WHEN nagt.HOL_SECTION_YEAR = (SELECT VALUE1 FROM NEA_CODE_NAME CN WHERE CN.CATEGORY_CODE = 'CURRENT_YEAR' AND CN.DELETE_FLAG = '0') THEN
+            nagt.HOL_SECTION_YEAR
+          ELSE
+            NULL
+        END useSectionYear
+      , CASE
+          WHEN nagt.HOL_SECTION_YEAR = (SELECT VALUE1 FROM NEA_CODE_NAME CN WHERE CN.CATEGORY_CODE = 'CURRENT_YEAR' AND CN.DELETE_FLAG = '0') THEN
+            NEA_UTIL_PKG.get_section_name_f(nagt.HOL_COMPANY_CODE, nagt.HOL_SECTION_CODE, nagt.HOL_SECTION_YEAR)
+          ELSE
+            NULL
+        END useSectionName
+      , '1' useType
+      , NEA_UTIL_PKG.get_cn_value1_f('LICENSE_USE_TYPE', '1') useTypeName
+      , '0' useRentalFlag
+      , NEA_UTIL_PKG.get_cn_value1_f('FLAG_YN', '0') useRentalFlagName
+      , nagtll.LIC_QUANTITY_TYPE licQuantityType
+      , NEA_UTIL_PKG.get_cn_value1_f('LICENSE_QUANTITY_TYPE', nagtll.LIC_QUANTITY_TYPE) licQuantityTypeName
+      , nagtll.LIC_QUANTITY licQuantity
+      , nagt.APPLICATION_ID getApplicationId
+    FROM
+      NEA_AP_GET_TAN nagt
+      , NEA_AP_GET_TAN_LINE_LIC nagtll
+      , NEA_CODE_NAME cn_latype
+    WHERE
+      nagtll.AP_GET_TAN_LINE_LIC_ID = #apGetTanLineLicId#
+      AND nagt.APPLICATION_ID = nagtll.APPLICATION_ID
+      AND cn_latype.CATEGORY_CODE (+) = 'LICENSE_ASSET_TYPE'
+      AND cn_latype.VALUE2 (+) = nagt.AP_GET_TYPE
+      AND cn_latype.DELETE_FLAG (+) = '0'
+  </select>
+
+  <!--
+      取得申請(有形)明細識別ID取得
+  -->
+  <select id="selectApGetTanLineLicId_LIC" parameterClass="java.util.Map" resultClass="java.lang.Long">
+    SELECT
+      nagtll.AP_GET_TAN_LINE_LIC_ID
+    FROM
+      NEA_AP_GET_TAN_LINE_LIC nagtll
+    WHERE
+      nagtll.APPLICATION_ID = #applicationId#
+      AND nagtll.LINE_SEQ = #lineSeq#
+  </select>
+
+  <!--
+     ファイル・直入力可能マスタ値取得
+  -->
+  <select id="selectLicensePossibleInputMasterList_LIC" parameterClass="java.util.Map" resultClass="jp.co.ctcg.easset.dto.CodeName">
+    SELECT
+      *
+    FROM
+      (
+      SELECT
+        1 sort1
+        , NULL sort2
+        , SOFTWARE_MAKER_NAME sort3
+        , NULL sort4
+        , NULL sort5
+        , 'ソフトウェアメーカー' categoryCode
+        , SOFTWARE_MAKER_NAME value1
+        , NULL description
+        , 'softwareMakerName' property
+      FROM
+        NEA_SOFTWARE_MAKER
+      WHERE
+        DELETE_FLAG = '0'
+        AND SOFTWARE_MAKER_NAME IS NOT NULL
+      UNION ALL
+      SELECT
+        2
+        , NULL
+        , SM.SOFTWARE_MAKER_NAME
+        , NULL
+        , S.SOFTWARE_NAME
+        , 'ソフトウェア'
+        , S.SOFTWARE_NAME
+        , 'メーカー:' ||  SM.SOFTWARE_MAKER_NAME
+        , 'softwareName' property
+      FROM
+        NEA_SOFTWARE S
+        , NEA_SOFTWARE_MAKER SM
+      WHERE
+        SM.SOFTWARE_MAKER_ID = S.SOFTWARE_MAKER_ID
+        AND S.DELETE_FLAG = '0'
+        AND SM.DELETE_FLAG = '0'
+        AND S.SOFTWARE_NAME IS NOT NULL
+        AND SM.SOFTWARE_MAKER_NAME IS NOT NULL
+      UNION ALL
+      SELECT
+        3
+        , C.SORT_NUMBER
+        , C.INTERNAL_CODE
+        , C.SORT_NUMBER
+        , C.INTERNAL_CODE
+        , '資産区分'
+        , C.VALUE1
+        , NULL
+        , 'licAssetTypeName' property
+      FROM
+        NEA_CODE_NAME C
+      WHERE
+        C.CATEGORY_CODE = 'LICENSE_ASSET_TYPE'
+        AND C.DELETE_FLAG = '0'
+      UNION ALL
+      SELECT
+        4
+        , C.SORT_NUMBER
+        , C.INTERNAL_CODE
+        , C.SORT_NUMBER
+        , C.INTERNAL_CODE
+        , '取得方法'
+        , C.VALUE1
+        , NULL
+        , 'licGetTypeName' property
+      FROM
+        NEA_CODE_NAME C
+      WHERE
+        C.CATEGORY_CODE = 'LICENSE_GET_TYPE'
+        AND C.DELETE_FLAG = '0'
+      UNION ALL
+      SELECT
+        5
+        , C.SORT_NUMBER
+        , C.INTERNAL_CODE
+        , C.SORT_NUMBER
+        , C.INTERNAL_CODE
+        , 'ハードウェアバンドル'
+        , C.VALUE1
+        , NULL
+        , 'licHrdBandleFlagName' property
+      FROM
+        NEA_CODE_NAME C
+      WHERE
+        C.CATEGORY_CODE = 'FLAG_YN'
+        AND C.DELETE_FLAG = '0'
+      UNION ALL
+      SELECT
+        6
+        , C.SORT_NUMBER
+        , C.INTERNAL_CODE
+        , C.SORT_NUMBER
+        , C.INTERNAL_CODE
+        , 'メディア形態'
+        , C.VALUE1
+        , NULL
+        , 'licMediaTypeName' property
+      FROM
+        NEA_CODE_NAME C
+      WHERE
+        C.CATEGORY_CODE = 'SOFTWARE_MEDIA_TYPE'
+        AND C.DELETE_FLAG = '0'
+      UNION ALL
+      SELECT
+        7
+        , C.SORT_NUMBER
+        , C.INTERNAL_CODE
+        , C.SORT_NUMBER
+        , C.INTERNAL_CODE
+        , 'ライセンス形態'
+        , C.VALUE1
+        , NULL
+        , 'licLicenseTypeName' property
+      FROM
+        NEA_CODE_NAME C
+      WHERE
+        C.CATEGORY_CODE = 'LICENSE_TYPE'
+        AND C.DELETE_FLAG = '0'
+      UNION ALL
+      SELECT
+        8
+        , C.SORT_NUMBER
+        , C.INTERNAL_CODE
+        , C.SORT_NUMBER
+        , C.INTERNAL_CODE
+        , 'アップグレードライセンス'
+        , C.VALUE1
+        , NULL
+        , 'licUpgradeFlagName' property
+      FROM
+        NEA_CODE_NAME C
+      WHERE
+        C.CATEGORY_CODE = 'FLAG_YN'
+        AND C.DELETE_FLAG = '0'
+      UNION ALL
+      SELECT
+        9
+        , C.SORT_NUMBER
+        , C.INTERNAL_CODE
+        , C.SORT_NUMBER
+        , C.INTERNAL_CODE
+        , 'ボリュームタイプ'
+        , C.VALUE1
+        , NULL
+        , 'licVolumeTypeName' property
+      FROM
+        NEA_CODE_NAME C
+      WHERE
+        C.CATEGORY_CODE = 'LICENSE_VOLUME_TYPE'
+        AND C.DELETE_FLAG = '0'
+      UNION ALL
+      SELECT
+        10
+        , C.SORT_NUMBER
+        , C.INTERNAL_CODE
+        , C.SORT_NUMBER
+        , C.INTERNAL_CODE
+        , '使用許諾書有無'
+        , C.VALUE1
+        , NULL
+        , 'licUseConsentFlagName' property
+      FROM
+        NEA_CODE_NAME C
+      WHERE
+        C.CATEGORY_CODE = 'FLAG_AN'
+        AND C.DELETE_FLAG = '0'
+      UNION ALL
+      SELECT
+        11
+        , C.SORT_NUMBER
+        , C.INTERNAL_CODE
+        , C.SORT_NUMBER
+        , C.INTERNAL_CODE
+        , 'ダウングレード許諾有無'
+        , C.VALUE1
+        , NULL
+        , 'licDowngradeConsentFlagName' property
+      FROM
+        NEA_CODE_NAME C
+      WHERE
+        C.CATEGORY_CODE = 'FLAG_AN'
+        AND C.DELETE_FLAG = '0'
+      UNION ALL
+      SELECT
+        12
+        , C.SORT_NUMBER
+        , C.INTERNAL_CODE
+        , C.SORT_NUMBER
+        , C.INTERNAL_CODE
+        , 'ライセンス数制限'
+        , C.VALUE1
+        , NULL
+        , 'licQuantityTypeName' property
+      FROM
+        NEA_CODE_NAME C
+      WHERE
+        C.CATEGORY_CODE = 'LICENSE_QUANTITY_TYPE'
+        AND C.DELETE_FLAG = '0'
+      UNION ALL
+      SELECT
+        13
+        , C.SORT_NUMBER
+        , C.INTERNAL_CODE
+        , C.SORT_NUMBER
+        , C.INTERNAL_CODE
+        , 'ターム契約区分'
+        , C.VALUE1
+        , NULL
+        , 'trmContractTypeName' property
+      FROM
+        NEA_CODE_NAME C
+      WHERE
+        C.CATEGORY_CODE = 'LICENSE_TERM_CONTRACT_TYPE'
+        AND C.DELETE_FLAG = '0'
+      UNION ALL
+      SELECT
+        14
+        , C.SORT_NUMBER
+        , C.INTERNAL_CODE
+        , C.SORT_NUMBER
+        , C.INTERNAL_CODE
+        , '自動割当切替'
+        , C.VALUE1
+        , NULL
+        , 'trmAutoAllocFlagName' property
+      FROM
+        NEA_CODE_NAME C
+      WHERE
+        C.CATEGORY_CODE = 'FLAG_YN'
+        AND C.DELETE_FLAG = '0'
+      UNION ALL
+      SELECT
+        15
+        , C.SORT_NUMBER
+        , C.INTERNAL_CODE
+        , C.SORT_NUMBER
+        , C.INTERNAL_CODE
+        , '使用許諾区分'
+        , C.VALUE1
+        , NULL
+        , 'useTypeName' property
+      FROM
+        NEA_CODE_NAME C
+      WHERE
+        C.CATEGORY_CODE = 'LICENSE_USE_TYPE'
+        AND C.DELETE_FLAG = '0'
+      UNION ALL
+      SELECT
+        16
+        , NULL
+        , ND.DIVISIONCODE
+        , NULL
+        , ND.DIVISIONCODE
+        , '保有部署/使用許諾部署'
+        , ND.DIVISIONCODE
+        , NEA_UTIL_PKG.GET_SECTION_NAME_F(ND.COMPANYCODE, ND.DIVISIONKANJI)
+        , 'holSectionName' property
+      FROM
+        NEA_NEWDIVISIONMASTERTABLE_V ND
+      WHERE
+        ND.COMPANYCODE = #companyCode#
+        AND ND.NENDO = (SELECT VALUE1 FROM NEA_CODE_NAME CN WHERE CN.CATEGORY_CODE = 'CURRENT_YEAR' AND CN.DELETE_FLAG = '0')
+      )
+      <dynamic open=" WHERE " close="" >
+        <isNotEmpty property="propertyList">
+          <iterate property="propertyList" open=" property IN(" close=")" conjunction=",">
+            #propertyList[]#
+          </iterate>
+        </isNotEmpty>
+      </dynamic>
+
+    ORDER BY
+      1, 2, 3, 4, 5
+  </select>
+
+  <!--
+     ファイル・直入力可能マスタ値取得(保有会社変更用)
+  -->
+  <select id="selectLicenseCompanyMoveInputMasterList_LIC" parameterClass="java.util.Map" resultClass="jp.co.ctcg.easset.dto.CodeName">
+    SELECT *
+      FROM (
+            SELECT 1 sort1
+                 , SORT_NUMBER sort2
+                 , INTERNAL_CODE sort3
+                 , 0 sort4
+                 , '' sort5
+                 , '保有会社/使用会社' categoryCode
+                 , VALUE1 value1
+                 , '' description
+              FROM NEA_CODE_NAME
+             WHERE CATEGORY_CODE = 'USE_COMPANY'
+               AND DELETE_FLAG = '0'
+               AND INTERNAL_CODE <![CDATA[<]]><![CDATA[>]]> #companyCode#
+            UNION ALL
+            SELECT 2 sort1
+                 , C.SORT_NUMBER sort2
+                 , C.INTERNAL_CODE sort3
+                 , 0 sort4
+                 , ND.DIVISIONCODE sort5
+                 , '保有部署/使用部署' categoryCode
+                 , ND.DIVISIONCODE value1
+                 , C.VALUE1 || '用　' || NEA_UTIL_PKG.GET_SECTION_NAME_F(ND.COMPANYCODE, ND.DIVISIONKANJI) description
+              FROM NEA_CODE_NAME C
+                 , NEA_NEWDIVISIONMASTERTABLE_V ND
+             WHERE C.CATEGORY_CODE = 'USE_COMPANY'
+               AND C.DELETE_FLAG = '0'
+               AND C.INTERNAL_CODE <![CDATA[<]]><![CDATA[>]]> #companyCode#
+               AND ND.COMPANYCODE = C.INTERNAL_CODE
+               AND ND.NENDO = (SELECT VALUE1 FROM NEA_CODE_NAME CN WHERE CN.CATEGORY_CODE = 'CURRENT_YEAR' AND CN.DELETE_FLAG = '0')
+           )
+    ORDER BY 1, 2, 3, 4, 5
+  </select>
+  <!--
+    ライセンス割当情報検索取得
+  -->
+  <select id="selectLicenseAlloc_LIC" parameterClass="java.util.Map" resultClass="jp.co.ctcg.easset.dto.license.LicenseAlloc">
+    SELECT
+      ROW_NUMBER() OVER(ORDER BY nlla.LICENSE_ID) lineSeq
+    , nlla.LICENSE_ID licenseId
+    , nlla.LICENSE_LINE_QTY_ID licenseLineQtyId
+    , nlla.ASSET_ID assetId
+    , nlla.ASSET_LINE_OS_ID assetLineOsId
+    , nlla.CREATE_DATE createDate
+    , nlla.CREATE_STAFF_CODE createStaffDate
+    , nlla.UPDATE_DATE updateDate
+    , nlla.UPDATE_STAFF_CODE updateStaffCode
+    , nalo.OS_NAME osName
+    , nsm.SOFTWARE_MAKER_NAME softwareMakerName
+    , ns.SOFTWARE_NAME softwareName
+    , nl.LIC_LICENSE_KEY licLicenseKey
+    FROM
+      NEA_LICENSE_LINE_ALLOC nlla
+    , NEA_ASSET_LINE_OS nalo
+    , NEA_ASSET  na
+    , NEA_LICENSE_LINE_QTY nllq
+    , NEA_LICENSE nl
+    , NEA_SOFTWARE_MAKER nsm
+    , NEA_SOFTWARE ns
+    WHERE
+      nlla.ASSET_ID = nalo.ASSET_ID
+    AND
+      nlla.ASSET_LINE_OS_ID = nalo.ASSET_LINE_OS_ID
+    AND
+      nalo.ASSET_ID = na.ASSET_ID
+    AND
+      nllq.LICENSE_ID = nlla.LICENSE_ID
+    AND
+      nllq.LICENSE_LINE_QTY_ID = nlla.LICENSE_LINE_QTY_ID
+    AND
+      nl.LICENSE_ID = nllq.LICENSE_ID
+    AND
+      nl.SOFTWARE_MAKER_ID = nsm.SOFTWARE_MAKER_ID(+)
+    AND
+      nl.SOFTWARE_ID = ns.SOFTWARE_ID(+)
+    <isNotEmpty property="obj.assetId">
+      AND nlla.ASSET_ID = #obj.assetId#
+    </isNotEmpty>
+    <isNotEmpty property="obj.assetLineOsId">
+      AND nlla.ASSET_LINE_OS_ID = #obj.assetLineOsId#
+    </isNotEmpty>
+    <isNotEmpty property="obj.licenseId">
+      AND nlla.LICENSE_ID = #obj.licenseId#
+    </isNotEmpty>
+    <isNotEmpty property="obj.licenseLineQtyId">
+      AND nlla.LICENSE_LINE_QTY_ID = #obj.licenseLineQtyId#
+    </isNotEmpty>
+    ORDER BY
+      nlla.LICENSE_ID
+
+  </select>
+
+  <!--
+    数量管理明細取得
+  -->
+  <select id="selectLicenseLineQty_LIC" parameterClass="java.util.Map" resultClass="jp.co.ctcg.easset.dto.license.LicenseLineQty">
+    SELECT
+      nllq.LICENSE_ID licenseId
+    , nllq.LICENSE_LINE_QTY_TYPE licenseLineQtyType
+    , nllq.LINE_SEQ lineSeq
+    , nllq.CREATE_DATE createDate
+    , nllq.CREATE_STAFF_CODE createStaffCode
+    , nllq.UPDATE_DATE updateDate
+    , nllq.UPDATE_STAFF_CODE updateStaffCode
+    , nllq.LICENSE_LINE_QTY_ID licenseLineQtyId
+    , nllq.USE_COMPANY_CODE useCompanyCode
+    , NEA_UTIL_PKG.get_company_name_f(nllq.USE_COMPANY_CODE) useCompanyName
+    , nllq.USE_SECTION_CODE useSectionCode
+    , nllq.USE_SECTION_YEAR useSectionYear
+    , NEA_UTIL_PKG.get_section_name_f(nllq.USE_COMPANY_CODE, nllq.USE_SECTION_CODE, nllq.USE_SECTION_YEAR) useSectionName
+    , nllq.LIC_LINE_ENABLE_QUANTITY licLineEnableQuantity
+    , nllq.LIC_LINE_USE_QUANTITY licLineUseQuantity
+    FROM
+      NEA_LICENSE_LINE_QTY nllq
+    WHERE
+      nllq.LICENSE_ID = #licenseId#
+      <!-- ライセンス数量管理明細区分 -->
+      <isNotEmpty property="licenseLineQtyType">
+        AND nllq.LICENSE_LINE_QTY_TYPE = #licenseLineQtyType#
+      </isNotEmpty>
+      <!-- 割当対象指定 -->
+      <isNotEmpty property="forAlloc">
+        <!-- 許諾区分：部署限定 -->
+        <isEqual property="useType" compareValue="1">
+          AND EXISTS (
+            SELECT
+              'X'
+            FROM
+              NEA_ASSET na
+            WHERE
+              na.ASSET_ID = #assetId#
+              AND nllq.USE_COMPANY_CODE = na.HOL_COMPANY_CODE
+              AND nllq.USE_SECTION_CODE = na.HOL_SECTION_CODE
+              AND nllq.USE_SECTION_YEAR = na.HOL_SECTION_YEAR
+          )
+        </isEqual>
+        <!-- 許諾区分：会社限定 -->
+        <isEqual property="useType" compareValue="2">
+          AND nllq.LICENSE_LINE_QTY_TYPE = '1'
+          AND EXISTS (
+            SELECT
+              'X'
+            FROM
+              NEA_ASSET na
+            WHERE
+              na.ASSET_ID = #assetId#
+              AND nllq.USE_COMPANY_CODE = na.HOL_COMPANY_CODE
+          )
+        </isEqual>
+        <!-- 許諾区分：全Ｇ会社利用 -->
+        <isEqual property="useType" compareValue="3">
+          AND nllq.LICENSE_LINE_QTY_TYPE = '1'
+        </isEqual>
+
+        <!-- ライセンス数制限：有限 -->
+        <isEqual property="licQuantityType" compareValue="1">
+          AND nllq.LIC_LINE_ENABLE_QUANTITY <![CDATA[>]]> nllq.LIC_LINE_USE_QUANTITY
+        </isEqual>
+      </isNotEmpty>
+  </select>
+
+  <!--
+    アップグレード元明細取得
+  -->
+  <select id="selectLicenseLineUpgSrc_LIC" parameterClass="java.util.Map" resultClass="jp.co.ctcg.easset.dto.license.LicenseLineUpg">
+    SELECT
+      nllu.LICENSE_ID licenseId
+    , nllu.UPGRADE_LICENSE_ID upgradeLicenseId
+    , ROW_NUMBER() OVER(ORDER BY nllu.LICENSE_ID) lineSeq
+    , nllu.CREATE_DATE createDate
+    , nllu.CREATE_STAFF_CODE createStaffCode
+    , nllu.UPDATE_DATE updateDate
+    , nllu.UPDATE_STAFF_CODE updateStaffCode
+    , nllu.LIC_UPGRADE_QUANTITY licUpgradeQuantity
+
+    , nsm.SOFTWARE_MAKER_NAME softwareMakerName
+    , ns.SOFTWARE_NAME softwareName
+    , nlcs.LIC_LICENSE_KEY licLicenseKey
+    , nlcs.LIC_QUANTITY licQuantity
+    , NEA_UTIL_PKG.get_lic_enable_quantity_f(nlcs.LICENSE_ID) licEnableQuantity
+    , NEA_UTIL_PKG.get_lic_use_quantity_f(nlcs.LICENSE_ID) licUseQuantity
+    FROM
+      NEA_LICENSE_LINE_UPG nllu
+    , NEA_LICENSE nlcs
+    , NEA_SOFTWARE_MAKER nsm
+    , NEA_SOFTWARE ns
+    WHERE
+        nllu.UPGRADE_LICENSE_ID = #licenseId#
+    AND nllu.LICENSE_ID = nlcs.LICENSE_ID
+    AND nlcs.SOFTWARE_MAKER_ID = nsm.SOFTWARE_MAKER_ID(+)
+    AND nlcs.SOFTWARE_ID = ns.SOFTWARE_ID(+)
+    ORDER BY
+      nllu.LICENSE_ID
+
+  </select>
+
+  <!--
+    アップグレード先明細取得
+  -->
+  <select id="selectLicenseLineUpgDst_LIC" parameterClass="java.util.Map" resultClass="jp.co.ctcg.easset.dto.license.LicenseLineUpg">
+    SELECT
+      nllu.LICENSE_ID licenseId
+    , nllu.UPGRADE_LICENSE_ID upgradeLicenseId
+    , ROW_NUMBER() OVER(ORDER BY nllu.UPGRADE_LICENSE_ID) lineSeq
+    , nllu.CREATE_DATE createDate
+    , nllu.CREATE_STAFF_CODE createStaffCode
+    , nllu.UPDATE_DATE updateDate
+    , nllu.UPDATE_STAFF_CODE updateStaffCode
+    , nllu.LIC_UPGRADE_QUANTITY licUpgradeQuantity
+
+    , nsm.SOFTWARE_MAKER_NAME softwareMakerName
+    , ns.SOFTWARE_NAME softwareName
+    , nlcs.LIC_LICENSE_KEY licLicenseKey
+    , nlcs.LIC_QUANTITY licQuantity
+    , NEA_UTIL_PKG.get_lic_enable_quantity_f(nlcs.LICENSE_ID) licEnableQuantity
+    , NEA_UTIL_PKG.get_lic_use_quantity_f(nlcs.LICENSE_ID) licUseQuantity
+    FROM
+      NEA_LICENSE_LINE_UPG nllu
+    , NEA_LICENSE nlcs
+    , NEA_SOFTWARE_MAKER nsm
+    , NEA_SOFTWARE ns
+    WHERE
+        nllu.LICENSE_ID = #licenseId#
+    AND nllu.UPGRADE_LICENSE_ID = nlcs.LICENSE_ID
+    AND nlcs.SOFTWARE_MAKER_ID = nsm.SOFTWARE_MAKER_ID(+)
+    AND nlcs.SOFTWARE_ID = ns.SOFTWARE_ID(+)
+    ORDER BY
+      nllu.UPGRADE_LICENSE_ID
+  </select>
+
+  <!--
+   ライセンス割当情報作成
+  -->
+  <insert id="insertLicenseAlloc_LIC" parameterClass="java.util.Map">
+    INSERT INTO NEA_LICENSE_LINE_ALLOC (
+      LICENSE_ID
+    , LICENSE_LINE_QTY_ID
+    , ASSET_ID
+    , ASSET_LINE_OS_ID
+    , CREATE_DATE
+    , CREATE_STAFF_CODE
+    , UPDATE_DATE
+    , UPDATE_STAFF_CODE
+    ) VALUES (
+      #obj.licenseId:VARCHAR# /* LICENSE_ID*/
+    , #obj.licenseLineQtyId#
+    , #obj.assetId:VARCHAR# /* ASSET_ID*/
+    , #obj.assetLineOsId:NUMERIC# /* ASSET_LINE_OS_ID*/
+    , #obj.createDate:TIMESTAMP# /* CREATE_DATE*/
+    , #obj.createStaffCode:VARCHAR# /* CREATE_STAFF_CODE*/
+    , #obj.updateDate:TIMESTAMP# /* UPDATE_DATE*/
+    , #obj.updateStaffCode:VARCHAR# /* UPDATE_STAFF_CODE*/
+    )
+  </insert>
+
+  <!--
+   ライセンス_数量管理明細情報更新（有効数更新）
+  -->
+  <update id="updateLicenseLineEnableQty_LIC" parameterClass="java.util.Map">
+    UPDATE
+      NEA_LICENSE_LINE_QTY
+    SET
+      UPDATE_DATE = #obj.updateDate:TIMESTAMP#
+    , UPDATE_STAFF_CODE = #obj.updateStaffCode:VARCHAR#
+    , LIC_LINE_ENABLE_QUANTITY = #obj.licLineEnableQuantity:NUMERIC#
+    WHERE
+      LICENSE_ID = #obj.licenseId:VARCHAR#
+      AND LICENSE_LINE_QTY_TYPE = #obj.licenseLineQtyType:CHAR#
+      AND LINE_SEQ = #obj.lineSeq:NUMERIC#
+  </update>
+
+  <!--
+   ライセンス_数量管理明細情報更新
+  -->
+  <update id="updateLicenseLineQty_LIC" parameterClass="java.util.Map">
+    UPDATE
+      NEA_LICENSE_LINE_QTY
+    SET
+      UPDATE_DATE = #obj.updateDate:TIMESTAMP#
+    , UPDATE_STAFF_CODE = #obj.updateStaffCode:VARCHAR#
+    , LIC_LINE_USE_QUANTITY = #obj.licLineUseQuantity:NUMERIC#
+    WHERE
+      LICENSE_ID = #obj.licenseId:VARCHAR#
+    <isNotEmpty property="obj.useCompanyCode">
+      AND USE_COMPANY_CODE = #obj.useCompanyCode:VARCHAR#
+    </isNotEmpty>
+    <isNotEmpty property="obj.useSectionCode">
+      AND USE_SECTION_CODE = #obj.useSectionCode:VARCHAR#
+    </isNotEmpty>
+    <isNotEmpty property="obj.useSectionYear">
+      AND USE_SECTION_YEAR = #obj.useSectionYear:NUMERIC#
+    </isNotEmpty>
+  </update>
+
+  <!--
+   ライセンス_数量管理明細使用部署情報更新(許諾部署のみ)
+  -->
+  <update id="updateLicenseLineQtyUseSection_LIC" parameterClass="java.util.Map">
+    UPDATE
+      NEA_LICENSE_LINE_QTY
+    SET
+      USE_COMPANY_CODE = #obj.useCompanyCode:VARCHAR#
+    , USE_SECTION_CODE = #obj.useSectionCode:VARCHAR#
+    , USE_SECTION_YEAR = #obj.useSectionYear:NUMERIC#
+    WHERE
+      LICENSE_ID = #obj.licenseId:VARCHAR#
+    AND LICENSE_LINE_QTY_TYPE = '1'
+  </update>
+
+  <!--
+   ライセンス割当情報削除
+  -->
+  <delete id="deleteLicenseAlloc_LIC" parameterClass="java.util.Map">
+    DELETE FROM
+      NEA_LICENSE_LINE_ALLOC
+    WHERE
+      LICENSE_ID = #obj.licenseId:VARCHAR#
+    AND LICENSE_LINE_QTY_ID = #obj.licenseLineQtyId:NUMERIC#
+    AND ASSET_ID = #obj.assetId:VARCHAR#
+    AND ASSET_LINE_OS_ID = #obj.assetLineOsId:NUMERIC#
+  </delete>
+
+  <!--
+    情報機器抹消
+  -->
+  <parameterMap id="param_callDeleteLicenseLogical_LIC" class="java.util.Map">
+    <parameter property="updateStaffCode" jdbcType="VARCHAR" javaType="String" mode="IN"/>
+    <parameter property="licenseId" jdbcType="VARCHAR" javaType="String" mode="IN"/>
+    <parameter property="deleteDate" jdbcType="DATE" javaType="Date" mode="IN"/>
+    <parameter property="deleteReason" jdbcType="VARCHAR" javaType="String" mode="IN"/>
+  </parameterMap>
+  <procedure id="callDeleteLicenseLogical_LIC" parameterMap="param_callDeleteLicenseLogical_LIC">
+    { call NEA_UTIL_PKG.DELETE_LICENSE_LOGICAL(?, ?, ?, ?) }
+  </procedure>
+
+  <!--
+    ライセンス割当解除
+  -->
+  <parameterMap id="param_callDeleteLicenseAlloc_LIC" class="java.util.Map">
+    <parameter property="updateStaffCode" jdbcType="VARCHAR" javaType="String" mode="IN"/>
+    <parameter property="licenseId" jdbcType="VARCHAR" javaType="String" mode="IN"/>
+    <parameter property="licenseLineQtyId" jdbcType="NUMBER" javaType="Long" mode="IN"/>
+    <parameter property="assetId" jdbcType="VARCHAR" javaType="String" mode="IN"/>
+    <parameter property="assetLineOsId" jdbcType="NUMBER" javaType="Long" mode="IN"/>
+  </parameterMap>
+  <procedure id="callDeleteLicenseAlloc_LIC" parameterMap="param_callDeleteLicenseAlloc_LIC">
+    { call NEA_UTIL_PKG.DELETE_LICENSE_ALLOC(?, ?, ?, ?, ?) }
+  </procedure>
+
+</sqlMap>

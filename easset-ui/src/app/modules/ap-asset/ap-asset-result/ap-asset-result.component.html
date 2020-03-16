@@ -1,0 +1,77 @@
+<!-- フォーマッタ定義 -->
+<div class="page-container page-asset-result">
+  <div class="section-header">
+    <div class="row col">
+      <span class="ico"><img src="assets/images/button/to_search.gif"/></span>
+      <div class="e-link">
+        <a class="cell-link" (click)="goBack()">検索条件に戻る</a>
+      </div>
+    </div>
+  </div>
+  <div class="section-body">
+    <div class="row col">
+      <div class="col-6 control">
+        <div class="row col">
+          <div class="wm-buttons">
+            <button type="button" class="wm-btn">
+              <span class="ico"><img src="assets/images/button/save.png"/></span>
+              <span class="txt" (click)="bulkApply()">申請</span>
+            </button>
+            <button type="button" class="wm-btn">
+              <span class="ico"><img src="assets/images/button/save.png/"/></span>
+              <span class="txt" (click)="bulkDelete()">削除</span>
+            </button>
+            <!-- 表示制御：全社権限の場合表示 -->
+            <button type="button" class="wm-btn" *ngIf="getAccessLevel() === 'admin'">
+              <span class="ico"><img src="assets/images/button/save.png"/></span>
+              <span class="txt" (click)="bulkAssetCreate()">情報機器等新規登録</span>
+            </button>
+            <button type="button" class="wm-btn">
+              <label class="txt" (click)="downloadOptionPropComponent.open($event.currentTarget)">ダウンロード(全件)</label>
+            </button>
+            <label *ngIf="getAccessLevel() !== 'admin'">※　行をダブルクリックすると詳細が表示されます。</label>
+          </div>
+        </div>
+        <div class="list-status">
+          <div class="status-desc" *ngIf="getAccessLevel() === 'admin'">
+            ※　行をダブルクリックすると詳細が表示されます。
+          </div>
+        </div>
+      </div>
+      <div class="col-6">
+        <!-- 表示制御：全社権限の場合表示 -->
+        <div *ngIf="getAccessLevel() === 'admin'">
+          <div class="block-frame-border">
+            <div class="row">
+              <div class="col-7">
+                <div class="row col">
+                  <div class="form-group w-70">
+                    <label>取得申請書番号:</label>
+                    <ea-input-mask class="wm-combo wm-tab-element w-70 bg-white"
+                                   [(ngModel)]="searchModel.getApplicationId" id="getApplicationId"
+                                   name="getApplicationId"
+                                   [pattern]="'a-zA-Z0-9'" [maxLength]="9" [capitalize]="true"></ea-input-mask>
+                    <label class="text0-inline">(あいまい)</label>
+                  </div>
+                </div>
+                <div class="form-group w-70--1">
+                  <label>登録申請番号:</label>
+                  <ea-input-mask class="wm-combo wm-tab-element w-70 bg-white" [(ngModel)]="searchModel.assetId"
+                                 id="assetId" name="assetId" [pattern]="'a-zA-Z0-9'" [maxLength]="9"
+                                 [capitalize]="true">
+                  </ea-input-mask>
+                  <label class="text0-inline">(あいまい)</label>
+                </div>
+              </div>
+              <div class="col-2 col-form-buttons d-flex align-items-center">
+                <button type="button" class="wm-btn" (click)="search()">検索</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <app-ap-asset-result-list (select)="clickRow($event)" [dataList]="listAssetSR"></app-ap-asset-result-list>
+  <app-download-option-prop #appDownloadOptionProd [paramObj]="{itemDefName: 'ITEM_DEF_AP_ASSET'}"
+                            (select)="download($event)"></app-download-option-prop>

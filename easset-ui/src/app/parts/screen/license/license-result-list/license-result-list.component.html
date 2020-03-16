@@ -1,0 +1,62 @@
+<div class="grid-common-wrap grid-common-wrap-licenses-result-list">
+  <div class="grid-common-count">
+    【件数{{ gridLicenseResultList && gridLicenseResultList.rows ? (gridLicenseResultList.rows.length | number) : 0 }}件】
+  </div>
+  <div class="grid-inventory-list wp-grid-licenses-result-list" id="wp-grid-licenses-result-list">
+    <ea-flex-grid #gridLicenseResultList class="grid-common-list grid-lisence-result-list grid-inventory-list"
+      [itemsSource]="dataList" (initialized)="onGridInitialized(gridLicenseResultList)" [allowSorting]="false"
+      [isReadOnly]="false">
+      <ng-container *ngIf="checkBoxVisible">
+        <ea-flex-grid-column header="Sel" binding="sel" [allowDragging]="'None'" [allowMerging]="false" [width]="30"
+          [isReadOnly]="false"></ea-flex-grid-column>
+      </ng-container>
+      <ea-flex-grid-column header="ﾗｲｾﾝｽ管理番号" binding="licenseId" [width]="100"></ea-flex-grid-column>
+      <ng-container *ngIf="deleteColumnVisible">
+        <ea-flex-grid-column header="抹消日" binding="deleteDate" [width]="100"></ea-flex-grid-column>
+        <ea-flex-grid-column header="抹消理由" binding="deleteReason" [width]="200"></ea-flex-grid-column>
+      </ng-container>
+      <ea-flex-grid-column header="メーカー" binding="softwareMakerName" [width]="150"></ea-flex-grid-column>
+      <ea-flex-grid-column header="ソフトウェア" binding="softwareName" [width]="300"></ea-flex-grid-column>
+      <ea-flex-grid-column header="シリアル番号" binding="licSerialCode" [width]="120"></ea-flex-grid-column>
+      <ea-flex-grid-column header="保有数" binding="licQuantity" [width]="70"></ea-flex-grid-column>
+      <ea-flex-grid-column header="有効数" binding="licEnableQuantity" [width]="70"></ea-flex-grid-column>
+      <ea-flex-grid-column header="消費数" binding="licUseQuantity" [width]="70"></ea-flex-grid-column>
+      <ea-flex-grid-column header="UPG済数" binding="licUpgradeToQuantity" [width]="70">
+      </ea-flex-grid-column>
+      <ea-flex-grid-column header="使用許諾部署" binding="adgUseSection" [width]="270">
+        <ng-template wjFlexGridCellTemplate [cellType]="'Cell'" let-cell="cell">
+          {{ cell.item.holCompanyName }}
+          {{ cell.item.holSectionName }}
+        </ng-template>
+      </ea-flex-grid-column>
+      <ea-flex-grid-column header="保有部署" binding="adgHolSection" [width]="270">
+        <ng-template wjFlexGridCellTemplate [cellType]="'Cell'" let-cell="cell">
+          {{ cell.item.holCompanyName }}
+          {{ cell.item.holSectionName }}
+        </ng-template>
+      </ea-flex-grid-column>
+      <ea-flex-grid-column header="資産管理担当者" binding="adgHolStaff" [width]="170">
+        <ng-template wjFlexGridCellTemplate [cellType]="'Cell'" let-cell="cell">
+          {{ cell.item.holStaffCode }}
+          {{ cell.item.holStaffName }}
+        </ng-template>
+      </ea-flex-grid-column>
+      <ea-flex-grid-column header="ﾊｰﾄﾞｳｪｱ&#013;ﾊﾞﾝﾄﾞﾙ" binding="licHrdBandleFlagName" [width]="70" [wordWrap]="true">
+      </ea-flex-grid-column>
+      <ea-flex-grid-column header="資産区分" binding="licAssetTypeName" [width]="100"></ea-flex-grid-column>
+      <ea-flex-grid-column header="取得方法" binding="licGetTypeName" [width]="150"></ea-flex-grid-column>
+      <ea-flex-grid-column header="取得費用" binding="licAmount" [width]="100"></ea-flex-grid-column>
+      <ea-flex-grid-column header="ライセンス形態" binding="licLicenseTypeName" [width]="150"></ea-flex-grid-column>
+      <ea-flex-grid-column header="ｱｯﾌﾟ&#013;ｸﾞﾚｰﾄﾞ" binding="licUpgradeFlagName" [width]="70">
+      </ea-flex-grid-column>
+      <ea-flex-grid-column header="ターム" binding="licTermFlagName" [width]="70"></ea-flex-grid-column>
+      <ea-flex-grid-column header="ボリュームタイプ" binding="licVolumeTypeName" [width]="150"></ea-flex-grid-column>
+      <ea-flex-grid-column header="備考" binding="dscDescription" [width]="300"></ea-flex-grid-column>
+      <ea-flex-grid-column header="取得申請書番号" binding="getApplicationId" [width]="100"></ea-flex-grid-column>
+      <ea-flex-grid-column header="登録申請番号" binding="registApplicationId" [width]="100"></ea-flex-grid-column>
+      <ea-flex-grid-column header="契約番号" binding="contractNum" [width]="100"></ea-flex-grid-column>
+      <ea-flex-grid-column header="契約枝番" binding="contractEda" [width]="100"></ea-flex-grid-column>
+      <ea-flex-grid-column header="資産番号" binding="shisanNum" [width]="100"></ea-flex-grid-column>
+    </ea-flex-grid>
+  </div>
+</div>

@@ -1,0 +1,1254 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<!--
+ *===================================================================
+ * ファイル名 : InvDAO_SqlMap.xml
+ * 概要説明   : 棚卸用SQL文
+ * バージョン : 1.0
+ *===================================================================
+ * 修正履歴
+ * 日付       Ver. 担当者       修正内容
+ * －－－－－ －－ －－－－－－ －－－－－－－－－－－－－－－－－－
+ * 2013-03-19 1.0  李            新規
+ *===================================================================
+ -->
+<sqlMap namespace="InvDAO" >
+
+  <!--
+    棚卸データ作成ステータス取得
+  -->
+  <select id="selectInvStat_INV" parameterClass="java.util.Map" resultClass="jp.co.ctcg.easset.dto.inv.InvStat">
+    SELECT
+      PERIOD period
+    , COMPANY_CODE companyCode
+    , CREATE_DATE createDate
+    , CREATE_STAFF_CODE createStaffCode
+    , UPDATE_DATE updateDate
+    , UPDATE_STAFF_CODE updateStaffCode
+    , CREATE_STATUS createStatus
+    , CREATE_START_DATE createStartDate
+    , CREATE_END_DATE createEndDate
+    , CREATE_EXEC_STAFF_CODE createExecStaffCode
+    , FLD_TAN_PUBLIC_TYPE fldTanPublicType
+    , FLD_TAN_SEND_STATUS fldTanSendStatus
+    , FLD_TAN_SEND_START_DATE fldTanSendStartDate
+    , FLD_TAN_SEND_END_DATE fldTanSendEndDate
+    , FLD_RO_PUBLIC_TYPE fldRoPublicType
+    , FLD_RO_SEND_STATUS fldRoSendStatus
+    , FLD_RO_SEND_START_DATE fldRoSendStartDate
+    , FLD_RO_SEND_END_DATE fldRoSendEndDate
+    , FLD_INT_PUBLIC_TYPE fldIntPublicType
+    , FLD_INT_SEND_STATUS fldIntSendStatus
+    , FLD_INT_SEND_START_DATE fldIntSendStartDate
+    , FLD_INT_SEND_END_DATE fldIntSendEndDate
+    , LE_PUBLIC_TYPE lePublicType
+    , LE_SEND_STATUS leSendStatus
+    , LE_SEND_START_DATE leSendStartDate
+    , LE_SEND_END_DATE leSendEndDate
+    , RE_PUBLIC_TYPE rePublicType
+    , RE_SEND_STATUS reSendStatus
+    , RE_SEND_START_DATE reSendStartDate
+    , RE_SEND_END_DATE reSendEndDate
+    , EQUIP_PUBLIC_TYPE equipPublicType
+    , EQUIP_SEND_STATUS equipSendStatus
+    , EQUIP_SEND_START_DATE equipSendStartDate
+    , EQUIP_SEND_END_DATE equipSendEndDate
+    , LAST_SUCCESS_CREATE_START_DATE lastSuccessCreateStartDate
+    , LAST_SUCCESS_CREATE_END_DATE lastSuccessCreateEndDate
+    , LAST_SUCCESS_EXEC_STAFF_CODE lastSuccessExecStaffCode
+
+    , NEA_UTIL_PKG.GET_CN_VALUE1_F('INV_CREATE_STATUS', CREATE_STATUS) createStatusName
+    , NEA_UTIL_PKG.GET_STAFF_NAME_F(CREATE_EXEC_STAFF_CODE) createExecStaffName
+
+    , NEA_UTIL_PKG.GET_CN_VALUE1_F('INV_PUBLIC_TYPE', FLD_TAN_PUBLIC_TYPE) fldTanPublicTypeName
+    , NEA_UTIL_PKG.GET_CN_VALUE1_F('INV_PUBLIC_TYPE', FLD_RO_PUBLIC_TYPE) fldRoPublicTypeName
+    , NEA_UTIL_PKG.GET_CN_VALUE1_F('INV_PUBLIC_TYPE', FLD_INT_PUBLIC_TYPE) fldIntPublicTypeName
+    , NEA_UTIL_PKG.GET_CN_VALUE1_F('INV_PUBLIC_TYPE', LE_PUBLIC_TYPE) lePublicTypeName
+    , NEA_UTIL_PKG.GET_CN_VALUE1_F('INV_PUBLIC_TYPE', RE_PUBLIC_TYPE) rePublicTypeName
+    , NEA_UTIL_PKG.GET_CN_VALUE1_F('INV_PUBLIC_TYPE', EQUIP_PUBLIC_TYPE) equipPublicTypeName
+
+    , NEA_UTIL_PKG.GET_CN_VALUE1_F('INV_SEND_STATUS', FLD_TAN_SEND_STATUS) fldTanSendStatusName
+    , NEA_UTIL_PKG.GET_CN_VALUE1_F('INV_SEND_STATUS', FLD_RO_SEND_STATUS) fldRoSendStatusName
+    , NEA_UTIL_PKG.GET_CN_VALUE1_F('INV_SEND_STATUS', FLD_INT_SEND_STATUS) fldIntSendStatusName
+    , NEA_UTIL_PKG.GET_CN_VALUE1_F('INV_SEND_STATUS', LE_SEND_STATUS) leSendStatusName
+    , NEA_UTIL_PKG.GET_CN_VALUE1_F('INV_SEND_STATUS', RE_SEND_STATUS) reSendStatusName
+    , NEA_UTIL_PKG.GET_CN_VALUE1_F('INV_SEND_STATUS', EQUIP_SEND_STATUS) equipSendStatusName
+    FROM
+      NEA_INV_STAT
+    WHERE
+      COMPANY_CODE = #companyCode#
+      <isNotEmpty property="period">
+        AND PERIOD = #period#
+      </isNotEmpty>
+    ORDER BY PERIOD DESC
+    <isNotEmpty property="lockFlag">
+      FOR UPDATE
+    </isNotEmpty>
+   </select>
+
+  <!--
+    棚卸データ作成ステータス更新
+  -->
+  <update id="updateInvStat_INV" parameterClass="java.util.Map" >
+    UPDATE
+      NEA_INV_STAT
+    SET
+    PERIOD = #obj.period:CHAR#
+    , COMPANY_CODE = #obj.companyCode:VARCHAR#
+    , CREATE_DATE = #obj.createDate:TIMESTAMP#
+    , CREATE_STAFF_CODE = #obj.createStaffCode:VARCHAR#
+    , UPDATE_DATE = #obj.updateDate:TIMESTAMP#
+    , UPDATE_STAFF_CODE = #obj.updateStaffCode:VARCHAR#
+    , CREATE_STATUS = #obj.createStatus:CHAR#
+    , CREATE_START_DATE = #obj.createStartDate:TIMESTAMP#
+    , CREATE_END_DATE = #obj.createEndDate:TIMESTAMP#
+    , CREATE_EXEC_STAFF_CODE = #obj.createExecStaffCode:VARCHAR#
+    , FLD_TAN_PUBLIC_TYPE = #obj.fldTanPublicType:CHAR#
+    , FLD_TAN_SEND_STATUS = #obj.fldTanSendStatus:CHAR#
+    , FLD_TAN_SEND_START_DATE = #obj.fldTanSendStartDate:TIMESTAMP#
+    , FLD_TAN_SEND_END_DATE = #obj.fldTanSendEndDate:TIMESTAMP#
+    , FLD_RO_PUBLIC_TYPE = #obj.fldRoPublicType:CHAR#
+    , FLD_RO_SEND_STATUS = #obj.fldRoSendStatus:CHAR#
+    , FLD_RO_SEND_START_DATE = #obj.fldRoSendStartDate:TIMESTAMP#
+    , FLD_RO_SEND_END_DATE = #obj.fldRoSendEndDate:TIMESTAMP#
+    , FLD_INT_PUBLIC_TYPE = #obj.fldIntPublicType:CHAR#
+    , FLD_INT_SEND_STATUS = #obj.fldIntSendStatus:CHAR#
+    , FLD_INT_SEND_START_DATE = #obj.fldIntSendStartDate:TIMESTAMP#
+    , FLD_INT_SEND_END_DATE = #obj.fldIntSendEndDate:TIMESTAMP#
+    , LE_PUBLIC_TYPE = #obj.lePublicType:CHAR#
+    , LE_SEND_STATUS = #obj.leSendStatus:CHAR#
+    , LE_SEND_START_DATE = #obj.leSendStartDate:TIMESTAMP#
+    , LE_SEND_END_DATE = #obj.leSendEndDate:TIMESTAMP#
+    , RE_PUBLIC_TYPE = #obj.rePublicType:CHAR#
+    , RE_SEND_STATUS = #obj.reSendStatus:CHAR#
+    , RE_SEND_START_DATE = #obj.reSendStartDate:TIMESTAMP#
+    , RE_SEND_END_DATE = #obj.reSendEndDate:TIMESTAMP#
+    , EQUIP_PUBLIC_TYPE = #obj.equipPublicType:CHAR#
+    , EQUIP_SEND_STATUS = #obj.equipSendStatus:CHAR#
+    , EQUIP_SEND_START_DATE = #obj.equipSendStartDate:TIMESTAMP#
+    , EQUIP_SEND_END_DATE = #obj.equipSendEndDate:TIMESTAMP#
+    , LAST_SUCCESS_CREATE_START_DATE = #obj.lastSuccessCreateStartDate:TIMESTAMP#
+    , LAST_SUCCESS_CREATE_END_DATE = #obj.lastSuccessCreateEndDate:TIMESTAMP#
+    , LAST_SUCCESS_EXEC_STAFF_CODE = #obj.lastSuccessExecStaffCode:VARCHAR#
+    WHERE
+      PERIOD = #obj.period:CHAR#
+    AND
+      COMPANY_CODE = #obj.companyCode:VARCHAR#
+  </update>
+
+  <!--
+    棚卸データ作成ステータス作成
+  -->
+  <insert id="insertInvStat_Inv" parameterClass="java.util.Map">
+    INSERT  INTO NEA_INV_STAT
+      (
+      PERIOD
+      , COMPANY_CODE
+      , CREATE_DATE
+      , CREATE_STAFF_CODE
+      , UPDATE_DATE
+      , UPDATE_STAFF_CODE
+      , CREATE_STATUS
+      , CREATE_START_DATE
+      , CREATE_END_DATE
+      , CREATE_EXEC_STAFF_CODE
+      , FLD_TAN_PUBLIC_TYPE
+      , FLD_TAN_SEND_STATUS
+      , FLD_TAN_SEND_START_DATE
+      , FLD_TAN_SEND_END_DATE
+      , FLD_RO_PUBLIC_TYPE
+      , FLD_RO_SEND_STATUS
+      , FLD_RO_SEND_START_DATE
+      , FLD_RO_SEND_END_DATE
+      , FLD_INT_PUBLIC_TYPE
+      , FLD_INT_SEND_STATUS
+      , FLD_INT_SEND_START_DATE
+      , FLD_INT_SEND_END_DATE
+      , LE_PUBLIC_TYPE
+      , LE_SEND_STATUS
+      , LE_SEND_START_DATE
+      , LE_SEND_END_DATE
+      , RE_PUBLIC_TYPE
+      , RE_SEND_STATUS
+      , RE_SEND_START_DATE
+      , RE_SEND_END_DATE
+      , EQUIP_PUBLIC_TYPE
+      , EQUIP_SEND_STATUS
+      , EQUIP_SEND_START_DATE
+      , EQUIP_SEND_END_DATE
+      , LAST_SUCCESS_CREATE_START_DATE
+      , LAST_SUCCESS_CREATE_END_DATE
+      , LAST_SUCCESS_EXEC_STAFF_CODE
+      ) VALUES (
+      #obj.period:CHAR# /* PERIOD*/
+      , #obj.companyCode:VARCHAR# /* COMPANY_CODE*/
+      , #obj.createDate:TIMESTAMP# /* CREATE_DATE*/
+      , #obj.createStaffCode:VARCHAR# /* CREATE_STAFF_CODE*/
+      , #obj.updateDate:TIMESTAMP# /* UPDATE_DATE*/
+      , #obj.updateStaffCode:VARCHAR# /* UPDATE_STAFF_CODE*/
+      , #obj.createStatus:CHAR# /* CREATE_STATUS*/
+      , #obj.createStartDate:TIMESTAMP# /* CREATE_START_DATE*/
+      , #obj.createEndDate:TIMESTAMP# /* CREATE_END_DATE*/
+      , #obj.createExecStaffCode:VARCHAR# /* CREATE_EXEC_STAFF_CODE*/
+      , #obj.fldTanPublicType:CHAR# /* FLD_TAN_PUBLIC_TYPE*/
+      , #obj.fldTanSendStatus:CHAR# /* FLD_TAN_SEND_STATUS*/
+      , #obj.fldTanSendStartDate:TIMESTAMP# /* FLD_TAN_SEND_START_DATE*/
+      , #obj.fldTanSendEndDate:TIMESTAMP# /* FLD_TAN_SEND_END_DATE*/
+      , #obj.fldRoPublicType:CHAR# /* FLD_RO_PUBLIC_TYPE*/
+      , #obj.fldRoSendStatus:CHAR# /* FLD_RO_SEND_STATUS*/
+      , #obj.fldRoSendStartDate:TIMESTAMP# /* FLD_RO_SEND_START_DATE*/
+      , #obj.fldRoSendEndDate:TIMESTAMP# /* FLD_RO_SEND_END_DATE*/
+      , #obj.fldIntPublicType:CHAR# /* FLD_INT_PUBLIC_TYPE*/
+      , #obj.fldIntSendStatus:CHAR# /* FLD_INT_SEND_STATUS*/
+      , #obj.fldIntSendStartDate:TIMESTAMP# /* FLD_INT_SEND_START_DATE*/
+      , #obj.fldIntSendEndDate:TIMESTAMP# /* FLD_INT_SEND_END_DATE*/
+      , #obj.lePublicType:CHAR# /* LE_PUBLIC_TYPE*/
+      , #obj.leSendStatus:CHAR# /* LE_SEND_STATUS*/
+      , #obj.leSendStartDate:TIMESTAMP# /* LE_SEND_START_DATE*/
+      , #obj.leSendEndDate:TIMESTAMP# /* LE_SEND_END_DATE*/
+      , #obj.rePublicType:CHAR# /* RE_PUBLIC_TYPE*/
+      , #obj.reSendStatus:CHAR# /* RE_SEND_STATUS*/
+      , #obj.reSendStartDate:TIMESTAMP# /* RE_SEND_START_DATE*/
+      , #obj.reSendEndDate:TIMESTAMP# /* RE_SEND_END_DATE*/
+      , #obj.equipPublicType:CHAR# /* EQUIP_PUBLIC_TYPE*/
+      , #obj.equipSendStatus:CHAR# /* EQUIP_SEND_STATUS*/
+      , #obj.equipSendStartDate:TIMESTAMP# /* EQUIP_SEND_START_DATE*/
+      , #obj.equipSendEndDate:TIMESTAMP# /* EQUIP_SEND_END_DATE*/
+      , #obj.lastSuccessCreateStartDate:TIMESTAMP# /* LAST_SUCCESS_CREATE_START_DATE*/
+      , #obj.lastSuccessCreateEndDate:TIMESTAMP# /* LAST_SUCCESS_CREATE_END_DATE*/
+      , #obj.lastSuccessExecStaffCode:VARCHAR# /* LAST_SUCCESS_EXEC_STAFF_CODE*/
+      )
+  </insert>
+
+  <!--
+    棚卸集約情報_担当者別条件共通
+  -->
+  <sql id="selectInvSumStaffWhere_INV">
+      AND nisums.HOL_SECTION_CODE = nisum.HOL_SECTION_CODE
+      AND nisums.HOL_SECTION_YEAR = nisum.HOL_SECTION_YEAR
+      AND nisums.PERIOD = nisum.PERIOD
+      AND nisums.COMPANY_CODE = nisum.COMPANY_CODE
+      AND nisums.INV_ASSET_TYPE = nisum.INV_ASSET_TYPE
+      AND nisums.INV_STAFF_CODE = #invStaffCode#
+  </sql>
+
+  <!--
+    棚卸集約情報条件共通
+  -->
+  <sql id="selectInvSumWhere_INV">
+    <isNotEmpty property="isUnknow">
+       AND nisum.HOL_SECTION_CODE NOT IN ('Z1', 'Z2')
+    </isNotEmpty>
+    <isEqual property="invLinkType" compareValue="1">
+       AND nisum.HOL_SECTION_CODE NOT IN ('Z1', 'Z2')
+    </isEqual>
+    <isEqual property="invLinkType" compareValue="2">
+       AND nisum.HOL_SECTION_CODE = 'Z1'
+    </isEqual>
+    <isEqual property="invLinkType" compareValue="3">
+       AND nisum.HOL_SECTION_CODE = 'Z2'
+    </isEqual>
+    <isNotEmpty property="eappId">
+      AND nisum.EAPP_ID = #eappId#
+    </isNotEmpty>
+    <isEmpty property="eappId">
+      <!-- 一般権限と資産管理担当者/部署長のみ -->
+      <isNotEmpty property="isPublic" >
+      AND nisum.PERIOD = nistat.PERIOD
+      AND nisum.COMPANY_CODE = nistat.COMPANY_CODE
+        <!-- 棚卸公開設定確認 -->
+        AND
+          (
+                (nistat.FLD_TAN_PUBLIC_TYPE = '2' AND nisum.INV_ASSET_TYPE = '1')
+            OR  (nistat.FLD_RO_PUBLIC_TYPE = '2' AND nisum.INV_ASSET_TYPE = '2')
+            OR  (nistat.FLD_INT_PUBLIC_TYPE = '2' AND nisum.INV_ASSET_TYPE = '3')
+            OR  (nistat.FLD_INT_PUBLIC_TYPE = '2' AND nisum.INV_ASSET_TYPE = '4')
+            OR  (nistat.LE_PUBLIC_TYPE = '2' AND nisum.INV_ASSET_TYPE = '5')
+            OR  (nistat.RE_PUBLIC_TYPE = '2' AND nisum.INV_ASSET_TYPE = '6')
+            OR  (nistat.EQUIP_PUBLIC_TYPE = '2' AND nisum.INV_ASSET_TYPE = '7')
+          )
+      </isNotEmpty>
+      AND
+        nisum.PERIOD = #searchParam.period#
+      <isNotEmpty property="companyCode">
+        AND
+          nisum.COMPANY_CODE = #companyCode#
+      </isNotEmpty>
+      <!-- ステータス -->
+      <isNotEmpty property="apStatusPluralList">
+        AND $apStatusPluralList$
+      </isNotEmpty>
+      <isNotEmpty property="accessLevelSection">
+        AND $accessLevelSection$
+      </isNotEmpty>
+      <!-- 保有部署 -->
+      <isNotEmpty property="section">
+        AND $section$
+      </isNotEmpty>
+      <!-- 資産区分 -->
+      <isNotEmpty property="invAssetTypePluralList">
+        AND $invAssetTypePluralList$
+      </isNotEmpty>
+      <!-- 棚卸状況 -->
+      <isNotEmpty property="invImplementationPluralList">
+        AND $invImplementationPluralList$
+      </isNotEmpty>
+    </isEmpty>
+  </sql>
+
+  <!--
+    棚卸集約情報検索
+  -->
+  <select id="selectInvSum_INV" parameterClass="java.util.Map" resultClass="jp.co.ctcg.easset.dto.inv.InvSumSR">
+    SELECT
+      nisum.PERIOD period
+    , nisum.COMPANY_CODE companyCode
+    , nisum.HOL_SECTION_CODE holSectionCode
+    , nisum.HOL_SECTION_YEAR holSectionYear
+    , nisum.INV_ASSET_TYPE invAssetType
+    , nisum.CREATE_DATE createDate
+    , nisum.CREATE_STAFF_CODE createStaffCode
+    , nisum.UPDATE_DATE updateDate
+    , nisum.UPDATE_STAFF_CODE updateStaffCode
+    , nisum.AP_STATUS apStatus
+    , nisum.AP_DATE apDate
+    , nisum.AP_STAFF_CODE apStaffCode
+    , nisum.APPROVE_DATE approveDate
+    , nisum.APPROVE_STAFF_CODE approveStaffCode
+    , nisum.EAPP_ID eappId
+    , nisum.REMINDER_DATE reminderDate
+    <isEmpty property="isGeneral" >
+    , nisum.INV_COUNT_UNDECIDED invCountUndecided
+    , nisum.INV_COUNT_OWN invCountOwn
+    , nisum.INV_COUNT_NOT_OWN invCountNotOwn
+    , nisum.INV_COUNT_TOTAL invCountTotal
+    , nisum.ASSET_COUNT assetCount
+    , TO_CHAR(NULL) invStaffCode
+    </isEmpty>
+    <isNotEmpty property="isGeneral" >
+      , nisums.INV_COUNT_UNDECIDED invCountUndecided
+      , nisums.INV_COUNT_OWN invCountOwn
+      , nisums.INV_COUNT_NOT_OWN invCountNotOwn
+      , nisums.INV_COUNT_TOTAL invCountTotal
+      , nisums.ASSET_COUNT assetCount
+      , nisums.INV_STAFF_CODE invStaffCode
+    </isNotEmpty>
+    , DECODE(nisum.HOL_SECTION_CODE, 'Z1', '(保有部署不明)', 'Z2', '(資産情報不明)', NEA_UTIL_PKG.get_section_name_f(nisum.COMPANY_CODE, nisum.HOL_SECTION_CODE, nisum.HOL_SECTION_YEAR)) holSectionName
+    , NEA_UTIL_PKG.get_staff_name_f(nisum.AP_STAFF_CODE) apStaffName
+    , NEA_UTIL_PKG.get_staff_name_f(nisum.APPROVE_STAFF_CODE) approveStaffName
+    , NEA_UTIL_PKG.get_cn_value1_f('INV_ASSET_TYPE', nisum.INV_ASSET_TYPE) invAssetTypeName
+    , NEA_UTIL_PKG.get_cn_value1_f('AP_STATUS_INV', nisum.AP_STATUS) apStatusName
+    , '0' invStaffFlag
+    FROM
+      NEA_$histTablePrefixLd$INV_SUM nisum
+      <!-- 一般権限と資産管理担当者/部署長のみ -->
+      <isNotEmpty property="isPublic" >
+        , NEA_INV_STAT nistat
+      </isNotEmpty>
+    <!-- 一般権限 -->
+    <isNotEmpty property="isGeneral" >
+      , NEA_$histTablePrefixLd$INV_SUM_STAFF nisums
+    </isNotEmpty>
+    WHERE
+      1 = 1
+    <!-- 一般権限 -->
+    <isNotEmpty property="isGeneral" >
+      <include refid="selectInvSumStaffWhere_INV" />
+    </isNotEmpty>
+    <include refid="selectInvSumWhere_INV" />
+    <!-- 資産管理担当者のみUNION -->
+    <isNotEmpty property="isSearchInvStaff">
+      UNION ALL
+      SELECT
+        nisum.PERIOD period
+      , nisum.COMPANY_CODE companyCode
+      , nisum.HOL_SECTION_CODE holSectionCode
+      , nisum.HOL_SECTION_YEAR holSectionYear
+      , nisum.INV_ASSET_TYPE invAssetType
+      , nisum.CREATE_DATE createDate
+      , nisum.CREATE_STAFF_CODE createStaffCode
+      , nisum.UPDATE_DATE updateDate
+      , nisum.UPDATE_STAFF_CODE updateStaffCode
+      , nisum.AP_STATUS apStatus
+      , nisum.AP_DATE apDate
+      , nisum.AP_STAFF_CODE apStaffCode
+      , nisum.APPROVE_DATE approveDate
+      , nisum.APPROVE_STAFF_CODE approveStaffCode
+      , nisum.EAPP_ID eappId
+      , nisum.REMINDER_DATE reminderDate
+      , nisums.INV_COUNT_UNDECIDED invCountUndecided
+      , nisums.INV_COUNT_OWN invCountOwn
+      , nisums.INV_COUNT_NOT_OWN invCountNotOwn
+      , nisums.INV_COUNT_TOTAL invCountTotal
+      , nisums.ASSET_COUNT assetCount
+      , nisums.INV_STAFF_CODE invStaffCode
+      , DECODE(nisum.HOL_SECTION_CODE, 'Z1', '(保有部署不明)', 'Z2', '(資産情報不明)', NEA_UTIL_PKG.get_section_name_f(nisum.COMPANY_CODE, nisum.HOL_SECTION_CODE, nisum.HOL_SECTION_YEAR)) holSectionName
+      , NEA_UTIL_PKG.get_staff_name_f(nisum.AP_STAFF_CODE) apStaffName
+      , NEA_UTIL_PKG.get_staff_name_f(nisum.APPROVE_STAFF_CODE) approveStaffName
+      , NEA_UTIL_PKG.get_cn_value1_f('INV_ASSET_TYPE', nisum.INV_ASSET_TYPE) invAssetTypeName
+      , NEA_UTIL_PKG.get_cn_value1_f('AP_STATUS_INV', nisum.AP_STATUS) apStatusName
+    , '1' invStaffFlag
+      FROM
+        NEA_$histTablePrefixLd$INV_SUM nisum
+      , NEA_INV_STAT nistat
+      , NEA_$histTablePrefixLd$INV_SUM_STAFF nisums
+      WHERE
+        1 = 1
+      AND nisum.PERIOD = nistat.PERIOD
+      AND nisum.COMPANY_CODE = nistat.COMPANY_CODE
+      <!-- 棚卸公開設定確認 -->
+      AND
+        (
+              (nistat.FLD_TAN_PUBLIC_TYPE = '2' AND nisum.INV_ASSET_TYPE = '1')
+          OR  (nistat.FLD_RO_PUBLIC_TYPE = '2' AND nisum.INV_ASSET_TYPE = '2')
+          OR  (nistat.FLD_INT_PUBLIC_TYPE = '2' AND nisum.INV_ASSET_TYPE = '3')
+          OR  (nistat.FLD_INT_PUBLIC_TYPE = '2' AND nisum.INV_ASSET_TYPE = '4')
+          OR  (nistat.LE_PUBLIC_TYPE = '2' AND nisum.INV_ASSET_TYPE = '5')
+          OR  (nistat.RE_PUBLIC_TYPE = '2' AND nisum.INV_ASSET_TYPE = '6')
+          OR  (nistat.EQUIP_PUBLIC_TYPE = '2' AND nisum.INV_ASSET_TYPE = '7')
+        )
+      <include refid="selectInvSumStaffWhere_INV" />
+      <isNotEmpty property="isUnknow">
+         AND nisum.HOL_SECTION_CODE NOT IN ('Z1', 'Z2')
+      </isNotEmpty>
+      AND
+        nisum.PERIOD = #searchParam.period#
+      AND
+        nisum.COMPANY_CODE = #companyCode#
+      <isNotEmpty property="apStatusPluralList">
+        AND $apStatusPluralList$
+      </isNotEmpty>
+      <!-- 保有部署 -->
+      <isNotEmpty property="section">
+        AND $section$
+      </isNotEmpty>
+      <!-- 資産区分 -->
+      <isNotEmpty property="invAssetTypePluralList">
+        AND $invAssetTypePluralList$
+      </isNotEmpty>
+      <!-- 棚卸状況 -->
+      <isNotEmpty property="invImplementationStaffPluralList">
+        AND $invImplementationStaffPluralList$
+      </isNotEmpty>
+      AND
+        NOT EXISTS
+          (
+            SELECT
+              'X'
+            FROM
+              NEA_$histTablePrefixLd$INV_SUM nisum1
+            WHERE
+              1 = 1
+             <isNotEmpty property="notExistsAccessLevelSection">
+                AND $notExistsAccessLevelSection$
+             </isNotEmpty>
+             AND nisum1.PERIOD = nisum.PERIOD
+             AND nisum1.COMPANY_CODE = nisum.COMPANY_CODE
+             AND nisum1.HOL_SECTION_CODE = nisum.HOL_SECTION_CODE
+             AND nisum1.HOL_SECTION_YEAR = nisum.HOL_SECTION_YEAR
+             AND nisum1.INV_ASSET_TYPE = nisum.INV_ASSET_TYPE
+           )
+    </isNotEmpty>
+
+    <isNotEmpty property="lockFlag">
+      FOR UPDATE
+    </isNotEmpty>
+    ORDER BY holSectionCode, invAssetType
+  </select>
+
+  <!--
+    棚卸集約情報更新
+  -->
+  <update id="updateInvSum_INV" parameterClass="java.util.Map">
+    UPDATE
+      NEA_INV_SUM
+    SET
+      PERIOD = #obj.period:CHAR#
+    , COMPANY_CODE = #obj.companyCode:VARCHAR#
+    , HOL_SECTION_CODE = #obj.holSectionCode:VARCHAR#
+    , HOL_SECTION_YEAR = #obj.holSectionYear:NUMERIC#
+    , INV_ASSET_TYPE = #obj.invAssetType:CHAR#
+    , CREATE_DATE = #obj.createDate:TIMESTAMP#
+    , CREATE_STAFF_CODE = #obj.createStaffCode:VARCHAR#
+    , UPDATE_DATE = #obj.updateDate:TIMESTAMP#
+    , UPDATE_STAFF_CODE = #obj.updateStaffCode:VARCHAR#
+    , AP_STATUS = #obj.apStatus:CHAR#
+    , AP_DATE = #obj.apDate:DATE#
+    , AP_STAFF_CODE = #obj.apStaffCode:VARCHAR#
+    , APPROVE_DATE = #obj.approveDate:DATE#
+    , APPROVE_STAFF_CODE = #obj.approveStaffCode:VARCHAR#
+    , EAPP_ID = #obj.eappId:NUMERIC#
+    , REMINDER_DATE = #obj.reminderDate:DATE#
+    , INV_COUNT_UNDECIDED = #obj.invCountUndecided:NUMERIC#
+    , INV_COUNT_OWN = #obj.invCountOwn:NUMERIC#
+    , INV_COUNT_NOT_OWN = #obj.invCountNotOwn:NUMERIC#
+    , INV_COUNT_TOTAL = #obj.invCountTotal:NUMERIC#
+    , ASSET_COUNT = #obj.assetCount:NUMERIC#
+    WHERE
+      PERIOD = #obj.period:CHAR#
+    AND
+      COMPANY_CODE = #obj.companyCode:VARCHAR#
+    AND
+      HOL_SECTION_CODE = #obj.holSectionCode:VARCHAR#
+    AND
+      HOL_SECTION_YEAR = #obj.holSectionYear:NUMERIC#
+    AND
+      INV_ASSET_TYPE = #obj.invAssetType:CHAR#
+  </update>
+
+  <!--
+    棚卸集約対象者情報更新
+  -->
+  <update id="updateInvSumStaff_INV" parameterClass="java.util.Map">
+    UPDATE
+      NEA_INV_SUM_STAFF
+    SET
+      PERIOD = #obj.period:CHAR#
+    , COMPANY_CODE = #obj.companyCode:VARCHAR#
+    , HOL_SECTION_CODE = #obj.holSectionCode:VARCHAR#
+    , HOL_SECTION_YEAR = #obj.holSectionYear:NUMERIC#
+    , INV_ASSET_TYPE = #obj.invAssetType:CHAR#
+    , CREATE_DATE = #obj.createDate:TIMESTAMP#
+    , CREATE_STAFF_CODE = #obj.createStaffCode:VARCHAR#
+    , UPDATE_DATE = #obj.updateDate:TIMESTAMP#
+    , UPDATE_STAFF_CODE = #obj.updateStaffCode:VARCHAR#
+    , INV_COUNT_UNDECIDED = #obj.invCountUndecided:NUMERIC#
+    , INV_COUNT_OWN = #obj.invCountOwn:NUMERIC#
+    , INV_COUNT_NOT_OWN = #obj.invCountNotOwn:NUMERIC#
+    , INV_COUNT_TOTAL = #obj.invCountTotal:NUMERIC#
+    , ASSET_COUNT = #obj.assetCount:NUMERIC#
+    WHERE
+      PERIOD = #obj.period:CHAR#
+    AND
+      COMPANY_CODE = #obj.companyCode:VARCHAR#
+    AND
+      HOL_SECTION_CODE = #obj.holSectionCode:VARCHAR#
+    AND
+      HOL_SECTION_YEAR = #obj.holSectionYear:NUMERIC#
+    AND
+      INV_ASSET_TYPE = #obj.invAssetType:CHAR#
+    AND
+      INV_STAFF_CODE = #invStaffCode#
+  </update>
+
+
+  <!--
+    棚卸集約情報作成
+  -->
+  <insert id="insertInvSum_Inv" parameterClass="java.util.Map">
+    INSERT INTO NEA_INV_SUM
+      (
+        PERIOD
+      , COMPANY_CODE
+      , HOL_SECTION_CODE
+      , HOL_SECTION_YEAR
+      , INV_ASSET_TYPE
+      , CREATE_DATE
+      , CREATE_STAFF_CODE
+      , UPDATE_DATE
+      , UPDATE_STAFF_CODE
+      , AP_STATUS
+      , AP_DATE
+      , AP_STAFF_CODE
+      , APPROVE_DATE
+      , APPROVE_STAFF_CODE
+      , EAPP_ID
+      , REMINDER_DATE
+      , INV_COUNT_UNDECIDED
+      , INV_COUNT_OWN
+      , INV_COUNT_NOT_OWN
+      , INV_COUNT_TOTAL
+      , ASSET_COUNT
+      ) VALUES (
+        #obj.period:CHAR# /* PERIOD*/
+      , #obj.companyCode:VARCHAR# /* COMPANY_CODE*/
+      , #obj.holSectionCode:VARCHAR# /* HOL_SECTION_CODE*/
+      , #obj.holSectionYear:NUMERIC# /* HOL_SECTION_YEAR*/
+      , #obj.invAssetType:CHAR# /* INV_ASSET_TYPE*/
+      , #obj.createDate:TIMESTAMP# /* CREATE_DATE*/
+      , #obj.createStaffCode:VARCHAR# /* CREATE_STAFF_CODE*/
+      , #obj.updateDate:TIMESTAMP# /* UPDATE_DATE*/
+      , #obj.updateStaffCode:VARCHAR# /* UPDATE_STAFF_CODE*/
+      , #obj.apStatus:CHAR# /* AP_STATUS*/
+      , #obj.apDate:DATE# /* AP_DATE*/
+      , #obj.apStaffCode:VARCHAR# /* AP_STAFF_CODE*/
+      , #obj.approveDate:DATE# /* APPROVE_DATE*/
+      , #obj.approveStaffCode:VARCHAR# /* APPROVE_STAFF_CODE*/
+      , #obj.eappId:NUMERIC# /* EAPP_ID*/
+      , #obj.reminderDate:DATE# /* REMINDER_DATE*/
+      , #obj.invCountUndecided:NUMERIC# /* INV_COUNT_UNDECIDED*/
+      , #obj.invCountOwn:NUMERIC# /* INV_COUNT_OWN*/
+      , #obj.invCountNotOwn:NUMERIC# /* INV_COUNT_NOT_OWN*/
+      , #obj.invCountTotal:NUMERIC# /* INV_COUNT_TOTAL*/
+      , #obj.assetCount:NUMERIC# /* ASSET_COUNT*/
+      )
+  </insert>
+
+  <!--
+    棚卸データ共通
+  -->
+  <sql id="selectInvLineComColumn_INV">
+      nil.INV_LINE_SEQ invLineSeq
+    , nil.CREATE_DATE createDate
+    , nil.CREATE_STAFF_CODE createStaffCode
+    , nil.UPDATE_DATE updateDate
+    , nil.UPDATE_STAFF_CODE updateStaffCode
+    , nil.PERIOD period
+    , nil.COMPANY_CODE companyCode
+    , nil.HOL_SECTION_CODE holSectionCode
+    , nil.HOL_SECTION_YEAR holSectionYear
+    , nil.INV_ASSET_TYPE invAssetType
+    , nil.INV_STATUS invStatus
+    , nil.INV_COMMENT invComment
+    , nil.AST_LIC_ID astLicId
+    , nil.PP_ID ppId
+    , nil.AST_NUM astNum
+    , nil.CONTRACT_NUM contractNum
+    , nil.CONTRACT_SUB_NUM contractSubNum
+    , nil.APPLICATION_ID applicationId
+    , nil.DELETE_FLAG deleteFlag
+    , nil.DELETE_DATE deleteDate
+    , nil.AST_NAME astName
+    , nil.HOL_STAFF_CODE holStaffCode
+    , nil.USE_STAFF_CODE useStaffCode
+    , nil.HOL_OFFICE_CODE holOfficeCode
+    , nil.HOL_OFFICE_FLOOR holOfficeFloor
+    , nil.HOL_OFFICE_ROOM_NUM holOfficeRoomNum
+    , nil.HOL_OFFICE_RACK_NUM holOfficeRackNum
+    , nil.HOL_QUANTITY holQuantity
+    , nil.INV_LINK_TYPE invLinkType
+    , nil.INV_STAFF_CODE invStaffCode
+    , NEA_UTIL_PKG.replace_enter_f(nil.DSC_DESCRIPTION, #enterChar#) dscDescription
+    , nil.DSC_ATTRIBUTE1 dscAttribute1
+    , nil.DSC_ATTRIBUTE2 dscAttribute2
+    , DECODE(nil.INV_STATUS, '2', '1', '0') invStatus1
+    , DECODE(nil.INV_STATUS, '3', '1', '0') invStatus2
+    , DECODE(DELETE_FLAG, '0', '', '1', '抹消済') deleteFlagName
+    , DECODE(nil.INV_STATUS, '2', '有', '3', '無') invStatusName
+    , NEA_UTIL_PKG.get_staff_name_f(nil.HOL_STAFF_CODE) holStaffName
+    , NEA_UTIL_PKG.get_staff_name_f(nil.USE_STAFF_CODE) useStaffName
+    , NEA_UTIL_PKG.get_section_name_f(nil.COMPANY_CODE, nil.HOL_SECTION_CODE, nil.HOL_SECTION_YEAR) holSectionName
+    , NEA_UTIL_PKG.get_cn_value1_f('OFFICE', nil.HOL_OFFICE_CODE) holOfficeName
+  </sql>
+
+  <!--
+    棚卸データ共通Where句
+  -->
+  <sql id="selectInvLineComWhere_INV">
+    nil.PERIOD = #searchParam.period#
+    AND nil.COMPANY_CODE = #searchParam.companyCode#
+    AND nil.INV_ASSET_TYPE = #searchParam.invAssetType#
+    <!-- 棚卸対象外は除外する -->
+    AND nil.INV_STATUS != '4'
+    <isNotEmpty property="invLinkTypePluralList">
+      AND $invLinkTypePluralList$
+    </isNotEmpty>
+    <isNotEmpty property="invStaffCode">
+      AND nil.INV_STAFF_CODE = #invStaffCode#
+    </isNotEmpty>
+    <!-- 保有部署 -->
+    <isNotEmpty property="section">
+      AND $section$
+    </isNotEmpty>
+  </sql>
+
+  <!-- 棚卸データ検索 -->
+  <select id="selectInvLine_INV" parameterClass="java.util.Map" resultClass="jp.co.ctcg.easset.dto.inv.InvLine">
+   SELECT
+      <include refid="selectInvLineComColumn_INV" />
+   FROM
+     NEA_$histTablePrefixLd$INV_LINE nil
+   WHERE
+     1 = 1
+   <isNotEmpty property="searchParam.period">
+     AND
+       nil.PERIOD = #searchParam.period#
+   </isNotEmpty>
+   <isNotEmpty property="searchParam.astLicId">
+     AND
+       nil.AST_LIC_ID = #searchParam.astLicId#
+   </isNotEmpty>
+   <isNotEmpty property="searchParam.companyCode">
+     AND
+       nil.COMPANY_CODE = #searchParam.companyCode#
+   </isNotEmpty>
+   <isNotEmpty property="isDeleteFlag">
+     <!-- 棚卸対象外は除外する -->
+     AND nil.INV_STATUS != '4'
+   </isNotEmpty>
+   <isNotEmpty property="isNotExistsAst+icId">
+     <!-- 情報機器管理番号が空白以外 -->
+     AND nil.AST_LIC_ID IS NOT NULL
+   </isNotEmpty>
+   <isNotEmpty property="isOrderByAstLicId">
+     ORDER BY AST_LIC_ID
+   </isNotEmpty>
+  </select>
+
+  <!--
+    棚卸データ検索(資産別一覧)
+  -->
+  <select id="selectInvLineFld_INV" parameterClass="java.util.Map" resultClass="jp.co.ctcg.easset.dto.inv.InvLine">
+    SELECT
+      <include refid="selectInvLineComColumn_INV" />
+    , fld.skkshisankbn
+    , fld.skkshisankbnName
+    , fld.shisanknrkbn
+    , fld.shisanknrkbnName
+    , fld.stkymd
+    , fld.stkymdF
+    , fld.stkgkk
+    , fld.stkgkz
+    , fld.toBokak
+    , fld.skkStatusName
+    , fld.shuruicd
+    , fld.shuruinm
+    , fld.bunruicd
+    , fld.bunruinm
+    , fld.skkhok
+    , fld.skkhokName
+    , fld.tainenk
+    , fld.costType
+    , fld.costTypeName
+    , fld.depPrjCode
+    , fld.depPrjName
+    , fld.soshiki2cd
+    , fld.soshiki2nm
+    , fld.itemGroupCode
+    , fld.itemGroupName
+    , fld.setchicd
+    , fld.setchinm
+    , fld.biko1
+    , fld.biko2
+    FROM
+      NEA_$histTablePrefixLdInv$INV_LINE nil
+    , (
+        SELECT
+          ptvf.PERIOD period
+        , ptvf.COMPANY_CODE companyCode
+        , ptvf.OYA || ptvf.EDA astNum
+        , ptvf.KOYUNO koyuno
+        , ptvf.SKKSHISANKBN skkshisankbn
+        , NEA_UTIL_PKG.get_cn_value1_f('PPFS_FLD_SKKSHISANKBN', ptvf.SKKSHISANKBN) skkshisankbnName
+        , ptvf.SHISANKNRKBN shisanknrkbn
+        , NEA_UTIL_PKG.get_cn_value1_f('PPFS_FLD_SHISANKNRKBN', ptvf.SHISANKNRKBN) shisanknrkbnName
+        , ptvf.STKYMD stkymd
+        , NEA_UTIL_PKG.format_date_char_f(ptvf.STKYMD) stkymdF
+        , ptvf.STKGKK stkgkk
+        , ptvf.STKGKZ stkgkz
+        , ptvf.TO_BOKAK toBokak
+        , CASE
+            /*** 仮勘定:非償却固定 ****/
+            WHEN ptvf.SHISANKNRKBN = '1' THEN
+              '非償却'
+            /*** 本勘定:非償却 ***/
+            WHEN ptvf.SKKHOK = '9' THEN
+              '非償却'
+            /*** 本勘定:未償却 ***/
+            WHEN (ptvf.SKKHOK != '9' and SUBSTR(ptvf.KADOYMD, 1, 6) > #searchParam.period#) THEN
+              '未償却'
+            /*** 本勘定:償却完了 ***/
+            WHEN ptvf.SKKKANRYOFLGK = '1' THEN
+              '償却完了'
+            ELSE
+              '償却中'
+          END skkStatusName
+         , ptvf.SHURUICD shuruicd
+         , ptvf.SHURUINM shuruinm
+         , ptvf.BUNRUICD bunruicd
+         , ptvf.BUNRUINM bunruinm
+         , ptvf.SKKHOK skkhok
+         , NEA_UTIL_PKG.get_cn_value1_f('PPFS_FLD_SKKHO', ptvf.SKKHOK)  skkhokName
+         , DECODE(ptvf.SKKHOK, '3', ptvf.SKKMMSUK || 'ヶ月', 'D', ptvf.SKKMMSUK || 'ヶ月', ptvf.TAINENK || '年' ) tainenk
+         , ptvf.COST_TYPE costType
+         , ptvf.COST_TYPE_NAME costTypeName
+         , ptvf.DEP_PRJ_CODE depPrjCode
+         , ptvf.DEP_PRJ_NAME depPrjName
+         , ptvf.SOSHIKI2CD soshiki2cd
+         , ptvf.SOSHIKI2NM soshiki2nm
+         , ptvf.ITEM_GROUP_CODE itemGroupCode
+         , ptvf.ITEM_GROUP_NAME itemGroupName
+         , ptvf.SETCHICD setchicd
+         , ptvf.SETCHINM setchinm
+         , ptvf.BIKO1 biko1
+         , ptvf.BIKO2 biko2
+         FROM
+           NEA_$histTablePrefixLdFld$PPFS_FLD ptvf
+      ) fld
+    WHERE
+        nil.PERIOD = fld.period(+)
+    AND nil.COMPANY_CODE = fld.companyCode(+)
+    AND nil.PP_ID = fld.koyuno(+)
+    AND <include refid="selectInvLineComWhere_INV" />
+
+    ORDER BY
+      DECODE(nil.INV_ASSET_TYPE, '3', nil.APPLICATION_ID, nil.AST_NUM)
+    , nil.AST_NUM
+    , nil.AST_LIC_ID
+
+  </select>
+
+  <!--
+    棚卸データ検索(リース・レンタル別一覧)
+  -->
+  <select id="selectInvLineLld_INV" parameterClass="java.util.Map" resultClass="jp.co.ctcg.easset.dto.inv.InvLine">
+    SELECT
+      <include refid="selectInvLineComColumn_INV" />
+     , pl.shisannmA
+     , pl.lastymdC
+     , pl.lamanryoymdC
+     , pl.lakikanC
+     , pl.lamanryoymdC
+     , pl.lakikanC
+     , pl.laryoTotalA
+     , pl.ikkailaryoA
+     , pl.lakaishacdC
+     , pl.kykkbnC
+     , pl.latorihikikbnC
+     , pl.bskeijokbnC
+     , pl.stkgkkA
+     , pl.toBokakA
+     , pl.niniLd_3cdA
+     , pl.niniLd_3nmA
+     , pl.niniLd_6cdA
+     , pl.niniLd_6nmA
+     , pl.niniLd_7cdA
+     , pl.niniLd_7nmA
+     , pl.soshiki2cdA
+     , pl.soshiki2nmA
+     , pl.biko1A
+     , pl.biko2A
+     , pl.shuruicdA
+     , pl.shuruinmA
+     , pl.bunruicdA
+     , pl.bunruinmA
+     , pl.setchicdA
+     , pl.setchinmA
+     , pl.stymdL
+     , pl.stymdLF
+     , pl.manryoymdL
+     , pl.manryoymdLF
+     , pl.kikanL
+     , pl.kykkbnCName
+     , pl.latorihikikbnCName
+     , pl.bskeijokbnCName
+     , pl.lakaishacdCName
+     , pl.lastymdCF
+     , pl.lamanryoymdCF
+     FROM
+      NEA_$histTablePrefixLdInv$INV_LINE nil
+    , (
+        SELECT
+            ptvla.KOYUNO koyuno
+          , ptvla.PERIOD period
+          , ptvla.KYKNO kykno
+          , ptvla.shisannm shisannmA
+          , ptvlc.lastymd lastymdC
+          , ptvlc.lamanryoymd lamanryoymdC
+          , ptvlc.lakikan lakikanC
+          , ptvla.LARYO_TOTAL laryoTotalA
+          , pla.IKKAILARYO ikkailaryoA
+          , ptvlc.lakaishacd lakaishacdC
+          , ptvlc.kykkbn kykkbnC
+          , ptvlc.latorihikikbn latorihikikbnC
+          , ptvlc.bskeijokbn bskeijokbnC
+          , pf.STKGKK stkgkkA
+          , pf.TO_BOKAK toBokakA
+          , ptvla.nini_Ld_3cd niniLd_3cdA
+          , ptvla.nini_Ld_3nm niniLd_3nmA
+          , ptvla.nini_Ld_6cd niniLd_6cdA
+          , ptvla.nini_Ld_6nm niniLd_6nmA
+          , ptvla.nini_Ld_7cd niniLd_7cdA
+          , ptvla.nini_Ld_7nm niniLd_7nmA
+          , ptvla.soshiki2cd soshiki2cdA
+          , ptvla.soshiki2nm soshiki2nmA
+          , ptvla.biko1 biko1A
+          , ptvla.biko2 biko2A
+          , ptvla.SHURUICD shuruicdA
+          , ptvla.SHURUINM shuruinmA
+          , ptvla.BUNRUICD bunruicdA
+          , ptvla.BUNRUINM bunruinmA
+          , ptvla.SETCHICD setchicdA
+          , ptvla.SETCHINM setchinmA
+          , DECODE(ptvlc.LATORIHIKIKBN, '3', NVL(ptvla.NINI_LD_15CD, ptvlc.LASTYMD), ptvlc.LASTYMD) stymdL
+          , NEA_UTIL_PKG.format_date_char_f(DECODE(ptvlc.LATORIHIKIKBN, '3', NVL(ptvla.NINI_LD_15CD, ptvlc.LASTYMD), ptvlc.LASTYMD)) stymdLF
+          , DECODE(ptvlc.LATORIHIKIKBN, '3', NVL(ptvla.NINI_LD_16CD, ptvlc.LAMANRYOYMD), ptvlc.LAMANRYOYMD) manryoymdL
+          , NEA_UTIL_PKG.format_date_char_f(DECODE(ptvlc.LATORIHIKIKBN, '3', NVL(ptvla.NINI_LD_16CD, ptvlc.LAMANRYOYMD), ptvlc.LAMANRYOYMD)) manryoymdLF
+          , CASE
+              WHEN ptvlc.LATORIHIKIKBN = '3' AND ptvla.NINI_LD_15CD IS NOT NULL AND ptvla.NINI_LD_16CD IS NOT NULL THEN NEA_UTIL_PKG.get_month_diff_f(ptvla.NINI_LD_15CD, ptvla.NINI_LD_16CD)
+              ELSE ptvlc.LAKIKAN
+            END kikanL
+          , NEA_UTIL_PKG.get_cn_value1_f('PPFS_LLD_KYKKBN', ptvlc.KYKKBN) kykkbnCName
+          , NEA_UTIL_PKG.get_cn_value1_f('PPFS_LLD_LATORIHIKIKBN', ptvlc.LATORIHIKIKBN) latorihikikbnCName
+          , NEA_UTIL_PKG.get_cn_value1_f('PPFS_LLD_BSKEIJOKBN', ptvlc.BSKEIJOKBN) bskeijokbnCName
+          , ptvlc.TORIHIKINM lakaishacdCName
+          , NEA_UTIL_PKG.format_date_char_f(ptvlc.LASTYMD) lastymdCF
+          , NEA_UTIL_PKG.format_date_char_f(ptvlc.LAMANRYOYMD) lamanryoymdCF
+          FROM
+            NEA_$histTablePrefixLdLld$PPFS_LLDC ptvlc
+          , NEA_$histTablePrefixLdLld$PPFS_LLDA ptvla
+          , NEA_$histTablePrefixLdLld$PPFS_RELATION_LA pzvr
+          , NEA_$histTablePrefixLdLld$PPFS_LD_ASSETS pla
+          , NEA_$histTablePrefixLdLld$PPFS_FLD pf
+          WHERE
+              ptvlc.KOYUNO = pzvr.KOYUNO_KYK
+          AND ptvlc.PERIOD = pzvr.PERIOD
+          AND ptvlc.COMPANY_CODE = pzvr.COMPANY_CODE
+          AND ptvla.KOYUNO = pzvr.KOYUNO_SHISAN
+          AND ptvla.PERIOD = pzvr.PERIOD
+          AND ptvla.COMPANY_CODE = pzvr.COMPANY_CODE
+          AND pzvr.YUKOFLG = '1'
+          AND pzvr.CANCELSUMIFLG = '0'
+          AND ptvla.KOYUNO = pla.KOYUNO
+          AND ptvla.PERIOD = pla.PERIOD
+          AND ptvla.COMPANY_CODE = pla.COMPANY_CODE
+          AND ptvla.KOYUNO = pf.KOYUNO (+)
+          AND ptvla.PERIOD = pf.PERIOD (+)
+          AND ptvla.COMPANY_CODE = pf.COMPANY_CODE (+)
+         ) pl
+    WHERE
+        nil.CONTRACT_NUM = pl.kykno(+)
+    AND nil.PP_ID = pl.koyuno(+)
+    AND nil.PERIOD = pl.PERIOD(+)
+    AND <include refid="selectInvLineComWhere_INV" />
+
+    ORDER BY
+      nil.CONTRACT_NUM
+    , nil.CONTRACT_SUB_NUM
+    , nil.AST_LIC_ID
+  </select>
+
+  <!--
+    棚卸データ検索(無形固定資産：仮勘定資産別一覧)項目
+  -->
+  <sql id="selectInvLineIntComColumn_INV">
+      <include refid="selectInvLineComColumn_INV" />
+    , ptvf.SHISANKNRKBN shisanknrkbn
+    , NEA_UTIL_PKG.get_cn_value1_f('PPFS_FLD_SHISANKNRKBN', ptvf.SHISANKNRKBN) shisanknrkbnName
+    , MIN(NVL(ptvf.STKYMD, ptvf.CPKEIJOYMD)) oldKeijoymd
+    , MAX(NVL(ptvf.STKYMD, ptvf.CPKEIJOYMD)) newKeijoymd
+    , NEA_UTIL_PKG.format_date_char_f(
+          MIN(NVL(ptvf.STKYMD, ptvf.CPKEIJOYMD))
+        ) oldKeijoymdF
+    , NEA_UTIL_PKG.format_date_char_f(
+          MAX(NVL(ptvf.STKYMD, ptvf.CPKEIJOYMD))
+        ) newKeijoymdF
+    , SUM(ptvf.STKGKK) stkgkk
+    , SUM(ptvf.STKGKZ) stkgkz
+    , SUM(ptvf.TO_BOKAK) toBokak
+    , MAX(ptvf.SHURUICD) KEEP (DENSE_RANK LAST ORDER BY NVL(ptvf.STKYMD, ptvf.CPKEIJOYMD), ptvf.OYA, PTVF.EDA) shuruicd
+    , MAX(ptvf.SHURUINM) KEEP (DENSE_RANK LAST ORDER BY NVL(ptvf.STKYMD, ptvf.CPKEIJOYMD), ptvf.OYA, PTVF.EDA) shuruinm
+    , MAX(ptvf.BUNRUICD) KEEP (DENSE_RANK LAST ORDER BY NVL(ptvf.STKYMD, ptvf.CPKEIJOYMD), ptvf.OYA, ptvf.EDA) bunruicd
+    , MAX(ptvf.BUNRUINM) KEEP (DENSE_RANK LAST ORDER BY NVL(ptvf.STKYMD, ptvf.CPKEIJOYMD), ptvf.OYA, ptvf.EDA) bunruinm
+    , MAX(ptvf.SOSHIKI2CD) KEEP (DENSE_RANK LAST ORDER BY NVL(ptvf.STKYMD, ptvf.CPKEIJOYMD), ptvf.OYA, PTVF.EDA) soshiki2cd
+    , MAX(ptvf.SOSHIKI2NM) KEEP (DENSE_RANK LAST ORDER BY NVL(ptvf.STKYMD, ptvf.CPKEIJOYMD), ptvf.OYA, PTVF.EDA) soshiki2nm
+    , MAX(ptvf.PUR_COMPANY_CODE) KEEP (DENSE_RANK LAST ORDER BY NVL(ptvf.STKYMD, ptvf.CPKEIJOYMD), ptvf.OYA, PTVF.EDA) purCompanyCode
+    , MAX(ptvf.PUR_COMPANY_NAME) KEEP (DENSE_RANK LAST ORDER BY NVL(ptvf.STKYMD, ptvf.CPKEIJOYMD), ptvf.OYA, PTVF.EDA) purCompanyName
+    , MAX(ptvf.SLIP_NUM) KEEP (DENSE_RANK LAST ORDER BY NVL(ptvf.STKYMD, ptvf.CPKEIJOYMD), ptvf.OYA, PTVF.EDA) slipNum
+  </sql>
+
+  <!--
+    棚卸データ検索(無形固定資産：仮勘定資産別一覧)項目
+  -->
+  <sql id="selectInvLineIntComGroupBy_INV">
+    GROUP BY
+      nil.INV_LINE_SEQ
+    , nil.CREATE_DATE
+    , nil.CREATE_STAFF_CODE
+    , nil.UPDATE_DATE
+    , nil.UPDATE_STAFF_CODE
+    , nil.PERIOD
+    , nil.COMPANY_CODE
+    , nil.INV_ASSET_TYPE
+    , nil.INV_STATUS
+    , nil.INV_COMMENT
+    , nil.HOL_SECTION_CODE
+    , nil.HOL_SECTION_YEAR
+    , nil.APPLICATION_ID
+    , nil.AST_LIC_ID
+    , nil.AST_NUM
+    , nil.PP_ID
+    , nil.AST_NAME
+    , nil.CONTRACT_NUM
+    , nil.CONTRACT_SUB_NUM
+    , nil.DELETE_FLAG
+    , nil.DELETE_DATE
+    , nil.HOL_STAFF_CODE
+    , nil.USE_STAFF_CODE
+    , nil.HOL_OFFICE_CODE
+    , nil.HOL_OFFICE_FLOOR
+    , nil.HOL_OFFICE_ROOM_NUM
+    , nil.HOL_OFFICE_RACK_NUM
+    , nil.HOL_QUANTITY
+    , nil.INV_LINK_TYPE
+    , nil.INV_STAFF_CODE
+    , nil.DSC_DESCRIPTION
+    , nil.DSC_ATTRIBUTE1
+    , nil.DSC_ATTRIBUTE2
+    , ptvf.shisanknrkbn
+  </sql>
+
+  <!--
+    棚卸データ検索(無形固定資産：仮勘定資産別一覧)
+  -->
+  <select id="selectInvLineInt_INV" parameterClass="java.util.Map" resultClass="jp.co.ctcg.easset.dto.inv.InvLine">
+    SELECT
+      <include refid="selectInvLineIntComColumn_INV" />
+    FROM
+      NEA_$histTablePrefixLdInv$INV_LINE nil
+    , NEA_$histTablePrefixLdFld$PPFS_FLD ptvf
+    WHERE
+        nil.PERIOD = ptvf.PERIOD
+    AND nil.APPLICATION_ID = ptvf.APPLICATION_ID
+    AND nil.COMPANY_CODE = ptvf.COMPANY_CODE
+    AND ptvf.SHISANJOTAIKBN = '1' /* "資産状態区分"が"通常" */
+    AND ptvf.SHISANKNRKBN
+      IN (    /* "資産管理区分"が"建設仮勘定" */
+           SELECT
+             INTERNAL_CODE
+           FROM
+             NEA_CODE_NAME
+           WHERE
+             CATEGORY_CODE = 'PPFS_FLD_SHISANKNRKBN' /* 資産管理区分 */
+           AND VALUE6 = '1' /* 棚卸対象 */
+           AND DELETE_FLAG = '0'
+         )
+    AND ptvf.SKKSHISANKBN
+      IN ( /* "償却資産区分"が"無形資産" OR "繰延資産" */
+           SELECT
+             INTERNAL_CODE
+           FROM
+             NEA_CODE_NAME
+           WHERE
+             CATEGORY_CODE = 'PPFS_FLD_SKKSHISANKBN' /* 償却資産区分 */
+           AND VALUE6 = '1' /* 棚卸対象 */
+           AND DELETE_FLAG = '0'
+         )
+    AND <include refid="selectInvLineComWhere_INV" />
+    <include refid="selectInvLineIntComGroupBy_INV" />
+    UNION ALL
+    SELECT
+      <include refid="selectInvLineIntComColumn_INV" />
+    FROM
+      NEA_$histTablePrefixLdInv$INV_LINE nil
+    , NEA_$histTablePrefixLdFld$PPFS_FLD ptvf
+    WHERE
+        nil.PERIOD = ptvf.PERIOD
+    AND nil.PP_ID = ptvf.KOYUNO
+    AND nil.COMPANY_CODE = ptvf.COMPANY_CODE
+    AND ptvf.SHISANJOTAIKBN = '1' /* "資産状態区分"が"通常" */
+    AND ptvf.SHISANKNRKBN
+      IN (    /* "資産管理区分"が"建設仮勘定" */
+           SELECT
+             INTERNAL_CODE
+           FROM
+             NEA_CODE_NAME
+           WHERE
+             CATEGORY_CODE = 'PPFS_FLD_SHISANKNRKBN' /* 資産管理区分 */
+           AND VALUE6 = '1' /* 棚卸対象 */
+           AND DELETE_FLAG = '0'
+         )
+    AND ptvf.SKKSHISANKBN
+      IN ( /* "償却資産区分"が"無形資産" OR "繰延資産" */
+           SELECT
+             INTERNAL_CODE
+           FROM
+             NEA_CODE_NAME
+           WHERE
+             CATEGORY_CODE = 'PPFS_FLD_SKKSHISANKBN' /* 償却資産区分 */
+           AND VALUE6 = '1' /* 棚卸対象 */
+           AND DELETE_FLAG = '0'
+         )
+    AND <include refid="selectInvLineComWhere_INV" />
+    <include refid="selectInvLineIntComGroupBy_INV" />
+
+    ORDER BY
+      applicationId
+    , ppId
+    , astNum
+  </select>
+
+  <!--
+    棚卸データ検索(備品等)
+  -->
+  <select id="selectInvLineEquip_INV" parameterClass="java.util.Map" resultClass="jp.co.ctcg.easset.dto.inv.InvLine">
+    SELECT
+      <include refid="selectInvLineComColumn_INV" />
+    FROM
+      NEA_$histTablePrefixLdInv$INV_LINE nil
+    WHERE
+      <include refid="selectInvLineComWhere_INV" />
+
+    ORDER BY
+      nil.AST_LIC_ID
+  </select>
+
+    <!--
+    棚卸データ更新
+  -->
+  <update id="updateInvLine_INV" parameterClass="java.util.Map" >
+    UPDATE
+      NEA_$histTablePrefixLd$INV_LINE
+    SET
+      UPDATE_DATE = #obj.updateDate:TIMESTAMP#
+    , UPDATE_STAFF_CODE = #obj.updateStaffCode:VARCHAR#
+    , INV_STATUS = #obj.invStatus:CHAR#
+    , INV_COMMENT = #obj.invComment:VARCHAR#
+    WHERE
+      INV_LINE_SEQ = #obj.invLineSeq:NUMERIC#
+  </update>
+
+  <!--
+    棚卸データ作成
+  -->
+  <insert id="insertInvLine_Inv" parameterClass="java.util.Map">
+    INSERT  INTO NEA_INV_LINE
+      (
+        INV_LINE_SEQ
+      , CREATE_DATE
+      , CREATE_STAFF_CODE
+      , UPDATE_DATE
+      , UPDATE_STAFF_CODE
+      , PERIOD
+      , COMPANY_CODE
+      , HOL_SECTION_CODE
+      , HOL_SECTION_YEAR
+      , INV_ASSET_TYPE
+      , INV_STATUS
+      , INV_COMMENT
+      , AST_LIC_ID
+      , PP_ID
+      , AST_NUM
+      , CONTRACT_NUM
+      , CONTRACT_SUB_NUM
+      , APPLICATION_ID
+      , DELETE_FLAG
+      , DELETE_DATE
+      , AST_NAME
+      , HOL_STAFF_CODE
+      , USE_STAFF_CODE
+      , HOL_OFFICE_CODE
+      , HOL_OFFICE_FLOOR
+      , HOL_OFFICE_ROOM_NUM
+      , HOL_OFFICE_RACK_NUM
+      , HOL_QUANTITY
+      , INV_LINK_TYPE
+      , INV_STAFF_CODE
+      ) VALUES (
+        #obj.invLineSeq:NUMERIC# /* INV_LINE_SEQ*/
+      , #obj.createDate:TIMESTAMP# /* CREATE_DATE*/
+      , #obj.createStaffCode:VARCHAR# /* CREATE_STAFF_CODE*/
+      , #obj.updateDate:TIMESTAMP# /* UPDATE_DATE*/
+      , #obj.updateStaffCode:VARCHAR# /* UPDATE_STAFF_CODE*/
+      , #obj.period:CHAR# /* PERIOD*/
+      , #obj.companyCode:VARCHAR# /* COMPANY_CODE*/
+      , #obj.holSectionCode:VARCHAR# /* HOL_SECTION_CODE*/
+      , #obj.holSectionYear:NUMERIC# /* HOL_SECTION_YEAR*/
+      , #obj.invAssetType:CHAR# /* INV_ASSET_TYPE*/
+      , #obj.invStatus:CHAR# /* INV_STATUS*/
+      , #obj.invComment:VARCHAR# /* INV_COMMENT*/
+      , #obj.astLicId:VARCHAR# /* AST_LIC_ID*/
+      , #obj.ppId:NUMERIC# /* PP_ID*/
+      , #obj.astNum:VARCHAR# /* AST_NUM*/
+      , #obj.contractNum:VARCHAR# /* CONTRACT_NUM*/
+      , #obj.contractSubNum:VARCHAR# /* CONTRACT_SUB_NUM*/
+      , #obj.applicationId:VARCHAR# /* APPLICATION_ID*/
+      , #obj.deleteFlag:VARCHAR# /* DELETE_FLAG*/
+      , #obj.deleteDate:DATE# /* DELETE_DATE*/
+      , #obj.astName:VARCHAR# /* AST_NAME*/
+      , #obj.holStaffCode:VARCHAR# /* HOL_STAFF_CODE*/
+      , #obj.useStaffCode:VARCHAR# /* USE_STAFF_CODE*/
+      , #obj.holOfficeCode:VARCHAR# /* HOL_OFFICE_CODE*/
+      , #obj.holOfficeFloor:NUMERIC# /* HOL_OFFICE_FLOOR*/
+      , #obj.holOfficeRoomNum:VARCHAR# /* HOL_OFFICE_ROOM_NUM*/
+      , #obj.holOfficeRackNum:VARCHAR# /* HOL_OFFICE_RACK_NUM*/
+      , #obj.holQuantity:NUMERIC# /* HOL_QUANTITY*/
+      , #obj.invLinkType:CHAR# /* INV_LINK_TYPE*/
+      , #obj.invStaffCode:VARCHAR# /* INV_STAFF_CODE*/
+      )
+  </insert>
+
+  <!--
+    棚卸データ削除
+  -->
+  <delete id="deleteInvLine_INV" parameterClass="java.util.Map">
+    DELETE FROM
+      NEA_INV_LINE
+    WHERE
+      PERIOD = #obj.period:CHAR#
+    AND
+      COMPANY_CODE = #obj.companyCode:VARCHAR#
+    AND
+      HOL_SECTION_CODE = #obj.holSectionCode:VARCHAR#
+    AND
+      HOL_SECTION_YEAR = #obj.holSectionYear:NUMERIC#
+    AND
+      INV_ASSET_TYPE = #obj.invAssetType:CHAR#
+    <isNotEmpty property="isGeneral" >
+      AND INV_STAFF_CODE = #invStaffCode#
+    </isNotEmpty>
+  </delete>
+
+  <!--
+    ステータス更新
+  -->
+  <parameterMap id="param_callUpdateInvStatus_INV" class="java.util.Map">
+    <parameter property="companyCode" jdbcType="VARCHAR" javaType="String" mode="IN"/>
+    <parameter property="period" jdbcType="CHAR" javaType="String" mode="IN"/>
+    <parameter property="execStaffCode" jdbcType="VARCHAR" javaType="String" mode="IN"/>
+    <parameter property="execStatus" jdbcType="CHAR" javaType="String" mode="IN"/>
+  </parameterMap>
+  <procedure id="callUpdateInvStatus_INV" parameterMap="param_callUpdateInvStatus_INV">
+    { call NEA_INV_PKG.UPDATE_STATUS(?, ?, ?, ?) }
+  </procedure>
+
+  <!--
+    棚卸データ作成実行
+  -->
+  <parameterMap id="param_callCreateInvData_INV" class="java.util.Map">
+    <parameter property="companyCode" jdbcType="VARCHAR" javaType="String" mode="IN"/>
+    <parameter property="period" jdbcType="CHAR" javaType="String" mode="IN"/>
+    <parameter property="execStaffCode" jdbcType="VARCHAR" javaType="String" mode="IN"/>
+  </parameterMap>
+  <procedure id="callCreateInvData_INV" parameterMap="param_callCreateInvData_INV" timeout="7200">
+    { call NEA_INV_PKG.CREATE_INV_DATA(?, ?, ?) }
+  </procedure>
+
+  <!--
+    棚卸集約データ実施状況更新
+  -->
+  <parameterMap id="param_callUpdateInvSumState_INV" class="java.util.Map">
+    <parameter property="companyCode" jdbcType="VARCHAR" javaType="String" mode="IN"/>
+    <parameter property="period" jdbcType="CHAR" javaType="String" mode="IN"/>
+    <parameter property="holSectionCode" jdbcType="VARCHAR" javaType="String" mode="IN"/>
+    <parameter property="holSectionYear" jdbcType="NUMERIC" javaType="Integer" mode="IN"/>
+    <parameter property="invAssetType" jdbcType="VARCHAR" javaType="String" mode="IN"/>
+    <parameter property="invStaffCode" jdbcType="VARCHAR" javaType="String" mode="IN"/>
+    <parameter property="execStaffCode" jdbcType="VARCHAR" javaType="String" mode="IN"/>
+    <parameter property="apStatus" jdbcType="VARCHAR" javaType="String" mode="IN"/>
+  </parameterMap>
+  <procedure id="callUpdateInvSumState_INV" parameterMap="param_callUpdateInvSumState_INV">
+    { call NEA_INV_PKG.UPDATE_$histTablePrefixLd$INV_SUM_STATE(?, ?, ?, ?, ?, ?, ?, ?) }
+  </procedure>
+
+  <!--
+    棚卸最新の会計年月取得
+  -->
+  <select id="selectCurrentInvPeriod_INV" parameterClass="java.util.Map" resultClass="java.lang.String">
+   SELECT
+      NEA_INV_PKG.GET_CURRENT_INV_PERIOD_F(#companyCode#)
+    FROM
+      DUAL
+  </select>
+
+  <!--
+    棚卸カレントデータ切替
+  -->
+  <parameterMap id="param_callSwitchCurrentInvData_INV" class="java.util.Map">
+    <parameter property="companyCode" jdbcType="VARCHAR" javaType="String" mode="IN"/>
+  </parameterMap>
+  <procedure id="callSwitchCurrentInvData_INV" parameterMap="param_callSwitchCurrentInvData_INV" timeout="7200">
+    { call NEA_INV_PKG.SWITCH_CURRENT_INV_DATA(?) }
+  </procedure>
+
+</sqlMap>
